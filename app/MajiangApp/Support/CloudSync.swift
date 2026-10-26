@@ -35,7 +35,8 @@ final class CloudSync {
     private var again = false
     private var debounce: Task<Void, Never>?
 
-    private lazy var database = CKContainer(identifier: Self.containerID).privateCloudDatabase
+    // 用到时才建：@Observable 不跟踪它，lazy 也不能引用 Self。
+    @ObservationIgnored private lazy var database = CKContainer(identifier: CloudSync.containerID).privateCloudDatabase
     private let zoneID = CKRecordZone.ID(zoneName: "Majiang", ownerName: CKCurrentUserDefaultName)
 
     /// 存在本机的同步进度：上次同步到哪（CloudKit 的 change token），每场牌局上次同步时的指纹。
