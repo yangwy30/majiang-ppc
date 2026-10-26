@@ -162,20 +162,17 @@ private struct EmptyHome: View {
     var body: some View {
         GeometryReader { geo in
             ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
+                // 品牌标在顶上；标题和步骤作为一块往下放，剩下的空白上 : 下 ≈ 5 : 3，两段都至少 32
+                FiveThreeLayout(height: geo.size.height - 38) {
                     brand
-                    // 标题和步骤作为一块往下放：上方留白 : 下方留白 ≈ 5 : 3，两段都至少 32
                     VStack(alignment: .leading, spacing: 0) {
                         headline
                         steps.padding(.top, 40)
                     }
-                    .padding(.vertical, 32)
-                    .frame(maxHeight: .infinity, alignment: Alignment(horizontal: .leading, vertical: .fiveEighths))
                 }
                 .padding(.horizontal, 28)
                 // 安全区以下再留 38，离屏幕顶约 100
                 .padding(.top, 38)
-                .frame(minHeight: geo.size.height)
             }
         }
         .bottomBar {
@@ -239,13 +236,29 @@ private extension EmptyHome {
     }
 }
 
-private extension VerticalAlignment {
-    /// 放在 5/8 高度处：子视图和容器都按这个比例对齐，上下留白就是 5 : 3。
-    enum FiveEighths: AlignmentID {
-        static func defaultValue(in d: ViewDimensions) -> CGFloat { d.height * 5 / 8 }
+/// 两块竖排：第一块贴顶，第二块放在剩下的空白里，上方 : 下方 ≈ 5 : 3，两段都至少 `minGap`。
+/// 屏幕太矮时整体比 `height` 高，外面的 ScrollView 可以滚。
+private struct FiveThreeLayout: Layout {
+    var height: CGFloat
+    var minGap: CGFloat = 32
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? 0
+        let content = subviews.reduce(0) { $0 + $1.sizeThatFits(ProposedViewSize(width: width, height: nil)).height }
+        return CGSize(width: width, height: max(height, content + 2 * minGap))
     }
 
-    static let fiveEighths = VerticalAlignment(FiveEighths.self)
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard subviews.count == 2 else { return }
+        let p = ProposedViewSize(width: bounds.width, height: nil)
+        let top = subviews[0].sizeThatFits(p).height
+        let block = subviews[1].sizeThatFits(p).height
+        let free = bounds.height - top - block
+        let below = max(minGap, free * 3 / 8)
+        let above = max(minGap, free - below)
+        subviews[0].place(at: bounds.origin, proposal: p)
+        subviews[1].place(at: CGPoint(x: bounds.minX, y: bounds.minY + top + above), proposal: p)
+    }
 }
 
 /// 三步里的一行：朱红数字、标题和说明、右边一个小样。
