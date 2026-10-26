@@ -74,14 +74,18 @@ public struct WinRecord: Hashable, Codable, Sendable {
     public var context: WinContext
     public var fans: [FanEntry]
     public var flowerFan: Int
+    /// 事后在账本里直接改了番数（含花）。有它时 `fans` 不再可信，界面清空明细，改局时也不重新算番。
+    public var fanOverride: Int?
 
-    public init(winner: Int, discarder: Int?, hand: Hand?, context: WinContext, fans: [FanEntry], flowerFan: Int) {
+    public init(winner: Int, discarder: Int?, hand: Hand?, context: WinContext, fans: [FanEntry], flowerFan: Int,
+                fanOverride: Int? = nil) {
         self.winner = winner
         self.discarder = discarder
         self.hand = hand
         self.context = context
         self.fans = fans
         self.flowerFan = flowerFan
+        self.fanOverride = fanOverride
     }
 
     public init(winner: Int, discarder: Int?, hand: Hand, context: WinContext, result: ScoringResult) {
@@ -89,7 +93,7 @@ public struct WinRecord: Hashable, Codable, Sendable {
                   fans: result.fans, flowerFan: result.flowerFan)
     }
 
-    public var totalFan: Int { fans.reduce(0) { $0 + $1.points } + flowerFan }
+    public var totalFan: Int { fanOverride ?? fans.reduce(0) { $0 + $1.points } + flowerFan }
     public var isSelfDrawn: Bool { discarder == nil }
 }
 
@@ -117,6 +121,8 @@ public enum GameError: Error, Hashable, Sendable {
     case discarderIsWinner
     case belowMinimumFan(Int)
     case deltasMustSumToZero
+    case recordNotFound
+    case tooManyHands(Int)
 
     public var message: String {
         switch self {
@@ -125,6 +131,8 @@ public enum GameError: Error, Hashable, Sendable {
         case .discarderIsWinner: "点炮的人不能是和牌的人"
         case .belowMinimumFan(let fan): "只有 \(fan) 番，不够起和"
         case .deltasMustSumToZero: "四个人的得失分加起来要等于 0"
+        case .recordNotFound: "找不到这一局"
+        case .tooManyHands(let total): "这样改就超过 \(total) 局了"
         }
     }
 }
@@ -236,17 +244,8 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
     @discardableResult
     public mutating func recordWin(_ win: WinRecord) throws -> HandRecord {
         guard !isFinished else { throw GameError.finished }
-        guard (0..<4).contains(win.winner) else { throw GameError.invalidPlayer }
-        if let discarder = win.discarder {
-            guard (0..<4).contains(discarder) else { throw GameError.invalidPlayer }
-            guard discarder != win.winner else { throw GameError.discarderIsWinner }
-        }
-        let fanWithoutFlowers = win.totalFan - win.flowerFan
-        guard fanWithoutFlowers >= rules.minimumFan else { throw GameError.belowMinimumFan(fanWithoutFlowers) }
-
-        let deltas = Payment.winDeltas(winner: win.winner, discarder: win.discarder,
-                                       totalFan: win.totalFan, basePoints: rules.basePoints)
-        return append(.win(win), deltas: deltas)
+        try validate(.win(win))
+        return append(.win(win), deltas: deltas(for: .win(win)))
     }
 
     @discardableResult
@@ -258,15 +257,14 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
     @discardableResult
     public mutating func recordFalseWin(offender: Int) throws -> HandRecord {
         guard !isFinished else { throw GameError.finished }
-        guard (0..<4).contains(offender) else { throw GameError.invalidPlayer }
-        let deltas = Payment.falseWinDeltas(offender: offender, penalty: rules.falseWinPenalty)
-        return append(.falseWin(offender: offender), deltas: deltas)
+        try validate(.falseWin(offender: offender))
+        return append(.falseWin(offender: offender), deltas: deltas(for: .falseWin(offender: offender)))
     }
 
     @discardableResult
     public mutating func recordManual(deltas: [Int], note: String = "") throws -> HandRecord {
         guard !isFinished else { throw GameError.finished }
-        guard deltas.count == 4, deltas.reduce(0, +) == 0 else { throw GameError.deltasMustSumToZero }
+        try validate(.manual(deltas: deltas, note: note))
         return append(.manual(deltas: deltas, note: note), deltas: deltas)
     }
 
@@ -280,6 +278,102 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
 
     public mutating func end(at date: Date = Date()) {
         endedAt = date
+    }
+
+    // MARK: 改以前的局
+
+    /// 把某一局改成另一种结果。这一局之后每一局的局数、风位、番数和得失分都跟着重算；
+    /// 改不了（比如番数不够起和）时抛错，牌局不变。打完的牌局也能改。
+    public mutating func replace(_ id: UUID, with outcome: HandOutcome) throws {
+        self = try replacing(id, with: outcome)
+    }
+
+    /// 改完以后的样子，不动原来的牌局。改局页面用它预览番数和分数。
+    public func replacing(_ id: UUID, with outcome: HandOutcome) throws -> Game {
+        guard let index = records.firstIndex(where: { $0.id == id }) else { throw GameError.recordNotFound }
+        var copy = self
+        copy.records[index].outcome = outcome
+        try copy.reflow(edited: id)
+        return copy
+    }
+
+    /// 删掉某一局，后面的跟着重算。
+    public mutating func remove(_ id: UUID) {
+        guard let index = records.firstIndex(where: { $0.id == id }) else { return }
+        records.remove(at: index)
+        // 删掉一局只会让局数变少，不会有新的不合法
+        try? reflow(edited: nil)
+    }
+
+    /// 从头把每一局重新编号、重新算钱。只有局数变了的和牌、或者刚改的那一局，才重新算风位和番数；
+    /// 其余记录原样保留，免得算番库升级让旧局悄悄变分。
+    private mutating func reflow(edited: UUID?) throws {
+        var hand = 0
+        for i in records.indices {
+            records[i].handIndex = hand
+            let isEdited = records[i].id == edited
+            if case .win(let win) = records[i].outcome {
+                records[i].outcome = .win(reconciled(win, inHand: hand, edited: isEdited))
+            }
+            if isEdited { try validate(records[i].outcome) }
+            records[i].deltas = deltas(for: records[i].outcome)
+            if records[i].outcome.advancesHand { hand += 1 }
+        }
+        guard hand <= rules.totalHands else { throw GameError.tooManyHands(rules.totalHands) }
+    }
+
+    /// 和牌放到第 `hand` 局：圈风、门风、自摸跟着改；有牌又没手动改番数时重新算番。
+    private func reconciled(_ win: WinRecord, inHand hand: Int, edited: Bool) -> WinRecord {
+        var context = win.context
+        context.prevalentWind = prevalentWind(ofHand: hand)
+        context.seatWind = seatWind(of: win.winner, inHand: hand)
+        context.selfDrawn = win.isSelfDrawn
+        if context.selfDrawn != win.context.selfDrawn {
+            // 杠上开花和抢杠和、妙手回春和海底捞月共用一个标记，自摸点炮换了就不成立了
+            context.kongInvolved = false
+            context.lastTileOfWall = false
+        }
+        guard edited || context != win.context else { return win }
+
+        var updated = win
+        updated.context = context
+        if let tiles = win.hand, win.fanOverride == nil,
+           case .success(let result) = FanCalculator.score(tiles, context: context),
+           edited || result.meetsMinimum(rules.minimumFan) {
+            updated.fans = result.fans
+            updated.flowerFan = result.flowerFan
+        }
+        return updated
+    }
+
+    private func validate(_ outcome: HandOutcome) throws {
+        switch outcome {
+        case .win(let win):
+            guard (0..<4).contains(win.winner) else { throw GameError.invalidPlayer }
+            if let discarder = win.discarder {
+                guard (0..<4).contains(discarder) else { throw GameError.invalidPlayer }
+                guard discarder != win.winner else { throw GameError.discarderIsWinner }
+            }
+            let fanWithoutFlowers = win.totalFan - win.flowerFan
+            guard fanWithoutFlowers >= rules.minimumFan else { throw GameError.belowMinimumFan(fanWithoutFlowers) }
+        case .drawn:
+            break
+        case .falseWin(let offender):
+            guard (0..<4).contains(offender) else { throw GameError.invalidPlayer }
+        case .manual(let deltas, _):
+            guard deltas.count == 4, deltas.reduce(0, +) == 0 else { throw GameError.deltasMustSumToZero }
+        }
+    }
+
+    private func deltas(for outcome: HandOutcome) -> [Int] {
+        switch outcome {
+        case .win(let win):
+            Payment.winDeltas(winner: win.winner, discarder: win.discarder,
+                              totalFan: win.totalFan, basePoints: rules.basePoints)
+        case .drawn: [0, 0, 0, 0]
+        case .falseWin(let offender): Payment.falseWinDeltas(offender: offender, penalty: rules.falseWinPenalty)
+        case .manual(let deltas, _): deltas
+        }
     }
 
     private mutating func append(_ outcome: HandOutcome, deltas: [Int]) -> HandRecord {

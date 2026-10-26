@@ -20,7 +20,7 @@
 **产品**
 
 - [可行性评估](docs/feasibility.md)：结论、技术路线、MVP 范围和工期
-- [用户流程设计](docs/user-flow.md)：完整流程图、每个页面的截图、视觉风格和牌面风格
+- [用户流程设计](docs/user-flow.md)：完整流程图、每个页面的截图、视觉规范和用词
 - [Yang 的全部消息](docs/yang-messages.md)：项目里 Yang 发过的所有提示词和消息，按时间原文汇总
 
 **调研**（总览和关键结论见 [research/README.md](research/README.md)）
@@ -34,9 +34,9 @@
 ## 仓库结构
 
 ```
-docs/       产品文档：可行性评估、用户流程；assets/user-flow/ 是页面截图和设计源文件
+docs/       产品文档：可行性评估、用户流程；assets/user-flow/ 是 App 的页面截图
 research/   调研报告；results/ 是测试的原始 JSON
-tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟）和页面截图导出脚本，见 tools/README.md
+tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟），见 tools/README.md
 data/       标准答案、照片来源表、番种测试用例，见 data/README.md
 app/        iOS App：Xcode 工程、SwiftUI 界面、MajiangKit 逻辑包，见 app/README.md
 ```

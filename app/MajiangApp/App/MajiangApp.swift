@@ -12,7 +12,7 @@ struct MajiangApp: App {
     }
 }
 
-/// 只有一条主线：首页 → 牌桌 → 记一局 → 账本，没有 tab bar。
+/// 没有 tab bar：首页 → 开局 → 牌桌 → 结算。
 struct RootView: View {
     @Environment(AppModel.self) private var model
 
@@ -24,9 +24,7 @@ struct RootView: View {
                     switch route {
                     case .newGame: NewGameView()
                     case .table(let id): TableView(gameID: id)
-                    case .ledger(let id): LedgerView(gameID: id)
-                    case .endGame(let id): EndGameView(gameID: id)
-                    case .settings: SettingsView()
+                    case .settle(let id): SettleView(gameID: id)
                     }
                 }
         }

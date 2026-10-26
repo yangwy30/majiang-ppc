@@ -1,14 +1,40 @@
 import SwiftUI
 import MajiangKit
 
-/// 1. 首页：进行中的牌局 + 历史牌局 + 开新局。
+/// 首页：没打完的牌局、以前的牌局、开一局。有没打完的牌局时 App 直接打开牌桌，这里是返回后看到的。
 struct HomeView: View {
     @Environment(AppModel.self) private var model
+    @State private var showGuide = false
+    @State private var showSettings = false
+
+    private var isEmpty: Bool { model.archive.games.isEmpty }
 
     var body: some View {
+        Group {
+            if isEmpty {
+                EmptyHome(openGuide: { showGuide = true }, openSettings: { showSettings = true },
+                          start: { model.path.append(.newGame) })
+            } else {
+                list
+            }
+        }
+        .page()
+        .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showGuide) { RulesGuideView() }
+        #if DEBUG
+        .sheet(isPresented: $showSettings) { SettingsView() }
+        #endif
+    }
+
+    private var list: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 0) {
+                header
+
                 if let game = model.archive.activeGame {
+                    SectionLabel("没打完")
+                        .padding(.top, 44)
+                        .padding(.bottom, 12)
                     Button {
                         model.path.append(.table(game.id))
                     } label: {
@@ -18,49 +44,52 @@ struct HomeView: View {
                 }
 
                 if !model.archive.finishedGames.isEmpty {
-                    SectionTitle(text: "历史牌局")
-                    VStack(spacing: 0) {
-                        ForEach(model.archive.finishedGames) { game in
-                            Button {
-                                model.path.append(.endGame(game.id))
-                            } label: {
-                                HistoryRow(game: game)
-                            }
-                            .buttonStyle(.plain)
-                            if game.id != model.archive.finishedGames.last?.id {
-                                Divider().overlay(Theme.border)
-                            }
+                    SectionLabel("以前的")
+                        .padding(.top, 36)
+                        .padding(.bottom, 4)
+                    ForEach(model.archive.finishedGames) { game in
+                        Button {
+                            model.path.append(.settle(game.id))
+                        } label: {
+                            HistoryRow(game: game)
                         }
+                        .buttonStyle(.plain)
                     }
-                    .card(padding: 0)
-                } else if model.archive.activeGame == nil {
-                    EmptyHome()
                 }
 
+                Button("第一次打国标？看看番怎么算 ›") { showGuide = true }
+                    .buttonStyle(.text(size: 14))
+                    .padding(.top, 10)
+
                 if let error = model.loadError {
-                    Text(error).font(.footnote).foregroundStyle(Theme.crimson)
+                    Text(error)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.gray)
+                        .padding(.top, 16)
                 }
             }
-            .padding(20)
+            .padding(.horizontal, 24)
+            .padding(.top, 40)
         }
-        .safeAreaInset(edge: .bottom) {
-            Button("开新局") { model.path.append(.newGame) }
+        .bottomBar {
+            Button("开一局") { model.path.append(.newGame) }
                 .buttonStyle(.primary)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
-                .background(Theme.canvas)
         }
-        .page()
-        .navigationTitle("国标记分")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    model.path.append(.settings)
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .accessibilityLabel("设置")
-            }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("国标记分")
+                .font(.system(size: 34, weight: .semibold))
+                .tracking(-0.5)
+                #if DEBUG
+                // 开发版的设置（识别方式、API Key）藏在长按标题里，正式版没有设置页
+                .onLongPressGesture { showSettings = true }
+                #endif
+            Text("打完一手，拍一下和牌的人的牌，App 帮你算番记账。")
+                .font(.system(size: 15))
+                .foregroundStyle(Theme.gray)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
@@ -69,28 +98,32 @@ private struct ActiveGameCard: View {
     var game: Game
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("进行中").font(.headline)
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(game.handLabel).font(.system(size: 17, weight: .semibold))
                 Spacer()
-                Chip(text: "\(game.prevalentWind.name)圈 · 第 \(game.currentHandIndex % 4 + 1) 局", kind: .neutral)
+                Text("继续 ›").font(.system(size: 15)).foregroundStyle(Theme.gray)
             }
-            HStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 8) {
                 ForEach(0..<4, id: \.self) { i in
-                    VStack(spacing: 4) {
-                        Text(game.players[i].name).font(.subheadline).lineLimit(1)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(game.players[i].name)
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.gray)
+                            .lineLimit(1)
                         Text(Theme.signed(game.scores[i]))
-                            .font(.title3.weight(.bold).monospacedDigit())
+                            .font(Theme.score(24))
                             .foregroundStyle(Theme.scoreColor(game.scores[i]))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
                     }
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            Text("剩 \(game.remainingHands) 局 · 点击继续")
-                .font(.footnote)
-                .foregroundStyle(Theme.secondaryInk)
         }
-        .card()
+        .padding(.vertical, 20)
+        .block(radius: 22)
+        .contentShape(Rectangle())
     }
 }
 
@@ -98,33 +131,168 @@ private struct HistoryRow: View {
     var game: Game
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(game.startedAt.formatted(date: .abbreviated, time: .omitted)).font(.subheadline.weight(.medium))
-                Text(game.players.map(\.name).joined(separator: "、") + " · \(game.currentHandIndex) 局")
-                    .font(.footnote)
-                    .foregroundStyle(Theme.secondaryInk)
-                    .lineLimit(1)
+        VStack(spacing: 0) {
+            HStack {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(game.startedAt.dayLabel).font(.system(size: 16, weight: .medium))
+                    Text(game.players.map(\.name).joined(separator: "、") + " · \(game.currentHandIndex) 局")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.gray)
+                        .lineLimit(1)
+                }
+                Spacer()
+                // 第一位当作「我」：开局时第一个填的是自己
+                Text(Theme.signed(game.scores[0]))
+                    .font(Theme.score(20))
+                    .foregroundStyle(Theme.scoreColor(game.scores[0]))
             }
-            Spacer()
-            // 第一位当作「我」：开局时东位填自己
-            Text(Theme.signed(game.scores[0]))
-                .font(.body.weight(.semibold).monospacedDigit())
-                .foregroundStyle(Theme.scoreColor(game.scores[0]))
-            Image(systemName: "chevron.right").font(.footnote).foregroundStyle(Theme.tertiaryInk)
+            .padding(.vertical, 14)
+            Hairline()
         }
-        .padding(16)
         .contentShape(Rectangle())
     }
 }
 
+/// 第一次打开、还没有任何牌局时的首页：一句话加三步，说清这个 App 是干什么的。
 private struct EmptyHome: View {
+    var openGuide: () -> Void
+    var openSettings: () -> Void
+    var start: () -> Void
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("打完一局，对着和牌拍一张").font(.title3.weight(.bold))
-            Text("App 认牌、算番、记账。圈风门风和庄家自动轮转，不用记规则。")
-                .foregroundStyle(Theme.secondaryInk)
+        GeometryReader { geo in
+            // 安全区以下留 38，离屏幕顶约 100；SE 这种矮屏只留 22，免得整页要滚
+            let topInset: CGFloat = geo.size.height < 560 ? 22 : 38
+            ScrollView {
+                // 品牌标在顶上；标题和步骤作为一块往下放，剩下的空白上 : 下 ≈ 5 : 3，两段都至少 32
+                FiveThreeLayout(height: geo.size.height - topInset) {
+                    brand
+                    VStack(alignment: .leading, spacing: 0) {
+                        headline
+                        steps.padding(.top, 40)
+                    }
+                }
+                .padding(.horizontal, 28)
+                .padding(.top, topInset)
+            }
         }
-        .card(padding: 20)
+        .bottomBar {
+            Button("开一局", action: start)
+                .buttonStyle(.primary)
+            Button("第一次打国标？先看看番怎么算", action: openGuide)
+                .buttonStyle(.text(size: 14))
+                .padding(.top, 10)
+        }
+    }
+}
+
+private extension EmptyHome {
+    var brand: some View {
+        HStack(spacing: 12) {
+            Text("和")
+                .font(Theme.serif(17))
+                .foregroundStyle(.white)
+                .frame(width: 30, height: 30)
+                .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+            Text("国标记分").font(.system(size: 17, weight: .semibold))
+        }
+        .accessibilityElement(children: .combine)
+        #if DEBUG
+        // 开发版的设置（识别方式、API Key）藏在长按品牌标里，正式版没有设置页
+        .onLongPressGesture { openSettings() }
+        #endif
+    }
+
+    var headline: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("拍一下，")
+            Text("番和钱都算好。")
+        }
+        .font(Theme.serif(32, semibold: true))
+    }
+
+    var steps: some View {
+        VStack(spacing: 0) {
+            StepRow(number: "一", title: "拍", detail: "和牌的人把牌推倒，拍一张") {
+                HStack(spacing: 2) {
+                    ForEach(Array(Tile.parseList("12355p").enumerated()), id: \.offset) { _, tile in
+                        TileFace(tile: tile, width: 16)
+                    }
+                }
+            }
+            StepRow(number: "二", title: "算", detail: "认出牌，按国标算番") {
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Text("32").font(Theme.score(30, weight: .ultraLight))
+                    Text("番").font(Theme.serif(13, semibold: true))
+                }
+            }
+            StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账") {
+                VStack(alignment: .trailing, spacing: 0) {
+                    Text("+120").foregroundStyle(Theme.vermilion)
+                    Text("−40").foregroundStyle(Theme.ink)
+                }
+                .font(Theme.score(15))
+            }
+        }
+    }
+}
+
+/// 两块竖排：第一块贴顶，第二块放在剩下的空白里，上方 : 下方 ≈ 5 : 3，两段都至少 `minGap`。
+/// 屏幕太矮时整体比 `height` 高，外面的 ScrollView 可以滚。
+private struct FiveThreeLayout: Layout {
+    var height: CGFloat
+    var minGap: CGFloat = 32
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? 0
+        let content = subviews.reduce(0) { $0 + $1.sizeThatFits(ProposedViewSize(width: width, height: nil)).height }
+        return CGSize(width: width, height: max(height, content + 2 * minGap))
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard subviews.count == 2 else { return }
+        let p = ProposedViewSize(width: bounds.width, height: nil)
+        let top = subviews[0].sizeThatFits(p).height
+        let block = subviews[1].sizeThatFits(p).height
+        let free = bounds.height - top - block
+        let below = max(minGap, free * 3 / 8)
+        let above = max(minGap, free - below)
+        subviews[0].place(at: bounds.origin, proposal: p)
+        subviews[1].place(at: CGPoint(x: bounds.minX, y: bounds.minY + top + above), proposal: p)
+    }
+}
+
+/// 三步里的一行：朱红数字、标题和说明、右边一个小样。
+private struct StepRow<Sample: View>: View {
+    var number: String
+    var title: String
+    var detail: String
+    @ViewBuilder var sample: Sample
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                // 数字放进描边小方印，单独一笔的「一」才不像破折号
+                Text(number)
+                    .font(Theme.serif(15, semibold: true))
+                    .foregroundStyle(Theme.vermilion)
+                    .frame(width: 26, height: 26)
+                    .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous).strokeBorder(Theme.vermilion, lineWidth: 1))
+                    .frame(width: 28, alignment: .leading)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title).font(.system(size: 17, weight: .semibold))
+                    Text(detail)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.gray)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
+                }
+                .padding(.leading, 6)
+                Spacer(minLength: 12)
+                sample.accessibilityHidden(true)
+            }
+            .padding(.vertical, 24)
+            Hairline()
+        }
     }
 }

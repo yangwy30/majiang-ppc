@@ -1,26 +1,55 @@
 import SwiftUI
 import MajiangKit
 
-/// 扁平真牌（风格 A）：饼画圆点，条画竹节，万写数字配红色「萬」，没有立体厚度。
-/// 用在要对照桌上真牌的地方：确认牌面、选和张、不成和页。小尺寸和明细里用 `TileText`。
+/// 牌的显示状态：拿不准的牌用朱红虚线加「?」，认错的只有虚线，取景器里的示意牌发灰。
+enum TileState {
+    case normal, doubt, wrong, dim
+}
+
+/// 扁平真牌：饼画圆环，条画竹节，万写数字配红色「萬」，没有立体厚度。
+/// 用在要对照桌上真牌的地方：核对页、候选、不成和提示。
 struct TileFace: View {
     var tile: Tile
     var width: CGFloat = 44
+    var state: TileState = .normal
 
-    private var height: CGFloat { width * 4 / 3 }
+    private var height: CGFloat { (width * 1.32).rounded() }
+    private var inset: CGFloat { width * 0.14 }
+    private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: width * 0.16, style: .continuous) }
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: width * 0.14, style: .continuous)
-                .fill(Theme.tileFace)
-            RoundedRectangle(cornerRadius: width * 0.14, style: .continuous)
-                .stroke(Theme.border, lineWidth: 1)
+            shape
+                .fill(Theme.tileShadow)
+                .offset(y: 1.5)
+            shape
+                .fill(state == .dim ? Theme.tileDim : Theme.tileFace)
+            shape
+                .strokeBorder(Theme.tileEdge, lineWidth: 1)
             face
-                .frame(width: width * 0.8, height: height * 0.84)
+                .frame(width: width - 2 * inset, height: height - 2 * inset)
         }
         .frame(width: width, height: height)
+        .opacity(state == .dim ? 0.9 : 1)
+        .overlay {
+            if state == .doubt || state == .wrong {
+                RoundedRectangle(cornerRadius: width * 0.16 + 3, style: .continuous)
+                    .strokeBorder(Theme.vermilion, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                    .padding(-4.5)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if state == .doubt {
+                Text("?")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 18, height: 18)
+                    .background(Theme.vermilion, in: Circle())
+                    .offset(x: 7, y: -7)
+            }
+        }
         .accessibilityElement()
-        .accessibilityLabel(tile.displayName)
+        .accessibilityLabel(tile.displayName + (state == .doubt ? "，拿不准" : ""))
     }
 
     @ViewBuilder
@@ -67,45 +96,61 @@ private struct Pattern<Content: View>: View {
     }
 }
 
+/// 饼：圆环加实心圆点，蓝、绿、红三色，排法和设计稿一致。
 private struct DotsFace: View {
     var rank: Int
 
+    private struct Dot {
+        var x: CGFloat
+        var y: CGFloat
+        var color: Color
+        /// 直径占牌面内宽的比例。
+        var size: CGFloat
+    }
+
     var body: some View {
         GeometryReader { geo in
-            let d = min(geo.size.width, geo.size.height) * diameter
-            Pattern(points: Self.layout(rank)) { red in
+            let w = geo.size.width
+            ForEach(Array(Self.layout(rank).enumerated()), id: \.offset) { _, dot in
+                let s = dot.size * w
                 ZStack {
-                    Circle().fill(red ? Theme.tileRed : Theme.tileDots)
-                    Circle().fill(Theme.tileFace).padding(d * 0.28)
-                    Circle().fill(red ? Theme.tileRed : Theme.tileDots).padding(d * 0.4)
+                    Circle().strokeBorder(dot.color, lineWidth: max(1, s * 0.13))
+                    Circle().fill(dot.color).frame(width: s * 0.34, height: s * 0.34)
                 }
-                .frame(width: d, height: d)
+                .frame(width: s, height: s)
+                .position(x: dot.x * w, y: dot.y * geo.size.height)
             }
         }
     }
 
-    private var diameter: CGFloat {
+    private static func layout(_ rank: Int) -> [Dot] {
+        let b = Theme.tileBlue, g = Theme.tileGreen, r = Theme.tileRed
+        let spec: [(CGFloat, CGFloat, Color, CGFloat)]
         switch rank {
-        case 1: 0.8
-        case 2, 3: 0.42
-        case 4, 5: 0.4
-        default: 0.3
+        case 1: spec = [(0.5, 0.5, r, 0.86)]
+        case 2: spec = [(0.5, 0.26, g, 0.46), (0.5, 0.74, b, 0.46)]
+        case 3: spec = [(0.2, 0.16, b, 0.38), (0.5, 0.5, r, 0.38), (0.8, 0.84, g, 0.38)]
+        case 4: spec = [(0.26, 0.27, b, 0.44), (0.74, 0.27, g, 0.44), (0.26, 0.73, g, 0.44), (0.74, 0.73, b, 0.44)]
+        case 5: spec = [(0.22, 0.2, b, 0.38), (0.78, 0.2, g, 0.38), (0.5, 0.5, r, 0.38), (0.22, 0.8, g, 0.38), (0.78, 0.8, b, 0.38)]
+        case 6: spec = [(0.27, 0.16, g, 0.38), (0.73, 0.16, g, 0.38), (0.27, 0.5, r, 0.38), (0.73, 0.5, r, 0.38),
+                        (0.27, 0.84, r, 0.38), (0.73, 0.84, r, 0.38)]
+        case 7: spec = [(0.18, 0.1, g, 0.3), (0.5, 0.23, g, 0.3), (0.82, 0.36, g, 0.3), (0.27, 0.63, r, 0.34),
+                        (0.73, 0.63, r, 0.34), (0.27, 0.89, r, 0.34), (0.73, 0.89, r, 0.34)]
+        case 8:
+            var dots: [(CGFloat, CGFloat, Color, CGFloat)] = []
+            for y: CGFloat in [0.11, 0.37, 0.63, 0.89] {
+                dots.append((0.27, y, b, 0.32))
+                dots.append((0.73, y, b, 0.32))
+            }
+            spec = dots
+        default:
+            var dots: [(CGFloat, CGFloat, Color, CGFloat)] = []
+            for (y, c) in [(CGFloat(0.16), b), (0.5, r), (0.84, g)] {
+                for x: CGFloat in [0.17, 0.5, 0.83] { dots.append((x, y, c, 0.3)) }
+            }
+            spec = dots
         }
-    }
-
-    static func layout(_ rank: Int) -> [Spot] {
-        switch rank {
-        case 1: return [spot(0.5, 0.5, red: true)]
-        case 2: return [spot(0.5, 0.27), spot(0.5, 0.73)]
-        case 3: return [spot(0.22, 0.2), spot(0.5, 0.5, red: true), spot(0.78, 0.8)]
-        case 4: return grid([0.28, 0.72], [0.27, 0.73])
-        case 5: return grid([0.26, 0.74], [0.22, 0.78]) + [spot(0.5, 0.5, red: true)]
-        case 6: return grid([0.3, 0.7], [0.17]) + grid([0.3, 0.7], [0.55, 0.84], red: { _, _ in true })
-        case 7: return [spot(0.2, 0.12), spot(0.5, 0.24), spot(0.8, 0.36)]
-            + grid([0.3, 0.7], [0.6, 0.86], red: { _, _ in true })
-        case 8: return grid([0.3, 0.7], [0.12, 0.37, 0.63, 0.88])
-        default: return grid([0.2, 0.5, 0.8], [0.17, 0.5, 0.83], red: { _, y in y == 0.5 })
-        }
+        return spec.map { Dot(x: $0.0, y: $0.1, color: $0.2, size: $0.3) }
     }
 }
 
@@ -151,7 +196,7 @@ private struct Stick: View {
 
     var body: some View {
         GeometryReader { geo in
-            let color = red ? Theme.tileRed : Theme.tileBamboo
+            let color = red ? Theme.tileRed : Theme.tileGreen
             ZStack {
                 Capsule().fill(color)
                 Rectangle().fill(Theme.tileFace).frame(height: max(1, geo.size.height * 0.07))
@@ -185,7 +230,7 @@ private struct HonorFace: View {
         if tile.rank == 7 {
             // 白板：蓝色细框
             RoundedRectangle(cornerRadius: width * 0.08)
-                .stroke(Theme.tileDots, lineWidth: max(1.5, width * 0.05))
+                .stroke(Theme.tileBlue, lineWidth: max(1.5, width * 0.05))
                 .padding(width * 0.06)
         } else {
             Text(tile.faceCharacter)
@@ -198,24 +243,13 @@ private struct HonorFace: View {
     private var color: Color {
         switch tile.rank {
         case 5: Theme.tileRed
-        case 6: Theme.tileBamboo
+        case 6: Theme.tileGreen
         default: Theme.ink
         }
     }
 }
 
-/// 文字牌（风格 B）：「567饼」「3万」，用颜色区分花色。用在账本、历史、番种明细和小尺寸。
-struct TileText: View {
-    var tiles: [Tile]
-    var font: Font = .body
-
-    var body: some View {
-        Text(tiles.displayText)
-            .font(font.monospacedDigit())
-    }
-}
-
-/// 一排扁平真牌，副露之间留空。
+/// 一排扁平真牌。
 struct TileRow: View {
     var tiles: [Tile]
     var width: CGFloat = 36
