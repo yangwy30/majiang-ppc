@@ -14,6 +14,7 @@ struct CaptureView: View {
     @State private var pickerItem: PhotosPickerItem?
     /// 端侧模型零点几秒就认完了，转圈晚一点出来，免得一闪而过。
     @State private var slow = false
+    @State private var autoShot = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -75,6 +76,14 @@ struct CaptureView: View {
             flow.photo = nil
             cameraOn = await camera.start()
             await model.preloadOnDeviceModel()
+            #if DEBUG
+            // 截图用：`-demo-screen capture -auto-shoot` 进拍照页 1.5 秒后自动拍一张（演示数据），看核对页升上来、牌落下
+            if model.demoScreen == .capture && ProcessInfo.processInfo.arguments.contains("-auto-shoot") && !autoShot {
+                autoShot = true
+                try? await Task.sleep(for: .seconds(1.5))
+                use(UIImage(systemName: "photo") ?? UIImage())
+            }
+            #endif
         }
         .onDisappear { camera.stop() }
         .task(id: flow.isRecognizing) {
