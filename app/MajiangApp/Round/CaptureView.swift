@@ -154,7 +154,7 @@ struct CaptureView: View {
                     .padding(.horizontal, 18)
                 VStack {
                     Spacer()
-                    Text(cameraOn || model.effectiveRecognitionMode == .demo ? "手牌推倒排成一排，和的那张放最右"
+                    Text(cameraOn || model.effectiveRecognitionMode == .demo || model.demoScreen != nil ? "手牌推倒排成一排，和的那张放最右"
                          : "这台设备没有相机，从左下角的相册选一张")
                         .font(.system(size: 14))
                         .foregroundStyle(.white.opacity(0.85))
