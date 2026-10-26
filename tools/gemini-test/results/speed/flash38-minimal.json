@@ -1,0 +1,167 @@
+[
+ {
+  "id": "g01",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g02",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g03",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g04",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g05",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g06",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g07",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g08",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g09",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "g10",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w01",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w02",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w03",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w04",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w05",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w06",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w07",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w08",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w09",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w10",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w11",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w12",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w13",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w14",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w15",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w16",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w17",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w18",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w19",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w20",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w21",
+  "truth_win": true,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w23",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ },
+ {
+  "id": "w24",
+  "truth_win": false,
+  "error": "HTTP 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Thinking level MINIMAL is not supported for this model. Please retry with other thinking level.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n "
+ }
+]
