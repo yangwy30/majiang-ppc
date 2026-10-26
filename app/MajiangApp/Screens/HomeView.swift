@@ -160,56 +160,23 @@ private struct EmptyHome: View {
     var start: () -> Void
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 12) {
-                    Text("和")
-                        .font(Theme.serif(17))
-                        .foregroundStyle(.white)
-                        .frame(width: 30, height: 30)
-                        .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
-                    Text("国标记分").font(.system(size: 17, weight: .semibold))
-                }
-                .accessibilityElement(children: .combine)
-                #if DEBUG
-                // 开发版的设置（识别方式、API Key）藏在长按品牌标里，正式版没有设置页
-                .onLongPressGesture { openSettings() }
-                #endif
-
+        GeometryReader { geo in
+            ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("拍一下，")
-                    Text("番和钱都算好。")
+                    brand
+                    // 标题和步骤作为一块往下放：上方留白 : 下方留白 ≈ 5 : 3，两段都至少 32
+                    VStack(alignment: .leading, spacing: 0) {
+                        headline
+                        steps.padding(.top, 40)
+                    }
+                    .padding(.vertical, 32)
+                    .frame(maxHeight: .infinity, alignment: Alignment(horizontal: .leading, vertical: .fiveEighths))
                 }
-                .font(Theme.serif(32, semibold: true))
-                .padding(.top, 28)
-
-                VStack(spacing: 0) {
-                    StepRow(number: "一", title: "拍", detail: "和牌的人把牌推倒，拍一张") {
-                        HStack(spacing: 2) {
-                            ForEach(Array(Tile.parseList("12355p").enumerated()), id: \.offset) { _, tile in
-                                TileFace(tile: tile, width: 16)
-                            }
-                        }
-                    }
-                    StepRow(number: "二", title: "算", detail: "认出牌，按国标算番") {
-                        HStack(alignment: .firstTextBaseline, spacing: 3) {
-                            Text("32").font(Theme.score(30, weight: .ultraLight))
-                            Text("番").font(Theme.serif(13, semibold: true))
-                        }
-                    }
-                    StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账") {
-                        VStack(alignment: .trailing, spacing: 0) {
-                            Text("+120").foregroundStyle(Theme.vermilion)
-                            Text("−40").foregroundStyle(Theme.ink)
-                        }
-                        .font(Theme.score(15))
-                    }
-                }
-                .padding(.top, 40)
+                .padding(.horizontal, 28)
+                // 安全区以下再留 38，离屏幕顶约 100
+                .padding(.top, 38)
+                .frame(minHeight: geo.size.height)
             }
-            .padding(.horizontal, 28)
-            // 安全区以下再留 38，离屏幕顶约 100
-            .padding(.top, 38)
         }
         .bottomBar {
             Button("开一局", action: start)
@@ -219,6 +186,66 @@ private struct EmptyHome: View {
                 .padding(.top, 10)
         }
     }
+}
+
+private extension EmptyHome {
+    var brand: some View {
+        HStack(spacing: 12) {
+            Text("和")
+                .font(Theme.serif(17))
+                .foregroundStyle(.white)
+                .frame(width: 30, height: 30)
+                .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+            Text("国标记分").font(.system(size: 17, weight: .semibold))
+        }
+        .accessibilityElement(children: .combine)
+        #if DEBUG
+        // 开发版的设置（识别方式、API Key）藏在长按品牌标里，正式版没有设置页
+        .onLongPressGesture { openSettings() }
+        #endif
+    }
+
+    var headline: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("拍一下，")
+            Text("番和钱都算好。")
+        }
+        .font(Theme.serif(32, semibold: true))
+    }
+
+    var steps: some View {
+        VStack(spacing: 0) {
+            StepRow(number: "一", title: "拍", detail: "和牌的人把牌推倒，拍一张") {
+                HStack(spacing: 2) {
+                    ForEach(Array(Tile.parseList("12355p").enumerated()), id: \.offset) { _, tile in
+                        TileFace(tile: tile, width: 16)
+                    }
+                }
+            }
+            StepRow(number: "二", title: "算", detail: "认出牌，按国标算番") {
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Text("32").font(Theme.score(30, weight: .ultraLight))
+                    Text("番").font(Theme.serif(13, semibold: true))
+                }
+            }
+            StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账") {
+                VStack(alignment: .trailing, spacing: 0) {
+                    Text("+120").foregroundStyle(Theme.vermilion)
+                    Text("−40").foregroundStyle(Theme.ink)
+                }
+                .font(Theme.score(15))
+            }
+        }
+    }
+}
+
+private extension VerticalAlignment {
+    /// 放在 5/8 高度处：子视图和容器都按这个比例对齐，上下留白就是 5 : 3。
+    enum FiveEighths: AlignmentID {
+        static func defaultValue(in d: ViewDimensions) -> CGFloat { d.height * 5 / 8 }
+    }
+
+    static let fiveEighths = VerticalAlignment(FiveEighths.self)
 }
 
 /// 三步里的一行：朱红数字、标题和说明、右边一个小样。
@@ -231,9 +258,12 @@ private struct StepRow<Sample: View>: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
+                // 数字放进描边小方印，单独一笔的「一」才不像破折号
                 Text(number)
-                    .font(Theme.serif(22, semibold: true))
+                    .font(Theme.serif(15, semibold: true))
                     .foregroundStyle(Theme.vermilion)
+                    .frame(width: 26, height: 26)
+                    .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous).strokeBorder(Theme.vermilion, lineWidth: 1))
                     .frame(width: 28, alignment: .leading)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title).font(.system(size: 17, weight: .semibold))
@@ -247,7 +277,7 @@ private struct StepRow<Sample: View>: View {
                 Spacer(minLength: 12)
                 sample.accessibilityHidden(true)
             }
-            .padding(.vertical, 20)
+            .padding(.vertical, 24)
             Hairline()
         }
     }
