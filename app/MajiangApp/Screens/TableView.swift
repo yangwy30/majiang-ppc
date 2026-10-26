@@ -78,7 +78,7 @@ struct TableView: View {
         .confirmationDialog("这一局荒庄？不计分，只推进局数。", isPresented: $confirmDraw, titleVisibility: .visible) {
             Button("荒庄") {
                 guard var updated = model.game(gameID) else { return }
-                try? updated.recordDraw()
+                _ = try? updated.recordDraw()
                 model.update(updated)
             }
         }
@@ -86,8 +86,8 @@ struct TableView: View {
             RoundFlowView(game: game) { record in
                 guard var updated = model.game(gameID) else { return }
                 switch record {
-                case .win(let win): try? updated.recordWin(win)
-                case .falseWin(let offender): try? updated.recordFalseWin(offender: offender)
+                case .win(let win): _ = try? updated.recordWin(win)
+                case .falseWin(let offender): _ = try? updated.recordFalseWin(offender: offender)
                 default: break
                 }
                 model.update(updated)
@@ -96,7 +96,7 @@ struct TableView: View {
         .sheet(isPresented: $manualScoring) {
             ManualScoreView(game: game) { deltas, note in
                 guard var updated = model.game(gameID) else { return }
-                try? updated.recordManual(deltas: deltas, note: note)
+                _ = try? updated.recordManual(deltas: deltas, note: note)
                 model.update(updated)
             }
         }
@@ -114,18 +114,22 @@ private struct TableDiagram: View {
             SeatLabel(game: game, player: seating[2], hand: hand)
             HStack(spacing: 12) {
                 SeatLabel(game: game, player: seating[3], hand: hand)
+                    .frame(maxWidth: .infinity)
+                // 中间固定为正方形；在没有高度约束的 HStack 里用 aspectRatio 会被压扁，「东圈」变成省略号
                 VStack(spacing: 6) {
                     Text("\(game.prevalentWind(ofHand: hand).name)圈")
                         .font(.system(size: 34, weight: .bold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                     Text(game.isFinished ? "已打完" : "剩 \(game.remainingHands) 局")
                         .font(.footnote)
                         .foregroundStyle(Theme.secondaryInk)
                 }
-                .frame(maxWidth: .infinity)
-                .aspectRatio(1, contentMode: .fit)
+                .frame(width: 116, height: 116)
                 .background(Theme.canvas, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Theme.border))
                 SeatLabel(game: game, player: seating[1], hand: hand)
+                    .frame(maxWidth: .infinity)
             }
             SeatLabel(game: game, player: seating[0], hand: hand)
         }
