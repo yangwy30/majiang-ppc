@@ -83,6 +83,101 @@ final class GameTests: XCTestCase {
         XCTAssertThrowsError(try game.recordDraw())
     }
 
+    func testEditingAnEarlierWinRecomputesTheLedger() throws {
+        var game = makeGame()
+        let first = try game.recordWin(win(0, discarder: 1, fan: 10))
+        try game.recordWin(win(2, discarder: nil, fan: 8))
+        // 第一局其实是阿乐和、老王点炮
+        var fixed = win(2, discarder: 3, fan: 10)
+        fixed.context = game.records[0].outcome.win!.context
+        try game.replace(first.id, with: .win(fixed))
+        XCTAssertEqual(game.records[0].id, first.id)
+        XCTAssertEqual(game.records[0].deltas, [-8, -8, 34, -18])
+        XCTAssertEqual(game.records[1].deltas, [-16, -16, 48, -16], "后面的局不受影响")
+        XCTAssertEqual(game.scores, [-24, -24, 82, -34])
+        XCTAssertEqual(game.records[0].outcome.win?.context.seatWind, .west, "门风跟着和牌的人换")
+    }
+
+    func testChangingAWinToAFalseWinRenumbersLaterHands() throws {
+        var game = makeGame()
+        let first = try game.recordWin(win(0, discarder: 1, fan: 8))
+        try game.recordDraw()
+        try game.recordWin(win(1, discarder: nil, fan: 8))
+        try game.replace(first.id, with: .falseWin(offender: 0))
+        XCTAssertEqual(game.records.map(\.handIndex), [0, 0, 1], "错和不算一局，后面的局往前挪")
+        XCTAssertEqual(game.currentHandIndex, 2)
+        XCTAssertEqual(game.records[0].deltas, [-30, 10, 10, 10])
+        XCTAssertEqual(game.scores.reduce(0, +), 0)
+    }
+
+    func testRemovingAHandMovesLaterWinsAndRescoresWinds() throws {
+        var game = makeGame()
+        let draw = try game.recordDraw()
+        // 第二局老王（西家）和：西风刻算门风刻
+        let tiles = Hand(concealed: Tile.parseList("西西西 南南南 123m 456m 9m9m"), winningTile: Tile(.characters, 9))
+        let context = game.winContext(for: 3)
+        let result = try FanCalculator.score(tiles, context: context).get()
+        XCTAssertTrue(result.contains(.seatWind))
+        try game.recordWin(WinRecord(winner: 3, discarder: 0, hand: tiles, context: context, result: result))
+
+        game.remove(draw.id)
+        XCTAssertEqual(game.records.count, 1)
+        XCTAssertEqual(game.records[0].handIndex, 0)
+        let moved = try XCTUnwrap(game.records[0].outcome.win)
+        XCTAssertEqual(moved.context.seatWind, .north, "挪到第一局，老王是北家")
+        XCTAssertFalse(moved.fans.contains { $0.fan == .seatWind })
+        XCTAssertEqual(game.records[0].deltas[3], 3 * 8 + moved.totalFan)
+    }
+
+    func testSwitchingSelfDrawnRescoresTheHand() throws {
+        var game = makeGame()
+        let tiles = Hand(concealed: Tile.parseList("1p 1p 1p 2p 2p 3p 3p 4p 4p 5p 5p 6p 6p 7p"))
+        var context = game.winContext(for: 0)
+        context.selfDrawn = true
+        context.lastTileOfWall = true
+        let result = try FanCalculator.score(tiles, context: context).get()
+        let record = try game.recordWin(WinRecord(winner: 0, discarder: nil, hand: tiles, context: context, result: result))
+
+        var edited = try XCTUnwrap(record.outcome.win)
+        edited.discarder = 2
+        try game.replace(record.id, with: .win(edited))
+        let rescored = try XCTUnwrap(game.records[0].outcome.win)
+        XCTAssertFalse(rescored.context.selfDrawn)
+        XCTAssertFalse(rescored.context.lastTileOfWall, "妙手回春换成点炮就不成立了")
+        XCTAssertFalse(rescored.fans.contains { $0.fan == .selfDrawn })
+        XCTAssertEqual(game.records[0].deltas[2], -(8 + rescored.totalFan))
+    }
+
+    func testFanOverride() throws {
+        var game = makeGame()
+        let record = try game.recordWin(win(1, discarder: 0, fan: 8, flowers: 2))
+        var edited = try XCTUnwrap(record.outcome.win)
+        edited.fanOverride = 16
+        try game.replace(record.id, with: .win(edited))
+        XCTAssertEqual(game.records[0].outcome.win?.totalFan, 16)
+        XCTAssertEqual(game.records[0].deltas, [-24, 40, -8, -8])
+
+        edited.fanOverride = 9  // 去掉 2 番花只剩 7 番
+        XCTAssertThrowsError(try game.replace(record.id, with: .win(edited))) { error in
+            XCTAssertEqual(error as? GameError, .belowMinimumFan(7))
+        }
+        XCTAssertEqual(game.records[0].outcome.win?.totalFan, 16, "改不了时牌局不变")
+    }
+
+    func testEditCannotPushPastLastHand() throws {
+        var game = makeGame()
+        for _ in 0..<15 { try game.recordDraw() }
+        let falseWin = try game.recordFalseWin(offender: 1)
+        try game.recordDraw()
+        XCTAssertTrue(game.isFinished)
+        XCTAssertThrowsError(try game.replace(falseWin.id, with: .drawn)) { error in
+            XCTAssertEqual(error as? GameError, .tooManyHands(16))
+        }
+        // 打完的牌局也能改别的
+        try game.replace(falseWin.id, with: .falseWin(offender: 2))
+        XCTAssertEqual(game.records[15].deltas, [10, 10, -30, 10])
+    }
+
     func testMinimalTransfers() {
         let scores = [72, -72, 30, -30]
         let transfers = Settlement.minimalTransfers(scores: scores)
@@ -202,5 +297,12 @@ final class ArchiveAndParsingTests: XCTestCase {
     func testSpecialWinConflicts() {
         XCTAssertTrue(SpecialWin.kongReplacement.conflicts.contains(.lastTileDraw))
         XCTAssertTrue(SpecialWin.lastTileClaim.conflicts.contains(.robbingTheKong))
+    }
+}
+
+private extension HandOutcome {
+    var win: WinRecord? {
+        if case .win(let win) = self { return win }
+        return nil
     }
 }

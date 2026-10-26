@@ -5,7 +5,7 @@ import MajiangKit
 /// 数据存在临时目录，不会碰真的牌局记录。只在开发版里有。
 enum DemoScreen: String {
     case emptyHome = "empty-home"
-    case home, newGame = "new-game", table, capture, check, notWin = "not-win", result, settle
+    case home, newGame = "new-game", table, editHand = "edit-hand", capture, check, notWin = "not-win", result, settle
 
     static var current: DemoScreen? {
         #if DEBUG

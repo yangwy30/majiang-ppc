@@ -11,8 +11,8 @@ struct TableView: View {
     @State private var showGuide = false
     @State private var confirmEnd = false
     @State private var pickingFalseWin = false
-    /// 点了账本最上面那局，问要不要撤销。
-    @State private var undoCandidate: HandRecord?
+    /// 点开要改的那一局。
+    @State private var editing: EditTarget?
     @State private var recordError: String?
     /// 刚记下的一局，底部显示 5 秒「撤销」。
     @State private var justRecorded: HandRecord?
@@ -50,19 +50,22 @@ struct TableView: View {
                         .foregroundStyle(Theme.gray)
                         .padding(.vertical, 14)
                 }
-                ForEach(Array(game.records.enumerated().reversed()), id: \.element.id) { number, record in
-                    if record.id == game.records.last?.id {
-                        // 最近一局随时可以点开撤销，不只是记下后的 5 秒
-                        Button {
-                            undoCandidate = record
-                        } label: {
-                            RecordRow(number: number + 1, record: record, game: game)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityHint("点一下可以撤销这一局")
-                    } else {
-                        RecordRow(number: number + 1, record: record, game: game)
+                ForEach(Array(game.records.enumerated().reversed()), id: \.element.id) { index, record in
+                    // 每一局都能点开改或删，打完的牌局也一样
+                    Button {
+                        editing = EditTarget(record: record, number: index + 1)
+                    } label: {
+                        RecordRow(number: index + 1, record: record, game: game)
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityHint("点一下可以改或删掉这一局")
+                }
+                if !game.records.isEmpty {
+                    Text("记错了？点那一局就能改，后面的分数会跟着重算。")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.faint)
+                        .padding(.top, 14)
+                        .padding(.bottom, 8)
                 }
             }
             .padding(.horizontal, 24)
@@ -114,12 +117,12 @@ struct TableView: View {
         } message: {
             Text("推倒了却凑不成和牌：赔另外三家各 \(game.rules.falseWinPenalty) 分，这一局接着打。")
         }
-        .confirmationDialog("撤销第 \((undoCandidate?.handIndex ?? 0) + 1) 局？",
-                            isPresented: Binding(get: { undoCandidate != nil }, set: { if !$0 { undoCandidate = nil } }),
-                            titleVisibility: .visible, presenting: undoCandidate) { record in
-            Button("撤销这一局", role: .destructive) { undo(record) }
-        } message: { record in
-            Text(record.title(in: game) + "。撤销后这一局的分数全部退回。")
+        .sheet(item: $editing) { target in
+            EditHandSheet(game: game, record: target.record, number: target.number) { outcome in
+                edit { try $0.replace(target.record.id, with: outcome) }
+            } onDelete: {
+                edit { $0.remove(target.record.id) }
+            }
         }
         .alert("结束这场牌局？", isPresented: $confirmEnd) {
             Button("结束", role: .destructive) { settle(game) }
@@ -144,6 +147,9 @@ struct TableView: View {
         .sheet(isPresented: $showGuide) { RulesGuideView() }
         .onAppear {
             if model.demoScreen == .table { justRecorded = game.records.last }
+            if model.demoScreen == .editHand, game.records.count > 1 {
+                editing = EditTarget(record: game.records[1], number: 2)
+            }
             if model.demoScreen?.opensRound == true { recording = true }
         }
         .alert("没有记上", isPresented: Binding(get: { recordError != nil }, set: { if !$0 { recordError = nil } })) {
@@ -177,6 +183,23 @@ struct TableView: View {
         }
     }
 
+    /// 改以前的一局。改了刚记的那局就收起「撤销」，免得撤销掉的是改过的版本。
+    private func edit(_ change: (inout Game) throws -> Void) {
+        guard var updated = model.game(gameID) else { return }
+        do {
+            try change(&updated)
+            model.update(updated)
+            if let record = justRecorded, updated.records.last?.id != record.id || updated.records.last != record {
+                undoTimer?.cancel()
+                withAnimation(.easeIn(duration: 0.2)) { justRecorded = nil }
+            }
+        } catch let error as GameError {
+            recordError = error.message
+        } catch {
+            recordError = error.localizedDescription
+        }
+    }
+
     private func undo(_ record: HandRecord) {
         undoTimer?.cancel()
         guard var updated = model.game(gameID), updated.records.last?.id == record.id else { return }
@@ -192,6 +215,12 @@ struct TableView: View {
         model.update(updated)
         model.path = [.settle(game.id)]
     }
+}
+
+private struct EditTarget: Identifiable {
+    var record: HandRecord
+    var number: Int
+    var id: UUID { record.id }
 }
 
 /// 方桌：我（第一个填的人）在下面，下家在右，对家在上，上家在左。
