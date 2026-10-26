@@ -62,7 +62,7 @@ final class RecognitionTests: XCTestCase {
         let b = Recognition(concealed: bTiles, source: "Gemini")
 
         // 端侧读对，Gemini 读错一张
-        let merged = DualReadRecognizer.merge(b, a)
+        let merged = DualReadRecognizer.merge(b, with: a)
         XCTAssertEqual(merged.reviewCount, 1)
         XCTAssertEqual(merged.concealed[9].candidates, [Tile(.dots, 4), Tile(.dots, 5)])
 
@@ -76,20 +76,24 @@ final class RecognitionTests: XCTestCase {
         both.concealed[9].tile = Tile(.dots, 5)
         XCTAssertTrue(RecognitionResolver.resolve(both, context: WinContext()).recommended.isEmpty)
 
-        // 一路失败时用另一路
-        let dual = DualReadRecognizer(primary: OnDeviceRecognizer(), secondary: MockRecognizer(samples: [a], delay: .zero))
+        // 端侧模型没装时只用 Gemini
+        let dual = DualReadRecognizer(primary: OnDeviceRecognizer(), secondary: MockRecognizer(samples: [b], delay: .zero))
         let only = try await dual.recognize(RecognitionRequest(image: Data()))
-        XCTAssertEqual(only.source, "端侧")
+        XCTAssertEqual(only.source, "Gemini")
     }
 
     func testMergeWithDifferentCounts() {
-        let a = Recognition(concealed: Tile.parseList("123m456m789m11p23p"), source: "a")
-        let b = Recognition(concealed: Tile.parseList("123m456m789m11p234p"), source: "b")
-        let merged = DualReadRecognizer.merge(a, b)
-        XCTAssertEqual(merged.concealed.count, 13)
-        XCTAssertEqual(merged.reviewCount, 0, "a 里的牌在 b 里都有")
-        let c = DualReadRecognizer.merge(b, a)
-        XCTAssertEqual(c.reviewCount, 1)
+        let short = Recognition(concealed: Tile.parseList("123m456m789m11p23p"), source: "a")
+        let long = Recognition(concealed: Tile.parseList("123m456m789m11p234p"), source: "b")
+        // 另一路多读到一张：插在对应位置，标成待确认（可能是这一路漏读了）
+        let merged = DualReadRecognizer.merge(short, with: long)
+        XCTAssertEqual(merged.concealed.map(\.tile), Tile.parseList("123m456m789m11p234p"))
+        XCTAssertEqual(merged.reviewCount, 1)
+        XCTAssertTrue(merged.concealed[13].uncertain)
+        // 这一路多读的一张也标出来
+        let other = DualReadRecognizer.merge(long, with: short)
+        XCTAssertEqual(other.concealed.count, 14)
+        XCTAssertEqual(other.concealed.indices.filter { other.concealed[$0].needsReview }, [13])
     }
 
     func testMockSamplesAreConsistent() throws {

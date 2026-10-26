@@ -10,7 +10,7 @@ enum Route: Hashable {
 
 /// 识别用哪一路。默认演示数据，填了 Key 之后可以切到 Gemini。只在开发版的设置里能改。
 enum RecognitionMode: String, CaseIterable, Identifiable {
-    case demo, gemini, dual
+    case demo, gemini, onDevice, dual
 
     var id: String { rawValue }
 
@@ -18,9 +18,12 @@ enum RecognitionMode: String, CaseIterable, Identifiable {
         switch self {
         case .demo: "演示数据"
         case .gemini: "Gemini"
+        case .onDevice: "只用端侧模型"
         case .dual: "端侧 + Gemini 双读"
         }
     }
+
+    var usesOnDeviceModel: Bool { self == .onDevice || self == .dual }
 }
 
 @MainActor
@@ -44,6 +47,8 @@ final class AppModel {
     let cloud: CloudSync
     /// 演示识别只建一次，这样每次拍照会轮到下一手示例牌。
     private let demoRecognizer = MockRecognizer()
+    /// 端侧模型加载一次就留着（外层 nil = 还没加载，内层 nil = 没装）。
+    @ObservationIgnored private var loadedDetector: TileDetecting??
 
     /// 截图模式停在哪一页（见 DemoData）；正式版永远是 nil。
     let demoScreen = DemoScreen.current
@@ -151,9 +156,39 @@ final class AppModel {
             return demoRecognizer
         case .gemini:
             return RuleCheckedRecognizer(base: gemini())
+        case .onDevice:
+            return OnDeviceRecognizer(detector: onDeviceDetector)
         case .dual:
-            return DualReadRecognizer(primary: OnDeviceRecognizer(), secondary: RuleCheckedRecognizer(base: gemini()))
+            return DualReadRecognizer(primary: OnDeviceRecognizer(detector: onDeviceDetector),
+                                      secondary: RuleCheckedRecognizer(base: gemini()))
         }
+    }
+
+    // MARK: 端侧模型
+
+    /// 端侧模型在 App 包里的位置（Xcode 把 Resources/Models/MahjongTileDetector.mlpackage 编译成 .mlmodelc）。
+    /// 模型不进仓库，没放的话就是 nil，双读只剩 Gemini 一路。见 app/README.md。
+    nonisolated static var onDeviceModelURL: URL? {
+        Bundle.main.url(forResource: "MahjongTileDetector", withExtension: "mlmodelc")
+    }
+
+    private var onDeviceDetector: TileDetecting? {
+        if let loaded = loadedDetector { return loaded }
+        let detector = Self.loadDetector()
+        loadedDetector = .some(detector)
+        return detector
+    }
+
+    /// 打开拍照页时先在后台把模型加载好，按快门时不用等。
+    func preloadOnDeviceModel() async {
+        guard loadedDetector == nil, recognitionMode.usesOnDeviceModel else { return }
+        let detector = await Task.detached(priority: .userInitiated) { Self.loadDetector() }.value
+        if loadedDetector == nil { loadedDetector = .some(detector) }
+    }
+
+    nonisolated private static func loadDetector() -> TileDetecting? {
+        guard let url = onDeviceModelURL else { return nil }
+        return try? CoreMLTileDetector(compiledModelAt: url)
     }
 
     private func gemini() -> GeminiRecognizer {

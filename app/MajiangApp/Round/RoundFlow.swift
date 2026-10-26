@@ -15,6 +15,8 @@ final class RoundFlow {
     var winner: Int
     var photo: UIImage?
     var isRecognizing = false
+    /// 双读时端侧的结果已经显示在核对页，Gemini 还在复核。复核完之前牌面不能改。
+    var isReviewing = false
     var recognitionError: String?
     var source = ""
     /// 识别时的说明，比如有牌没认出来。
@@ -27,6 +29,10 @@ final class RoundFlow {
     var winningIndex: Int?
     /// 需要确认的牌里，规则引擎推荐的读法。
     var recommended: [Int: Tile] = [:]
+    /// 只有一边读到的牌里，规则引擎推荐删掉的。
+    var recommendedRemovals: Set<Int> = []
+    /// 刚识别完时有几张要确认（核对页标题上说两边读得一不一样）。
+    var reviewAtLoad = 0
 
     var selfDrawn = true
     /// 点炮的人。不预先猜，让用户自己点，免得记错人。
@@ -35,6 +41,10 @@ final class RoundFlow {
     var flowerCount = 0
     var showResult = false
 
+    /// 每次识别一个编号；中途重拍了，旧的结果回来时丢掉。
+    @ObservationIgnored private var recognitionID = UUID()
+    /// 端侧结果里的花牌数；复核期间用户改过花牌就不用 Gemini 的覆盖。
+    @ObservationIgnored private var previewFlowerCount: Int?
     @ObservationIgnored private var suggestionCache: (hand: Hand, context: WinContext, value: [FixSuggestion])?
 
     init(game: Game) {
@@ -73,6 +83,7 @@ final class RoundFlow {
 
     /// 底部按钮不能点时的原因；nil 表示可以看结果了。
     var blockedReason: String? {
+        if isReviewing { return "正在复核…" }
         if tiles.isEmpty { return "先把牌加上" }
         if pendingReviewCount > 0 { return "还有 \(pendingReviewCount) 张没确认" }
         switch scoring {
@@ -102,7 +113,19 @@ final class RoundFlow {
         var concealed = tiles.map(\.tile)
         concealed[index] = tile
         let winning = winningIndex.flatMap { concealed.indices.contains($0) ? concealed[$0] : nil } ?? concealed.last
-        let candidate = Hand(melds: melds, concealed: concealed, winningTile: winning)
+        return wins(Hand(melds: melds, concealed: concealed, winningTile: winning))
+    }
+
+    /// 把第 `index` 张删掉以后能不能和（只有一边读到的牌，问「照片里有没有这张」时用）。
+    func wins(removing index: Int) -> Bool {
+        guard tiles.indices.contains(index) else { return false }
+        var concealed = tiles.map(\.tile)
+        let winning = winningIndex.flatMap { $0 != index && concealed.indices.contains($0) ? concealed[$0] : nil }
+        concealed.remove(at: index)
+        return wins(Hand(melds: melds, concealed: concealed, winningTile: winning ?? concealed.last))
+    }
+
+    private func wins(_ candidate: Hand) -> Bool {
         if case .success(let result) = FanCalculator.score(candidate, context: context) {
             return result.meetsMinimum(game.rules.minimumFan)
         }
@@ -115,20 +138,55 @@ final class RoundFlow {
 
     // MARK: 识别
 
+    /// 识别。双读时端侧结果一出来就进核对页（牌面先锁住），Gemini 复核完再换成合并后的结果。
     func recognize(with recognizer: TileRecognizer) async {
         guard let photo, let data = photo.jpegData(compressionQuality: 0.85) else { return }
+        let id = UUID()
+        recognitionID = id
         isRecognizing = true
         recognitionError = nil
-        defer { isRecognizing = false }
-        do {
-            let recognition = try await recognizer.recognize(RecognitionRequest(image: data))
-            load(recognition)
-            steps = [.check]
-        } catch let error as RecognitionError {
-            recognitionError = error.message
-        } catch {
-            recognitionError = error.localizedDescription
+        defer {
+            if recognitionID == id {
+                isRecognizing = false
+                isReviewing = false
+            }
         }
+        let request = RecognitionRequest(image: data)
+        do {
+            let recognition: Recognition
+            if let progressive = recognizer as? ProgressiveTileRecognizer {
+                recognition = try await progressive.recognize(request) { [weak self] preview in
+                    await self?.showPreview(preview, id: id)
+                }
+            } else {
+                recognition = try await recognizer.recognize(request)
+            }
+            guard recognitionID == id else { return }
+            // 复核期间用户改过花牌数，就以用户的为准
+            let userFlowers = previewFlowerCount.flatMap { $0 != flowerCount ? flowerCount : nil }
+            load(recognition)
+            if let userFlowers { flowerCount = userFlowers }
+            steps = [.check]
+        } catch {
+            guard recognitionID == id else { return }
+            recognitionError = (error as? RecognitionError)?.message ?? error.localizedDescription
+        }
+    }
+
+    private func showPreview(_ preview: Recognition, id: UUID) {
+        guard recognitionID == id else { return }
+        load(preview)
+        previewFlowerCount = preview.flowerCount
+        isRecognizing = false
+        isReviewing = true
+        steps = [.check]
+    }
+
+    /// 回到拍照页重拍时调用：还没回来的识别结果不要了。
+    func cancelRecognition() {
+        recognitionID = UUID()
+        isRecognizing = false
+        isReviewing = false
     }
 
     func load(_ recognition: Recognition) {
@@ -138,8 +196,11 @@ final class RoundFlow {
         source = recognition.source
         notes = recognition.notes
         winningIndex = tiles.indices.last
-        recommended = RecognitionResolver.resolve(recognition, context: context,
-                                                  minimumFan: game.rules.minimumFan).recommended
+        previewFlowerCount = nil
+        reviewAtLoad = recognition.reviewCount
+        let resolution = RecognitionResolver.resolve(recognition, context: context, minimumFan: game.rules.minimumFan)
+        recommended = resolution.recommended
+        recommendedRemovals = resolution.removals
     }
 
     /// 跳过拍照：从空手牌开始手动输入。
@@ -156,6 +217,7 @@ final class RoundFlow {
         tiles[index].alternatives = []
         tiles[index].uncertain = false
         recommended[index] = nil
+        recommendedRemovals.remove(index)
     }
 
     /// 补一张牌。补的是漏读的牌，和张不跟着跳；还没有和张时才用这张。
@@ -169,19 +231,27 @@ final class RoundFlow {
         guard tiles.indices.contains(index) else { return append(tile) }
         tiles.insert(RecognizedTile(tile: tile), at: index + 1)
         if let w = winningIndex, w > index { winningIndex = w + 1 }
-        // 推荐读法按位置记的，位置变了就作废
-        recommended = [:]
+        shiftRecommendations(after: index, by: 1)
     }
 
     func remove(at index: Int) {
         guard tiles.indices.contains(index) else { return }
         tiles.remove(at: index)
-        recommended = [:]
+        recommended[index] = nil
+        recommendedRemovals.remove(index)
+        shiftRecommendations(after: index, by: -1)
         // 和张在被删的牌后面时下标前移；删的就是和张时改用最右一张
         if let w = winningIndex {
             if w > index { winningIndex = w - 1 }
             else if w == index { winningIndex = tiles.indices.last }
         }
+    }
+
+    /// 推荐读法是按位置记的，插入或删掉一张后，后面的位置跟着挪。
+    private func shiftRecommendations(after index: Int, by delta: Int) {
+        func shifted(_ i: Int) -> Int { i > index ? i + delta : i }
+        recommended = Dictionary(uniqueKeysWithValues: recommended.map { (shifted($0.key), $0.value) })
+        recommendedRemovals = Set(recommendedRemovals.map(shifted))
     }
 
     func apply(_ suggestion: FixSuggestion) {

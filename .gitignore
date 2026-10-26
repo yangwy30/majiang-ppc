@@ -6,6 +6,11 @@
 /tools/**/*.jpeg
 /tools/**/*.png
 *.onnx
+# 端侧认牌模型（竞品权重转的 Core ML，同样没有许可证）只放在本地，见 app/README.md
+*.mlpackage
+*.mlmodel
+*.mlmodelc
+app/MajiangApp/Resources/Models/
 
 # 脚本默认输出目录；要留档的结果手动放进 research/results/
 /tools/*/results/

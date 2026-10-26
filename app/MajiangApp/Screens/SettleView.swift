@@ -79,11 +79,6 @@ struct SettleView: View {
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 24)
                 }
-
-                // 结算是按账本算的；记错了回到账本改，回来就是新的结果
-                Button("看每一局，改记错的 ›") { model.path.append(.table(game.id)) }
-                    .buttonStyle(.text(size: 14))
-                    .padding(.top, 8)
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
@@ -92,15 +87,20 @@ struct SettleView: View {
             // 发图：微信里大家一眼看清；要文字的复制一下贴进群里
             Button("发到微信群") { ShareSheet.share(game) }
                 .buttonStyle(.primary)
-            Button(copied ? "已复制，去微信里粘贴" : "复制文字版") {
-                UIPasteboard.general.string = game.shareText
-                copied = true
-                Task {
-                    try? await Task.sleep(for: .seconds(2))
-                    copied = false
+            // 两个次要操作并排放，免得底部栏太高
+            HStack(spacing: 28) {
+                Button(copied ? "已复制，去微信粘贴" : "复制文字版") {
+                    UIPasteboard.general.string = game.shareText
+                    copied = true
+                    Task {
+                        try? await Task.sleep(for: .seconds(2))
+                        copied = false
+                    }
                 }
+                // 结算是按账本算的；记错了回到账本改，回来就是新的结果
+                Button("看每一局，改记错的") { model.path.append(.table(game.id)) }
             }
-            .buttonStyle(.text)
+            .buttonStyle(.text(size: 14))
         }
         .page()
         .navigationTitle("")

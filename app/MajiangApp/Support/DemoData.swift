@@ -6,6 +6,8 @@ import MajiangKit
 enum DemoScreen: String {
     case emptyHome = "empty-home"
     case home, newGame = "new-game", table, editHand = "edit-hand", capture, check, notWin = "not-win", result, settle
+    /// 双读：端侧结果已显示、Gemini 还在复核；复核完、有一张两边读得不一样和一张只有一边读到。
+    case reviewing = "check-reviewing", dualRead = "check-dual"
     /// 发到群里的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
     case shareSettle = "share-settle", shareLive = "share-live", backup
 
@@ -20,7 +22,7 @@ enum DemoScreen: String {
     }
 
     /// 在牌桌上自动打开记一局。
-    var opensRound: Bool { [.capture, .check, .notWin, .result].contains(self) }
+    var opensRound: Bool { [.capture, .check, .notWin, .result, .reviewing, .dualRead].contains(self) }
 }
 
 #if DEBUG
@@ -90,6 +92,17 @@ enum DemoData {
             flow.steps = [.check]
         case .notWin:
             flow.load(samples[2])
+            flow.steps = [.check]
+        case .reviewing:
+            flow.load(Recognition(concealed: Tile.parseList("1112233445566p 7p"), source: "端侧"))
+            flow.isReviewing = true
+            flow.steps = [.check]
+        case .dualRead:
+            // Gemini 把一张 5饼 读成 4饼；端侧在中间多读了一张 9条
+            var gemini = Recognition(concealed: Tile.parseList("1112233445566p 7p"), source: "Gemini")
+            gemini.concealed[9] = RecognizedTile(tile: Tile(suit: .dots, rank: 4)!)
+            let onDevice = Recognition(concealed: Tile.parseList("111223p 9s 3445566p 7p"), source: "端侧")
+            flow.load(DualReadRecognizer.merge(gemini, with: onDevice))
             flow.steps = [.check]
         case .result:
             flow.load(samples[0])
