@@ -2,13 +2,10 @@ import SwiftUI
 import MajiangKit
 
 enum RoundStep: Hashable {
-    case confirm
-    case notWin
-    case details
-    case result
+    case check
 }
 
-/// 记一局的草稿：谁和了 → 照片 → 确认牌面 → 怎么和的 → 番数与收付。
+/// 记一局的草稿：谁和了 → 拍照 → 核对（牌面 + 怎么和的）→ 结果。
 @MainActor
 @Observable
 final class RoundFlow {
@@ -32,9 +29,13 @@ final class RoundFlow {
     var recommended: [Int: Tile] = [:]
 
     var selfDrawn = true
+    /// 点炮的人。不预先猜，让用户自己点，免得记错人。
     var discarder: Int?
     var specials: Set<SpecialWin> = []
     var flowerCount = 0
+    var showResult = false
+
+    @ObservationIgnored private var suggestionCache: (hand: Hand, context: WinContext, value: [FixSuggestion])?
 
     init(game: Game) {
         self.game = game
@@ -67,6 +68,47 @@ final class RoundFlow {
 
     var pendingReviewCount: Int { tiles.filter(\.needsReview).count }
 
+    /// 第一张还拿不准的牌，核对页一次问一张。
+    var firstPending: Int? { tiles.firstIndex(where: \.needsReview) }
+
+    /// 底部按钮不能点时的原因；nil 表示可以看结果了。
+    var blockedReason: String? {
+        if tiles.isEmpty { return "先把牌加上" }
+        if pendingReviewCount > 0 { return "还有 \(pendingReviewCount) 张没确认" }
+        switch scoring {
+        case .failure:
+            return "先把牌改对"
+        case .success(let result) where !result.meetsMinimum(game.rules.minimumFan):
+            return "不够 \(game.rules.minimumFan) 番，和不了"
+        case .success:
+            break
+        }
+        if !selfDrawn && (discarder == nil || discarder == winner) { return "选一下是谁打的" }
+        return nil
+    }
+
+    /// 改牌建议（算一次要试几百种改法，按手牌缓存）。
+    var suggestions: [FixSuggestion] {
+        let hand = hand, context = context
+        if let cache = suggestionCache, cache.hand == hand, cache.context == context { return cache.value }
+        let value = WinAssistant.fixSuggestions(for: hand, context: context, minimumFan: game.rules.minimumFan)
+        suggestionCache = (hand, context, value)
+        return value
+    }
+
+    /// 把第 `index` 张换成 `tile` 以后能不能和（只看这一张，别的牌按现在的读法）。
+    func wins(with tile: Tile, at index: Int) -> Bool {
+        guard tiles.indices.contains(index) else { return false }
+        var concealed = tiles.map(\.tile)
+        concealed[index] = tile
+        let winning = winningIndex.flatMap { concealed.indices.contains($0) ? concealed[$0] : nil } ?? concealed.last
+        let candidate = Hand(melds: melds, concealed: concealed, winningTile: winning)
+        if case .success(let result) = FanCalculator.score(candidate, context: context) {
+            return result.meetsMinimum(game.rules.minimumFan)
+        }
+        return false
+    }
+
     func isAvailable(_ special: SpecialWin) -> Bool {
         special.unavailableReason(hand: hand, selfDrawn: selfDrawn) == nil
     }
@@ -81,7 +123,7 @@ final class RoundFlow {
         do {
             let recognition = try await recognizer.recognize(RecognitionRequest(image: data))
             load(recognition)
-            steps = [.confirm]
+            steps = [.check]
         } catch let error as RecognitionError {
             recognitionError = error.message
         } catch {
@@ -103,7 +145,7 @@ final class RoundFlow {
     /// 跳过拍照：从空手牌开始手动输入。
     func startManualEntry() {
         load(Recognition(concealed: [RecognizedTile](), source: "手动输入"))
-        steps = [.confirm]
+        steps = [.check]
     }
 
     // MARK: 修改
@@ -113,6 +155,7 @@ final class RoundFlow {
         tiles[index].tile = tile
         tiles[index].alternatives = []
         tiles[index].uncertain = false
+        recommended[index] = nil
     }
 
     /// 补一张牌。补的是漏读的牌，和张不跟着跳；还没有和张时才用这张。
@@ -121,9 +164,19 @@ final class RoundFlow {
         if winningIndex == nil { winningIndex = tiles.indices.last }
     }
 
+    /// 在第 `index` 张后面插一张（漏读了中间的牌）。
+    func insert(_ tile: Tile, after index: Int) {
+        guard tiles.indices.contains(index) else { return append(tile) }
+        tiles.insert(RecognizedTile(tile: tile), at: index + 1)
+        if let w = winningIndex, w > index { winningIndex = w + 1 }
+        // 推荐读法按位置记的，位置变了就作废
+        recommended = [:]
+    }
+
     func remove(at index: Int) {
         guard tiles.indices.contains(index) else { return }
         tiles.remove(at: index)
+        recommended = [:]
         // 和张在被删的牌后面时下标前移；删的就是和张时改用最右一张
         if let w = winningIndex {
             if w > index { winningIndex = w - 1 }
@@ -139,12 +192,6 @@ final class RoundFlow {
         }
     }
 
-    /// 一键采纳所有推荐读法。
-    func acceptRecommendations() {
-        for (index, tile) in recommended { choose(tile, at: index) }
-        recommended = [:]
-    }
-
     // MARK: 记账
 
     var winRecord: WinRecord? {
@@ -158,13 +205,5 @@ final class RoundFlow {
         guard let record = winRecord else { return nil }
         return Payment.winDeltas(winner: winner, discarder: record.discarder,
                                  totalFan: record.totalFan, basePoints: game.rules.basePoints)
-    }
-
-    /// 点炮的默认人选：和牌者的上家。
-    func defaultDiscarder() -> Int {
-        let hand = game.currentHandIndex
-        let seating = game.seating(ofRound: game.roundIndex(ofHand: hand))
-        let position = game.position(of: winner, inHand: hand)
-        return seating[(position + 3) % 4]
     }
 }

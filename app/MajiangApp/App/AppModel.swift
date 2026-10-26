@@ -1,15 +1,14 @@
 import SwiftUI
 import MajiangKit
 
+/// 只有一条主线：首页 → 开局 → 牌桌（也是账本）→ 结算。记一局是从牌桌全屏弹出的。
 enum Route: Hashable {
     case newGame
     case table(UUID)
-    case ledger(UUID)
-    case endGame(UUID)
-    case settings
+    case settle(UUID)
 }
 
-/// 识别用哪一路。默认演示数据，填了 Key 之后可以切到 Gemini。
+/// 识别用哪一路。默认演示数据，填了 Key 之后可以切到 Gemini。只在开发版的设置里能改。
 enum RecognitionMode: String, CaseIterable, Identifiable {
     case demo, gemini, dual
 
@@ -60,6 +59,8 @@ final class AppModel {
         self.recognitionMode = RecognitionMode(rawValue: UserDefaults.standard.string(forKey: "recognitionMode") ?? "") ?? .demo
         self.proxyURL = UserDefaults.standard.string(forKey: "proxyURL") ?? ""
         self.loadError = error
+        // 有没打完的牌局时，打开 App 直接进牌桌
+        if let active = loaded.activeGame { path = [.table(active.id)] }
     }
 
     // MARK: 牌局
@@ -78,11 +79,6 @@ final class AppModel {
         archive.lastRules = rules
         save()
         return game
-    }
-
-    func delete(_ id: UUID) {
-        archive.games.removeAll { $0.id == id }
-        save()
     }
 
     func save() {

@@ -1,137 +1,194 @@
 import SwiftUI
 import MajiangKit
 
-/// 2. 新建牌局：四个座位 + 规则。
+/// 开局：按出牌顺序填四个名字，第一个是第一局的庄。规则收成一行，一般设一次就不再改。
 struct NewGameView: View {
     @Environment(AppModel.self) private var model
     @State private var names = ["", "", "", ""]
     @State private var rules = GameRules()
-    @State private var yuanText = "1"
+    @State private var editingRules = false
     @FocusState private var focused: Int?
 
+    private var trimmed: [String] { names.map { $0.trimmingCharacters(in: .whitespaces) } }
+
     private var canStart: Bool {
-        names.allSatisfy { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
-            && Set(names.map { $0.trimmingCharacters(in: .whitespaces) }).count == 4
+        trimmed.allSatisfy { !$0.isEmpty } && Set(trimmed).count == 4
+    }
+
+    /// 不能开始时按钮上直接写原因。
+    private var startLabel: String {
+        if canStart { return "开始" }
+        let filled = trimmed.filter { !$0.isEmpty }
+        return Set(filled).count < filled.count ? "名字不能重复" : "填好 4 个名字"
     }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                SectionTitle(text: "座位（东家是第一局的庄）")
+            VStack(alignment: .leading, spacing: 0) {
+                PageTitle(title: "谁在打？", subtitle: "从第一局的庄家开始，按出牌顺序填。")
+
                 VStack(spacing: 0) {
                     ForEach(0..<4, id: \.self) { i in
-                        HStack(spacing: 12) {
+                        HStack(spacing: 14) {
                             Text(Wind(rawValue: i)!.name)
-                                .font(.headline)
-                                .frame(width: 28, height: 28)
-                                .background(i == 0 ? Theme.crimsonSoft : Theme.canvas, in: Circle())
-                                .foregroundStyle(i == 0 ? Theme.crimson : Theme.ink)
-                            TextField(i == 0 ? "你的名字" : "名字", text: $names[i])
+                                .font(Theme.serif(15))
+                                .foregroundStyle(Theme.faint)
+                                .frame(width: 22, alignment: .leading)
+                            TextField("名字", text: $names[i])
+                                .font(.system(size: 17))
                                 .focused($focused, equals: i)
                                 .submitLabel(i < 3 ? .next : .done)
                                 .onSubmit { focused = i < 3 ? i + 1 : nil }
+                                .accessibilityLabel("第 \(i + 1) 位")
+                            if i == 0 { DealerStamp() }
                         }
-                        .padding(.horizontal, 16)
-                        .frame(minHeight: 52)
-                        if i < 3 { Divider().overlay(Theme.border) }
+                        .frame(height: 58)
+                        if i < 3 { Hairline(color: Theme.lineSoft) }
                     }
                 }
-                .card(padding: 0)
-
-                HStack {
-                    Button {
-                        names.shuffle()
-                    } label: {
-                        Label("随机座位", systemImage: "shuffle")
-                    }
-                    .buttonStyle(.secondary)
-                }
+                .block(radius: 22)
+                .padding(.top, 28)
 
                 if !frequentNames.isEmpty {
-                    SectionTitle(text: "常用牌友")
+                    SectionLabel("常一起打的")
+                        .padding(.top, 28)
+                        .padding(.bottom, 10)
                     FlowLayout(spacing: 8) {
                         ForEach(frequentNames, id: \.self) { name in
-                            Button(name) { add(name) }
-                                .font(.subheadline)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 7)
-                                .background(Theme.card, in: Capsule())
-                                .overlay(Capsule().stroke(Theme.border))
-                                .buttonStyle(.plain)
+                            NameChip(name: name, selected: false) { add(name) }
                         }
                     }
                 }
 
-                SectionTitle(text: "规则")
-                VStack(spacing: 0) {
+                Button {
+                    editingRules = true
+                } label: {
                     HStack {
-                        Text("1 分折合")
+                        Text("规则").font(.system(size: 16))
                         Spacer()
-                        TextField("1", text: $yuanText)
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
-                        Text("元").foregroundStyle(Theme.secondaryInk)
+                        Text(rules.summary + " ›")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Theme.gray)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
-                    .padding(16)
-                    Divider().overlay(Theme.border)
-                    HStack {
-                        Text("底分 \(rules.basePoints) · \(rules.minimumFan) 番起和")
-                        Spacer()
-                        Text("国标固定").foregroundStyle(Theme.secondaryInk)
-                    }
-                    .padding(16)
-                    Divider().overlay(Theme.border)
-                    Toggle("带花牌", isOn: $rules.includeFlowers).padding(16)
-                    Divider().overlay(Theme.border)
-                    Toggle(isOn: $rules.swapSeatsEachRound) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("每圈换座")
-                            Text("比赛规则；朋友局一般不换").font(.footnote).foregroundStyle(Theme.secondaryInk)
-                        }
-                    }
-                    .padding(16)
+                    .frame(height: 56)
+                    .block(radius: 18)
+                    .contentShape(Rectangle())
                 }
-                .card(padding: 0)
+                .buttonStyle(.plain)
+                .padding(.top, 28)
             }
-            .padding(20)
+            .padding(.horizontal, 24)
+            .padding(.top, 12)
         }
-        .safeAreaInset(edge: .bottom) {
-            Button("开始") { start() }
-                .buttonStyle(.primary)
-                .disabled(!canStart)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
-                .background(Theme.canvas)
+        .scrollDismissesKeyboard(.interactively)
+        .bottomBar {
+            Button(startLabel) { start() }
+            .buttonStyle(.primary)
+            .disabled(!canStart)
         }
         .page()
-        .navigationTitle("新建牌局")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("取消") { model.path.removeLast() }
+                    .buttonStyle(.text(size: 17))
+            }
+        }
+        .sheet(isPresented: $editingRules) {
+            RulesSheet(rules: $rules)
+        }
         .onAppear {
             rules = model.archive.lastRules
-            yuanText = rules.yuanPerPoint.formatted()
         }
     }
 
     private var frequentNames: [String] {
-        model.archive.frequentPlayers.map(\.name).filter { !names.contains($0) }
+        model.archive.frequentPlayers.map(\.name).filter { !trimmed.contains($0) }
     }
 
+    /// 点一下常一起打的人，按顺序填进第一个空位。
     private func add(_ name: String) {
-        if let i = names.firstIndex(where: { $0.trimmingCharacters(in: .whitespaces).isEmpty }) {
+        if let i = trimmed.firstIndex(where: \.isEmpty) {
             names[i] = name
         }
     }
 
     private func start() {
-        rules.yuanPerPoint = Double(yuanText.replacingOccurrences(of: ",", with: ".")) ?? 1
         let known = Dictionary(model.archive.frequentPlayers.map { ($0.name, $0) }, uniquingKeysWith: { a, _ in a })
-        let players = names.map { raw -> Player in
-            let name = raw.trimmingCharacters(in: .whitespaces)
-            return known[name] ?? Player(name: name)
-        }
+        let players = trimmed.map { known[$0] ?? Player(name: $0) }
         let game = model.startGame(players: players, rules: rules)
         model.path = [.table(game.id)]
+    }
+}
+
+/// 规则：1 分几元、带不带花、每圈换不换座。底分 8、8 番起和是国标固定的，只在说明里写。
+private struct RulesSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var rules: GameRules
+    @State private var yuanText = ""
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("1 分算")
+                            Spacer()
+                            TextField("1", text: $yuanText)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 80)
+                            Text("元").foregroundStyle(Theme.gray)
+                        }
+                        .frame(height: 54)
+                        Hairline(color: Theme.lineSoft)
+                        Toggle(isOn: $rules.includeFlowers) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("带花")
+                                Text("每张花 1 番，不算进 8 番").font(.system(size: 12)).foregroundStyle(Theme.gray)
+                            }
+                        }
+                        .frame(minHeight: 60)
+                        Hairline(color: Theme.lineSoft)
+                        Toggle(isOn: $rules.swapSeatsEachRound) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("每圈换座")
+                                Text("比赛这么打；朋友局一般不换").font(.system(size: 12)).foregroundStyle(Theme.gray)
+                            }
+                        }
+                        .frame(minHeight: 60)
+                    }
+                    .font(.system(size: 16))
+                    .tint(Theme.ink)
+                    .block()
+
+                    Text("国标规则：每人先付 8 分，再付番数；要 8 番才能和。")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.gray)
+                        .padding(.top, 10)
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 8)
+            }
+            .page()
+            .navigationTitle("规则")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("好") { dismiss() }.fontWeight(.semibold)
+                }
+            }
+        }
+        .presentationDetents([.medium])
+        .onAppear { yuanText = rules.yuanPerPoint.formatted(.number.precision(.fractionLength(0...2)).grouping(.never)) }
+        .onChange(of: yuanText) { _, text in
+            if let value = Double(text.replacingOccurrences(of: ",", with: ".")), value > 0 {
+                rules.yuanPerPoint = value
+            }
+        }
     }
 }
 

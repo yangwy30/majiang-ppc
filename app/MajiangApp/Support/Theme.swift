@@ -1,36 +1,51 @@
 import SwiftUI
+import UIKit
 
-/// 视觉沿用 bway-lot：暖白底、白卡片细边框、墨黑文字和主按钮，酒红只用于庄和输分。
+/// 视觉「墨与朱」：纸白底、墨色字，整个 App 只用一种朱红（庄的印章、赢的分数）。
+/// 输的分数用墨色加负号，不用红绿。
 enum Theme {
-    static let canvas = Color(hex: 0xFAF9F5)
-    static let card = Color.white
-    static let border = Color(hex: 0xE6E4DD)
-    static let ink = Color(hex: 0x141413)
-    static let secondaryInk = Color(hex: 0x6B6A64)
-    static let tertiaryInk = Color(hex: 0xA3A19A)
-    static let crimson = Color(hex: 0x9E2A47)
-    static let green = Color(hex: 0x1D6344)
-    static let greenSoft = Color(hex: 0xEAF5EF)
-    static let amber = Color(hex: 0x8F5B14)
-    static let amberSoft = Color(hex: 0xFEF6E6)
-    static let crimsonSoft = Color(hex: 0xF8ECEF)
+    static let paper = Color(hex: 0xF7F6F2)
+    static let white = Color.white
+    static let line = Color(hex: 0xE7E4DC)
+    /// 白色块里面的分隔线。
+    static let lineSoft = Color(hex: 0xEFECE6)
+    static let gray = Color(hex: 0x6E6C64)
+    static let faint = Color(hex: 0xA8A59C)
+    static let ink = Color(hex: 0x16150F)
+    static let vermilion = Color(hex: 0xC23B22)
+    static let segment = Color(hex: 0xECEAE3)
+    /// 拍照页的底色。
+    static let darkroom = Color(hex: 0x0F0F0D)
 
     // 牌面
-    static let tileFace = Color(hex: 0xFFFEFB)
-    static let tileDots = Color(hex: 0x1F4E79)
-    static let tileBamboo = Color(hex: 0x1D6344)
-    static let tileRed = Color(hex: 0xB0263B)
+    static let tileFace = Color(hex: 0xFFFDF8)
+    static let tileDim = Color(hex: 0xE9E5DA)
+    static let tileEdge = Color(hex: 0xE2DDD0)
+    static let tileShadow = Color(hex: 0xD6D0C1)
+    static let tileBlue = Color(hex: 0x23406B)
+    static let tileGreen = Color(hex: 0x2F5D46)
+    static let tileRed = Color(hex: 0xC23B22)
 
-    static let radius: CGFloat = 14
+    static func scoreColor(_ value: Int) -> Color { value > 0 ? vermilion : ink }
 
-    /// 分数颜色：赢绿、输酒红、零灰。
-    static func scoreColor(_ value: Int) -> Color {
-        value > 0 ? green : value < 0 ? crimson : secondaryInk
-    }
-
+    /// 「+92」「−76」「0」。负号用真正的减号，和加号一样宽。
     static func signed(_ value: Int) -> String {
-        value > 0 ? "+\(value)" : "\(value)"
+        value > 0 ? "+\(value)" : value < 0 ? "−\(-value)" : "0"
     }
+
+    /// 分数：SF 细体，等宽数字。
+    static func score(_ size: CGFloat, weight: Font.Weight = .light) -> Font {
+        .system(size: size, weight: weight).monospacedDigit()
+    }
+
+    /// 宋体只用于风位、庄和「番」字。系统没有宋体时退回衬线体。
+    static func serif(_ size: CGFloat) -> Font {
+        if let name = songti { return .custom(name, fixedSize: size) }
+        return .system(size: size, weight: .semibold, design: .serif)
+    }
+
+    private static let songti: String? = ["STSongti-SC-Bold", "STSongti-SC-Regular"]
+        .first { UIFont(name: $0, size: 12) != nil }
 }
 
 extension Color {
@@ -45,58 +60,62 @@ extension Color {
 
 // MARK: - 通用组件
 
-/// 白卡片，1px 细边框。
-struct CardBackground: ViewModifier {
-    var padding: CGFloat = 16
-
-    func body(content: Content) -> some View {
-        content
-            .padding(padding)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.radius, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: Theme.radius, style: .continuous).stroke(Theme.border, lineWidth: 1))
-    }
-}
-
 extension View {
-    func card(padding: CGFloat = 16) -> some View { modifier(CardBackground(padding: padding)) }
-
-    /// 暖白底的页面。
+    /// 纸白底的页面。
     func page() -> some View {
         self
             .scrollContentBackground(.hidden)
-            .background(Theme.canvas.ignoresSafeArea())
+            .background(Theme.paper.ignoresSafeArea())
             .foregroundStyle(Theme.ink)
             .tint(Theme.ink)
     }
+
+    /// 白色圆角块：只用来收纳一组设置，列表不套卡片。
+    func block(radius: CGFloat = 20) -> some View {
+        self
+            .padding(.horizontal, 18)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.white, in: RoundedRectangle(cornerRadius: radius, style: .continuous))
+    }
+
+    /// 页面底部固定的按钮区，底下垫一层纸色，免得滚动内容透出来。
+    func bottomBar<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+        safeAreaInset(edge: .bottom) {
+            VStack(spacing: 4, content: content)
+                .padding(.horizontal, 24)
+                .padding(.top, 12)
+                .padding(.bottom, 8)
+                .background(Theme.paper)
+        }
+    }
 }
 
-/// 实心黑色主按钮。
+/// 每页唯一的黑色胶囊主按钮。不能点时变成灰底，按钮上直接写原因。
 struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.body.weight(.semibold))
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .foregroundStyle(.white)
-            .background(Theme.ink.opacity(isEnabled ? (configuration.isPressed ? 0.8 : 1) : 0.3),
-                        in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-            // 半透明的禁用色下面垫一层底色，免得滚动内容透出来
-            .background(Theme.canvas, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .font(.system(size: isEnabled ? 17 : 16, weight: isEnabled ? .semibold : .medium))
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .foregroundStyle(isEnabled ? Color.white : Theme.gray)
+            .background(isEnabled ? Theme.ink.opacity(configuration.isPressed ? 0.82 : 1) : Theme.line, in: Capsule())
+            .contentShape(Capsule())
     }
 }
 
-/// 白底细边框次按钮。
-struct SecondaryButtonStyle: ButtonStyle {
+/// 其余操作都是文字按钮，没有描边按钮。
+struct TextButtonStyle: ButtonStyle {
+    var color: Color = Theme.gray
+    var size: CGFloat = 15
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.body.weight(.medium))
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .foregroundStyle(Theme.ink)
-            .background(configuration.isPressed ? Theme.border.opacity(0.4) : Theme.card,
-                        in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Theme.border, lineWidth: 1))
+            .font(.system(size: size))
+            .foregroundStyle(color)
+            .frame(minHeight: 44)
+            .opacity(configuration.isPressed ? 0.5 : 1)
+            .contentShape(Rectangle())
     }
 }
 
@@ -104,52 +123,124 @@ extension ButtonStyle where Self == PrimaryButtonStyle {
     static var primary: PrimaryButtonStyle { PrimaryButtonStyle() }
 }
 
-extension ButtonStyle where Self == SecondaryButtonStyle {
-    static var secondary: SecondaryButtonStyle { SecondaryButtonStyle() }
-}
-
-/// 状态小标签：绿色成功、琥珀需确认、酒红庄。
-struct Chip: View {
-    enum Kind { case success, warning, dealer, neutral }
-    var text: String
-    var kind: Kind = .neutral
-
-    var body: some View {
-        Text(text)
-            .font(.caption.weight(.semibold))
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .foregroundStyle(foreground)
-            .background(background, in: Capsule())
-    }
-
-    private var foreground: Color {
-        switch kind {
-        case .success: Theme.green
-        case .warning: Theme.amber
-        case .dealer: Theme.crimson
-        case .neutral: Theme.secondaryInk
-        }
-    }
-
-    private var background: Color {
-        switch kind {
-        case .success: Theme.greenSoft
-        case .warning: Theme.amberSoft
-        case .dealer: Theme.crimsonSoft
-        case .neutral: Theme.border.opacity(0.5)
-        }
+extension ButtonStyle where Self == TextButtonStyle {
+    static var text: TextButtonStyle { TextButtonStyle() }
+    static func text(_ color: Color = Theme.gray, size: CGFloat = 15) -> TextButtonStyle {
+        TextButtonStyle(color: color, size: size)
     }
 }
 
-/// 页面里的小节标题。
-struct SectionTitle: View {
+/// 朱红印章「庄」。
+struct DealerStamp: View {
+    var size: CGFloat = 22
+
+    var body: some View {
+        Text("庄")
+            .font(Theme.serif(size * 0.6))
+            .foregroundStyle(.white)
+            .frame(width: size, height: size)
+            .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: size * 0.24, style: .continuous))
+            .accessibilityLabel("庄家")
+    }
+}
+
+/// 灰色小节标题，比如「账本」「常一起打的」。
+struct SectionLabel: View {
     var text: String
+
+    init(_ text: String) { self.text = text }
 
     var body: some View {
         Text(text)
-            .font(.footnote.weight(.semibold))
-            .foregroundStyle(Theme.secondaryInk)
+            .font(.system(size: 13, weight: .medium))
+            .foregroundStyle(Theme.gray)
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// 页面大标题和一行灰色说明。
+struct PageTitle: View {
+    var title: String
+    var subtitle: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.system(size: 30, weight: .semibold))
+                .tracking(-0.4)
+            if let subtitle {
+                Text(subtitle)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Theme.gray)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// 两段的切换：底色 #ECEAE3，选中的一段是白色。
+struct SegmentedSwitch<Value: Hashable>: View {
+    var options: [(Value, String)]
+    @Binding var selection: Value
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(options, id: \.0) { value, label in
+                let on = value == selection
+                Button {
+                    selection = value
+                } label: {
+                    Text(label)
+                        .font(.system(size: 15, weight: on ? .semibold : .regular))
+                        .foregroundStyle(on ? Theme.ink : Theme.gray)
+                        .frame(maxWidth: .infinity, minHeight: 36)
+                        .background {
+                            if on {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(Theme.white)
+                                    .shadow(color: Theme.ink.opacity(0.08), radius: 1.5, y: 1)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(on ? .isSelected : [])
+            }
+        }
+        .padding(3)
+        .background(Theme.segment, in: RoundedRectangle(cornerRadius: 13, style: .continuous))
+        .animation(.easeOut(duration: 0.15), value: selection)
+    }
+}
+
+/// 选人的胶囊：选中黑底白字，没选白底细线。
+struct NameChip: View {
+    var name: String
+    var selected: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(name)
+                .font(.system(size: 15))
+                .lineLimit(1)
+                .padding(.horizontal, 16)
+                .frame(minHeight: 36)
+                .foregroundStyle(selected ? Color.white : Theme.ink)
+                .background(selected ? Theme.ink : Theme.white, in: Capsule())
+                .overlay(Capsule().strokeBorder(selected ? Color.clear : Theme.line))
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+/// 细线。
+struct Hairline: View {
+    var color: Color = Theme.line
+
+    var body: some View {
+        Rectangle().fill(color).frame(height: 1)
     }
 }

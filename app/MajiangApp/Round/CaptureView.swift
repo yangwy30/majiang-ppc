@@ -2,65 +2,57 @@ import SwiftUI
 import PhotosUI
 import MajiangKit
 
-/// 4. 拍照：先选谁和了，再拍和牌那家的牌。
+/// 拍照：页面本身就是取景器，谁和了的四个名字浮在上面，按快门直接识别。
 struct CaptureView: View {
     @Environment(AppModel.self) private var model
     @Bindable var flow: RoundFlow
-    @State private var showCamera = false
+    var close: () -> Void
+
+    @State private var camera = CameraController()
+    @State private var cameraOn = false
+    @State private var choosingPhoto = false
     @State private var pickerItem: PhotosPickerItem?
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                SectionTitle(text: "谁和了")
-                PlayerPicker(game: flow.game, selection: $flow.winner)
+        VStack(spacing: 0) {
+            winnerPicker
+                .padding(.top, 10)
 
-                viewfinder
+            viewfinder
+                .padding(.top, 20)
 
-                VStack(alignment: .leading, spacing: 6) {
-                    hint("手牌推倒排一排，和的那张放最右", systemImage: "rectangle.split.3x1")
-                    hint("吃碰杠放旁边，暗杠翻开一张", systemImage: "square.stack")
-                    hint("正上方俯拍，牌占满画面，不要切边", systemImage: "viewfinder")
-                }
-                .font(.footnote)
-                .foregroundStyle(Theme.secondaryInk)
+            Text(status ?? " ")
+                .font(.system(size: 13))
+                .foregroundStyle(flow.recognitionError == nil ? Color.white.opacity(0.72) : Color(hex: 0xF2A08F))
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+                .frame(minHeight: 34)
+                .padding(.top, 10)
 
-                if let error = flow.recognitionError {
-                    Text(error)
-                        .font(.footnote)
-                        .foregroundStyle(Theme.crimson)
-                        .card(padding: 12)
-                }
-            }
-            .padding(20)
+            controls
+                .padding(.top, 8)
+                .padding(.bottom, 8)
         }
-        .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 10) {
-                if CameraPicker.isAvailable {
-                    Button("拍照") { showCamera = true }
-                        .buttonStyle(.primary)
-                }
-                HStack(spacing: 10) {
-                    PhotosPicker(selection: $pickerItem, matching: .images) {
-                        Text("从相册选")
-                    }
-                    .buttonStyle(.secondary)
-                    Button("手动输入") { flow.startManualEntry() }
-                        .buttonStyle(.secondary)
-                }
-            }
-            .disabled(flow.isRecognizing)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
-            .background(Theme.canvas)
-        }
-        .page()
-        .navigationTitle("记一局")
+        .padding(.horizontal, 24)
+        .background(Theme.darkroom.ignoresSafeArea())
+        .foregroundStyle(.white)
+        .navigationTitle("谁和了？")
         .navigationBarTitleDisplayMode(.inline)
-        .fullScreenCover(isPresented: $showCamera) {
-            CameraPicker { image in use(image) }
-                .ignoresSafeArea()
+        .toolbarBackground(Theme.darkroom, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: close) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundStyle(.white)
+                        .frame(width: 44, height: 44, alignment: .leading)
+                }
+                .accessibilityLabel("关闭")
+            }
         }
+        .photosPicker(isPresented: $choosingPhoto, selection: $pickerItem, matching: .images)
         .onChange(of: pickerItem) { _, item in
             guard let item else { return }
             Task {
@@ -70,49 +62,168 @@ struct CaptureView: View {
                 pickerItem = nil
             }
         }
+        .task {
+            // 从核对页退回来时，照片清掉，重新取景
+            flow.photo = nil
+            cameraOn = await camera.start()
+        }
+        .onDisappear { camera.stop() }
+    }
+
+    private var status: String? {
+        if flow.isRecognizing { return "正在认牌…" }
+        return flow.recognitionError
+    }
+
+    private var winnerPicker: some View {
+        HStack(spacing: 8) {
+            ForEach(0..<4, id: \.self) { i in
+                let on = flow.winner == i
+                Button {
+                    flow.winner = i
+                } label: {
+                    Text(flow.game.players[i].name)
+                        .font(.system(size: 15, weight: .medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity, minHeight: 38)
+                        .foregroundStyle(on ? Theme.ink : .white)
+                        .background(on ? Color.white : Color.white.opacity(0.12), in: Capsule())
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(on ? .isSelected : [])
+            }
+        }
+        .disabled(flow.isRecognizing)
     }
 
     private var viewfinder: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: Theme.radius, style: .continuous)
-                .fill(Theme.ink.opacity(0.92))
             if let photo = flow.photo {
                 Image(uiImage: photo)
                     .resizable()
-                    .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.radius - 4, style: .continuous))
-                    .padding(4)
+                    .scaledToFill()
+            } else if cameraOn {
+                CameraPreview(session: camera.session)
             } else {
-                VStack(spacing: 8) {
-                    Image(systemName: "camera").font(.title)
-                    Text("拍 \(flow.game.players[flow.winner].name) 的牌").font(.subheadline)
+                // 没有相机（模拟器）或没给权限：画一手示意牌
+                RadialGradient(colors: [Color(hex: 0x46443B), Color(hex: 0x2B2A25), Color(hex: 0x201F1B)],
+                               center: UnitPoint(x: 0.5, y: 0.45), startRadius: 0, endRadius: 320)
+                HStack(spacing: 2) {
+                    ForEach(Array(Tile.parseList("11122334455667p").enumerated()), id: \.offset) { _, tile in
+                        TileFace(tile: tile, width: 20, state: .dim)
+                    }
                 }
-                .foregroundStyle(.white.opacity(0.75))
             }
-            if flow.isRecognizing {
-                VStack(spacing: 10) {
-                    ProgressView().tint(.white)
-                    Text("正在认牌…").font(.subheadline.weight(.medium))
+
+            if flow.photo == nil {
+                CornerBrackets()
+                    .stroke(.white.opacity(0.9), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                    .padding(22)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(.white.opacity(0.55), lineWidth: 1.5)
+                    .frame(height: 50)
+                    .padding(.horizontal, 18)
+                VStack {
+                    Spacer()
+                    Text(cameraOn || model.recognitionMode == .demo ? "手牌推倒排成一排，和的那张放最右"
+                         : "这台设备没有相机，从左下角的相册选一张")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 64)
                 }
-                .foregroundStyle(.white)
-                .padding(20)
-                .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 12))
+            }
+
+            if flow.isRecognizing {
+                ProgressView()
+                    .controlSize(.large)
+                    .tint(.white)
+                    .frame(width: 80, height: 80)
+                    .background(.black.opacity(0.45), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             }
         }
-        .frame(height: 240)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
     }
 
-    /// 图标宽度不一，固定宽度让三行文字左边对齐。
-    private func hint(_ text: String, systemImage: String) -> some View {
-        Label {
-            Text(text)
-        } icon: {
-            Image(systemName: systemImage).frame(width: 20)
+    private var controls: some View {
+        ZStack {
+            HStack {
+                Button {
+                    choosingPhoto = true
+                } label: {
+                    Image(systemName: "photo")
+                        .font(.system(size: 20))
+                        .frame(width: 48, height: 48)
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(.white.opacity(0.3)))
+                        .contentShape(Rectangle())
+                }
+                .accessibilityLabel("从相册选")
+                Spacer()
+                Button("手动输入") { flow.startManualEntry() }
+                    .buttonStyle(.text(.white.opacity(0.85)))
+            }
+            Button(action: shoot) {
+                Circle()
+                    .fill(.white)
+                    .padding(7)
+                    .overlay(Circle().strokeBorder(.white, lineWidth: 3))
+                    .frame(width: 76, height: 76)
+                    .contentShape(Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("拍照")
+        }
+        .buttonStyle(.plain)
+        .disabled(flow.isRecognizing)
+        .opacity(flow.isRecognizing ? 0.4 : 1)
+    }
+
+    private func shoot() {
+        if cameraOn {
+            Task {
+                if let image = await camera.capture() { use(image) }
+            }
+        } else if model.recognitionMode == .demo {
+            // 演示识别不看照片，模拟器里也能走完流程
+            use(UIImage(systemName: "photo") ?? UIImage())
+        } else {
+            choosingPhoto = true
         }
     }
 
     private func use(_ image: UIImage) {
         flow.photo = image.downscaled()
-        Task { await flow.recognize(with: model.makeRecognizer()) }
+        Task {
+            await flow.recognize(with: model.makeRecognizer())
+            // 认不出来时回到取景，让人重拍
+            if flow.recognitionError != nil { flow.photo = nil }
+        }
+    }
+}
+
+/// 取景框四个角。
+private struct CornerBrackets: Shape {
+    var length: CGFloat = 26
+    var radius: CGFloat = 10
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let corners: [(CGPoint, CGFloat, CGFloat)] = [
+            (CGPoint(x: rect.minX, y: rect.minY), 1, 1),
+            (CGPoint(x: rect.maxX, y: rect.minY), -1, 1),
+            (CGPoint(x: rect.minX, y: rect.maxY), 1, -1),
+            (CGPoint(x: rect.maxX, y: rect.maxY), -1, -1),
+        ]
+        for (corner, dx, dy) in corners {
+            path.move(to: CGPoint(x: corner.x, y: corner.y + dy * length))
+            path.addLine(to: CGPoint(x: corner.x, y: corner.y + dy * radius))
+            path.addQuadCurve(to: CGPoint(x: corner.x + dx * radius, y: corner.y), control: corner)
+            path.addLine(to: CGPoint(x: corner.x + dx * length, y: corner.y))
+        }
+        return path
     }
 }
