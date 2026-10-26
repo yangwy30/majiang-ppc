@@ -146,7 +146,7 @@ final class AppModel {
     /// 把全部记录写成一个文件，用来存到「文件」或隔空投送。
     func exportFile() throws -> URL {
         let stamp = Date().formatted(.iso8601.year().month().day().dateSeparator(.omitted))
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("国标记分-全部牌局-\(stamp).json")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("拍照算番-全部牌局-\(stamp).json")
         try archive.exportData().write(to: url, options: .atomic)
         return url
     }

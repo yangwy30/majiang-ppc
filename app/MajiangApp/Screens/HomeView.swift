@@ -84,7 +84,7 @@ struct HomeView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("国标记分")
+            Text("拍照算番")
                 .font(.system(size: 34, weight: .semibold))
                 .tracking(-0.5)
                 #if DEBUG
@@ -203,7 +203,7 @@ private extension EmptyHome {
                 .foregroundStyle(.white)
                 .frame(width: 30, height: 30)
                 .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
-            Text("国标记分").font(.system(size: 17, weight: .semibold))
+            Text("拍照算番").font(.system(size: 17, weight: .semibold))
         }
         .accessibilityElement(children: .combine)
         #if DEBUG
