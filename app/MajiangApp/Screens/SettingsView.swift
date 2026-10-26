@@ -16,8 +16,9 @@ struct SettingsView: View {
                     Picker("识别方式", selection: $model.recognitionMode) {
                         ForEach(RecognitionMode.allCases) { Text($0.title).tag($0) }
                     }
+                    LabeledContent("端侧模型", value: AppModel.onDeviceModelURL == nil ? "没装" : "已装")
                 } footer: {
-                    Text("演示数据不看照片，按顺序给出三手示例牌。双读目前只有 Gemini 一路，端侧模型还没接入。")
+                    Text("演示数据不看照片，按顺序给出三手示例牌。双读：端侧模型先出结果，Gemini 再认一遍，两边不一样的牌让你选。端侧模型没装时双读只剩 Gemini（装法见 app/README.md）。")
                 }
 
                 Section {
