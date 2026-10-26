@@ -97,7 +97,7 @@ struct TableView: View {
             Text("结束后就不能再记了，会算出谁该给谁转多少。")
         }
         .fullScreenCover(isPresented: $recording) {
-            RoundFlowView(game: game) { outcome in
+            RoundFlowView(game: game, demo: model.demoScreen) { outcome in
                 switch outcome {
                 case .win(let win): record { try $0.recordWin(win) }
                 case .falseWin(let offender): record { try $0.recordFalseWin(offender: offender) }
@@ -111,6 +111,10 @@ struct TableView: View {
             }
         }
         .sheet(isPresented: $showGuide) { RulesGuideView() }
+        .onAppear {
+            if model.demoScreen == .table { justRecorded = game.records.last }
+            if model.demoScreen?.opensRound == true { recording = true }
+        }
         .alert("没有记上", isPresented: Binding(get: { recordError != nil }, set: { if !$0 { recordError = nil } })) {
             Button("好") { recordError = nil }
         } message: {

@@ -43,10 +43,21 @@ final class AppModel {
     /// 演示识别只建一次，这样每次拍照会轮到下一手示例牌。
     private let demoRecognizer = MockRecognizer()
 
+    /// 截图模式停在哪一页（见 DemoData）；正式版永远是 nil。
+    let demoScreen = DemoScreen.current
+
     init(archiveURL: URL? = nil) {
-        let url = archiveURL ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        var url = archiveURL ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("majiang", isDirectory: true)
             .appendingPathComponent("archive.json")
+        #if DEBUG
+        if let screen = DemoScreen.current {
+            // 截图用的假数据放临时目录，每次启动重新生成
+            url = FileManager.default.temporaryDirectory.appendingPathComponent("demo-archive.json")
+            try? FileManager.default.removeItem(at: url)
+            if screen != .emptyHome { try? DemoData.archive().save(to: url) }
+        }
+        #endif
         // 读不出来时原文件会被改名备份，之后保存不会覆盖掉旧记录
         let (loaded, backup, failure) = GameArchive.loadOrRecover(from: url)
         var error: String?
@@ -61,6 +72,12 @@ final class AppModel {
         self.loadError = error
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
+        switch demoScreen {
+        case .home, .emptyHome: path = []
+        case .newGame: path = [.newGame]
+        case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
+        default: break
+        }
     }
 
     // MARK: 牌局
@@ -92,6 +109,7 @@ final class AppModel {
     // MARK: 识别
 
     func makeRecognizer() -> TileRecognizer {
+        if demoScreen != nil { return demoRecognizer }
         switch recognitionMode {
         case .demo:
             return demoRecognizer

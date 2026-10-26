@@ -1,0 +1,93 @@
+import Foundation
+import MajiangKit
+
+/// 截图用：启动参数 `-demo-screen <页面>` 打开一份假数据，直接停在某个页面。
+/// 数据存在临时目录，不会碰真的牌局记录。只在开发版里有。
+enum DemoScreen: String {
+    case emptyHome = "empty-home"
+    case home, newGame = "new-game", table, capture, check, notWin = "not-win", result, settle
+
+    static var current: DemoScreen? {
+        #if DEBUG
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-demo-screen"), i + 1 < args.count else { return nil }
+        return DemoScreen(rawValue: args[i + 1])
+        #else
+        return nil
+        #endif
+    }
+
+    /// 在牌桌上自动打开记一局。
+    var opensRound: Bool { [.capture, .check, .notWin, .result].contains(self) }
+}
+
+#if DEBUG
+enum DemoData {
+    static let names = ["杨", "阿强", "莉莉", "小张"]
+
+    static func archive() -> GameArchive {
+        var archive = GameArchive()
+        let players = names.map { Player(name: $0) }
+        let day: TimeInterval = 86_400
+
+        var older = Game(players: [players[0], players[1], Player(name: "老王"), players[3]], startedAt: Date().addingTimeInterval(-8 * day))
+        win(&older, winner: 2, discarder: 0, hand: "123m 456m 789s 234p 55s")
+        win(&older, winner: 0, discarder: nil, hand: "234m 456m 678m 东东东 99m")
+        older.end()
+        archive.upsert(older)
+
+        var last = Game(players: players, startedAt: Date().addingTimeInterval(-1 * day))
+        win(&last, winner: 0, discarder: nil, hand: "1112233445566p 7p")
+        win(&last, winner: 3, discarder: 1, hand: "123s 456s 789s 南南南 22m")
+        last.end()
+        archive.upsert(last)
+
+        var active = Game(players: players)
+        win(&active, winner: 0, discarder: nil, hand: "1112233445566p 7p")
+        win(&active, winner: 2, discarder: 1, hand: "123m 456m 789s 234p 55s")
+        _ = try? active.recordDraw()
+        win(&active, winner: 3, discarder: nil, hand: "234m 456m 678m 东东东 99m")
+        archive.upsert(active)
+
+        archive.remember(players + [Player(name: "老王"), Player(name: "小周")])
+        return archive
+    }
+
+    /// 按真的算番记一手；凑不成或不够番时退回 8 番的无番和，保证有数据。
+    private static func win(_ game: inout Game, winner: Int, discarder: Int?, hand text: String) {
+        let tiles = Tile.parseList(text)
+        let hand = Hand(concealed: tiles, winningTile: tiles.last)
+        var context = game.winContext(for: winner)
+        context.selfDrawn = discarder == nil
+        let record: WinRecord
+        if case .success(let result) = FanCalculator.score(hand, context: context), result.meetsMinimum(game.rules.minimumFan) {
+            record = WinRecord(winner: winner, discarder: discarder, hand: hand, context: context, result: result)
+        } else {
+            record = WinRecord(winner: winner, discarder: discarder, hand: nil, context: context,
+                               fans: [FanEntry(fan: .chickenHand, count: 1)], flowerFan: 0)
+        }
+        _ = try? game.recordWin(record)
+    }
+
+    /// 记一局流程里要停的那一步。
+    @MainActor
+    static func prepare(_ flow: RoundFlow, for screen: DemoScreen) {
+        let samples = MockRecognizer.defaultSamples
+        switch screen {
+        case .check:
+            flow.load(samples[0])
+            flow.steps = [.check]
+        case .notWin:
+            flow.load(samples[2])
+            flow.steps = [.check]
+        case .result:
+            flow.load(samples[0])
+            flow.choose(Tile(suit: .dots, rank: 5)!, at: 9)
+            flow.steps = [.check]
+            flow.showResult = true
+        default:
+            break
+        }
+    }
+}
+#endif

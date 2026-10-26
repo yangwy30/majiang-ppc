@@ -7,8 +7,12 @@ struct RoundFlowView: View {
     @State private var flow: RoundFlow
     var onFinish: (HandOutcome) -> Void
 
-    init(game: Game, onFinish: @escaping (HandOutcome) -> Void) {
-        _flow = State(initialValue: RoundFlow(game: game))
+    init(game: Game, demo: DemoScreen? = nil, onFinish: @escaping (HandOutcome) -> Void) {
+        let flow = RoundFlow(game: game)
+        #if DEBUG
+        if let demo { DemoData.prepare(flow, for: demo) }
+        #endif
+        _flow = State(initialValue: flow)
         self.onFinish = onFinish
     }
 
