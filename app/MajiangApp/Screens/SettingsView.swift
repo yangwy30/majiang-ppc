@@ -53,6 +53,12 @@ struct SettingsView: View {
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
+                    if model.proxyURL != AppModel.defaultProxyURL {
+                        Button("用我们的服务器") { model.proxyURL = AppModel.defaultProxyURL }
+                    }
+                    if !model.proxyURL.isEmpty {
+                        Button("清空（直连 Google）", role: .destructive) { model.proxyURL = "" }
+                    }
                 } header: {
                     Text("后端代理（可选）")
                 } footer: {

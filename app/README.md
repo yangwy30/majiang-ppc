@@ -73,7 +73,8 @@ swift test --filter OnDeviceEvaluationTests
 ### API Key 和后端代理
 
 - Key **不进代码、不进仓库**。开发阶段在 App 设置里填，存钥匙串，请求时放在 `x-goog-api-key` 请求头里（不放在 URL 上）。
-- 上架前要加一个很小的后端代理：App 把请求体原样 POST 到代理（带 `X-Majiang-Model` 头指明模型），代理加上 Key 转发到 `https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent`，再把回答原样返回。代理还应该做用户鉴权和限流。在设置里填代理地址后 App 就走代理。
+- 正式版走后端代理（`server/`，Cloudflare Worker，见 [server/README.md](../server/README.md)）：App 把请求体原样 POST 到代理，带 `X-Majiang-Device`（钥匙串里的随机编号，按手机限次数）；代理加上 Key 转发给 Gemini，再把回答原样返回。用哪个模型由代理决定，只放行 Flash / Flash-Lite。代理拒绝时（比如今天次数用完）回一句中文，App 直接显示。
+- 开发版默认用自带的 Key 直连；想试代理，在设置里点「用我们的服务器」。
 
 ### 分享和同步
 

@@ -26,9 +26,9 @@ public struct GeminiConfiguration: Sendable {
     public enum Endpoint: Sendable {
         /// 开发阶段：App 直接调 Google，Key 由用户在设置里填，存在钥匙串。
         case direct(APIKeyProvider)
-        /// 上架后：调我们自己的后端代理，代理持有 Key，App 里没有 Key。
-        /// 代理收到的请求体和 Google generateContent 一样，原样转发即可（见 docs/app-architecture.md）。
-        case proxy(url: URL, token: String?)
+        /// 上架后：调我们自己的后端代理（server/，Cloudflare Worker），代理持有 Key，App 里没有 Key。
+        /// 代理收到的请求体和 Google generateContent 一样，原样转发。deviceID 用来按手机限每天的次数。
+        case proxy(url: URL, token: String? = nil, deviceID: String? = nil)
     }
 
     public var endpoint: Endpoint
@@ -71,6 +71,7 @@ public struct GeminiRecognizer: TileRecognizer {
             throw RecognitionError.network(error.localizedDescription)
         }
         guard status == 200 else {
+            if let message = Self.proxyMessage(data) { throw RecognitionError.unavailable(message) }
             let text = String(decoding: data.prefix(300), as: UTF8.self)
             throw RecognitionError.network("HTTP \(status) \(text)")
         }
@@ -87,9 +88,10 @@ public struct GeminiRecognizer: TileRecognizer {
             guard !key.isEmpty else { throw RecognitionError.notConfigured }
             urlRequest = URLRequest(url: Self.apiBase.appendingPathComponent("models/\(configuration.model):generateContent"))
             urlRequest.setValue(key, forHTTPHeaderField: "x-goog-api-key")
-        case .proxy(let url, let token):
+        case .proxy(let url, let token, let deviceID):
             urlRequest = URLRequest(url: url)
             urlRequest.setValue(configuration.model, forHTTPHeaderField: "X-Majiang-Model")
+            if let deviceID { urlRequest.setValue(deviceID, forHTTPHeaderField: "X-Majiang-Device") }
             if let token { urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         }
         urlRequest.httpMethod = "POST"
@@ -163,6 +165,19 @@ public struct GeminiRecognizer: TileRecognizer {
     ]
 
     // MARK: 回答
+
+    /// 代理自己拒绝的请求（比如今天的次数用完了）带一句给用户看的话：{"error":{"message":…,"majiang":true}}。
+    static func proxyMessage(_ data: Data) -> String? {
+        struct Body: Decodable {
+            struct Err: Decodable {
+                var message: String
+                var majiang: Bool?
+            }
+            var error: Err
+        }
+        guard let body = try? JSONDecoder().decode(Body.self, from: data), body.error.majiang == true else { return nil }
+        return body.error.message
+    }
 
     struct Answer: Codable {
         struct MeldAnswer: Codable {

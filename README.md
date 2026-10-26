@@ -39,6 +39,7 @@ docs/       产品文档：可行性评估、用户流程；assets/user-flow/ �
 research/   调研报告；results/ 是测试的原始 JSON
 tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟），见 tools/README.md
 data/       标准答案、照片来源表、番种测试用例，见 data/README.md
+server/     认牌中转站（Cloudflare Worker，持有 Gemini Key、限次数），见 server/README.md
 app/        iOS App：Xcode 工程、SwiftUI 界面、MajiangKit 逻辑包，见 app/README.md
 ```
 
