@@ -48,6 +48,7 @@ app/
 curl -L -o /tmp/weights.onnx https://github.com/LYiHub/AR-Mahjong-Assistant-preview/raw/HEAD/server/models/yolo/weights.onnx
 # 2. 转成 Core ML（会核对和 ONNX Runtime 的输出一致）
 python3 -m venv /tmp/coreml && /tmp/coreml/bin/pip install torch onnx onnx2torch coremltools onnxruntime numpy
+#    Intel 版 Python 3.9 只装得上 torch 2.2，要再装 'numpy<2'，否则报 Numpy is not available
 mkdir -p app/MajiangApp/Resources/Models
 YOLOV8_ONNX=/tmp/weights.onnx /tmp/coreml/bin/python tools/competitor-model/convert_coreml.py \
     app/MajiangApp/Resources/Models/MahjongTileDetector.mlpackage

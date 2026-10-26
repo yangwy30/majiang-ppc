@@ -45,7 +45,7 @@ struct CheckView: View {
                     Text(flow.isReviewing ? "最右边那张算和的牌。" : "最右边那张算和的牌。不对就点一下改。")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.gray)
-                        .padding(.top, 2)
+                        .padding(.top, 6)
                 }
                 melds
                 notes
@@ -249,10 +249,17 @@ struct CheckView: View {
                 .padding(.top, 2)
             VStack(alignment: .leading, spacing: 4) {
                 Text("正在用 Gemini 再认一遍").font(.system(size: 16, weight: .semibold))
-                Text("一般 5–15 秒。两边读得不一样的牌会标出来让你选。先选下面是自摸还是点炮。")
+                Text("一般十几秒，慢的要半分钟。两边读得不一样的牌会标出来让你选。先选下面是自摸还是点炮。")
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
                     .fixedSize(horizontal: false, vertical: true)
+                // Gemini 偶尔会卡到超时（一分钟），不让人干等
+                Button("不等了，就用现在这些牌 ›") {
+                    flow.cancelRecognition()
+                    flow.notes.append("没等 Gemini 复核完，只有端侧的读法，对照照片看一眼")
+                }
+                    .buttonStyle(.text(size: 13))
+                    .padding(.top, 4)
             }
             Spacer(minLength: 0)
         }
@@ -511,7 +518,7 @@ private struct QuestionCard: View {
                 .font(.system(size: 16, weight: .semibold))
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
                 ForEach(candidates, id: \.self) { tile in
-                    option(title: onlyOneSide ? "有，是\(tile.displayName)" : tile.displayName, wins: hint(for: tile)) {
+                    option(title: onlyOneSide ? "有这张" : tile.displayName, wins: hint(for: tile)) {
                         TileFace(tile: tile, width: 30)
                     } action: {
                         flow.choose(tile, at: index)

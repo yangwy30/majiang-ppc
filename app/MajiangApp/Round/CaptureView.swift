@@ -64,7 +64,8 @@ struct CaptureView: View {
         }
         .task {
             // 从核对页退回来时，照片清掉、还在跑的复核不要了，重新取景
-            flow.cancelRecognition()
+            // （核对页盖在上面时这里也会跑一次，比如截图模式直接停在核对页，这时不能取消）
+            if flow.steps.isEmpty { flow.cancelRecognition() }
             flow.photo = nil
             cameraOn = await camera.start()
             await model.preloadOnDeviceModel()
