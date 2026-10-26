@@ -22,9 +22,9 @@ app/
 | `MajiangKit/Sources/CGuobiao` | 国标算番。直接用 [ChineseOfficialMahjongHelper](https://github.com/summerinsects/ChineseOfficialMahjongHelper) 的 C++ 算法（MIT，版权声明见 `vendor/LICENSE`，上架时要在 App 的「致谢」里列出），外面包一层 C 接口 |
 | `MajiangKit/Sources/MajiangKit/Tiles` | 牌、副露、手牌，牌的记法解析（`123m456p东东`、`5饼`、`五万`） |
 | `MajiangKit/Sources/MajiangKit/Scoring` | `FanCalculator` 算番（81 番 + 明暗杠，花牌单独计、不计入起和），`WinAssistant` 不成和时给改牌建议，`SpecialWin` 特殊情况的置灰规则 |
-| `MajiangKit/Sources/MajiangKit/Game` | 牌局：圈风、门风、庄家自动轮转（不连庄，可选每圈换座），自摸/点炮收付，荒庄，错和，手动记分，最少转账，JSON 存档 |
+| `MajiangKit/Sources/MajiangKit/Game` | 牌局：圈风、门风、庄家自动轮转（不连庄，可选每圈换座），自摸/点炮收付，荒庄，错和，手动记分，改或删以前的局（后面的局数、风位、番数、分数重算），最少转账，JSON 存档 |
 | `MajiangKit/Sources/MajiangKit/Recognition` | `TileRecognizer` 协议和几种实现，见下 |
-| `MajiangApp` | [用户流程 v0.2](../docs/user-flow.md) 的页面：首页、开局、牌桌（也是账本）、拍照（内嵌取景器）、核对、结果（弹出层）、结算，加规则说明、直接改分和开发版设置。视觉规范「墨与朱」在 `Support/Theme.swift` |
+| `MajiangApp` | [用户流程 v0.2](../docs/user-flow.md) 的页面：首页、开局、牌桌（也是账本）、拍照（内嵌取景器）、核对、结果（弹出层）、结算，加改局、规则说明、直接改分和开发版设置。视觉规范「墨与朱」在 `Support/Theme.swift` |
 
 ### 识别
 
@@ -46,5 +46,4 @@ app/
 - 给 Gemini 的参考图改成了 App 自己画的扁平牌面（研究用的参考图没有许可证，不能打包），提示词也改成了分开读立牌和副露。这两处对准确率的影响要用测试照片重新跑一次。
 - 端侧模型没有接入，双读目前只有 Gemini 一路。
 - 拍照页的实时检查（牌数、光线、对焦）还没做，取景器里只有一句提示。
-- 账本只能撤销最近的一局，更早的局不能点进去改。
 - 没有 App 图标。

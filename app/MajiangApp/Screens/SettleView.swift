@@ -87,6 +87,7 @@ struct SettleView: View {
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
+            .padding(.bottom, 16)
         }
         .bottomBar {
             ShareLink(item: shareText(game, ranking: ranking, transfers: transfers)) {
