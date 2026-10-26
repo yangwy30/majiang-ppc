@@ -116,8 +116,10 @@ struct CheckView: View {
             }
         }
         .sheet(item: $editing) { target in sheet(for: target) }
-        .onAppear {
-            flipStart = Date().addingTimeInterval(reduceMotion ? 0 : 1)
+        .task {
+            // 等页面升上来再落牌（onAppear 里直接改，第一帧还没画，看不到动画）
+            flipStart = Date().addingTimeInterval(reduceMotion ? 0 : 1.3)
+            try? await Task.sleep(for: .seconds(0.3))
             landed = true
         }
         .task(id: flow.isReviewing) {
@@ -201,7 +203,7 @@ struct CheckView: View {
                         .opacity(landed || reduceMotion ? 1 : 0)
                         .offset(y: landed || reduceMotion ? 0 : -26)
                         .scaleEffect(landed || reduceMotion ? 1 : 0.86)
-                        .animation(.spring(response: 0.42, dampingFraction: 0.68).delay(0.3 + Double(index) * 0.05), value: landed)
+                        .animation(.spring(response: 0.42, dampingFraction: 0.68).delay(Double(index) * 0.05), value: landed)
                         Text(index == winningIndex ? "和" : " ")
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Theme.vermilion)

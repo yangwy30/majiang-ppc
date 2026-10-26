@@ -125,9 +125,12 @@ struct CaptureView: View {
     private var viewfinder: some View {
         ZStack {
             if let photo = flow.photo {
-                Image(uiImage: photo)
-                    .resizable()
-                    .scaledToFill()
+                // 照片铺满取景框；放在 overlay 里，宽照片不会把整页撑宽（上面那排名字会被挤歪）
+                Color.clear.overlay {
+                    Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFill()
+                }
             } else if cameraOn {
                 CameraPreview(session: camera.session)
             } else {

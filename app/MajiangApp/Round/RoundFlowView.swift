@@ -5,6 +5,8 @@ import MajiangKit
 struct RoundFlowView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var flow: RoundFlow
+    /// 状态栏跟着谁在最上面：核对页升到顶以后才换成深色字，不然升的半路上是黑底黑字。
+    @State private var lightBars = false
     var onFinish: (HandOutcome) -> Void
 
     init(game: Game, demo: DemoScreen? = nil, onFinish: @escaping (HandOutcome) -> Void) {
@@ -13,6 +15,7 @@ struct RoundFlowView: View {
         if let demo { DemoData.prepare(flow, for: demo) }
         #endif
         _flow = State(initialValue: flow)
+        _lightBars = State(initialValue: !flow.steps.isEmpty)
         self.onFinish = onFinish
     }
 
@@ -41,7 +44,16 @@ struct RoundFlowView: View {
         .animation(.spring(response: 0.5, dampingFraction: 0.86), value: checking)
         .tint(Theme.ink)
         // 拍照页是深色底，状态栏要白字；导航栏的 toolbarColorScheme 管不到整个全屏弹层
-        .preferredColorScheme(checking ? .light : .dark)
+        .preferredColorScheme(lightBars ? .light : .dark)
+        .task(id: checking) {
+            guard checking else {
+                lightBars = false
+                return
+            }
+            if lightBars { return }
+            try? await Task.sleep(for: .seconds(0.35))
+            if !Task.isCancelled { lightBars = true }
+        }
     }
 
     private func finish(_ outcome: HandOutcome) {
