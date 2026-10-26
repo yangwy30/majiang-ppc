@@ -10,9 +10,10 @@ app/
 ## 怎么跑
 
 - **App**：用 Xcode 打开 `app/Majiang.xcodeproj`，选一个 iPhone 模拟器运行。真机要在 Signing 里选自己的开发者 Team。
-  第一次打开默认是「演示数据」识别，不看照片，按顺序给出三手示例牌（清一色带一张待确认的牌、带碰和暗杠的混一色、认错一张不成和的花龙），可以把整条流程走通。
-- **用 Gemini 认牌**：开发版长按首页的「国标记分」标题打开设置 → 填 Gemini API Key（只存在手机钥匙串里）→ 识别方式选 Gemini。正式版没有设置页。
-- **端侧模型 + 双读**：先按下面「端侧模型」把模型放进 App，再在设置里选「端侧 + Gemini 双读」（或「只用端侧模型」，不用联网）。
+  识别方式默认「自动」：填了 Gemini Key 又装了端侧模型就双读，只有一样就用那一样，**两样都没有才用演示数据**。演示数据不看照片，按顺序给出三手示例牌（清一色带一张待确认的牌、带碰和暗杠的混一色、认错一张不成和的花龙），核对页标题会写「演示数据，没看你的照片」。
+- **用 Gemini 认牌**：开发版长按首页的「国标记分」标题打开设置 → 填 Gemini API Key（只存在手机钥匙串里）。识别方式保持「自动」就会用上；设置页「现在用」显示实际走哪一路。正式版没有设置页。
+  - 省掉粘贴：编译前在 Mac 上 `mkdir -p app/MajiangApp/Resources/DevSecrets && cp ~/.config/gemini/api_key app/MajiangApp/Resources/DevSecrets/GeminiDevKey.txt`，开发版第一次打开会自动存进钥匙串。这个目录已被 `.gitignore` 挡住；文件会打进 App 包，所以**打 TestFlight / 上架包之前一定删掉它**。
+- **端侧模型 + 双读**：先按下面「端侧模型」把模型放进 App，再填 Key，「自动」就是双读（也可以手动选「只用端侧模型」，不用联网）。
 - **截图**：开发版启动参数 `-demo-screen <页面>` 用临时假数据直接停在某一页，见 [用户流程设计](../docs/user-flow.md#截图怎么更新)。
 - **测试**：`cd app/MajiangKit && swift test`（Mac 或 Linux 都行）。
 

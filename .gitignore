@@ -11,6 +11,8 @@
 *.mlmodel
 *.mlmodelc
 app/MajiangApp/Resources/Models/
+# 开发版自动带进手机的 Gemini Key（编译前从 ~/.config/gemini/api_key 复制过来），绝不进仓库
+app/MajiangApp/Resources/DevSecrets/
 
 # 脚本默认输出目录；要留档的结果手动放进 research/results/
 /tools/*/results/

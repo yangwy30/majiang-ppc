@@ -130,7 +130,7 @@ struct CaptureView: View {
                     .padding(.horizontal, 18)
                 VStack {
                     Spacer()
-                    Text(cameraOn || model.recognitionMode == .demo ? "手牌推倒排成一排，和的那张放最右"
+                    Text(cameraOn || model.effectiveRecognitionMode == .demo ? "手牌推倒排成一排，和的那张放最右"
                          : "这台设备没有相机，从左下角的相册选一张")
                         .font(.system(size: 14))
                         .foregroundStyle(.white.opacity(0.85))
@@ -190,7 +190,7 @@ struct CaptureView: View {
             Task {
                 if let image = await camera.capture() { use(image) }
             }
-        } else if model.recognitionMode == .demo {
+        } else if model.effectiveRecognitionMode == .demo {
             // 演示识别不看照片，模拟器里也能走完流程
             use(UIImage(systemName: "photo") ?? UIImage())
         } else {

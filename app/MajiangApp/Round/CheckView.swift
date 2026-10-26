@@ -129,6 +129,8 @@ struct CheckView: View {
 
     private var subtitle: String {
         if flow.source == "手动输入" { return "\(winnerName)和了 · 手动输入" }
+        // 演示数据不看照片，一定要说清楚，不然会以为是认错了（截图模式除外）
+        if flow.source == "演示" && DemoScreen.current == nil { return "演示数据，没看你的照片 · 长按首页标题填 Key" }
         let count = "\(winnerName)和了 · 认出 \(flow.hand.allTiles.count) 张"
         if flow.isReviewing { return count + " · 复核中" }
         if flow.source == "双读" {
