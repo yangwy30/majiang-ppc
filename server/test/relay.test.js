@@ -9,7 +9,7 @@ import { isAllowedModel } from "../src/models.js";
 const WORKER_PORT = 8787 + Math.floor(Math.random() * 1000);
 const BASE = `http://127.0.0.1:${WORKER_PORT}`;
 const DEVICE = "8f14e45f-ceea-467f-a0e6-4d2b1c9a0b11";
-const BODY = JSON.stringify({ contents: [{ role: "user", parts: [{ text: "hi" }] }] });
+const BODY = JSON.stringify({ contents: [{ role: "user", parts: [{ inline_data: { mime_type: "image/jpeg", data: "AAAA" } }, { text: "hi" }] }] });
 
 let fake, worker, received = [], nextStatus = 200;
 
@@ -60,6 +60,7 @@ test("没有设备标识、格式不对的请求不转发", async () => {
   assert.equal((await post({}, "not json")).status, 400);
   assert.equal((await post({}, JSON.stringify({ contents: [], tools: [] }))).status, 400);
   assert.equal((await post({}, JSON.stringify({ ...JSON.parse(BODY), systemInstruction: {} }))).status, 400);
+  assert.equal((await post({}, JSON.stringify({ contents: [{ role: "user", parts: [{ text: "写首诗" }] }] }))).status, 400);
   assert.equal((await fetch(`${BASE}/recognize`)).status, 405);
   assert.equal(received.length, 0);
 });

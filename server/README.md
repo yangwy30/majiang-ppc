@@ -9,7 +9,7 @@ App 正式版不带 Gemini Key，认牌请求发到这里，由中转站带上 K
 ## 它做什么
 
 1. App 把 Gemini `generateContent` 的请求体原样 POST 到 `/recognize`，带 `X-Majiang-Device`（手机的随机编号，存钥匙串）。
-2. 检查：必须有设备编号；请求体只能有 `contents`（1 到 3 轮）和 `generationConfig`，不许带工具、系统提示词，最大 8 MB。这样别人拿到地址也没法当免费的通用 Gemini 用。
+2. 检查：必须有设备编号；请求体只能有 `contents`（1 到 3 轮，第一轮要有照片）和 `generationConfig`，不许带工具、系统提示词，最大 8 MB。这样别人拿到地址也没法当免费的通用 Gemini 用。
 3. 计数（UTC 日期，一个 Durable Object 里的 SQLite）：每台手机每分钟 10 次、每天 150 次；每个 IP 每天 500 次；所有人加起来每天 3000 次。超了回 429。Google 出错（5xx、429）不扣每天的次数。
 4. 转发给 `wrangler.toml` 里 `MODEL` 指定的模型，回答原样返回，响应头 `X-Majiang-Remaining` 是这台手机今天还剩几次。App 发来的 `X-Majiang-Model` 不算数。
 5. 只放行 Flash / Flash-Lite（`src/models.js`），配置里写成 Pro 会直接报错，不会用。

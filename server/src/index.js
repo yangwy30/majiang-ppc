@@ -38,7 +38,7 @@ export default {
     const body = await request.arrayBuffer();
     if (body.byteLength > maxBytes) return fail(413, "照片太大了");
 
-    // 只转发认牌用得到的请求：不许带工具、系统提示词之类，防止被当成免费的通用 Gemini
+    // 只转发认牌用得到的请求：第一轮要有照片，不许带工具、系统提示词之类，防止被当成免费的通用 Gemini
     let json;
     try {
       json = JSON.parse(new TextDecoder().decode(body));
@@ -47,7 +47,8 @@ export default {
     }
     if (json === null || typeof json !== "object" || Array.isArray(json)
         || !Object.keys(json).every((k) => BODY_KEYS.has(k))
-        || !Array.isArray(json.contents) || json.contents.length < 1 || json.contents.length > 3) {
+        || !Array.isArray(json.contents) || json.contents.length < 1 || json.contents.length > 3
+        || !json.contents[0]?.parts?.some?.((p) => p?.inline_data?.data || p?.inlineData?.data)) {
       return fail(400, "请求格式不对");
     }
 
