@@ -1,5 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 import { isAllowedModel } from "./models.js";
+import { PRIVACY_HTML } from "./privacy.js";
 
 // 认牌请求的中转站。App 把 Gemini generateContent 的请求体原样 POST 到 /recognize，
 // 这里检查、计数，再带上 Key 转发给 Google，把回答原样还回去。
@@ -23,6 +24,9 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/health" && request.method === "GET") return new Response("ok");
+    if (url.pathname === "/privacy" && request.method === "GET") {
+      return new Response(PRIVACY_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
     if (url.pathname !== "/recognize") return fail(404, "地址不对");
     if (request.method !== "POST") return fail(405, "只收 POST");
 
