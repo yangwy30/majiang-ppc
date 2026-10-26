@@ -43,6 +43,8 @@ final class AppModel {
     }
 
     private let archiveURL: URL
+    /// iCloud 同步；截图模式下不同步。
+    let cloud: CloudSync
     /// 演示识别只建一次，这样每次拍照会轮到下一手示例牌。
     private let demoRecognizer = MockRecognizer()
     /// 端侧模型加载一次就留着（外层 nil = 还没加载，内层 nil = 没装）。
@@ -71,6 +73,8 @@ final class AppModel {
             if let backup { error! += "。原文件已备份为 \(backup.lastPathComponent)" }
         }
         self.archiveURL = url
+        self.cloud = CloudSync(stateURL: url.deletingLastPathComponent().appendingPathComponent("cloud-state.json"))
+        if DemoScreen.current != nil { cloud.enabled = false }
         self.archive = loaded
         self.recognitionMode = RecognitionMode(rawValue: UserDefaults.standard.string(forKey: "recognitionMode") ?? "") ?? .demo
         self.proxyURL = UserDefaults.standard.string(forKey: "proxyURL") ?? ""
@@ -78,7 +82,7 @@ final class AppModel {
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
         switch demoScreen {
-        case .home, .emptyHome: path = []
+        case .home, .emptyHome, .backup: path = []
         case .newGame: path = [.newGame]
         case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
         default: break
@@ -103,12 +107,44 @@ final class AppModel {
         return game
     }
 
+    /// 存到本机，再排一次 iCloud 同步。
     func save() {
+        saveLocally()
+        cloud.scheduleSync(self)
+    }
+
+    /// 只存本机（收到 iCloud 的改动时用，不用再传回去）。
+    func saveLocally() {
         do {
             try archive.save(to: archiveURL)
         } catch {
             loadError = "保存失败：\(error.localizedDescription)"
         }
+    }
+
+    func syncNow() async {
+        guard demoScreen == nil else { return }
+        await cloud.sync(self)
+    }
+
+    // MARK: 导出导入（不用 iCloud 时换手机）
+
+    /// 把全部记录写成一个文件，用来存到「文件」或隔空投送。
+    func exportFile() throws -> URL {
+        let stamp = Date().formatted(.iso8601.year().month().day().dateSeparator(.omitted))
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("国标记分-全部牌局-\(stamp).json")
+        try archive.exportData().write(to: url, options: .atomic)
+        return url
+    }
+
+    /// 并入另一台手机导出的文件，只加不删。
+    func importFile(_ url: URL) throws -> ArchiveMergeSummary {
+        let scoped = url.startAccessingSecurityScopedResource()
+        defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+        let other = try GameArchive.decode(Data(contentsOf: url))
+        let summary = archive.merge(other)
+        if !summary.isEmpty || !other.frequentPlayers.isEmpty { save() }
+        return summary
     }
 
     // MARK: 识别

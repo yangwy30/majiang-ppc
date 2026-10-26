@@ -74,7 +74,16 @@ swift test --filter OnDeviceEvaluationTests
 - Key **不进代码、不进仓库**。开发阶段在 App 设置里填，存钥匙串，请求时放在 `x-goog-api-key` 请求头里（不放在 URL 上）。
 - 上架前要加一个很小的后端代理：App 把请求体原样 POST 到代理（带 `X-Majiang-Model` 头指明模型），代理加上 Key 转发到 `https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent`，再把回答原样返回。代理还应该做用户鉴权和限流。在设置里填代理地址后 App 就走代理。
 
+### 分享和同步
+
+- **发到微信群**：牌桌右上角和结算页把账本渲染成一张图（`Support/ShareCard.swift`，360 点宽、3 倍），走系统分享面板；结算页另有「复制文字版」。没有服务器，其他牌友在群里看图。
+- **iCloud 同步**（`Support/CloudSync.swift`）：CloudKit 私有库 `iCloud.com.yangwy30.majiang`，自定义 zone `Majiang`，每场牌局一条 `Game` 记录（字段 `json` 是那场的 JSON），常用牌友和上次规则一条 `Meta`。打开、回到前台、保存后 2 秒同步：先收再传。该传哪些、两边都改过时留哪份由 MajiangKit 的 `SyncBook` 决定（有测试）。
+- **导出 / 导入**：首页「备份与换手机」，导出全部牌局为 JSON 文件，导入时用 `GameArchive.merge` 只加不删。
+- 真机要用开发者 Team 93RUQ2A6KX 签名，iCloud 容器要在开发者账号里存在（第一次真机构建时 Xcode 自动注册）。
+
 ## 还没做 / 待验证
+
+- iCloud 同步还没在真机上跑过（模拟器没登录 iCloud）。
 
 - 给 Gemini 的参考图改成了 App 自己画的扁平牌面（研究用的参考图没有许可证，不能打包），提示词也改成了分开读立牌和副露。这两处对准确率的影响要用测试照片重新跑一次。
 - 端侧模型是竞品的，上架前要换成自己训练的（见上）。端侧分不出吃碰杠，只有 Gemini 一路时副露要手动加。
