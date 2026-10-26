@@ -39,18 +39,23 @@ enum Theme {
         .system(size: size, weight: weight).monospacedDigit()
     }
 
-    /// 宋体只用于风位、庄、「番」字和名次。iOS 没有自带中文宋体，所以打包了一个 Noto Serif SC 粗体的子集
-    /// （只有「东南西北庄番」和数字，10 KB，SIL OFL 许可，见 Resources/Fonts）。别的字会退回系统字体。
-    static func serif(_ size: CGFloat) -> Font {
-        if let name = serifName { return .custom(name, fixedSize: size) }
-        return .system(size: size, weight: .semibold, design: .serif)
+    /// 宋体只用于风位、庄、「番」字、名次和第一次打开时的首页。iOS 没有自带中文宋体，所以打包了 Noto Serif SC 粗体和
+    /// 半粗体的子集（只有用到的几十个字，SIL OFL 许可，见 Resources/Fonts）。别的字会退回系统字体，
+    /// 宋体里要加新字时得重新做子集。
+    static func serif(_ size: CGFloat, semibold: Bool = false) -> Font {
+        if let name = semibold ? serifFonts.semibold : serifFonts.bold { return .custom(name, fixedSize: size) }
+        return .system(size: size, weight: semibold ? .semibold : .bold, design: .serif)
     }
 
-    private static let serifName: String? = {
-        if let url = Bundle.main.url(forResource: "NotoSerifSC-Bold-subset", withExtension: "otf") {
-            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+    private static let serifFonts: (bold: String?, semibold: String?) = {
+        func register(_ file: String, name: String) -> String? {
+            if let url = Bundle.main.url(forResource: file, withExtension: "otf") {
+                CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+            }
+            return UIFont(name: name, size: 12) != nil ? name : nil
         }
-        return UIFont(name: "NotoSerifSC-Bold", size: 12) != nil ? "NotoSerifSC-Bold" : nil
+        return (register("NotoSerifSC-Bold-subset", name: "NotoSerifSC-Bold"),
+                register("NotoSerifSC-SemiBold-subset", name: "NotoSerifSC-SemiBold"))
     }()
 }
 

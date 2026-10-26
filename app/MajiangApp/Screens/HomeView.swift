@@ -7,7 +7,26 @@ struct HomeView: View {
     @State private var showGuide = false
     @State private var showSettings = false
 
+    private var isEmpty: Bool { model.archive.games.isEmpty }
+
     var body: some View {
+        Group {
+            if isEmpty {
+                EmptyHome(openGuide: { showGuide = true }, openSettings: { showSettings = true },
+                          start: { model.path.append(.newGame) })
+            } else {
+                list
+            }
+        }
+        .page()
+        .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showGuide) { RulesGuideView() }
+        #if DEBUG
+        .sheet(isPresented: $showSettings) { SettingsView() }
+        #endif
+    }
+
+    private var list: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 header
@@ -56,12 +75,6 @@ struct HomeView: View {
             Button("开一局") { model.path.append(.newGame) }
                 .buttonStyle(.primary)
         }
-        .page()
-        .toolbar(.hidden, for: .navigationBar)
-        .sheet(isPresented: $showGuide) { RulesGuideView() }
-        #if DEBUG
-        .sheet(isPresented: $showSettings) { SettingsView() }
-        #endif
     }
 
     private var header: some View {
@@ -137,5 +150,105 @@ private struct HistoryRow: View {
             Hairline()
         }
         .contentShape(Rectangle())
+    }
+}
+
+/// 第一次打开、还没有任何牌局时的首页：一句话加三步，说清这个 App 是干什么的。
+private struct EmptyHome: View {
+    var openGuide: () -> Void
+    var openSettings: () -> Void
+    var start: () -> Void
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 12) {
+                    Text("和")
+                        .font(Theme.serif(17))
+                        .foregroundStyle(.white)
+                        .frame(width: 30, height: 30)
+                        .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+                    Text("国标记分").font(.system(size: 17, weight: .semibold))
+                }
+                .accessibilityElement(children: .combine)
+                #if DEBUG
+                // 开发版的设置（识别方式、API Key）藏在长按品牌标里，正式版没有设置页
+                .onLongPressGesture { openSettings() }
+                #endif
+
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("拍一下，")
+                    Text("番和钱都算好。")
+                }
+                .font(Theme.serif(32, semibold: true))
+                .padding(.top, 28)
+
+                VStack(spacing: 0) {
+                    StepRow(number: "一", title: "拍", detail: "和牌的人把牌推倒，拍一张") {
+                        HStack(spacing: 2) {
+                            ForEach(Array(Tile.parseList("12355p").enumerated()), id: \.offset) { _, tile in
+                                TileFace(tile: tile, width: 16)
+                            }
+                        }
+                    }
+                    StepRow(number: "二", title: "算", detail: "认出牌，按国标算番") {
+                        HStack(alignment: .firstTextBaseline, spacing: 3) {
+                            Text("32").font(Theme.score(30, weight: .ultraLight))
+                            Text("番").font(Theme.serif(13, semibold: true))
+                        }
+                    }
+                    StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账") {
+                        VStack(alignment: .trailing, spacing: 0) {
+                            Text("+120").foregroundStyle(Theme.vermilion)
+                            Text("−40").foregroundStyle(Theme.ink)
+                        }
+                        .font(Theme.score(15))
+                    }
+                }
+                .padding(.top, 40)
+            }
+            .padding(.horizontal, 28)
+            // 安全区以下再留 38，离屏幕顶约 100
+            .padding(.top, 38)
+        }
+        .bottomBar {
+            Button("开一局", action: start)
+                .buttonStyle(.primary)
+            Button("第一次打国标？先看看番怎么算", action: openGuide)
+                .buttonStyle(.text(size: 14))
+                .padding(.top, 10)
+        }
+    }
+}
+
+/// 三步里的一行：朱红数字、标题和说明、右边一个小样。
+private struct StepRow<Sample: View>: View {
+    var number: String
+    var title: String
+    var detail: String
+    @ViewBuilder var sample: Sample
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                Text(number)
+                    .font(Theme.serif(22, semibold: true))
+                    .foregroundStyle(Theme.vermilion)
+                    .frame(width: 28, alignment: .leading)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title).font(.system(size: 17, weight: .semibold))
+                    Text(detail)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.gray)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
+                }
+                .padding(.leading, 6)
+                Spacer(minLength: 12)
+                sample.accessibilityHidden(true)
+            }
+            .padding(.vertical, 20)
+            Hairline()
+        }
     }
 }
