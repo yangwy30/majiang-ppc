@@ -87,6 +87,9 @@ final class AppModel {
         self.cloud = CloudSync(stateURL: url.deletingLastPathComponent().appendingPathComponent("cloud-state.json"))
         if DemoScreen.current != nil { cloud.enabled = false }
         self.archive = loaded
+        #if DEBUG
+        if DemoScreen.current == nil { GeminiKeychain.importBundledDevKey() }
+        #endif
         self.recognitionMode = RecognitionMode(rawValue: UserDefaults.standard.string(forKey: "recognitionMode") ?? "") ?? .auto
         self.proxyURL = UserDefaults.standard.string(forKey: "proxyURL") ?? ""
         self.loadError = error

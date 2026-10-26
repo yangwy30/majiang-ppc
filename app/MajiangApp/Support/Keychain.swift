@@ -42,3 +42,16 @@ struct GeminiKeychain: APIKeyProvider {
         SecItemAdd(add as CFDictionary, nil)
     }
 }
+
+#if DEBUG
+extension GeminiKeychain {
+    /// 开发版：编译前把 Mac 上的 Key 放到 Resources/DevSecrets/GeminiDevKey.txt（不进仓库，见 app/README.md），
+    /// 装到手机后第一次打开自动存进钥匙串，不用在设置里粘贴。钥匙串里已经有 Key 就不动。
+    static func importBundledDevKey() {
+        guard !hasKey,
+              let url = Bundle.main.url(forResource: "GeminiDevKey", withExtension: "txt"),
+              let key = try? String(contentsOf: url, encoding: .utf8) else { return }
+        save(key)
+    }
+}
+#endif
