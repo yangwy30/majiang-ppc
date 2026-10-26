@@ -42,14 +42,17 @@ struct CheckView: View {
 
                 tileGrid.padding(.top, 22)
                 if !flow.tiles.isEmpty {
-                    Text("最右边那张算和的牌。不对就点一下改。")
+                    Text(flow.isReviewing ? "最右边那张算和的牌。" : "最右边那张算和的牌。不对就点一下改。")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 2)
                 }
                 melds
+                notes
 
-                if let index = flow.firstPending {
+                if flow.isReviewing {
+                    reviewingCard.padding(.top, 18)
+                } else if let index = flow.firstPending {
                     QuestionCard(flow: flow, index: index) { editing = .replace(index) }
                         .padding(.top, 18)
                 } else if !flow.tiles.isEmpty && !flow.isValidWin {
@@ -126,7 +129,12 @@ struct CheckView: View {
 
     private var subtitle: String {
         if flow.source == "手动输入" { return "\(winnerName)和了 · 手动输入" }
-        return "\(winnerName)和了 · 认出 \(flow.hand.allTiles.count) 张"
+        let count = "\(winnerName)和了 · 认出 \(flow.hand.allTiles.count) 张"
+        if flow.isReviewing { return count + " · 复核中" }
+        if flow.source == "双读" {
+            return count + (flow.reviewAtLoad == 0 ? " · 两边读得一样" : " · \(flow.reviewAtLoad) 张两边不一样")
+        }
+        return count
     }
 
     private var winningIndex: Int? { flow.winningIndex ?? flow.tiles.indices.last }
@@ -162,8 +170,9 @@ struct CheckView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .disabled(flow.isReviewing)
             }
-            if canAddTile {
+            if canAddTile && !flow.isReviewing {
                 Button {
                     editing = .add
                 } label: {
@@ -185,13 +194,16 @@ struct CheckView: View {
     @ViewBuilder
     private var melds: some View {
         if flow.melds.isEmpty {
-            Button("有吃、碰、杠亮在桌上？加上 ›") { editing = .meld }
-                .buttonStyle(.text(size: 13))
+            if !flow.isReviewing {
+                Button("有吃、碰、杠亮在桌上？加上 ›") { editing = .meld }
+                    .buttonStyle(.text(size: 13))
+            }
         } else {
             HStack {
                 SectionLabel("亮在桌上的")
                 Button("加一组 ›") { editing = .meld }
                     .buttonStyle(.text(size: 13))
+                    .disabled(flow.isReviewing)
             }
             .padding(.top, 14)
             FlowLayout(spacing: 14) {
@@ -211,6 +223,41 @@ struct CheckView: View {
             }
             .padding(.vertical, 4)
         }
+    }
+
+    /// 识别时的说明（画面里有别的牌没算、副露两边读得不一样、Gemini 没复核上……）。
+    @ViewBuilder
+    private var notes: some View {
+        if !flow.notes.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(flow.notes, id: \.self) { note in
+                    Text(note)
+                }
+            }
+            .font(.system(size: 13))
+            .foregroundStyle(Theme.gray)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.top, 10)
+        }
+    }
+
+    /// 端侧已经读出来了，Gemini 还在复核。
+    private var reviewingCard: some View {
+        HStack(alignment: .top, spacing: 12) {
+            ProgressView()
+                .tint(Theme.gray)
+                .padding(.top, 2)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("正在用 Gemini 再认一遍").font(.system(size: 16, weight: .semibold))
+                Text("一般 5–15 秒。两边读得不一样的牌会标出来让你选。先选下面是自摸还是点炮。")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Theme.gray)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, 18)
+        .block()
     }
 
     // MARK: 不成和
@@ -448,42 +495,37 @@ struct CheckView: View {
 }
 
 /// 拿不准的一张：「第 13 张看不太清，是哪个？」，候选旁边说选了能不能和。
+/// 只有一边读到的牌问「照片里有这张吗」，多一个「没有这张」。
 private struct QuestionCard: View {
     var flow: RoundFlow
     var index: Int
     var other: () -> Void
 
-    private var candidates: [Tile] { Array(flow.tiles[index].candidates.prefix(4)) }
+    private var tile: RecognizedTile { flow.tiles[index] }
+    private var candidates: [Tile] { Array(tile.candidates.prefix(tile.uncertain ? 3 : 4)) }
+    private var onlyOneSide: Bool { tile.uncertain && tile.alternatives.isEmpty }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("第 \(index + 1) 张看不太清，是哪个？")
+            Text(onlyOneSide ? "第 \(index + 1) 张可能是多认的，照片里有这张吗？" : "第 \(index + 1) 张看不太清，是哪个？")
                 .font(.system(size: 16, weight: .semibold))
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
                 ForEach(candidates, id: \.self) { tile in
-                    let wins = hint(for: tile)
-                    Button {
+                    option(title: onlyOneSide ? "有，是\(tile.displayName)" : tile.displayName, wins: hint(for: tile)) {
+                        TileFace(tile: tile, width: 30)
+                    } action: {
                         flow.choose(tile, at: index)
-                    } label: {
-                        HStack(spacing: 12) {
-                            TileFace(tile: tile, width: 30)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(tile.displayName).font(.system(size: 16, weight: .medium))
-                                if let wins {
-                                    Text(wins ? "选这个能和" : "选这个和不了")
-                                        .font(.system(size: 12))
-                                        .foregroundStyle(wins ? Theme.vermilion : Theme.gray)
-                                }
-                            }
-                            Spacer(minLength: 0)
-                        }
-                        .padding(.horizontal, 14)
-                        .frame(height: 64)
-                        .background(Color(hex: 0xFBFAF7), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Theme.line))
-                        .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
+                }
+                if tile.uncertain {
+                    option(title: "没有这张", wins: removalHint) {
+                        RoundedRectangle(cornerRadius: 30 * 0.16, style: .continuous)
+                            .strokeBorder(Theme.faint, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                            .frame(width: 30, height: 40)
+                            .overlay(Image(systemName: "xmark").font(.system(size: 12)).foregroundStyle(Theme.gray))
+                    } action: {
+                        flow.remove(at: index)
+                    }
                 }
             }
             .padding(.top, 14)
@@ -496,11 +538,42 @@ private struct QuestionCard: View {
         .block()
     }
 
+    private func option(title: String, wins: Bool?, @ViewBuilder face: () -> some View,
+                        action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                face()
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title).font(.system(size: 16, weight: .medium))
+                    if let wins {
+                        Text(wins ? "选这个能和" : "选这个和不了")
+                            .font(.system(size: 12))
+                            .foregroundStyle(wins ? Theme.vermilion : Theme.gray)
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 64)
+            .background(Color(hex: 0xFBFAF7), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Theme.line))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
     /// 只有这一张拿不准时，直接试一下能不能和；好几张都拿不准时，用规则引擎推荐的那组读法。
     private func hint(for tile: Tile) -> Bool? {
         if flow.pendingReviewCount == 1 { return flow.wins(with: tile, at: index) }
+        if flow.recommendedRemovals.contains(index) { return false }
         guard let recommended = flow.recommended[index] else { return nil }
         return recommended == tile
+    }
+
+    private var removalHint: Bool? {
+        if flow.pendingReviewCount == 1 { return flow.wins(removing: index) }
+        if flow.recommendedRemovals.contains(index) { return true }
+        return flow.recommended[index] == nil ? nil : false
     }
 }
 

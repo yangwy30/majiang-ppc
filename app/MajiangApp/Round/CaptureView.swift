@@ -63,9 +63,11 @@ struct CaptureView: View {
             }
         }
         .task {
-            // 从核对页退回来时，照片清掉，重新取景
+            // 从核对页退回来时，照片清掉、还在跑的复核不要了，重新取景
+            flow.cancelRecognition()
             flow.photo = nil
             cameraOn = await camera.start()
+            await model.preloadOnDeviceModel()
         }
         .onDisappear { camera.stop() }
     }

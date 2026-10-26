@@ -68,8 +68,10 @@ public struct RecognitionRequest: Sendable {
 }
 
 public enum RecognitionError: Error, Hashable, Sendable {
-    /// 这一路识别现在用不了（比如端侧模型还没接入）。
+    /// 这一路识别现在用不了（比如端侧模型没装）。
     case unavailable(String)
+    /// 照片里没找到牌。
+    case nothingFound
     /// 没有配置 API Key 或代理地址。
     case notConfigured
     case network(String)
@@ -78,6 +80,7 @@ public enum RecognitionError: Error, Hashable, Sendable {
     public var message: String {
         switch self {
         case .unavailable(let why): why
+        case .nothingFound: "照片里没找到牌，靠近一点、亮一点再拍"
         case .notConfigured: "还没有设置识别服务（在设置里填 Gemini API Key 或代理地址）"
         case .network(let why): "网络出错：\(why)"
         case .badResponse(let why): "识别结果看不懂：\(why)"
@@ -91,17 +94,32 @@ public protocol TileRecognizer: Sendable {
     func recognize(_ request: RecognitionRequest) async throws -> Recognition
 }
 
-// MARK: - 端侧模型（占位）
+/// 能先给一个快的结果、过一会儿再给最终结果的识别（双读：端侧先出，Gemini 复核完再合并）。
+public protocol ProgressiveTileRecognizer: TileRecognizer {
+    /// 快的结果一出来就调 `preview`（可能不调，比如端侧没认出来），最后返回最终结果。
+    func recognize(_ request: RecognitionRequest,
+                   preview: @escaping @Sendable (Recognition) async -> Void) async throws -> Recognition
+}
 
-/// 端侧模型的位置。将来用自己训练的模型（Jon Chan Roboflow 数据集，CC BY 4.0）转 Core ML 后接在这里。
-/// 不能用竞品的 ONNX 权重和 Ultralytics（AGPL）代码。
+// MARK: - 端侧模型
+
+/// 端侧认牌：检测模型找出每张牌，`TileLayout` 去掉画面里别人的牌、排成手牌。几十到几百毫秒出结果，不用联网。
+/// 分不出吃碰杠（都当立牌），双读时副露以 Gemini 为准。
+/// 原型阶段的模型是竞品的（没有许可证，见 `CoreMLTileDetector`），上架前换成自己训练的，这里不用改。
 public struct OnDeviceRecognizer: TileRecognizer {
     public let name = "端侧"
+    public var detector: TileDetecting?
 
-    public init() {}
+    /// `detector` 为 nil 表示这台设备上没装模型。
+    public init(detector: TileDetecting? = nil) {
+        self.detector = detector
+    }
 
     public func recognize(_ request: RecognitionRequest) async throws -> Recognition {
-        throw RecognitionError.unavailable("端侧模型还没有接入")
+        guard let detector else { throw RecognitionError.unavailable("端侧模型没装（见 app/README.md）") }
+        let recognition = TileLayout.recognition(from: try await detector.detect(in: request.image))
+        guard !recognition.concealed.isEmpty else { throw RecognitionError.nothingFound }
+        return recognition
     }
 }
 
