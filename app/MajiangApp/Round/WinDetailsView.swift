@@ -98,7 +98,7 @@ struct WinDetailsView: View {
                 estimate
                 Button("算番") { flow.steps.append(.result) }
                     .buttonStyle(.primary)
-                    .disabled(!flow.isValidWin || (!flow.selfDrawn && flow.discarder == nil))
+                    .disabled(flow.winRecord == nil)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
@@ -108,6 +108,8 @@ struct WinDetailsView: View {
         .navigationTitle("怎么和的")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+            // 和牌者可能在拍照页被改过，点炮者不能是和牌者本人
+            if flow.discarder == flow.winner { flow.discarder = nil }
             if !flow.selfDrawn && flow.discarder == nil { flow.discarder = flow.defaultDiscarder() }
         }
     }

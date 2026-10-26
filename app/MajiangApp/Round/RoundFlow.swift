@@ -140,6 +140,8 @@ final class RoundFlow {
 
     var winRecord: WinRecord? {
         guard case .success(let result) = scoring, result.meetsMinimum(game.rules.minimumFan) else { return nil }
+        // 拍照页回头改了和牌者时，之前选的点炮者可能就是和牌者本人，这时不能记账
+        if !selfDrawn && (discarder == nil || discarder == winner) { return nil }
         return WinRecord(winner: winner, discarder: selfDrawn ? nil : discarder, hand: hand, context: context, result: result)
     }
 
