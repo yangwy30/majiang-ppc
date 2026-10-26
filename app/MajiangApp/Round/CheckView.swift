@@ -96,8 +96,10 @@ struct CheckView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
+        // 核对页是从下面升上来盖住拍照页的，不在导航栈里，返回键自己放；
+        // 系统在这里还会多画一个返回键（iOS 27 模拟器上看到的），藏掉
+        .navigationBarBackButtonHidden()
         .toolbar {
-            // 核对页是从下面升上来盖住拍照页的，不在导航栈里，返回键自己放
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     flow.steps.removeAll()
