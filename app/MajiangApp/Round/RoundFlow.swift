@@ -15,7 +15,7 @@ final class RoundFlow {
     var winner: Int
     var photo: UIImage?
     var isRecognizing = false
-    /// 双读时端侧的结果已经显示在核对页，Gemini 还在复核。复核完之前牌面不能改。
+    /// 双读时端侧的结果已经显示在核对页，Gemini 还在复核（界面上叫「再认一遍」，不提 Gemini）。复核完之前牌面不能改。
     var isReviewing = false
     var recognitionError: String?
     var source = ""
@@ -83,7 +83,7 @@ final class RoundFlow {
 
     /// 底部按钮不能点时的原因；nil 表示可以看结果了。
     var blockedReason: String? {
-        if isReviewing { return "正在复核…" }
+        if isReviewing { return "稍等几秒" }
         if tiles.isEmpty { return "先把牌加上" }
         if pendingReviewCount > 0 { return "还有 \(pendingReviewCount) 张没确认" }
         switch scoring {
