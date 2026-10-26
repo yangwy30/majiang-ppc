@@ -8,14 +8,15 @@ enum Route: Hashable {
     case settle(UUID)
 }
 
-/// 识别用哪一路。默认演示数据，填了 Key 之后可以切到 Gemini。只在开发版的设置里能改。
+/// 识别用哪一路。默认「自动」：有什么用什么，什么都没有才用演示数据。只在开发版的设置里能改。
 enum RecognitionMode: String, CaseIterable, Identifiable {
-    case demo, gemini, onDevice, dual
+    case auto, demo, gemini, onDevice, dual
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
+        case .auto: "自动（推荐）"
         case .demo: "演示数据"
         case .gemini: "Gemini"
         case .onDevice: "只用端侧模型"
@@ -24,6 +25,16 @@ enum RecognitionMode: String, CaseIterable, Identifiable {
     }
 
     var usesOnDeviceModel: Bool { self == .onDevice || self == .dual }
+
+    /// 自动时实际用哪一路：Key 和端侧模型都有就双读，只有一样就用那一样，都没有才是演示数据。
+    static func resolveAuto(hasKey: Bool, hasModel: Bool) -> RecognitionMode {
+        switch (hasKey, hasModel) {
+        case (true, true): .dual
+        case (true, false): .gemini
+        case (false, true): .onDevice
+        case (false, false): .demo
+        }
+    }
 }
 
 @MainActor
@@ -76,7 +87,7 @@ final class AppModel {
         self.cloud = CloudSync(stateURL: url.deletingLastPathComponent().appendingPathComponent("cloud-state.json"))
         if DemoScreen.current != nil { cloud.enabled = false }
         self.archive = loaded
-        self.recognitionMode = RecognitionMode(rawValue: UserDefaults.standard.string(forKey: "recognitionMode") ?? "") ?? .demo
+        self.recognitionMode = RecognitionMode(rawValue: UserDefaults.standard.string(forKey: "recognitionMode") ?? "") ?? .auto
         self.proxyURL = UserDefaults.standard.string(forKey: "proxyURL") ?? ""
         self.loadError = error
         // 有没打完的牌局时，打开 App 直接进牌桌
@@ -149,10 +160,17 @@ final class AppModel {
 
     // MARK: 识别
 
+    /// 这次拍照实际走哪一路（「自动」在这里落到具体的一路）。
+    var effectiveRecognitionMode: RecognitionMode {
+        guard recognitionMode == .auto else { return recognitionMode }
+        let hasKey = GeminiKeychain.hasKey || URL(string: proxyURL)?.scheme == "https"
+        return .resolveAuto(hasKey: hasKey, hasModel: Self.onDeviceModelURL != nil)
+    }
+
     func makeRecognizer() -> TileRecognizer {
         if demoScreen != nil { return demoRecognizer }
-        switch recognitionMode {
-        case .demo:
+        switch effectiveRecognitionMode {
+        case .auto, .demo:
             return demoRecognizer
         case .gemini:
             return RuleCheckedRecognizer(base: gemini())
@@ -181,7 +199,7 @@ final class AppModel {
 
     /// 打开拍照页时先在后台把模型加载好，按快门时不用等。
     func preloadOnDeviceModel() async {
-        guard loadedDetector == nil, recognitionMode.usesOnDeviceModel else { return }
+        guard loadedDetector == nil, effectiveRecognitionMode.usesOnDeviceModel else { return }
         let detector = await Task.detached(priority: .userInitiated) { Self.loadDetector() }.value
         if loadedDetector == nil { loadedDetector = .some(detector) }
     }
