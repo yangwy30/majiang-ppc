@@ -15,3 +15,10 @@ __pycache__/
 .DS_Store
 .env
 api_key
+
+# Swift
+app/MajiangKit/.build/
+app/MajiangKit/.swiftpm/
+*.xcuserstate
+xcuserdata/
+DerivedData/
