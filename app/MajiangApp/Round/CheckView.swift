@@ -200,15 +200,16 @@ struct CheckView: View {
                             TileFace(tile: tile.tile, width: tileWidth,
                                      state: tile.needsReview ? .doubt : index == suspect ? .wrong : .normal)
                         }
-                        .opacity(landed || reduceMotion ? 1 : 0)
-                        .offset(y: landed || reduceMotion ? 0 : -26)
-                        .scaleEffect(landed || reduceMotion ? 1 : 0.86)
-                        .animation(.spring(response: 0.42, dampingFraction: 0.68).delay(Double(index) * 0.05), value: landed)
                         Text(index == winningIndex ? "和" : " ")
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Theme.vermilion)
                             .frame(height: 14)
                     }
+                    // 「和」字跟着牌一起落
+                    .opacity(landed || reduceMotion ? 1 : 0)
+                    .offset(y: landed || reduceMotion ? 0 : -26)
+                    .scaleEffect(landed || reduceMotion ? 1 : 0.86)
+                    .animation(.spring(response: 0.42, dampingFraction: 0.68).delay(Double(index) * 0.05), value: landed)
                 }
                 .buttonStyle(.plain)
                 .disabled(flow.isReviewing)

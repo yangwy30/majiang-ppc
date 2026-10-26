@@ -51,7 +51,7 @@ struct RoundFlowView: View {
                 return
             }
             if lightBars { return }
-            try? await Task.sleep(for: .seconds(0.35))
+            try? await Task.sleep(for: .seconds(0.45))
             if !Task.isCancelled { lightBars = true }
         }
     }
