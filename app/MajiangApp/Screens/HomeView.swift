@@ -161,9 +161,11 @@ private struct EmptyHome: View {
 
     var body: some View {
         GeometryReader { geo in
+            // 安全区以下留 38，离屏幕顶约 100；SE 这种矮屏只留 22，免得整页要滚
+            let topInset: CGFloat = geo.size.height < 560 ? 22 : 38
             ScrollView {
                 // 品牌标在顶上；标题和步骤作为一块往下放，剩下的空白上 : 下 ≈ 5 : 3，两段都至少 32
-                FiveThreeLayout(height: geo.size.height - 38) {
+                FiveThreeLayout(height: geo.size.height - topInset) {
                     brand
                     VStack(alignment: .leading, spacing: 0) {
                         headline
@@ -171,8 +173,7 @@ private struct EmptyHome: View {
                     }
                 }
                 .padding(.horizontal, 28)
-                // 安全区以下再留 38，离屏幕顶约 100
-                .padding(.top, 38)
+                .padding(.top, topInset)
             }
         }
         .bottomBar {
