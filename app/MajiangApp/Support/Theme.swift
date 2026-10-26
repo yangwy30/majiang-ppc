@@ -82,6 +82,8 @@ struct PrimaryButtonStyle: ButtonStyle {
             .foregroundStyle(.white)
             .background(Theme.ink.opacity(isEnabled ? (configuration.isPressed ? 0.8 : 1) : 0.3),
                         in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            // 半透明的禁用色下面垫一层底色，免得滚动内容透出来
+            .background(Theme.canvas, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 

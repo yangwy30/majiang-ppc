@@ -48,6 +48,7 @@ struct HomeView: View {
                 .buttonStyle(.primary)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 8)
+                .background(Theme.canvas)
         }
         .page()
         .navigationTitle("国标记分")

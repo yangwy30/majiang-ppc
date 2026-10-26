@@ -123,8 +123,11 @@ struct ConfirmTilesView: View {
                 Spacer()
                 Text("\(flow.hand.allTiles.count) 张").font(.footnote).foregroundStyle(Theme.secondaryInk)
             }
-            Text(WinAssistant.explain(flow.hand, context: flow.context, minimumFan: flow.game.rules.minimumFan))
-                .font(.subheadline)
+            // 成和时标签已经写了「牌型成立」，不再重复一遍
+            if flow.pendingReviewCount > 0 || !flow.isValidWin {
+                Text(WinAssistant.explain(flow.hand, context: flow.context, minimumFan: flow.game.rules.minimumFan))
+                    .font(.subheadline)
+            }
             if !flow.recommended.isEmpty {
                 Button("按规则推荐的读法全部确认") { flow.acceptRecommendations() }
                     .font(.subheadline.weight(.semibold))

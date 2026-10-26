@@ -18,9 +18,9 @@ struct CaptureView: View {
                 viewfinder
 
                 VStack(alignment: .leading, spacing: 6) {
-                    Label("手牌推倒排一排，和的那张放最右", systemImage: "rectangle.split.3x1")
-                    Label("吃碰杠放旁边，暗杠翻开一张", systemImage: "square.stack")
-                    Label("正上方俯拍，牌占满画面，不要切边", systemImage: "viewfinder")
+                    hint("手牌推倒排一排，和的那张放最右", systemImage: "rectangle.split.3x1")
+                    hint("吃碰杠放旁边，暗杠翻开一张", systemImage: "square.stack")
+                    hint("正上方俯拍，牌占满画面，不要切边", systemImage: "viewfinder")
                 }
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryInk)
@@ -100,6 +100,15 @@ struct CaptureView: View {
             }
         }
         .frame(height: 240)
+    }
+
+    /// 图标宽度不一，固定宽度让三行文字左边对齐。
+    private func hint(_ text: String, systemImage: String) -> some View {
+        Label {
+            Text(text)
+        } icon: {
+            Image(systemName: systemImage).frame(width: 20)
+        }
     }
 
     private func use(_ image: UIImage) {

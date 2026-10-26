@@ -102,6 +102,7 @@ struct NewGameView: View {
                 .disabled(!canStart)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 8)
+                .background(Theme.canvas)
         }
         .page()
         .navigationTitle("新建牌局")
