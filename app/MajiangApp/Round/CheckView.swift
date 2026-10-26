@@ -54,6 +54,9 @@ struct CheckView: View {
                         .padding(.top, 18)
                 } else if !flow.tiles.isEmpty && !flow.isValidWin {
                     problemCard.padding(.top, 18)
+                } else if flow.tiles.isEmpty {
+                    // 手动输入还没加牌时，和错了也要能直接记
+                    falseWinLink.padding(.top, 8)
                 }
 
                 howWon
@@ -272,19 +275,24 @@ struct CheckView: View {
             Hairline(color: Theme.lineSoft)
                 .padding(.top, 16)
                 .padding(.bottom, 12)
-            Button {
-                confirmFalseWin = true
-            } label: {
-                Text("牌没认错，是真的和错了？记下来（赔三家各 \(game.rules.falseWinPenalty) 分）›")
-                    .font(.system(size: 13))
-                    .foregroundStyle(Theme.gray)
-                    .multilineTextAlignment(.leading)
-            }
-            .buttonStyle(.plain)
+            falseWinLink
         }
         .padding(.top, 20)
         .padding(.bottom, 16)
         .block()
+    }
+
+    private var falseWinLink: some View {
+        Button {
+            confirmFalseWin = true
+        } label: {
+            Text(flow.tiles.isEmpty ? "其实是和错了？记下来（赔三家各 \(game.rules.falseWinPenalty) 分）›"
+                 : "牌没认错，是真的和错了？记下来（赔三家各 \(game.rules.falseWinPenalty) 分）›")
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.gray)
+                .multilineTextAlignment(.leading)
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: 怎么和的

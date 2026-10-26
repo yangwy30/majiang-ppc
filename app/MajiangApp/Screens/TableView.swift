@@ -10,6 +10,9 @@ struct TableView: View {
     @State private var manualScoring = false
     @State private var showGuide = false
     @State private var confirmEnd = false
+    @State private var pickingFalseWin = false
+    /// 点了账本最上面那局，问要不要撤销。
+    @State private var undoCandidate: HandRecord?
     @State private var recordError: String?
     /// 刚记下的一局，底部显示 5 秒「撤销」。
     @State private var justRecorded: HandRecord?
@@ -48,7 +51,18 @@ struct TableView: View {
                         .padding(.vertical, 14)
                 }
                 ForEach(Array(game.records.enumerated().reversed()), id: \.element.id) { number, record in
-                    RecordRow(number: number + 1, record: record, game: game)
+                    if record.id == game.records.last?.id {
+                        // 最近一局随时可以点开撤销，不只是记下后的 5 秒
+                        Button {
+                            undoCandidate = record
+                        } label: {
+                            RecordRow(number: number + 1, record: record, game: game)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityHint("点一下可以撤销这一局")
+                    } else {
+                        RecordRow(number: number + 1, record: record, game: game)
+                    }
                 }
             }
             .padding(.horizontal, 24)
@@ -76,6 +90,9 @@ struct TableView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
+                    if !game.isFinished {
+                        Button("有人和错了") { pickingFalseWin = true }
+                    }
                     Button("直接改分") { manualScoring = true }
                     Button("规则和番种说明") { showGuide = true }
                     Divider()
@@ -89,6 +106,20 @@ struct TableView: View {
                 }
                 .accessibilityLabel("更多")
             }
+        }
+        .confirmationDialog("谁和错了？", isPresented: $pickingFalseWin, titleVisibility: .visible) {
+            ForEach(0..<4, id: \.self) { i in
+                Button(game.players[i].name) { record { try $0.recordFalseWin(offender: i) } }
+            }
+        } message: {
+            Text("推倒了却凑不成和牌：赔另外三家各 \(game.rules.falseWinPenalty) 分，这一局接着打。")
+        }
+        .confirmationDialog("撤销第 \((undoCandidate?.handIndex ?? 0) + 1) 局？",
+                            isPresented: Binding(get: { undoCandidate != nil }, set: { if !$0 { undoCandidate = nil } }),
+                            titleVisibility: .visible, presenting: undoCandidate) { record in
+            Button("撤销这一局", role: .destructive) { undo(record) }
+        } message: { record in
+            Text(record.title(in: game) + "。撤销后这一局的分数全部退回。")
         }
         .alert("结束这场牌局？", isPresented: $confirmEnd) {
             Button("结束", role: .destructive) { settle(game) }
