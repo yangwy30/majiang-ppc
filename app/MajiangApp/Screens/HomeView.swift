@@ -23,6 +23,7 @@ struct HomeView: View {
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showGuide) { RulesGuideView() }
         .sheet(isPresented: $showBackup) { BackupView() }
+        .onAppear { if model.demoScreen == .backup { showBackup = true } }
         #if DEBUG
         .sheet(isPresented: $showSettings) { SettingsView() }
         #endif

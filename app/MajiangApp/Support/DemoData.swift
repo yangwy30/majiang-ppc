@@ -6,6 +6,8 @@ import MajiangKit
 enum DemoScreen: String {
     case emptyHome = "empty-home"
     case home, newGame = "new-game", table, editHand = "edit-hand", capture, check, notWin = "not-win", result, settle
+    /// 发到群里的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
+    case shareSettle = "share-settle", shareLive = "share-live", backup
 
     static var current: DemoScreen? {
         #if DEBUG
@@ -67,6 +69,15 @@ enum DemoData {
                                fans: [FanEntry(fan: .chickenHand, count: 1)], flowerFan: 0)
         }
         _ = try? game.recordWin(record)
+    }
+
+    /// 账本图截图用哪场牌局。
+    static func shareGame(_ screen: DemoScreen, in archive: GameArchive) -> Game? {
+        switch screen {
+        case .shareSettle: archive.finishedGames.first
+        case .shareLive: archive.activeGame
+        default: nil
+        }
     }
 
     /// 记一局流程里要停的那一步。
