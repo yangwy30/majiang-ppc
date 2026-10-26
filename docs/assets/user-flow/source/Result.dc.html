@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>番数与收付</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#141413;text-decoration:none}a:hover{color:#141413}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #faf9f5; color: #141413; font-family: -apple-system, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif; padding: 56px 20px 32px; display: flex; flex-direction: column; gap: 20px; overflow: hidden; position: relative">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Details.dc.html" aria-label="返回" style="width: 44px; height: 44px; display: flex; align-items: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <span style="font-size: 14px; color: #6b6963">东风圈 · 第 3 局</span>
+    <span style="width: 44px"></span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 4px 0 2px">
+    <span style="font-size: 14px; color: #575652">杨 · 自摸</span>
+    <span style="font-size: 72px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums">32<span style="font-size: 24px; font-weight: 600; letter-spacing: 0; margin-left: 4px">番</span></span>
+    <div style="display: flex; gap: 2px; margin-top: 12px">
+      <sc-for list="{{tiles}}" as="t" hint-placeholder-count="14">
+        <div style="width: 21px; height: 30px; border-radius: 4px; background: #ffffff; border: {{t.ring}}; box-shadow: 0 2px 0 #e2dfd6; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; margin-left: {{t.gap}}">
+          <span style="font-size: 11px; font-weight: 700; color: #9e2a47">{{t.top}}</span>
+          <span style="font-size: 7px; color: #9e2a47; margin-top: 2px">万</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e6e4dd; border-radius: 18px; display: flex; flex-direction: column">
+    <sc-for list="{{fans}}" as="f" hint-placeholder-count="5">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: {{f.border}}">
+        <div style="display: flex; flex-direction: column; gap: 1px">
+          <span style="font-size: 15px; font-weight: 500">{{f.name}}</span>
+          <span style="font-size: 12px; color: #6b6963">{{f.why}}</span>
+        </div>
+        <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{f.n}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">这一局</span>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+      <sc-for list="{{pay}}" as="p" hint-placeholder-count="4">
+        <div style="background: {{p.bg}}; border: 1px solid {{p.line}}; border-radius: 14px; padding: 12px 10px; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 13px; color: #575652">{{p.name}}</span>
+          <span style="font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; color: {{p.color}}">{{p.v}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <span style="font-size: 12px; color: #6b6963; padding: 0 2px">自摸：三家各付 8 + 32 = 40</span>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 34px">
+    <a href="Ledger.dc.html" style="height: 56px; border-radius: 16px; background: #141413; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">记入账本</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const NUM = '一二三四五六七八九';
+    const hand = [2, 2, 3, 4, 5, 3, 4, 5, 6, 7, 8, 7, 8, 9];
+    const groupStarts = { 2: 1, 5: 1, 8: 1, 11: 1 };
+    const tiles = hand.map((n, i) => ({ top: String(n), gap: groupStarts[i] ? '6px' : '0', ring: i === 4 ? '1.5px solid #141413' : '1px solid #d1cfc7' }));
+    const fans = [
+      ['清一色', '全是万子', 24],
+      ['不求人', '没有吃碰，自摸', 4],
+      ['平和', '四组顺子，将是数牌', 2],
+      ['一般高', '两组 三四五万', 1],
+      ['连六', '三四五 + 六七八万', 1]
+    ].map(([name, why, n], i) => ({ name, why, n, border: i ? '1px solid #efede7' : 'none' }));
+    const pay = [['杨', 120], ['阿明', -40], ['小周', -40], ['老陈', -40]].map(([name, v]) => ({
+      name, v: v > 0 ? '+' + v : String(v),
+      color: v > 0 ? '#1d6344' : '#9e2a47',
+      bg: v > 0 ? '#eaf5ef' : '#ffffff', line: v > 0 ? '#cfe7da' : '#e6e4dd'
+    }));
+    return { tiles, fans, pay };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>牌桌</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#141413;text-decoration:none}a:hover{color:#141413}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #faf9f5; color: #141413; font-family: -apple-system, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif; padding: 56px 20px 32px; display: flex; flex-direction: column; gap: 22px; overflow: hidden; position: relative">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" aria-label="返回首页" style="width: 44px; height: 44px; display: flex; align-items: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+      <span style="font-size: 16px; font-weight: 600">东风圈 · 第 3 局</span>
+      <span style="font-size: 12px; color: #6b6963">庄家 小周</span>
+    </div>
+    <a href="Ledger.dc.html" aria-label="账本" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"></path></svg>
+    </a>
+  </div>
+
+  <div style="position: relative; height: 330px">
+    <div style="position: absolute; left: 95px; top: 75px; width: 160px; height: 180px; border-radius: 24px; background: #f3f1eb; border: 1px solid #e6e4dd; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px">
+      <span style="font-size: 12px; color: #6b6963; letter-spacing: 0.08em">圈风</span>
+      <span style="width: 46px; height: 60px; border-radius: 8px; background: #ffffff; border: 1px solid #d1cfc7; box-shadow: 0 3px 0 #e6e4dd; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 600">东</span>
+      <span style="font-size: 12px; color: #6b6963; margin-top: 4px">余 13 局</span>
+    </div>
+    <sc-for list="{{seats}}" as="s" hint-placeholder-count="4">
+      <div style="position: absolute; left: {{s.x}}; top: {{s.y}}; width: 90px; display: flex; flex-direction: column; align-items: center; gap: 2px">
+        <div style="display: flex; align-items: center; gap: 6px">
+          <span style="font-size: 12px; font-weight: 600; color: {{s.windColor}}; background: {{s.windBg}}; border-radius: 5px; padding: 2px 6px">{{s.wind}}</span>
+          <span style="font-size: 15px; font-weight: 600">{{s.name}}</span>
+        </div>
+        <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: {{s.color}}">{{s.score}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">最近</span>
+    <div style="background: #ffffff; border: 1px solid #e6e4dd; border-radius: 18px">
+      <sc-for list="{{recent}}" as="r" hint-placeholder-count="2">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-top: {{r.border}}">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 600">{{r.title}}</span>
+            <span style="font-size: 12px; color: #6b6963">{{r.meta}}</span>
+          </div>
+          <span style="font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{r.fan}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 34px; display: flex; flex-direction: column; gap: 10px">
+    <a href="Capture.dc.html" style="height: 60px; border-radius: 18px; background: #141413; color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 17px; font-weight: 600">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+      有人和了
+    </a>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <button style="height: 48px; border-radius: 14px; border: 1px solid #e6e4dd; background: #ffffff; font-size: 15px; font-weight: 500; font-family: inherit; color: #141413">荒庄</button>
+      <button style="height: 48px; border-radius: 14px; border: 1px solid #e6e4dd; background: #ffffff; font-size: 15px; font-weight: 500; font-family: inherit; color: #141413">手动记分</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const tone = (v) => v > 0 ? '#1d6344' : (v < 0 ? '#9e2a47' : '#141413');
+    const fmt = (v) => v > 0 ? '+' + v : String(v);
+    const seats = [
+      { name: '小周', wind: '东 · 庄', v: -32, x: '130px', y: '0px', dealer: true },
+      { name: '阿明', wind: '北', v: 32, x: '270px', y: '138px' },
+      { name: '杨', wind: '西', v: 24, x: '130px', y: '272px' },
+      { name: '老陈', wind: '南', v: -24, x: '-10px', y: '138px' }
+    ].map((s) => ({ ...s, score: fmt(s.v), color: tone(s.v), windColor: s.dealer ? '#9e2a47' : '#575652', windBg: s.dealer ? '#fdf2f4' : '#f3f1eb' }));
+    const recent = [
+      ['第 2 局 · 杨 和', '老陈点炮', '8 番'],
+      ['第 1 局 · 阿明 和', '小周点炮', '16 番']
+    ].map(([title, meta, fan], i) => ({ title, meta, fan, border: i ? '1px solid #efede7' : 'none' }));
+    return { seats, recent };
+  }
+}
+</script>
+</body>
+</html>

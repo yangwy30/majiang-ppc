@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>新建牌局</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#141413;text-decoration:none}a:hover{color:#141413}
+input::placeholder{color:#8a8882}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #faf9f5; color: #141413; font-family: -apple-system, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif; padding: 56px 20px 32px; display: flex; flex-direction: column; gap: 24px; overflow: hidden; position: relative">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" aria-label="返回" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-start">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <span style="font-size: 16px; font-weight: 600">新建牌局</span>
+    <span style="width: 44px"></span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; align-items: baseline; justify-content: space-between">
+      <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">座位</span>
+      <button style="border: none; background: none; padding: 8px 0; font-size: 13px; font-weight: 600; color: #141413; display: flex; align-items: center; gap: 5px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path></svg>
+        随机座位
+      </button>
+    </div>
+    <div style="background: #ffffff; border: 1px solid #e6e4dd; border-radius: 18px; display: flex; flex-direction: column">
+      <sc-for list="{{seats}}" as="s" hint-placeholder-count="4">
+        <label style="display: flex; align-items: center; gap: 14px; padding: 7px 16px; border-top: {{s.border}}">
+          <span style="width: 34px; height: 44px; border-radius: 6px; background: #faf9f5; border: 1px solid #d1cfc7; box-shadow: 0 2px 0 #e6e4dd; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600">{{s.wind}}</span>
+          <input value="{{s.name}}" aria-label="{{s.label}}" style="flex: 1; border: none; outline: none; background: transparent; font-size: 17px; font-family: inherit; color: #141413; padding: 10px 0">
+          <sc-if value="{{s.dealer}}" hint-placeholder-val="{{false}}">
+            <span style="font-size: 12px; font-weight: 600; color: #9e2a47; background: #fdf2f4; padding: 4px 8px; border-radius: 6px">庄</span>
+          </sc-if>
+        </label>
+      </sc-for>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+      <span style="font-size: 13px; color: #6b6963; padding: 8px 0">常用牌友</span>
+      <button style="border: 1px solid #e6e4dd; background: #ffffff; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-family: inherit; color: #141413">Lily</button>
+      <button style="border: 1px solid #e6e4dd; background: #ffffff; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-family: inherit; color: #141413">大刘</button>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">规则</span>
+    <div style="background: #ffffff; border: 1px solid #e6e4dd; border-radius: 18px; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px">
+        <span style="font-size: 15px">每分</span>
+        <div style="display: flex; align-items: center; gap: 4px; border: 1px solid #e6e4dd; border-radius: 10px">
+          <button aria-label="减少" onClick="{{dec}}" style="width: 40px; height: 36px; border: none; background: none; font-size: 18px; color: #141413">−</button>
+          <span style="min-width: 44px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{unit}} 元</span>
+          <button aria-label="增加" onClick="{{inc}}" style="width: 40px; height: 36px; border: none; background: none; font-size: 18px; color: #141413">+</button>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-top: 1px solid #efede7">
+        <span style="font-size: 15px">底分</span>
+        <span style="font-size: 15px; color: #6b6963">8 分 · 8 番起和</span>
+      </div>
+      <sc-for list="{{toggles}}" as="g" hint-placeholder-count="2">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-top: 1px solid #efede7">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px">{{g.label}}</span>
+            <span style="font-size: 12px; color: #6b6963">{{g.hint}}</span>
+          </div>
+          <button onClick="{{g.flip}}" aria-label="{{g.label}}" aria-pressed="{{g.on}}" style="width: 51px; height: 31px; border-radius: 16px; border: none; padding: 2px; background: {{g.track}}; display: flex; justify-content: {{g.side}}">
+            <span style="width: 27px; height: 27px; border-radius: 14px; background: #ffffff; box-shadow: 0 1px 3px rgba(20,20,19,0.2)"></span>
+          </button>
+        </div>
+      </sc-for>
+    </div>
+    <span style="font-size: 12px; color: #6b6963; line-height: 1.5; padding: 0 4px">每局庄家下移、不连庄，圈风门风自动算。4 圈 16 局为一场。</span>
+  </div>
+
+  <a href="Table.dc.html" style="position: absolute; left: 20px; right: 20px; bottom: 34px; height: 56px; border-radius: 16px; background: #141413; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">开始</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { unit: 1, flowers: true, swap: false }; }
+  renderVals() {
+    const toggles = [
+      ['flowers', '带花牌', '每花 1 番，不计入 8 番起和'],
+      ['swap', '每圈换座', '比赛规则；朋友局通常不换']
+    ].map(([k, label, hint]) => {
+      const on = this.state[k];
+      return { label, hint, on: String(on), track: on ? '#141413' : '#d9d7cf', side: on ? 'flex-end' : 'flex-start', flip: () => this.setState({ [k]: !on }) };
+    });
+    const seats = [['东', '杨'], ['南', '阿明'], ['西', '小周'], ['北', '老陈']]
+      .map(([wind, name], i) => ({ wind, name, label: wind + '家姓名', dealer: i === 0, border: i ? '1px solid #efede7' : 'none' }));
+    return {
+      seats, toggles,
+      unit: this.state.unit,
+      inc: () => this.setState({ unit: this.state.unit + 1 }),
+      dec: () => this.setState({ unit: Math.max(1, this.state.unit - 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>
