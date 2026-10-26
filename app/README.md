@@ -1,4 +1,4 @@
-# iOS App（v0.1）
+# iOS App（v0.2）
 
 ```
 app/
@@ -11,7 +11,8 @@ app/
 
 - **App**：用 Xcode 打开 `app/Majiang.xcodeproj`，选一个 iPhone 模拟器运行。真机要在 Signing 里选自己的开发者 Team。
   第一次打开默认是「演示数据」识别，不看照片，按顺序给出三手示例牌（清一色带一张待确认的牌、带碰和暗杠的混一色、认错一张不成和的花龙），可以把整条流程走通。
-- **用 Gemini 认牌**：设置 → 填 Gemini API Key（只存在手机钥匙串里）→ 识别方式选 Gemini。
+- **用 Gemini 认牌**：开发版长按首页的「国标记分」标题打开设置 → 填 Gemini API Key（只存在手机钥匙串里）→ 识别方式选 Gemini。正式版没有设置页。
+- **截图**：开发版启动参数 `-demo-screen <页面>` 用临时假数据直接停在某一页，见 [用户流程设计](../docs/user-flow.md#截图怎么更新)。
 - **测试**：`cd app/MajiangKit && swift test`（Mac 或 Linux 都行）。
 
 ## 结构
@@ -23,7 +24,7 @@ app/
 | `MajiangKit/Sources/MajiangKit/Scoring` | `FanCalculator` 算番（81 番 + 明暗杠，花牌单独计、不计入起和），`WinAssistant` 不成和时给改牌建议，`SpecialWin` 特殊情况的置灰规则 |
 | `MajiangKit/Sources/MajiangKit/Game` | 牌局：圈风、门风、庄家自动轮转（不连庄，可选每圈换座），自摸/点炮收付，荒庄，错和，手动记分，最少转账，JSON 存档 |
 | `MajiangKit/Sources/MajiangKit/Recognition` | `TileRecognizer` 协议和几种实现，见下 |
-| `MajiangApp` | 用户流程 v0.1 的页面：首页、新建牌局、牌桌、拍照、确认牌面、不成和、怎么和的、番数与收付、账本、结束牌局，加设置和手动记分 |
+| `MajiangApp` | [用户流程 v0.2](../docs/user-flow.md) 的页面：首页、开局、牌桌（也是账本）、拍照（内嵌取景器）、核对、结果（弹出层）、结算，加规则说明、直接改分和开发版设置。视觉规范「墨与朱」在 `Support/Theme.swift` |
 
 ### 识别
 
@@ -42,9 +43,8 @@ app/
 
 ## 还没做 / 待验证
 
-- 这一版界面代码是在云端写的，云端没有 Xcode，**还没在 Mac 上编译过**，第一次编译可能要修一些小错。
 - 给 Gemini 的参考图改成了 App 自己画的扁平牌面（研究用的参考图没有许可证，不能打包），提示词也改成了分开读立牌和副露。这两处对准确率的影响要用测试照片重新跑一次。
 - 端侧模型没有接入，双读目前只有 Gemini 一路。
-- 拍照页的实时检查（牌数、光线、对焦）还没做，现在只有文字提示。
-- 账本只能撤销最后一局，不能修改中间某一局。
+- 拍照页的实时检查（牌数、光线、对焦）还没做，取景器里只有一句提示。
+- 账本只能撤销刚记下的一局，更早的局不能点进去改。
 - 没有 App 图标。
