@@ -9,7 +9,7 @@ extension HandRecord {
         case .win(let win):
             var parts = [win.discarder.map { "\(name(win.winner))和 · \(name($0))点炮" } ?? "\(name(win.winner))自摸"]
             // 大番种值得写出来（清一色、七对……），小番种不写
-            if let top = win.fans.first, top.fan.points >= 6 { parts.append(top.fan.name) }
+            if let top = win.fans.first, top.fan.points >= 6, top.fan != .chickenHand { parts.append(top.fan.name) }
             parts.append("\(win.totalFan) 番")
             return parts.joined(separator: " · ")
         case .drawn:
@@ -84,6 +84,9 @@ extension GameRules {
 extension Date {
     /// 「10月25日 周六」。
     var dayLabel: String {
-        formatted(.dateTime.month(.defaultDigits).day().weekday(.abbreviated).locale(Locale(identifier: "zh_CN")))
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "zh_CN")
+        let c = calendar.dateComponents([.month, .day, .weekday], from: self)
+        return "\(c.month!)月\(c.day!)日 \(calendar.shortWeekdaySymbols[c.weekday! - 1])"
     }
 }

@@ -1,3 +1,4 @@
+import CoreText
 import SwiftUI
 import UIKit
 
@@ -38,14 +39,19 @@ enum Theme {
         .system(size: size, weight: weight).monospacedDigit()
     }
 
-    /// 宋体只用于风位、庄和「番」字。系统没有宋体时退回衬线体。
+    /// 宋体只用于风位、庄、「番」字和名次。iOS 没有自带中文宋体，所以打包了一个 Noto Serif SC 粗体的子集
+    /// （只有「东南西北庄番」和数字，10 KB，SIL OFL 许可，见 Resources/Fonts）。别的字会退回系统字体。
     static func serif(_ size: CGFloat) -> Font {
-        if let name = songti { return .custom(name, fixedSize: size) }
+        if let name = serifName { return .custom(name, fixedSize: size) }
         return .system(size: size, weight: .semibold, design: .serif)
     }
 
-    private static let songti: String? = ["STSongti-SC-Bold", "STSongti-SC-Regular"]
-        .first { UIFont(name: $0, size: 12) != nil }
+    private static let serifName: String? = {
+        if let url = Bundle.main.url(forResource: "NotoSerifSC-Bold-subset", withExtension: "otf") {
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
+        return UIFont(name: "NotoSerifSC-Bold", size: 12) != nil ? "NotoSerifSC-Bold" : nil
+    }()
 }
 
 extension Color {

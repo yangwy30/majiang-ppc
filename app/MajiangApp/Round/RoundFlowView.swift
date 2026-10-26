@@ -24,6 +24,8 @@ struct RoundFlowView: View {
                 }
         }
         .tint(Theme.ink)
+        // 拍照页是深色底，状态栏要白字；导航栏的 toolbarColorScheme 管不到整个全屏弹层
+        .preferredColorScheme(flow.steps.isEmpty ? .dark : .light)
     }
 
     private func finish(_ outcome: HandOutcome) {
