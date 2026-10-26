@@ -5,6 +5,7 @@ import MajiangKit
 struct SettleView: View {
     @Environment(AppModel.self) private var model
     let gameID: UUID
+    @State private var copied = false
 
     var body: some View {
         if let game = model.game(gameID) {
@@ -72,9 +73,8 @@ struct SettleView: View {
                 .padding(.vertical, 4)
                 .block()
 
-                if let biggest = game.biggestWin {
-                    Text("最大的一手：\(game.players[biggest.win.winner].name)，"
-                         + (biggest.win.fans.first.map { "\($0.fan.name) " } ?? "") + "\(biggest.win.totalFan) 番")
+                if let line = game.biggestWinLine {
+                    Text(line)
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 24)
@@ -89,10 +89,18 @@ struct SettleView: View {
             .padding(.top, 8)
         }
         .bottomBar {
-            ShareLink(item: shareText(game, ranking: ranking, transfers: transfers)) {
-                Text("分享到群里")
+            // 发图：微信里大家一眼看清；要文字的复制一下贴进群里
+            Button("发到微信群") { ShareSheet.share(game) }
+                .buttonStyle(.primary)
+            Button(copied ? "已复制，去微信里粘贴" : "复制文字版") {
+                UIPasteboard.general.string = game.shareText
+                copied = true
+                Task {
+                    try? await Task.sleep(for: .seconds(2))
+                    copied = false
+                }
             }
-            .buttonStyle(.primary)
+            .buttonStyle(.text)
         }
         .page()
         .navigationTitle("")
@@ -104,19 +112,5 @@ struct SettleView: View {
                     .font(.system(size: 17, weight: .semibold))
             }
         }
-    }
-
-    private func shareText(_ game: Game, ranking: [Int], transfers: [Transfer]) -> String {
-        var lines = ["国标麻将 \(game.startedAt.dayLabel) · \(game.currentHandIndex) 局"]
-        for player in ranking {
-            lines.append("\(game.players[player].name) \(Theme.signed(game.scores[player])) 分（\(game.moneyText(game.scores[player]))）")
-        }
-        if !transfers.isEmpty {
-            lines.append("这样转账最省事：")
-            for t in transfers {
-                lines.append("\(game.players[t.from].name) → \(game.players[t.to].name) \(game.moneyText(t.points))")
-            }
-        }
-        return lines.joined(separator: "\n")
     }
 }

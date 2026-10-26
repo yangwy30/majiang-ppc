@@ -92,6 +92,15 @@ struct TableView: View {
         .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                // 一点就把现在的账本图发到微信群，大家不用凑过来看
+                Button { ShareSheet.share(game) } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 17, weight: .medium))
+                        .frame(width: 44, height: 44)
+                }
+                .accessibilityLabel("把账本发到群里")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     if !game.isFinished {
                         Button("有人和错了") { pickingFalseWin = true }

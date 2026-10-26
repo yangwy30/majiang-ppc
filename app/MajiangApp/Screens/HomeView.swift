@@ -6,6 +6,7 @@ struct HomeView: View {
     @Environment(AppModel.self) private var model
     @State private var showGuide = false
     @State private var showSettings = false
+    @State private var showBackup = false
 
     private var isEmpty: Bool { model.archive.games.isEmpty }
 
@@ -13,7 +14,7 @@ struct HomeView: View {
         Group {
             if isEmpty {
                 EmptyHome(openGuide: { showGuide = true }, openSettings: { showSettings = true },
-                          start: { model.path.append(.newGame) })
+                          openBackup: { showBackup = true }, start: { model.path.append(.newGame) })
             } else {
                 list
             }
@@ -21,6 +22,7 @@ struct HomeView: View {
         .page()
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showGuide) { RulesGuideView() }
+        .sheet(isPresented: $showBackup) { BackupView() }
         #if DEBUG
         .sheet(isPresented: $showSettings) { SettingsView() }
         #endif
@@ -60,6 +62,8 @@ struct HomeView: View {
                 Button("第一次打国标？看看番怎么算 ›") { showGuide = true }
                     .buttonStyle(.text(size: 14))
                     .padding(.top, 10)
+                Button("备份与换手机 ›") { showBackup = true }
+                    .buttonStyle(.text(size: 14))
 
                 if let error = model.loadError {
                     Text(error)
@@ -157,6 +161,7 @@ private struct HistoryRow: View {
 private struct EmptyHome: View {
     var openGuide: () -> Void
     var openSettings: () -> Void
+    var openBackup: () -> Void
     var start: () -> Void
 
     var body: some View {
@@ -182,6 +187,9 @@ private struct EmptyHome: View {
             Button("第一次打国标？先看看番怎么算", action: openGuide)
                 .buttonStyle(.text(size: 14))
                 .padding(.top, 10)
+            // 新手机上没装 iCloud 同步时，从旧手机导出的文件导入
+            Button("换了手机？导入以前的记录", action: openBackup)
+                .buttonStyle(.text(Theme.faint, size: 13))
         }
     }
 }
