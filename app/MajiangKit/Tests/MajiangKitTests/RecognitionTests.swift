@@ -12,10 +12,13 @@ final class RecognitionTests: XCTestCase {
     private final class FakeHTTP: HTTPClient, @unchecked Sendable {
         var requests: [URLRequest] = []
         var replies: [String]
-        init(replies: [String]) { self.replies = replies }
+        /// 不是 200 时原样返回 replies，不包成 Gemini 的回答。
+        let status: Int
+        init(replies: [String], status: Int = 200) { self.replies = replies; self.status = status }
         func send(_ request: URLRequest) async throws -> (Data, Int) {
             requests.append(request)
             let answer = replies.isEmpty ? "{}" : replies.removeFirst()
+            if status != 200 { return (Data(answer.utf8), status) }
             let envelope: [String: Any] = ["candidates": [["content": ["parts": [["text": answer]]]]]]
             return (try JSONSerialization.data(withJSONObject: envelope), 200)
         }
@@ -36,10 +39,22 @@ final class RecognitionTests: XCTestCase {
     }
 
     func testProxyRequestCarriesNoKey() throws {
-        let config = GeminiConfiguration(endpoint: .proxy(url: URL(string: "https://example.com/recognize")!, token: "t"))
+        let config = GeminiConfiguration(endpoint: .proxy(url: URL(string: "https://example.com/recognize")!, token: "t", deviceID: "d"))
         let request = try GeminiRecognizer(configuration: config).makeURLRequest(for: RecognitionRequest(image: Data()))
         XCTAssertNil(request.value(forHTTPHeaderField: "x-goog-api-key"))
         XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer t")
+        XCTAssertEqual(request.value(forHTTPHeaderField: "X-Majiang-Device"), "d")
+    }
+
+    func testProxyRefusalShowsItsOwnMessage() async throws {
+        let http = FakeHTTP(replies: [#"{"error":{"code":429,"message":"今天的次数用完了","majiang":true}}"#], status: 429)
+        let gemini = GeminiRecognizer(configuration: GeminiConfiguration(endpoint: .proxy(url: URL(string: "https://example.com")!)), http: http)
+        do {
+            _ = try await gemini.recognize(RecognitionRequest(image: Data()))
+            XCTFail("应该失败")
+        } catch let error as RecognitionError {
+            XCTAssertEqual(error.message, "今天的次数用完了")
+        }
     }
 
     func testRuleCheckRetriesOnceWithFeedback() async throws {

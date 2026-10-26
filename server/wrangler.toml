@@ -1,0 +1,28 @@
+# 认牌中转站（Cloudflare Worker）。部署和改配置见 server/README.md。
+name = "majiang-relay"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+# 用哪个模型，只能是 Flash / Flash-Lite（代码里会拦 Pro）。改完 `npm run deploy` 生效，App 不用更新。
+MODEL = "gemini-3.8-flash"
+# 每台手机每分钟、每天最多几次；同一个 IP 每天；所有人加起来每天（防止账单失控）。按 UTC 日期算。
+DEVICE_PER_MINUTE = "10"
+DEVICE_DAILY_LIMIT = "150"
+IP_DAILY_LIMIT = "500"
+GLOBAL_DAILY_LIMIT = "3000"
+MAX_BODY_BYTES = "8000000"
+# 计数和转发放在北美西部，避开 Gemini 不支持的地区（比如香港机房）
+LOCATION_HINT = "wnam"
+
+[[durable_objects.bindings]]
+name = "RELAY"
+class_name = "Relay"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Relay"]
+
+[observability]
+enabled = true

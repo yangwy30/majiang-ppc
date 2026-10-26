@@ -48,10 +48,13 @@ final class AppModel {
         didSet { UserDefaults.standard.set(recognitionMode.rawValue, forKey: "recognitionMode") }
     }
 
-    /// 上架后改成后端代理地址；为空时直接调 Google（开发用）。
+    /// 后端代理地址（server/ 里的 Cloudflare Worker）；为空时直接调 Google（开发用）。
+    /// 正式版默认走代理；开发版默认用自带的 Key 直连，想试代理就在设置里点「用我们的服务器」。
     var proxyURL: String {
         didSet { UserDefaults.standard.set(proxyURL, forKey: "proxyURL") }
     }
+
+    static let defaultProxyURL = "https://majiang-relay.yangwang9710.workers.dev/recognize"
 
     private let archiveURL: URL
     /// iCloud 同步；截图模式下不同步。
@@ -91,7 +94,11 @@ final class AppModel {
         if DemoScreen.current == nil { GeminiKeychain.importBundledDevKey() }
         #endif
         self.recognitionMode = RecognitionMode(rawValue: UserDefaults.standard.string(forKey: "recognitionMode") ?? "") ?? .auto
+        #if DEBUG
         self.proxyURL = UserDefaults.standard.string(forKey: "proxyURL") ?? ""
+        #else
+        self.proxyURL = UserDefaults.standard.string(forKey: "proxyURL") ?? Self.defaultProxyURL
+        #endif
         self.loadError = error
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
@@ -215,7 +222,7 @@ final class AppModel {
     private func gemini() -> GeminiRecognizer {
         let endpoint: GeminiConfiguration.Endpoint
         if let url = URL(string: proxyURL), url.scheme == "https" {
-            endpoint = .proxy(url: url, token: nil)
+            endpoint = .proxy(url: url, deviceID: DeviceID.current)
         } else {
             endpoint = .direct(GeminiKeychain())
         }

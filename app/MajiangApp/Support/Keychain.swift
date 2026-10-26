@@ -55,3 +55,31 @@ extension GeminiKeychain {
     }
 }
 #endif
+
+/// 这台手机的随机编号，发给后端代理按手机限每天的识别次数。存钥匙串，删了 App 重装也不变；不含任何个人信息。
+enum DeviceID {
+    private static let service = "majiang-ppc.device"
+    private static let account = "id"
+
+    static let current: String = {
+        let base: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+        ]
+        var query = base
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        if SecItemCopyMatching(query as CFDictionary, &item) == errSecSuccess,
+           let data = item as? Data, let id = String(data: data, encoding: .utf8), UUID(uuidString: id) != nil {
+            return id
+        }
+        let id = UUID().uuidString
+        var add = base
+        add[kSecValueData as String] = Data(id.utf8)
+        add[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        SecItemAdd(add as CFDictionary, nil)
+        return id
+    }()
+}
