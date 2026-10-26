@@ -3,7 +3,8 @@ import SwiftUI
 import UIKit
 
 /// 拍照页的内嵌相机。模拟器和没给相机权限时 `isAvailable` 为 false，页面退回到相册。
-final class CameraController: NSObject, AVCapturePhotoCaptureDelegate {
+/// 会话状态只在 `queue` 上读写，`pending` 只在主线程，所以手动标成 Sendable。
+final class CameraController: NSObject, AVCapturePhotoCaptureDelegate, @unchecked Sendable {
     let session = AVCaptureSession()
     private let output = AVCapturePhotoOutput()
     private let queue = DispatchQueue(label: "majiang.camera")
