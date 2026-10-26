@@ -2,11 +2,27 @@ import Foundation
 
 /// 所有牌局和常用牌友，存成一个 JSON 文件。
 public struct GameArchive: Codable, Hashable, Sendable {
+    /// 存档格式版本。改了不兼容的格式时加 1，并在 init(from:) 里迁移旧版本。
+    public static let currentVersion = 1
+
+    public var version = GameArchive.currentVersion
     public var games: [Game] = []
     public var frequentPlayers: [Player] = []
     public var lastRules = GameRules()
 
     public init() {}
+
+    enum CodingKeys: String, CodingKey {
+        case version, games, frequentPlayers, lastRules
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        version = try c.decodeIfPresent(Int.self, forKey: .version) ?? 1
+        games = try c.decodeIfPresent([Game].self, forKey: .games) ?? []
+        frequentPlayers = try c.decodeIfPresent([Player].self, forKey: .frequentPlayers) ?? []
+        lastRules = try c.decodeIfPresent(GameRules.self, forKey: .lastRules) ?? GameRules()
+    }
 
     public var activeGame: Game? { games.last { !$0.isFinished } }
 
@@ -29,6 +45,33 @@ public struct GameArchive: Codable, Hashable, Sendable {
             frequentPlayers.insert(player, at: 0)
         }
         frequentPlayers = Array(frequentPlayers.prefix(12))
+    }
+
+    /// 开新局：上一场没点「结束」的牌局自动结束，这样它会出现在历史里，不会找不到。
+    @discardableResult
+    public mutating func start(_ game: Game, at date: Date = Date()) -> Game {
+        for i in games.indices where !games[i].isFinished {
+            games[i].end(at: date)
+        }
+        games.append(game)
+        return game
+    }
+
+    /// 读存档；读不出来时把原文件改名备份（不覆盖、不删除），返回空存档和备份位置。
+    /// 这样之后的保存不会把读不出来的历史记录覆盖掉。
+    public static func loadOrRecover(from url: URL, now: Date = Date()) -> (archive: GameArchive, backup: URL?, error: Error?) {
+        do {
+            return (try load(from: url), nil, nil)
+        } catch {
+            let stamp = Int(now.timeIntervalSince1970)
+            let backup = url.deletingLastPathComponent().appendingPathComponent("archive-unreadable-\(stamp).json")
+            do {
+                try FileManager.default.moveItem(at: url, to: backup)
+                return (GameArchive(), backup, error)
+            } catch {
+                return (GameArchive(), nil, error)
+            }
+        }
     }
 
     public static func load(from url: URL) throws -> GameArchive {

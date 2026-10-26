@@ -25,6 +25,21 @@ public struct WinContext: Hashable, Codable, Sendable {
         self.seatWind = seatWind
     }
 
+    enum CodingKeys: String, CodingKey {
+        case selfDrawn, lastTileOfItsKind, kongInvolved, lastTileOfWall, flowerCount, prevalentWind, seatWind
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(selfDrawn: try c.decodeIfPresent(Bool.self, forKey: .selfDrawn) ?? false,
+                  lastTileOfItsKind: try c.decodeIfPresent(Bool.self, forKey: .lastTileOfItsKind) ?? false,
+                  kongInvolved: try c.decodeIfPresent(Bool.self, forKey: .kongInvolved) ?? false,
+                  lastTileOfWall: try c.decodeIfPresent(Bool.self, forKey: .lastTileOfWall) ?? false,
+                  flowerCount: try c.decodeIfPresent(Int.self, forKey: .flowerCount) ?? 0,
+                  prevalentWind: try c.decodeIfPresent(Wind.self, forKey: .prevalentWind) ?? .east,
+                  seatWind: try c.decodeIfPresent(Wind.self, forKey: .seatWind) ?? .east)
+    }
+
     var flag: UInt8 {
         var flag = UInt8(selfDrawn ? GB_FLAG_SELF_DRAWN : GB_FLAG_DISCARD)
         if lastTileOfItsKind { flag |= UInt8(GB_FLAG_LAST_TILE) }

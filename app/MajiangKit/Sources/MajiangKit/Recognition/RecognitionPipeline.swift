@@ -32,6 +32,7 @@ public struct DualReadRecognizer: TileRecognizer {
         var merged = a
         merged.source = "双读"
         merged.flowerCount = max(a.flowerCount, b.flowerCount)
+        merged.notes = a.notes + b.notes.filter { !a.notes.contains($0) }
         if merged.melds.isEmpty { merged.melds = b.melds }
 
         let left = a.concealed.map(\.tile)
@@ -89,13 +90,14 @@ public struct RuleCheckedRecognizer: TileRecognizer {
         }
         if !FanCalculator.isWinningShape(hand) {
             let count = hand.allTiles.count
-            return "按国标规则，你读出的这 \(count) 张牌拼不成和牌。很可能有一两张牌认错了（常见是条子、饼子的点数差一，或漏读了被遮挡、切边的牌）。"
+            return "按国标规则，你读出的这 \(count) 张牌拼不成和牌。请对照照片逐张再核对一遍（常见的错是条子、饼子的点数差一，或漏读了被遮挡、切边的牌）。如果照片里的牌确实就是这样，就照实输出，不要为了凑成和牌而改。"
         }
         return nil
     }
 }
 
-/// 在两路读法不一致的牌里，挑出能和、番数最高的组合，标成推荐（确认页上的「这张才能和」）。
+/// 在两路读法不一致的牌里，找出能和的组合，标成推荐（确认页上的「这张才能和」）。
+/// 只有恰好一种组合能起和时才推荐；几种都能和时不替用户挑（挑番大的会偏向多算番），让用户对照照片选。
 public enum RecognitionResolver {
     public struct Resolution: Hashable, Sendable {
         /// 每张需要确认的牌推荐的读法（下标同 `Recognition.concealed`）。
@@ -103,21 +105,21 @@ public enum RecognitionResolver {
         public let result: ScoringResult?
     }
 
-    public static func resolve(_ recognition: Recognition, context: WinContext, maxFlagged: Int = 6) -> Resolution {
-        let flagged = recognition.concealed.indices.filter { recognition.concealed[$0].needsReview }
+    public static func resolve(_ recognition: Recognition, context: WinContext,
+                               minimumFan: Int = 8, maxFlagged: Int = 6) -> Resolution {
+        let flagged = recognition.concealed.indices.filter { !recognition.concealed[$0].alternatives.isEmpty }
         guard !flagged.isEmpty, flagged.count <= maxFlagged else {
             return Resolution(recommended: [:], result: try? FanCalculator.score(recognition.hand, context: context).get())
         }
 
-        var best: (choice: [Int: Tile], result: ScoringResult)?
+        var winners: [(choice: [Int: Tile], result: ScoringResult)] = []
         func search(_ k: Int, _ choice: [Int: Tile]) {
             if k == flagged.count {
                 var tiles = recognition.concealed.map(\.tile)
                 for (i, tile) in choice { tiles[i] = tile }
                 let hand = Hand(melds: recognition.melds, concealed: tiles, winningTile: tiles.last)
-                if case .success(let result) = FanCalculator.score(hand, context: context),
-                   result.fanWithoutFlowers > (best?.result.fanWithoutFlowers ?? -1) {
-                    best = (choice, result)
+                if case .success(let result) = FanCalculator.score(hand, context: context), result.meetsMinimum(minimumFan) {
+                    winners.append((choice, result))
                 }
                 return
             }
@@ -129,7 +131,10 @@ public enum RecognitionResolver {
             }
         }
         search(0, [:])
-        return Resolution(recommended: best?.choice ?? [:], result: best?.result)
+        guard winners.count == 1, let only = winners.first else {
+            return Resolution(recommended: [:], result: nil)
+        }
+        return Resolution(recommended: only.choice, result: only.result)
     }
 }
 

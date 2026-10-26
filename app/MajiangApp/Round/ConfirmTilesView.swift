@@ -128,6 +128,9 @@ struct ConfirmTilesView: View {
                 Text(WinAssistant.explain(flow.hand, context: flow.context, minimumFan: flow.game.rules.minimumFan))
                     .font(.subheadline)
             }
+            ForEach(flow.notes, id: \.self) { note in
+                Text(note).font(.footnote).foregroundStyle(Theme.amber)
+            }
             if !flow.recommended.isEmpty {
                 Button("按规则推荐的读法全部确认") { flow.acceptRecommendations() }
                     .font(.subheadline.weight(.semibold))

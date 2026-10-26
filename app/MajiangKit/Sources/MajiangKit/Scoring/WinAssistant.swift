@@ -38,7 +38,18 @@ public enum SpecialWin: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    /// 把选中的特殊情况写进 WinContext。互斥的（杠上开花和妙手回春）由界面保证只选一个。
+    /// 不能和这一项同时成立的特殊情况：补花杠的牌不是牌墙最后一张，被抢的杠牌也不是最后打出的牌。
+    public var conflicts: Set<SpecialWin> {
+        switch self {
+        case .kongReplacement: [.lastTileDraw]
+        case .lastTileDraw: [.kongReplacement]
+        case .robbingTheKong: [.lastTileClaim]
+        case .lastTileClaim: [.robbingTheKong]
+        case .lastTileOfItsKind: []
+        }
+    }
+
+    /// 把选中的特殊情况写进 WinContext。互斥的由界面用 `conflicts` 保证只选一个。
     public static func apply(_ selected: Set<SpecialWin>, to context: inout WinContext) {
         context.lastTileOfItsKind = selected.contains(.lastTileOfItsKind)
         context.kongInvolved = selected.contains(.kongReplacement) || selected.contains(.robbingTheKong)
@@ -61,10 +72,12 @@ public struct FixSuggestion: Hashable, Sendable {
 }
 
 public enum WinAssistant {
-    /// 找出改一张（或补一张）牌就能够起和的改法，最可能认错的排前面。
+    /// 牌型凑不成和牌时，找出改一张（或补一张）牌就能够起和的改法，最可能认错的排前面。
     /// 认错多半是同花色点数差一点（5条 和 4条、6条），所以按点数差排序。
+    /// 牌型已经成立、只是番不够时不给建议：这时牌多半认对了，改牌只会把真的不够番的牌改成能和。
     public static func fixSuggestions(for hand: Hand, context: WinContext,
                                       minimumFan: Int = 8, limit: Int = 3) -> [FixSuggestion] {
+        if hand.hasValidTileCount && FanCalculator.isWinningShape(hand) { return [] }
         var found: [(cost: Int, suggestion: FixSuggestion)] = []
 
         if hand.concealed.count + 3 * hand.melds.count == 13 {

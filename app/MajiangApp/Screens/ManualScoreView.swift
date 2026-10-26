@@ -10,8 +10,15 @@ struct ManualScoreView: View {
     @State private var texts = ["", "", "", ""]
     @State private var note = ""
 
-    private var values: [Int] { texts.map { Int($0) ?? 0 } }
+    private var values: [Int] { texts.map { Int($0.trimmingCharacters(in: .whitespaces)) ?? 0 } }
     private var sum: Int { values.reduce(0, +) }
+    /// 有填了但不是整数的格子（比如「十」或「1.5」）。
+    private var hasInvalid: Bool {
+        texts.contains { text in
+            let t = text.trimmingCharacters(in: .whitespaces)
+            return !t.isEmpty && Int(t) == nil
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -28,8 +35,12 @@ struct ManualScoreView: View {
                         }
                     }
                 } footer: {
-                    Text(sum == 0 ? "合计为 0，可以保存" : "四个人加起来要等于 0，现在差 \(-sum)")
-                        .foregroundStyle(sum == 0 ? Theme.green : Theme.amber)
+                    if hasInvalid {
+                        Text("只能填整数，输分前面加负号").foregroundStyle(Theme.crimson)
+                    } else {
+                        Text(sum == 0 ? "合计为 0，可以保存" : "四个人加起来要等于 0，现在差 \(-sum)")
+                            .foregroundStyle(sum == 0 ? Theme.green : Theme.amber)
+                    }
                 }
                 Section {
                     TextField("备注（可不填）", text: $note)
@@ -47,7 +58,7 @@ struct ManualScoreView: View {
                         onSave(values, note)
                         dismiss()
                     }
-                    .disabled(sum != 0 || values.allSatisfy { $0 == 0 })
+                    .disabled(hasInvalid || sum != 0 || values.allSatisfy { $0 == 0 })
                 }
             }
         }

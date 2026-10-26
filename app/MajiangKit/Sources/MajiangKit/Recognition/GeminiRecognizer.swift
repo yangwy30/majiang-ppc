@@ -102,7 +102,7 @@ public struct GeminiRecognizer: TileRecognizer {
     func requestBody(for request: RecognitionRequest) -> [String: Any] {
         var parts: [[String: Any]] = []
         if let sheet = configuration.referenceSheet {
-            parts.append(["text": "参考图：各种麻将牌的牌面（不同牌的画法可能不同，仅作参考）。"])
+            parts.append(["text": "参考图：34 种牌的简化画法，下面标了记法，用来对照花色和点数。真实的牌画法会不同：1条常画成一只鸟，8条常画成 W/M 形，以照片里数出的竹节、圆点数为准。"])
             parts.append(Self.imagePart(sheet.data, sheet.mimeType))
             parts.append(["text": "要识别的照片："])
         }
@@ -140,16 +140,19 @@ public struct GeminiRecognizer: TileRecognizer {
     不要判断和没和，只输出 JSON。
     """
 
+    /// 34 种牌的记法，限定模型只能输出这些。
+    static let tileNotations: [String] = Tile.all.map(\.notation)
+
     static let schema: [String: Any] = [
         "type": "OBJECT",
         "properties": [
-            "concealed": ["type": "ARRAY", "items": ["type": "STRING"],
+            "concealed": ["type": "ARRAY", "items": ["type": "STRING", "enum": tileNotations],
                           "description": "Standing tiles left to right, winning tile last, e.g. 1m, 5p, 9s, 东"],
             "melds": ["type": "ARRAY", "items": [
                 "type": "OBJECT",
                 "properties": [
                     "kind": ["type": "STRING", "enum": ["chow", "pung", "kong", "concealed_kong"]],
-                    "tiles": ["type": "ARRAY", "items": ["type": "STRING"]],
+                    "tiles": ["type": "ARRAY", "items": ["type": "STRING", "enum": tileNotations]],
                 ],
                 "required": ["kind", "tiles"],
             ]],
@@ -180,11 +183,16 @@ public struct GeminiRecognizer: TileRecognizer {
                         var text: String?
                         var thought: Bool?
                     }
-                    var parts: [Part]
+                    var parts: [Part]?
                 }
-                var content: Content
+                var content: Content?
+                var finishReason: String?
+            }
+            struct PromptFeedback: Decodable {
+                var blockReason: String?
             }
             var candidates: [Candidate]?
+            var promptFeedback: PromptFeedback?
         }
         let envelope: Envelope
         do {
@@ -192,13 +200,23 @@ public struct GeminiRecognizer: TileRecognizer {
         } catch {
             throw RecognitionError.badResponse("不是 Gemini 的回答格式")
         }
-        guard let parts = envelope.candidates?.first?.content.parts else {
+        if let reason = envelope.promptFeedback?.blockReason {
+            throw RecognitionError.badResponse("Gemini 拒绝处理这张照片（\(reason)），换一张试试")
+        }
+        guard let candidate = envelope.candidates?.first else {
             throw RecognitionError.badResponse("没有候选回答")
         }
-        let text = parts.filter { $0.thought != true }.compactMap(\.text).joined()
+        let text = (candidate.content?.parts ?? []).filter { $0.thought != true }.compactMap(\.text).joined()
+        guard !text.isEmpty else {
+            throw RecognitionError.badResponse("回答是空的（\(candidate.finishReason ?? "原因不明")），再拍一次试试")
+        }
         return try parseAnswer(Data(text.utf8))
     }
 
+    static let flowerNames: Set<Character> = ["春", "夏", "秋", "冬", "梅", "兰", "竹", "菊", "花"]
+
+    /// 解析模型的 JSON。读不懂的牌不让整次识别失败：花牌名记进花牌数，其他的丢掉并记一条说明，
+    /// 张数不对时确认页会提示补牌；拼不成一组的副露拆回立牌，标成待确认。
     static func parseAnswer(_ data: Data) throws -> Recognition {
         let answer: Answer
         do {
@@ -206,19 +224,39 @@ public struct GeminiRecognizer: TileRecognizer {
         } catch {
             throw RecognitionError.badResponse("JSON 格式不对")
         }
-        let concealed = answer.concealed.compactMap(Tile.init(notation:))
-        guard concealed.count == answer.concealed.count else {
-            throw RecognitionError.badResponse("有无法识别的牌：\(answer.concealed.joined(separator: " "))")
+
+        var flowers = max(0, answer.flowers ?? 0)
+        var notes: [String] = []
+        func read(_ tokens: [String]) -> [Tile] {
+            tokens.compactMap { token in
+                if let tile = Tile(notation: token) { return tile }
+                if let first = token.first, flowerNames.contains(first) {
+                    flowers += 1
+                } else {
+                    notes.append("有一张牌没认出来（\(token)）")
+                }
+                return nil
+            }
         }
+
+        var concealed = read(answer.concealed).map { RecognizedTile(tile: $0) }
         var melds: [Meld] = []
         for m in answer.melds ?? [] {
-            let tiles = m.tiles.compactMap(Tile.init(notation:))
-            guard let meld = Meld.from(tiles: tiles, concealedKong: m.kind == "concealed_kong") else {
-                throw RecognitionError.badResponse("副露拼不成一组：\(m.tiles.joined(separator: " "))")
+            let tiles = read(m.tiles)
+            let isKong = m.kind == "kong" || m.kind == "concealed_kong"
+            if isKong, (3...4).contains(tiles.count), Set(tiles).count == 1 {
+                // 暗杠扣着的牌模型有时只报 3 张，按类型认成杠
+                melds.append(.kong(tiles[0], concealed: m.kind == "concealed_kong"))
+            } else if let meld = Meld.from(tiles: tiles, concealedKong: m.kind == "concealed_kong") {
+                melds.append(meld)
+            } else {
+                notes.append("有一组吃碰杠拼不成（\(m.tiles.joined(separator: " "))），放回手牌里请确认")
+                concealed.insert(contentsOf: tiles.map { RecognizedTile(tile: $0, uncertain: true) }, at: 0)
             }
-            melds.append(meld)
         }
-        return Recognition(concealed: concealed, melds: melds, flowerCount: max(0, answer.flowers ?? 0), source: "Gemini")
+        var recognition = Recognition(concealed: concealed, melds: melds, flowerCount: flowers, source: "Gemini")
+        recognition.notes = notes
+        return recognition
     }
 
     static func encodeAnswer(_ recognition: Recognition) -> String {

@@ -58,17 +58,23 @@ final class RecognitionTests: XCTestCase {
     func testDualReadFlagsDisagreementsAndResolverPicksTheWinningOne() async throws {
         let a = Recognition(concealed: Tile.parseList("1112233445566p7p"), source: "端侧")
         var bTiles = Tile.parseList("1112233445566p7p")
-        bTiles[9] = Tile(.dots, 6)
+        bTiles[9] = Tile(.dots, 4)
         let b = Recognition(concealed: bTiles, source: "Gemini")
 
         // 端侧读对，Gemini 读错一张
         let merged = DualReadRecognizer.merge(b, a)
         XCTAssertEqual(merged.reviewCount, 1)
-        XCTAssertEqual(merged.concealed[9].candidates, [Tile(.dots, 6), Tile(.dots, 5)])
+        XCTAssertEqual(merged.concealed[9].candidates, [Tile(.dots, 4), Tile(.dots, 5)])
 
         let resolution = RecognitionResolver.resolve(merged, context: WinContext(selfDrawn: true))
         XCTAssertEqual(resolution.recommended[9], Tile(.dots, 5))
         XCTAssertTrue(resolution.result?.contains(.fullFlush) ?? false)
+
+        // 两种读法都能和（5饼、6饼都成和）时不替用户挑
+        var both = merged
+        both.concealed[9].alternatives = [Tile(.dots, 6)]
+        both.concealed[9].tile = Tile(.dots, 5)
+        XCTAssertTrue(RecognitionResolver.resolve(both, context: WinContext()).recommended.isEmpty)
 
         // 一路失败时用另一路
         let dual = DualReadRecognizer(primary: OnDeviceRecognizer(), secondary: MockRecognizer(samples: [a], delay: .zero))

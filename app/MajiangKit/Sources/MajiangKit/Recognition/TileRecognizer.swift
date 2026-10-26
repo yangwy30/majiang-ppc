@@ -29,6 +29,8 @@ public struct Recognition: Hashable, Codable, Sendable {
     public var flowerCount: Int
     /// 哪一路识别出来的，例如「Gemini」「端侧」「双读」。
     public var source: String
+    /// 识别过程中的说明，例如「有一张牌没认出来」，显示在确认页。
+    public var notes: [String] = []
 
     public init(concealed: [RecognizedTile], melds: [Meld] = [], flowerCount: Int = 0, source: String) {
         self.concealed = concealed
@@ -127,7 +129,7 @@ public struct MockRecognizer: TileRecognizer {
     /// 清一色（mockup 里那手）带一张两路读得不一样的牌；一手带碰和暗杠的；一手不成和、需要改牌的。
     public static let defaultSamples: [Recognition] = {
         var flush = Recognition(concealed: Tile.parseList("1112233445566p 7p"), source: "演示")
-        flush.concealed[9] = RecognizedTile(tile: Tile(.dots, 5), alternatives: [Tile(.dots, 6)])
+        flush.concealed[9] = RecognizedTile(tile: Tile(.dots, 5), alternatives: [Tile(.dots, 4)])
 
         let melded = Recognition(
             concealed: Tile.parseList("123m 567m 中中"),

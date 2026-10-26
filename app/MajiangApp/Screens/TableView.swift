@@ -9,6 +9,7 @@ struct TableView: View {
     @State private var recording = false
     @State private var manualScoring = false
     @State private var confirmDraw = false
+    @State private var recordError: String?
 
     var body: some View {
         if let game = model.game(gameID) {
@@ -76,29 +77,39 @@ struct TableView: View {
             }
         }
         .confirmationDialog("这一局荒庄？不计分，只推进局数。", isPresented: $confirmDraw, titleVisibility: .visible) {
-            Button("荒庄") {
-                guard var updated = model.game(gameID) else { return }
-                _ = try? updated.recordDraw()
-                model.update(updated)
-            }
+            Button("荒庄") { record { try $0.recordDraw() } }
         }
         .fullScreenCover(isPresented: $recording) {
-            RoundFlowView(game: game) { record in
-                guard var updated = model.game(gameID) else { return }
-                switch record {
-                case .win(let win): _ = try? updated.recordWin(win)
-                case .falseWin(let offender): _ = try? updated.recordFalseWin(offender: offender)
+            RoundFlowView(game: game) { outcome in
+                switch outcome {
+                case .win(let win): record { try $0.recordWin(win) }
+                case .falseWin(let offender): record { try $0.recordFalseWin(offender: offender) }
                 default: break
                 }
-                model.update(updated)
             }
         }
         .sheet(isPresented: $manualScoring) {
             ManualScoreView(game: game) { deltas, note in
-                guard var updated = model.game(gameID) else { return }
-                _ = try? updated.recordManual(deltas: deltas, note: note)
-                model.update(updated)
+                record { try $0.recordManual(deltas: deltas, note: note) }
             }
+        }
+        .alert("没有记上", isPresented: Binding(get: { recordError != nil }, set: { if !$0 { recordError = nil } })) {
+            Button("好") { recordError = nil }
+        } message: {
+            Text(recordError ?? "")
+        }
+    }
+
+    /// 记一条到这场牌局；失败时弹窗说明，不悄悄丢掉。
+    private func record(_ change: (inout Game) throws -> HandRecord) {
+        guard var updated = model.game(gameID) else { return }
+        do {
+            _ = try change(&updated)
+            model.update(updated)
+        } catch let error as GameError {
+            recordError = error.message
+        } catch {
+            recordError = error.localizedDescription
         }
     }
 }

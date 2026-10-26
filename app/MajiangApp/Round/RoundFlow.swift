@@ -20,6 +20,8 @@ final class RoundFlow {
     var isRecognizing = false
     var recognitionError: String?
     var source = ""
+    /// 识别时的说明，比如有牌没认出来。
+    var notes: [String] = []
 
     /// 立牌（含和张），可逐张修改。
     var tiles: [RecognizedTile] = []
@@ -92,8 +94,10 @@ final class RoundFlow {
         melds = recognition.melds
         flowerCount = recognition.flowerCount
         source = recognition.source
+        notes = recognition.notes
         winningIndex = tiles.indices.last
-        recommended = RecognitionResolver.resolve(recognition, context: context).recommended
+        recommended = RecognitionResolver.resolve(recognition, context: context,
+                                                  minimumFan: game.rules.minimumFan).recommended
     }
 
     /// 跳过拍照：从空手牌开始手动输入。
@@ -111,15 +115,20 @@ final class RoundFlow {
         tiles[index].uncertain = false
     }
 
+    /// 补一张牌。补的是漏读的牌，和张不跟着跳；还没有和张时才用这张。
     func append(_ tile: Tile) {
         tiles.append(RecognizedTile(tile: tile))
-        winningIndex = tiles.indices.last
+        if winningIndex == nil { winningIndex = tiles.indices.last }
     }
 
     func remove(at index: Int) {
         guard tiles.indices.contains(index) else { return }
         tiles.remove(at: index)
-        if let w = winningIndex, w >= tiles.count { winningIndex = tiles.indices.last }
+        // 和张在被删的牌后面时下标前移；删的就是和张时改用最右一张
+        if let w = winningIndex {
+            if w > index { winningIndex = w - 1 }
+            else if w == index { winningIndex = tiles.indices.last }
+        }
     }
 
     func apply(_ suggestion: FixSuggestion) {

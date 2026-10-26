@@ -140,3 +140,67 @@ final class GameTests: XCTestCase {
         XCTAssertTrue(add.allSatisfy { $0.index == nil })
     }
 }
+
+final class ArchiveAndParsingTests: XCTestCase {
+    func testOldArchiveWithMissingFieldsStillLoads() throws {
+        let json = #"{"games":[{"id":"6E897041-FD3D-4426-B080-2D7BC6E72995","startedAt":"2026-10-26T04:00:00Z","players":[{"id":"6E897041-FD3D-4426-B080-2D7BC6E72991","name":"a"},{"id":"6E897041-FD3D-4426-B080-2D7BC6E72992","name":"b"},{"id":"6E897041-FD3D-4426-B080-2D7BC6E72993","name":"c"},{"id":"6E897041-FD3D-4426-B080-2D7BC6E72994","name":"d"}],"rules":{"yuanPerPoint":2}}]}"#
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let archive = try decoder.decode(GameArchive.self, from: Data(json.utf8))
+        XCTAssertEqual(archive.games.first?.rules.yuanPerPoint, 2)
+        XCTAssertEqual(archive.games.first?.rules.totalHands, 16)
+        XCTAssertEqual(archive.version, 1)
+    }
+
+    func testUnreadableArchiveIsBackedUpNotOverwritten() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let url = dir.appendingPathComponent("archive.json")
+        try Data("{ not json".utf8).write(to: url)
+
+        let (archive, backup, error) = GameArchive.loadOrRecover(from: url)
+        XCTAssertNotNil(error)
+        XCTAssertTrue(archive.games.isEmpty)
+        let backupURL = try XCTUnwrap(backup)
+        XCTAssertEqual(try String(contentsOf: backupURL, encoding: .utf8), "{ not json")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
+    }
+
+    func testStartingAGameEndsTheUnfinishedOne() {
+        var archive = GameArchive()
+        let players = ["a", "b", "c", "d"].map { Player(name: $0) }
+        let first = archive.start(Game(players: players))
+        archive.start(Game(players: players))
+        XCTAssertTrue(archive.finishedGames.contains { $0.id == first.id })
+        XCTAssertEqual(archive.games.filter { !$0.isFinished }.count, 1)
+    }
+
+    func testGeminiAnswerToleratesShortConcealedKongAndUnknownTiles() throws {
+        let json = #"{"concealed":["1m","2m","3m","梅","5p","5p","?"],"melds":[{"kind":"concealed_kong","tiles":["9s","9s","9s"]},{"kind":"chow","tiles":["1s","2s","4s"]}],"flowers":0}"#
+        let r = try GeminiRecognizer.parseAnswer(Data(json.utf8))
+        XCTAssertEqual(r.melds, [.kong(Tile(.bamboo, 9), concealed: true)])
+        XCTAssertEqual(r.flowerCount, 1)
+        XCTAssertEqual(r.concealed.prefix(3).map(\.tile), Tile.parseList("1s2s4s"))
+        XCTAssertTrue(r.concealed.prefix(3).allSatisfy(\.uncertain))
+        XCTAssertEqual(r.notes.count, 2)
+    }
+
+    func testBlockedGeminiResponseExplainsWhy() {
+        let json = #"{"promptFeedback":{"blockReason":"SAFETY"}}"#
+        XCTAssertThrowsError(try GeminiRecognizer.parseResponse(Data(json.utf8))) { error in
+            XCTAssertTrue((error as? RecognitionError)?.message.contains("SAFETY") ?? false)
+        }
+    }
+
+    func testNoFixSuggestionsForCorrectLowFanHand() {
+        // 牌型成立但不够 8 番：不要建议把牌改成能和的大番
+        let hand = Hand(melds: [.chow(Tile(.characters, 2))!],
+                        concealed: Tile.parseList("345p 678s 234s 66m"), winningTile: Tile(.characters, 6))
+        XCTAssertTrue(WinAssistant.fixSuggestions(for: hand, context: WinContext()).isEmpty)
+    }
+
+    func testSpecialWinConflicts() {
+        XCTAssertTrue(SpecialWin.kongReplacement.conflicts.contains(.lastTileDraw))
+        XCTAssertTrue(SpecialWin.lastTileClaim.conflicts.contains(.robbingTheKong))
+    }
+}

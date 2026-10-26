@@ -28,6 +28,23 @@ public struct GameRules: Hashable, Codable, Sendable {
     public var totalHands: Int = 16
 
     public init() {}
+
+    enum CodingKeys: String, CodingKey {
+        case yuanPerPoint, basePoints, minimumFan, includeFlowers, swapSeatsEachRound, falseWinPenalty, totalHands
+    }
+
+    /// 缺的字段用默认值，以后加规则不会让旧存档读不出来。
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let d = GameRules()
+        yuanPerPoint = try c.decodeIfPresent(Double.self, forKey: .yuanPerPoint) ?? d.yuanPerPoint
+        basePoints = try c.decodeIfPresent(Int.self, forKey: .basePoints) ?? d.basePoints
+        minimumFan = try c.decodeIfPresent(Int.self, forKey: .minimumFan) ?? d.minimumFan
+        includeFlowers = try c.decodeIfPresent(Bool.self, forKey: .includeFlowers) ?? d.includeFlowers
+        swapSeatsEachRound = try c.decodeIfPresent(Bool.self, forKey: .swapSeatsEachRound) ?? d.swapSeatsEachRound
+        falseWinPenalty = try c.decodeIfPresent(Int.self, forKey: .falseWinPenalty) ?? d.falseWinPenalty
+        totalHands = try c.decodeIfPresent(Int.self, forKey: .totalHands) ?? d.totalHands
+    }
 }
 
 /// 一局的结果。
@@ -100,6 +117,16 @@ public enum GameError: Error, Hashable, Sendable {
     case discarderIsWinner
     case belowMinimumFan(Int)
     case deltasMustSumToZero
+
+    public var message: String {
+        switch self {
+        case .finished: "这场牌局已经打完了"
+        case .invalidPlayer: "玩家不对"
+        case .discarderIsWinner: "点炮的人不能是和牌的人"
+        case .belowMinimumFan(let fan): "只有 \(fan) 番，不够起和"
+        case .deltasMustSumToZero: "四个人的得失分加起来要等于 0"
+        }
+    }
 }
 
 /// 一场牌局：四个人、规则、每一局的记录。圈风、门风、庄家都从局数推出来，不用存。
@@ -119,6 +146,20 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
         self.rules = rules
         self.records = []
         self.startedAt = startedAt
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, startedAt, endedAt, players, rules, records
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        startedAt = try c.decode(Date.self, forKey: .startedAt)
+        endedAt = try c.decodeIfPresent(Date.self, forKey: .endedAt)
+        players = try c.decode([Player].self, forKey: .players)
+        rules = try c.decodeIfPresent(GameRules.self, forKey: .rules) ?? GameRules()
+        records = try c.decodeIfPresent([HandRecord].self, forKey: .records) ?? []
     }
 
     // MARK: 局数、圈风、门风

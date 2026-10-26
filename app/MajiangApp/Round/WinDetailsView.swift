@@ -56,7 +56,12 @@ struct WinDetailsView: View {
                         Toggle(isOn: Binding(
                             get: { reason == nil && flow.specials.contains(special) },
                             set: { on in
-                                if on { flow.specials.insert(special) } else { flow.specials.remove(special) }
+                                if on {
+                                    flow.specials.subtract(special.conflicts)
+                                    flow.specials.insert(special)
+                                } else {
+                                    flow.specials.remove(special)
+                                }
                             })) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(special.name)

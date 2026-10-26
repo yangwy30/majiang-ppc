@@ -41,17 +41,19 @@ final class AppModel {
     }
 
     private let archiveURL: URL
+    /// 演示识别只建一次，这样每次拍照会轮到下一手示例牌。
+    private let demoRecognizer = MockRecognizer()
 
     init(archiveURL: URL? = nil) {
         let url = archiveURL ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("majiang", isDirectory: true)
             .appendingPathComponent("archive.json")
-        var loaded = GameArchive()
+        // 读不出来时原文件会被改名备份，之后保存不会覆盖掉旧记录
+        let (loaded, backup, failure) = GameArchive.loadOrRecover(from: url)
         var error: String?
-        do {
-            loaded = try GameArchive.load(from: url)
-        } catch let failure {
+        if let failure {
             error = "读取牌局记录失败：\(failure.localizedDescription)"
+            if let backup { error! += "。原文件已备份为 \(backup.lastPathComponent)" }
         }
         self.archiveURL = url
         self.archive = loaded
@@ -71,8 +73,7 @@ final class AppModel {
 
     @discardableResult
     func startGame(players: [Player], rules: GameRules) -> Game {
-        let game = Game(players: players, rules: rules)
-        archive.upsert(game)
+        let game = archive.start(Game(players: players, rules: rules))
         archive.remember(players)
         archive.lastRules = rules
         save()
@@ -97,7 +98,7 @@ final class AppModel {
     func makeRecognizer() -> TileRecognizer {
         switch recognitionMode {
         case .demo:
-            return MockRecognizer()
+            return demoRecognizer
         case .gemini:
             return RuleCheckedRecognizer(base: gemini())
         case .dual:

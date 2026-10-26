@@ -11,7 +11,7 @@ let package = Package(
         // Vendored Guobiao fan calculator (ChineseOfficialMahjongHelper, MIT) behind a small C shim.
         .target(
             name: "CGuobiao",
-            exclude: ["vendor/LICENSE"],
+            exclude: ["vendor/LICENSE"]
         ),
         .target(
             name: "MajiangKit",

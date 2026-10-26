@@ -49,6 +49,10 @@ struct NotWinView: View {
                         }
                     }
                     .card(padding: 0)
+                } else if FanCalculator.isWinningShape(flow.hand) {
+                    Text("牌型是成立的。如果牌都认对了，这手牌就是不够 \(flow.game.rules.minimumFan) 番，按规则不能和。也可以回去检查有没有漏选的特殊情况（比如和绝张、杠上开花）。")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.secondaryInk)
                 } else {
                     Text("改一张牌也凑不成能起和的牌，可能认错了不止一张，或者吃碰杠分组不对。回去逐张对照照片看看。")
                         .font(.subheadline)
