@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>牌面风格对比</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#141413}a:hover{color:#141413}
+</style>
+</helmet>
+<div style="width: 880px; height: 780px; box-sizing: border-box; background: #faf9f5; color: #141413; font-family: -apple-system, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif; padding: 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px">
+  <sc-for list="{{styles}}" as="s" hint-placeholder-count="2">
+    <section style="display: flex; flex-direction: column; gap: 22px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">{{s.tag}}</span>
+        <h2 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em">{{s.name}}</h2>
+        <span style="font-size: 13px; color: #575652">{{s.desc}}</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 12px; color: #6b6963">确认牌面（大）</span>
+        <div style="display: grid; grid-template-columns: repeat(7, 44px); gap: 6px">
+          <sc-for list="{{s.big}}" as="t" hint-placeholder-count="14">
+            <div style="position: relative; width: 44px; height: 60px; border-radius: 8px; background: #ffffff; border: 1px solid #d1cfc7; box-shadow: 0 2px 0 #e2dfd6; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; box-sizing: border-box">
+              <sc-for list="{{t.marks}}" as="d" hint-placeholder-count="0">
+                <span style="position: absolute; left: {{d.l}}; top: {{d.t}}; width: {{d.w}}; height: {{d.h}}; aspect-ratio: {{d.ar}}; border-radius: {{d.r}}; background: {{d.bg}}; box-shadow: {{d.sh}}; transform: translate(-50%, -50%)"></span>
+              </sc-for>
+              <span style="font-size: {{t.f1}}; font-weight: 700; color: {{t.c1}}">{{t.top}}</span>
+              <span style="font-size: {{t.f2}}; font-weight: 600; color: {{t.c2}}; margin-top: 3px">{{t.bot}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 12px; color: #6b6963">全部数牌（中）</span>
+        <sc-for list="{{s.suits}}" as="row" hint-placeholder-count="3">
+          <div style="display: flex; gap: 4px">
+            <sc-for list="{{row}}" as="t" hint-placeholder-count="9">
+              <div style="position: relative; width: 32px; height: 44px; border-radius: 6px; background: #ffffff; border: 1px solid #d1cfc7; box-shadow: 0 2px 0 #e2dfd6; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; box-sizing: border-box">
+                <sc-for list="{{t.marks}}" as="d" hint-placeholder-count="0">
+                  <span style="position: absolute; left: {{d.l}}; top: {{d.t}}; width: {{d.w}}; height: {{d.h}}; aspect-ratio: {{d.ar}}; border-radius: {{d.r}}; background: {{d.bg}}; box-shadow: {{d.sh}}; transform: translate(-50%, -50%)"></span>
+                </sc-for>
+                <span style="font-size: {{t.m1}}; font-weight: 700; color: {{t.c1}}">{{t.top}}</span>
+                <span style="font-size: {{t.m2}}; font-weight: 600; color: {{t.c2}}; margin-top: 2px">{{t.bot}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 12px; color: #6b6963">账本 / 番种明细里（小）</span>
+        <div style="display: flex; gap: 2px">
+          <sc-for list="{{s.big}}" as="t" hint-placeholder-count="14">
+            <div style="position: relative; width: 21px; height: 29px; border-radius: 4px; background: #ffffff; border: 1px solid #d1cfc7; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; box-sizing: border-box">
+              <sc-for list="{{t.marks}}" as="d" hint-placeholder-count="0">
+                <span style="position: absolute; left: {{d.l}}; top: {{d.t}}; width: {{d.w}}; height: {{d.h}}; aspect-ratio: {{d.ar}}; border-radius: {{d.r}}; background: {{d.bg}}; box-shadow: none; transform: translate(-50%, -50%)"></span>
+              </sc-for>
+              <span style="font-size: {{t.s1}}; font-weight: 700; color: {{t.c1}}">{{t.top}}</span>
+              <span style="font-size: {{t.s2}}; color: {{t.c2}}; margin-top: 1px">{{t.bot}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size: 14px; color: #575652; font-variant-numeric: tabular-nums">{{s.textLine}}</span>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":880,"height":780}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = '#9e2a47', G = '#1d6344', B = '#25549c', K = '#141413';
+    const NUM = '一二三四五六七八九';
+    const HON = { E: ['东', K], S: ['南', K], W: ['西', K], N: ['北', K], C: ['中', R], F: ['發', G] };
+    const dot = (x, y, w, c) => ({ l: x + '%', t: y + '%', w: w + '%', h: 'auto', ar: '1', r: '50%', bg: c, sh: 'inset 0 0 0 1.5px #ffffff, 0 0 0 1px ' + c });
+    const stick = (x, y, c, h) => ({ l: x + '%', t: y + '%', w: '11%', h: (h || 26) + '%', ar: 'auto', r: '3px', bg: 'linear-gradient(' + c + ' 0 44%, #ffffff 44% 56%, ' + c + ' 56%)', sh: 'none' });
+    const DOTS = {
+      1: [[50, 50, 60, R]],
+      2: [[50, 28, 36, G], [50, 72, 36, B]],
+      3: [[26, 22, 30, B], [50, 50, 30, R], [74, 78, 30, G]],
+      4: [[30, 28, 32, B], [70, 28, 32, G], [30, 72, 32, G], [70, 72, 32, B]],
+      5: [[28, 24, 28, B], [72, 24, 28, G], [50, 50, 28, R], [28, 76, 28, G], [72, 76, 28, B]],
+      6: [[30, 18, 28, G], [70, 18, 28, G], [30, 52, 28, R], [70, 52, 28, R], [30, 82, 28, R], [70, 82, 28, R]],
+      7: [[22, 14, 22, G], [50, 24, 22, G], [78, 34, 22, G], [30, 60, 24, R], [70, 60, 24, R], [30, 84, 24, R], [70, 84, 24, R]],
+      8: [[30, 15, 24, B], [70, 15, 24, B], [30, 38, 24, B], [70, 38, 24, B], [30, 62, 24, B], [70, 62, 24, B], [30, 85, 24, B], [70, 85, 24, B]],
+      9: [[22, 18, 24, B], [50, 18, 24, B], [78, 18, 24, B], [22, 50, 24, R], [50, 50, 24, R], [78, 50, 24, R], [22, 82, 24, G], [50, 82, 24, G], [78, 82, 24, G]]
+    };
+    const STICKS = {
+      1: [[50, 50, G, 64]],
+      2: [[50, 30, G], [50, 70, G]],
+      3: [[50, 30, G], [30, 70, G], [70, 70, G]],
+      4: [[30, 30, G], [70, 30, G], [30, 70, G], [70, 70, G]],
+      5: [[25, 30, G], [75, 30, G], [50, 50, R], [25, 70, G], [75, 70, G]],
+      6: [[22, 30, G], [50, 30, G], [78, 30, G], [22, 70, G], [50, 70, G], [78, 70, G]],
+      7: [[50, 17, R, 22], [22, 50, G, 22], [50, 50, G, 22], [78, 50, G, 22], [22, 82, G, 22], [50, 82, G, 22], [78, 82, G, 22]],
+      8: [[18, 30, G], [39, 30, G], [61, 30, G], [82, 30, G], [18, 70, G], [39, 70, G], [61, 70, G], [82, 70, G]],
+      9: [[22, 18, G, 22], [50, 18, R, 22], [78, 18, G, 22], [22, 50, G, 22], [50, 50, R, 22], [78, 50, G, 22], [22, 82, G, 22], [50, 82, R, 22], [78, 82, G, 22]]
+    };
+    const sizes = (f1, f2, m1, m2, s1, s2) => ({ f1: f1 + 'px', f2: f2 + 'px', m1: m1 + 'px', m2: m2 + 'px', s1: s1 + 'px', s2: s2 + 'px' });
+    const real = (c) => {
+      const n = +c[0], s = c[1];
+      if (HON[c]) { const [ch, col] = HON[c]; return { top: ch, bot: '', c1: col, c2: col, marks: [], ...sizes(22, 1, 17, 1, 11, 1) }; }
+      if (s === 'm') return { top: NUM[n - 1], bot: '萬', c1: K, c2: R, marks: [], ...sizes(17, 15, 13, 11, 8, 7) };
+      if (s === 'p') return { top: '', bot: '', c1: K, c2: K, marks: DOTS[n].map(([x, y, w, col]) => dot(x, y, w, col)), ...sizes(1, 1, 1, 1, 1, 1) };
+      return { top: '', bot: '', c1: K, c2: K, marks: STICKS[n].map(([x, y, col, h]) => stick(x, y, col, h)), ...sizes(1, 1, 1, 1, 1, 1) };
+    };
+    const SUIT = { m: ['万', R], p: ['饼', B], s: ['条', G] };
+    const text = (c) => {
+      if (HON[c]) { const [ch, col] = HON[c]; return { top: ch, bot: '', c1: col, c2: col, marks: [], ...sizes(20, 1, 16, 1, 11, 1) }; }
+      const [name, col] = SUIT[c[1]];
+      return { top: c[0], bot: name, c1: col, c2: col, marks: [], ...sizes(22, 11, 17, 9, 11, 6) };
+    };
+    const hand = ['1m', '2m', '3m', '5p', '6p', '7p', '3s', '4s', '5s', 'E', 'E', 'E', 'C', 'C'];
+    const suitRows = ['m', 'p', 's'].map((s) => [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => n + s));
+    const styles = [
+      { tag: 'A', name: '扁平真牌', desc: '照真牌画竹节、圆点、萬字，去掉立体厚度', fn: real, textLine: '一二三萬 · 五六七饼 · 三四五条 · 东东东 · 中中' },
+      { tag: 'B', name: '数字文字牌', desc: '阿拉伯数字 + 花色字，颜色区分花色', fn: text, textLine: '123万 · 567饼 · 345条 · 东东东 · 中中' }
+    ].map((st) => ({ ...st, big: hand.map(st.fn), suits: suitRows.map((row) => row.map(st.fn)) }));
+    return { styles };
+  }
+}
+</script>
+</body>
+</html>

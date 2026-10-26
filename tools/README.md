@@ -32,3 +32,16 @@ python3 tools/gemini-test/experiments.py --flash gemini-3.8-flash --methods ref 
 - **模型权重不进仓库**（没有许可证，且是 Ultralytics AGPL 训练导出的）。自己从原仓库下载，再用环境变量指定：
   - `YOLOV8_ONNX`：[alanfeiyuchang/majiang_calculator](https://github.com/alanfeiyuchang/majiang_calculator) 里的 `majiang calculator/Models/mahjong_yolov8.onnx`，和 [LYiHub/AR-Mahjong-Assistant-preview](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 `server/models/yolo/weights.onnx` 是同一个文件
   - `YOLO11_ONNX`：[mikemazzetti/mahjong-ar](https://github.com/mikemazzetti/mahjong-ar) 里的 `web/public/models/tiles.onnx`
+
+## mockup-render：页面截图导出
+
+`docs/user-flow.md` 里的页面截图，是由 `docs/assets/user-flow/source/` 里的设计源文件（`.dc.html`）导出的。改了源文件以后，用这个脚本重新导出：
+
+```bash
+# 中文字体：下载 Noto Sans SC 网页字体包并解压，再用 NOTO_SC_DIR 指向解压出来的目录
+npm pack @fontsource/noto-sans-sc@5.1.1 && tar xzf fontsource-noto-sans-sc-5.1.1.tgz
+NOTO_SC_DIR=$PWD node tools/mockup-render/render.js   # 默认读 source/，PNG 写到 docs/assets/user-flow/
+```
+
+- 依赖 Node 和 Playwright（Chromium）。
+- 脚本里有一个很小的模板解释器，只支持这些源文件用到的 `{{}}`、`<sc-for>`、`<sc-if>`。截图画的是每个页面的初始状态。

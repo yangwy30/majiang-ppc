@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>怎么和的</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#141413;text-decoration:none}a:hover{color:#141413}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #faf9f5; color: #141413; font-family: -apple-system, 'SF Pro Text', 'PingFang SC', 'Helvetica Neue', sans-serif; padding: 56px 20px 32px; display: flex; flex-direction: column; gap: 22px; overflow: hidden; position: relative">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Confirm.dc.html" aria-label="返回" style="width: 44px; height: 44px; display: flex; align-items: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#141413" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <span style="font-size: 16px; font-weight: 600">怎么和的</span>
+    <span style="width: 44px"></span>
+  </div>
+
+  <div style="display: flex; padding: 4px; background: #efede6; border-radius: 14px">
+    <sc-for list="{{modes}}" as="m" hint-placeholder-count="2">
+      <button onClick="{{m.pick}}" style="flex: 1; height: 44px; border: none; border-radius: 11px; background: {{m.bg}}; box-shadow: {{m.shadow}}; font-size: 16px; font-weight: 600; font-family: inherit; color: {{m.ink}}">{{m.label}}</button>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{isDiscard}}" hint-placeholder-val="{{false}}">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">谁点的炮</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{shooters}}" as="s" hint-placeholder-count="3">
+          <button onClick="{{s.pick}}" style="height: 48px; border-radius: 12px; border: {{s.ring}}; background: #ffffff; font-size: 15px; font-weight: 600; font-family: inherit; color: #141413">{{s.name}}</button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">和的哪张</span>
+    <div style="display: flex; gap: 6px">
+      <sc-for list="{{winTiles}}" as="t" hint-placeholder-count="8">
+        <button onClick="{{t.pick}}" aria-label="{{t.label}}" style="width: 38px; height: 52px; padding: 0; border-radius: 7px; background: #ffffff; border: {{t.ring}}; box-shadow: 0 2px 0 #e2dfd6; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; font-family: inherit; transform: {{t.lift}}">
+          <span style="font-size: 17px; font-weight: 700; color: #141413">{{t.top}}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #9e2a47; margin-top: 3px">萬</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 12px; letter-spacing: 0.08em; color: #6b6963; font-weight: 500">特殊情况</span>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{specials}}" as="x" hint-placeholder-count="5">
+        <button onClick="{{x.pick}}" disabled="{{x.disabled}}" style="height: 40px; padding: 0 14px; border-radius: 999px; border: {{x.ring}}; background: {{x.bg}}; color: {{x.ink}}; font-size: 14px; font-weight: 500; font-family: inherit; opacity: {{x.opacity}}">{{x.label}}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e6e4dd; border-radius: 16px; display: flex; flex-direction: column">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 16px">
+      <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">花牌</span><span style="font-size: 12px; color: #6b6963">不计入 8 番起和</span></span>
+      <div style="display: flex; align-items: center; border: 1px solid #e6e4dd; border-radius: 10px">
+        <button aria-label="减少花牌" onClick="{{decF}}" style="width: 40px; height: 36px; border: none; background: none; font-size: 18px; color: #141413">−</button>
+        <span style="min-width: 28px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{flowers}}</span>
+        <button aria-label="增加花牌" onClick="{{incF}}" style="width: 40px; height: 36px; border: none; background: none; font-size: 18px; color: #141413">+</button>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-top: 1px solid #efede7">
+      <span style="font-size: 15px">门风 / 圈风</span>
+      <span style="font-size: 14px; color: #6b6963">西 / 东 · 已按座位自动</span>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 34px; display: flex; align-items: center; gap: 12px">
+    <div style="display: flex; flex-direction: column; padding-left: 4px; min-width: 88px">
+      <span style="font-size: 12px; color: #6b6963">预计</span>
+      <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">{{fan}} 番</span>
+    </div>
+    <a href="Result.dc.html" style="flex: 1; height: 56px; border-radius: 16px; background: #141413; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">看明细</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { mode: 'self', shooter: '老陈', win: 5, sp: {}, flowers: 0 }; }
+  renderVals() {
+    const NUM = '一二三四五六七八九';
+    const st = this.state;
+    const self = st.mode === 'self';
+    const modes = [['self', '自摸'], ['discard', '点炮']].map(([k, label]) => {
+      const on = st.mode === k;
+      return { label, bg: on ? '#ffffff' : 'transparent', ink: on ? '#141413' : '#6b6963', shadow: on ? '0 1px 3px rgba(20,20,19,0.12)' : 'none', pick: () => this.setState({ mode: k, sp: {} }) };
+    });
+    const shooters = ['小周', '阿明', '老陈'].map((name) => ({ name, ring: st.shooter === name ? '2px solid #141413' : '1px solid #e6e4dd', pick: () => this.setState({ shooter: name }) }));
+    const winTiles = [2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
+      const on = st.win === n;
+      return { top: NUM[n - 1], label: NUM[n - 1] + '万', ring: on ? '2px solid #141413' : '1px solid #d1cfc7', lift: on ? 'translateY(-6px)' : 'none', pick: () => this.setState({ win: n }) };
+    });
+    const defs = [
+      ['和绝张', 4, null],
+      ['杠上开花', 8, 'nokong'],
+      ['妙手回春', 8, 'self'],
+      ['海底捞月', 8, 'discard'],
+      ['抢杠和', 8, 'discard']
+    ];
+    let fan = self ? 32 : 30;
+    const specials = defs.map(([label, f, need]) => {
+      const disabled = need === 'nokong' || (need === 'self' && !self) || (need === 'discard' && self);
+      const on = !disabled && !!st.sp[label];
+      if (on) fan += f;
+      return {
+        label: need === 'nokong' ? label + '（无杠）' : label,
+        disabled, opacity: disabled ? '0.4' : '1',
+        ring: on ? '1px solid #141413' : '1px solid #e6e4dd',
+        bg: on ? '#141413' : '#ffffff', ink: on ? '#ffffff' : '#141413',
+        pick: () => this.setState({ sp: { ...st.sp, [label]: !st.sp[label] } })
+      };
+    });
+    fan += st.flowers;
+    return {
+      modes, shooters, winTiles, specials, fan, isDiscard: !self, flowers: st.flowers,
+      incF: () => this.setState({ flowers: Math.min(8, st.flowers + 1) }),
+      decF: () => this.setState({ flowers: Math.max(0, st.flowers - 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>

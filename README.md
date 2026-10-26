@@ -20,7 +20,7 @@
 **产品**
 
 - [可行性评估](docs/feasibility.md)：结论、技术路线、MVP 范围和工期
-- [用户流程设计](docs/user-flow.md)：10 个页面的流程、视觉风格、牌面风格（配可点击的 mockup）
+- [用户流程设计](docs/user-flow.md)：完整流程图、每个页面的截图、视觉风格和牌面风格
 
 **调研**（总览和关键结论见 [research/README.md](research/README.md)）
 
@@ -33,9 +33,9 @@
 ## 仓库结构
 
 ```
-docs/       产品文档：可行性评估、用户流程
+docs/       产品文档：可行性评估、用户流程；assets/user-flow/ 是页面截图和设计源文件
 research/   调研报告；results/ 是测试的原始 JSON
-tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟），见 tools/README.md
+tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟）和页面截图导出脚本，见 tools/README.md
 data/       标准答案、照片来源表、番种测试用例，见 data/README.md
 ```
 

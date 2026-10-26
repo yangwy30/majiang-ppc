@@ -1,7 +1,6 @@
 # 用户流程设计（v0.1）
 
-> 可点击的高保真 mockup：[国标麻将 App 用户流程（设计画布）](https://claude.ai/artifact/AitrFvA9QMjZ9pWRHvyUj2)，共 10 个 iPhone 页面，外加一块牌面风格对比。
-> 本文是画布的文字版，记录每个页面做什么，以及背后的规则依据和设计取舍。
+本文用流程图和页面截图记录 App 的完整用户流程，以及每个页面背后的规则依据和设计取舍。共 9 个主页面，外加一个「不成和」分支页；页面截图在 [`assets/user-flow/`](assets/user-flow/)。
 
 ## 设计原则
 
@@ -10,6 +9,54 @@
 - **每局点 4 下左右**：有人和了 → 拍照 → 确认牌面 → 选自摸还是点炮 → 记入账本。
 - **规则知识由 App 来承担**：用户不需要精通国标。圈风、门风、庄家自动轮转；不可能出现的特殊番种会自动置灰；不成和会说明原因。
 
+## 流程图
+
+```mermaid
+flowchart TD
+    Home["① 首页<br/>进行中的牌局 · 历史"]
+    New["② 新建牌局<br/>座位 · 每分几元 · 带花 · 换座"]
+    Table["③ 牌桌<br/>本局庄家 · 门风 · 累计分"]
+    Capture["④ 拍照<br/>先选谁和，按提示摆牌"]
+    Read{{"端侧模型 + Gemini 各读一遍"}}
+    Confirm["⑤ 确认牌面<br/>两次读法不一致的牌给两个候选"]
+    Shape{"规则校验<br/>能凑成和牌型吗？"}
+    NotWin["⑤b 不成和<br/>指出最可能认错的牌"]
+    Penalty["错和<br/>赔另外三家各 10 分"]
+    How["⑥ 怎么和的<br/>自摸 / 点炮 · 和张 · 特殊情况 · 花牌"]
+    Who["选点炮的人"]
+    Eight{"够 8 番吗？<br/>花牌不算"}
+    Result["⑦ 番数与收付<br/>自摸：三家各付 8+番<br/>点炮：点炮者付 8+番，另两家各付 8"]
+    Draw["荒庄：不计分"]
+    Ledger["⑧ 账本<br/>每局收付 · 累计分 · 可改可撤销"]
+    Done{"16 局打完<br/>或手动结束？"}
+    Swap{"一圈打完<br/>且开了换座？"}
+    Reseat["重新排座"]
+    Settle["⑨ 结束牌局<br/>名次 · 最少转账 · 发到群里"]
+
+    Home -->|开新局| New --> Table
+    Home -->|继续| Table
+    Table -->|有人和了| Capture
+    Table -->|荒庄| Draw --> Ledger
+    Table -->|手动记分| How
+    Capture -->|拍照或从相册选| Read --> Confirm
+    Capture -->|跳过拍照| How
+    Confirm --> Shape
+    Shape -->|能| How
+    Shape -->|不能| NotWin
+    NotWin -->|改牌| Confirm
+    NotWin -->|确实和错了| Penalty --> Ledger
+    How -->|点炮| Who --> Eight
+    How -->|自摸| Eight
+    Eight -->|够| Result
+    Eight -->|不够| NotWin
+    Result -->|记入账本| Ledger
+    Ledger --> Done
+    Done -->|否| Swap
+    Swap -->|否，庄家下移一位| Table
+    Swap -->|是| Reseat --> Table
+    Done -->|是| Settle --> Home
+```
+
 ## 牌面风格
 
 | 场景 | 风格 | 理由 |
@@ -17,9 +64,24 @@
 | 拍照取景、确认牌面、识别候选、选和张、不成和页 | **A 扁平真牌**：饼画圆点，条画竹节，万写黑字数字配红色「萬」；去掉立体厚度，用 App 色板 | 要对照桌上的真牌，图案一致，一眼就能看出认错的牌 |
 | 番数结果页的小牌、账本、历史、番种明细 | **B 文字**：如「567饼」「3万」，用颜色区分花色 | 牌缩小后圆点和竹节挤成一团，文字反而更清楚 |
 
+<img src="assets/user-flow/tile-styles.png" width="720" alt="牌面风格对比：A 扁平真牌与 B 数字文字牌，各画大、中、小三种尺寸">
+
 ## 页面
 
 ### 开局
+
+<table>
+<tr>
+<td width="33%"><img src="assets/user-flow/01-home.png" alt="首页"></td>
+<td width="33%"><img src="assets/user-flow/02-new-game.png" alt="新建牌局"></td>
+<td width="33%"><img src="assets/user-flow/03-table.png" alt="牌桌"></td>
+</tr>
+<tr>
+<td align="center">① 首页</td>
+<td align="center">② 新建牌局</td>
+<td align="center">③ 牌桌</td>
+</tr>
+</table>
 
 1. **首页**：顶部是进行中的牌局卡片，显示圈数、局数、四人当前分数，点击继续。下面是历史牌局列表，显示日期、局数、玩家和我的输赢。底部按钮「开新局」。
 2. **新建牌局**：
@@ -29,9 +91,32 @@
 
 ### 记一局
 
+<table>
+<tr>
+<td width="33%"><img src="assets/user-flow/04-capture.png" alt="拍照"></td>
+<td width="33%"><img src="assets/user-flow/05-confirm.png" alt="确认牌面"></td>
+<td width="33%"><img src="assets/user-flow/05b-not-win.png" alt="不成和"></td>
+</tr>
+<tr>
+<td align="center">④ 拍照</td>
+<td align="center">⑤ 确认牌面</td>
+<td align="center">⑤b 不成和</td>
+</tr>
+<tr>
+<td width="33%"><img src="assets/user-flow/06-details.png" alt="怎么和的"></td>
+<td width="33%"><img src="assets/user-flow/07-result.png" alt="番数与收付"></td>
+<td width="33%"></td>
+</tr>
+<tr>
+<td align="center">⑥ 怎么和的</td>
+<td align="center">⑦ 番数与收付</td>
+<td></td>
+</tr>
+</table>
+
 4. **拍照**：先在顶部选谁和了，再拍照。取景框给出摆牌提示：「手牌推倒排一排，和的那张放最右；吃碰杠放旁边，暗杠翻开一张再拍」。框下实时检查牌数、光线、对焦。也可以从相册选，或者跳过拍照手动输入。
 5. **确认牌面**：14 张牌排成 7×2 的网格。本地模型和 Gemini 两次识别结果不一致的牌，用虚线框加「?」标出，并给出两个候选；规则引擎会标出「这张才能和」。全部确认后显示「牌型成立」。点任意一张牌都可以改；吃、碰、杠的分组由 App 按照片自动分好，用户确认一下即可。
-   - **5b 不成和**：按确认后的牌凑不成 4 组加 1 对（或不够 8 番）时，说明最可能认错的是哪张，并给出改法，比如「改成七万就能和」。也可以记为错和，按规则赔另外三家各 10 分。
+   - **⑤b 不成和**：按确认后的牌凑不成和牌型，或者不够 8 番时，说明最可能认错的是哪张，并给出改法，比如「改成七万就能和」。也可以记为错和，按规则赔另外三家各 10 分。
 6. **怎么和的**：
    - 自摸 / 点炮（分段切换）；点炮时选点炮的人。
    - 和的哪张：从手牌里选（影响边张、坎张、单钓、和绝张等番）。
@@ -41,6 +126,19 @@
 7. **番数与收付**：大字显示总番数，下面是番种明细（每项附一句白话说明），以及四人本局的收付和计算方式。按钮「记入账本」。
 
 ### 账本与结算
+
+<table>
+<tr>
+<td width="33%"><img src="assets/user-flow/08-ledger.png" alt="账本"></td>
+<td width="33%"><img src="assets/user-flow/09-settle.png" alt="结束牌局"></td>
+<td width="33%"></td>
+</tr>
+<tr>
+<td align="center">⑧ 账本</td>
+<td align="center">⑨ 结束牌局</td>
+<td></td>
+</tr>
+</table>
 
 8. **账本**：顶部是四人累计分；下面按局列出每局的和牌者、番数和四人收付。左滑某一局可以修改或撤销。
 9. **结束牌局**：名次和输赢，**最少转账方案**（例如「小周 → 杨 ¥72」），本场最大的一手等小统计。按钮「发到群里」。
@@ -65,6 +163,10 @@
 
 ## 待定
 
-- mockup 里那手清一色的 32 番明细是手写示意，没有用算番引擎核对过。
+- 页面截图里那手清一色的 32 番明细是手写示意，没有用算番引擎核对过。
 - 家规和国标不一样的地方（比如是否带花、是否换座、计价方式），需要和实际一起打牌的人确认。
 - 吃碰杠的自动分组依赖拍照时把副露放到一边，这个约定需要用真实照片验证。
+
+## 截图怎么更新
+
+页面截图由 [`assets/user-flow/source/`](assets/user-flow/source/) 里的设计源文件导出，导出脚本和用法见 [tools/README.md](../tools/README.md#mockup-render页面截图导出)。
