@@ -79,21 +79,18 @@ struct SettleView: View {
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 24)
                 }
-
-                // 结算是按账本算的；记错了回到账本改，回来就是新的结果
-                Button("看每一局，改记错的 ›") { model.path.append(.table(game.id)) }
-                    .buttonStyle(.text(size: 14))
-                    .padding(.top, 8)
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
-            .padding(.bottom, 16)
         }
         .bottomBar {
             ShareLink(item: shareText(game, ranking: ranking, transfers: transfers)) {
                 Text("分享到群里")
             }
             .buttonStyle(.primary)
+            // 结算是按账本算的；记错了回到账本改，回来就是新的结果
+            Button("看每一局，改记错的") { model.path.append(.table(game.id)) }
+                .buttonStyle(.text(size: 14))
         }
         .page()
         .navigationTitle("")
