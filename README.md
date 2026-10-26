@@ -37,10 +37,13 @@ docs/       产品文档：可行性评估、用户流程
 research/   调研报告；results/ 是测试的原始 JSON
 tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟），见 tools/README.md
 data/       标准答案、照片来源表、番种测试用例，见 data/README.md
+app/        iOS App：Xcode 工程、SwiftUI 界面、MajiangKit 逻辑包，见 app/README.md
 ```
 
 测试照片、牌面参考图和竞品模型权重**没有可再分发的许可证，不进仓库**，存放位置见 [data/README.md](data/README.md)。API Key 也不进仓库。
 
 ## 状态
 
-调研阶段已完成（2026-10-26）：认牌路线定为 Gemini Flash + 端侧模型双读 + 规则校验 + 用户核对，用户流程 v0.1 已出。尚未开始编码。下一步是用真实牌桌照片验证识别效果。
+调研阶段已完成（2026-10-26）：认牌路线定为 Gemini Flash + 端侧模型双读 + 规则校验 + 用户核对，用户流程 v0.1 已出。
+
+App v0.1 开始编码（2026-10-26）：算番引擎、牌局账本、识别接口和 10 个页面已写，见 [app/README.md](app/README.md)。下一步是在 Mac 上编译跑通，再用真实牌桌照片验证识别效果。
