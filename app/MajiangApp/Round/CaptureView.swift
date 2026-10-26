@@ -12,6 +12,8 @@ struct CaptureView: View {
     @State private var cameraOn = false
     @State private var choosingPhoto = false
     @State private var pickerItem: PhotosPickerItem?
+    /// 端侧模型零点几秒就认完了，转圈晚一点出来，免得一闪而过。
+    @State private var slow = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -62,19 +64,29 @@ struct CaptureView: View {
                 pickerItem = nil
             }
         }
-        .task {
+        // 核对页盖在上面时拍照页还在下面（定格的照片露在后面），相机先关掉
+        .task(id: flow.steps.isEmpty) {
+            guard flow.steps.isEmpty else {
+                camera.stop()
+                return
+            }
             // 从核对页退回来时，照片清掉、还在跑的复核不要了，重新取景
-            // （核对页盖在上面时这里也会跑一次，比如截图模式直接停在核对页，这时不能取消）
-            if flow.steps.isEmpty { flow.cancelRecognition() }
+            flow.cancelRecognition()
             flow.photo = nil
             cameraOn = await camera.start()
             await model.preloadOnDeviceModel()
         }
         .onDisappear { camera.stop() }
+        .task(id: flow.isRecognizing) {
+            slow = false
+            guard flow.isRecognizing else { return }
+            try? await Task.sleep(for: .seconds(0.6))
+            if !Task.isCancelled { withAnimation(.easeIn(duration: 0.2)) { slow = true } }
+        }
     }
 
     private var status: String? {
-        if flow.isRecognizing { return "正在认牌…" }
+        if flow.isRecognizing { return slow ? "正在认牌…" : nil }
         return flow.recognitionError
     }
 
@@ -140,7 +152,7 @@ struct CaptureView: View {
                 }
             }
 
-            if flow.isRecognizing {
+            if flow.isRecognizing && slow {
                 ProgressView()
                     .controlSize(.large)
                     .tint(.white)

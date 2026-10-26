@@ -198,10 +198,10 @@ public struct GeminiRecognizer: TileRecognizer {
         do {
             envelope = try JSONDecoder().decode(Envelope.self, from: data)
         } catch {
-            throw RecognitionError.badResponse("不是 Gemini 的回答格式")
+            throw RecognitionError.badResponse("识别服务的回答格式不对")
         }
         if let reason = envelope.promptFeedback?.blockReason {
-            throw RecognitionError.badResponse("Gemini 拒绝处理这张照片（\(reason)），换一张试试")
+            throw RecognitionError.badResponse("这张照片没法识别（\(reason)），换一张试试")
         }
         guard let candidate = envelope.candidates?.first else {
             throw RecognitionError.badResponse("没有候选回答")

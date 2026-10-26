@@ -12,6 +12,13 @@ struct CheckView: View {
     @State private var actionMeld: Int?
     @State private var confirmFalseWin = false
     @State private var rareOpen = false
+    /// 牌一张张落进格子里（从拍照页升上来时）。
+    @State private var landed = false
+    /// 再认一遍时牌从这个时刻开始翻，等落定以后。
+    @State private var flipStart = Date()
+    /// 再认一遍等久了才给「不等了」。
+    @State private var canSkip = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     enum EditTarget: Identifiable {
         case replace(Int)
@@ -51,7 +58,7 @@ struct CheckView: View {
                 notes
 
                 if flow.isReviewing {
-                    reviewingCard.padding(.top, 18)
+                    reviewingLine.padding(.top, 14)
                 } else if let index = flow.firstPending {
                     QuestionCard(flow: flow, index: index) { editing = .replace(index) }
                         .padding(.top, 18)
@@ -90,12 +97,34 @@ struct CheckView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
         .toolbar {
+            // 核对页是从下面升上来盖住拍照页的，不在导航栈里，返回键自己放
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    flow.steps.removeAll()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Theme.ink)
+                }
+                .accessibilityLabel("返回拍照")
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("重拍") { flow.steps.removeAll() }
                     .buttonStyle(.text(size: 16))
             }
         }
         .sheet(item: $editing) { target in sheet(for: target) }
+        .onAppear {
+            flipStart = Date().addingTimeInterval(reduceMotion ? 0 : 1)
+            landed = true
+        }
+        .task(id: flow.isReviewing) {
+            canSkip = false
+            guard flow.isReviewing else { return }
+            // 九成 16 秒内认完，12 秒还没好才给出口
+            try? await Task.sleep(for: .seconds(12))
+            if !Task.isCancelled { canSkip = true }
+        }
         .sheet(isPresented: $flow.showResult) {
             ResultSheet(flow: flow, finish: finish)
         }
@@ -132,9 +161,9 @@ struct CheckView: View {
         // 演示数据不看照片，一定要说清楚，不然会以为是认错了（截图模式除外）
         if flow.source == "演示" && DemoScreen.current == nil { return "演示数据，没看你的照片 · 长按首页标题填 Key" }
         let count = "\(winnerName)和了 · 认出 \(flow.hand.allTiles.count) 张"
-        if flow.isReviewing { return count + " · 复核中" }
+        if flow.isReviewing { return count }
         if flow.source == "双读" {
-            return count + (flow.reviewAtLoad == 0 ? " · 两边读得一样" : " · \(flow.reviewAtLoad) 张两边不一样")
+            return count + (flow.reviewAtLoad == 0 ? " · 两遍读得一样" : " · \(flow.reviewAtLoad) 张两遍不一样")
         }
         return count
     }
@@ -163,8 +192,14 @@ struct CheckView: View {
                     actionTile = index
                 } label: {
                     VStack(spacing: 4) {
-                        TileFace(tile: tile.tile, width: tileWidth,
-                                 state: tile.needsReview ? .doubt : index == suspect ? .wrong : .normal)
+                        FlippingTile(index: index, width: tileWidth, active: flow.isReviewing, start: flipStart) {
+                            TileFace(tile: tile.tile, width: tileWidth,
+                                     state: tile.needsReview ? .doubt : index == suspect ? .wrong : .normal)
+                        }
+                        .opacity(landed || reduceMotion ? 1 : 0)
+                        .offset(y: landed || reduceMotion ? 0 : -26)
+                        .scaleEffect(landed || reduceMotion ? 1 : 0.86)
+                        .animation(.spring(response: 0.42, dampingFraction: 0.68).delay(0.3 + Double(index) * 0.05), value: landed)
                         Text(index == winningIndex ? "和" : " ")
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Theme.vermilion)
@@ -243,30 +278,24 @@ struct CheckView: View {
         }
     }
 
-    /// 端侧已经读出来了，Gemini 还在复核。
-    private var reviewingCard: some View {
-        HStack(alignment: .top, spacing: 12) {
-            ProgressView()
-                .tint(Theme.gray)
-                .padding(.top, 2)
-            VStack(alignment: .leading, spacing: 4) {
-                Text("正在用 Gemini 再认一遍").font(.system(size: 16, weight: .semibold))
-                Text("一般十几秒，慢的要半分钟。两边读得不一样的牌会标出来让你选。先选下面是自摸还是点炮。")
-                    .font(.system(size: 14))
-                    .foregroundStyle(Theme.gray)
-                    .fixedSize(horizontal: false, vertical: true)
-                // Gemini 偶尔会卡到超时（一分钟），不让人干等
+    /// 第一遍已经读出来了，后台再认一遍：牌在上面翻，这里只说一句。
+    private var reviewingLine: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("每张翻过来再认一遍，几秒就好。可以先选下面是自摸还是点炮。")
+                .font(.system(size: 14))
+                .foregroundStyle(Theme.gray)
+                .fixedSize(horizontal: false, vertical: true)
+            if canSkip {
+                // 偶尔会卡到超时（一分钟），不让人干等
                 Button("不等了，就用现在这些牌 ›") {
                     flow.cancelRecognition()
-                    flow.notes.append("没等 Gemini 复核完，只有端侧的读法，对照照片看一眼")
+                    flow.notes.append("没等第二遍认完，只有第一遍的读法，对照照片看一眼")
                 }
-                    .buttonStyle(.text(size: 13))
-                    .padding(.top, 4)
+                .buttonStyle(.text(size: 13))
+                .transition(.opacity)
             }
-            Spacer(minLength: 0)
         }
-        .padding(.vertical, 18)
-        .block()
+        .animation(.easeOut(duration: 0.3), value: canSkip)
     }
 
     // MARK: 不成和
