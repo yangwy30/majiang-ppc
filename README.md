@@ -15,11 +15,32 @@
 5. **算番**：按国标 81 番规则计算番种与总番数。
 6. **记账**：记录每局得分，按玩家累计，整场结束出结算。
 
-## 文档
+## 文档索引
 
-- [可行性评估](docs/feasibility.md)
-- [用户流程设计](docs/user-flow.md)
+**产品**
+
+- [可行性评估](docs/feasibility.md)：结论、技术路线、MVP 范围和工期
+- [用户流程设计](docs/user-flow.md)：10 个页面的流程、视觉风格、牌面风格（配可点击的 mockup）
+
+**调研**（总览和关键结论见 [research/README.md](research/README.md)）
+
+- [开源数据集调研](research/datasets.md)
+- [测试照片集](research/test-photos.md)
+- [Gemini 识牌测试与改进方法对比](research/gemini-recognition.md)
+- [竞品离线认牌模型评测 + 端侧/Gemini 双读模拟](research/competitor-offline-model.md)
+- [国标规则与算番引擎](research/guobiao-rules.md)
+
+## 仓库结构
+
+```
+docs/       产品文档：可行性评估、用户流程
+research/   调研报告；results/ 是测试的原始 JSON
+tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟），见 tools/README.md
+data/       标准答案、照片来源表、番种测试用例，见 data/README.md
+```
+
+测试照片、牌面参考图和竞品模型权重**没有可再分发的许可证，不进仓库**，存放位置见 [data/README.md](data/README.md)。API Key 也不进仓库。
 
 ## 状态
 
-构想与可行性评估阶段，尚未开始编码。
+调研阶段已完成（2026-10-26）：认牌路线定为 Gemini Flash + 端侧模型双读 + 规则校验 + 用户核对，用户流程 v0.1 已出。尚未开始编码。下一步是用真实牌桌照片验证识别效果。
