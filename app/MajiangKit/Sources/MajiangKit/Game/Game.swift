@@ -26,11 +26,43 @@ public struct GameRules: Hashable, Codable, Sendable {
     public var falseWinPenalty: Int = 10
     /// 一场几局（4 圈 16 局）。
     public var totalHands: Int = 16
+    /// 封顶：一把最多按几番算（含花），0 为不封顶（国标不封顶）。
+    public var fanCap: Int = 0
+    /// 点炮时只有点炮的人付「底分 + 番数」，另外两家不付。国标是另外两家也各付底分。
+    public var onlyDiscarderPays: Bool = false
 
     public init() {}
 
+    /// 标准国标。
+    public static let standard = GameRules()
+
+    /// 新手局：凑不够 8 番也能和（和了就算），其余照国标。
+    public static var beginner: GameRules {
+        var rules = GameRules()
+        rules.minimumFan = 1
+        return rules
+    }
+
+    /// 计分规则一样（不比 1 分几元：钱是每桌自己定的，换预设不动它）。
+    public func scoresLike(_ other: GameRules) -> Bool {
+        var copy = other
+        copy.yuanPerPoint = yuanPerPoint
+        return copy == self
+    }
+
+    /// 封顶以后这一把按几番算。
+    public func cappedFan(_ fan: Int) -> Int {
+        fanCap > 0 ? min(fan, fanCap) : fan
+    }
+
+    /// 一把和牌按几番收钱：不带花时去掉花牌的番（中途改成不带花，前面的局也一样），再封顶。
+    public func paidFan(_ win: WinRecord) -> Int {
+        cappedFan(includeFlowers ? win.totalFan : win.totalFan - win.flowerFan)
+    }
+
     enum CodingKeys: String, CodingKey {
         case yuanPerPoint, basePoints, minimumFan, includeFlowers, swapSeatsEachRound, falseWinPenalty, totalHands
+        case fanCap, onlyDiscarderPays
     }
 
     /// 缺的字段用默认值，以后加规则不会让旧存档读不出来。
@@ -44,6 +76,8 @@ public struct GameRules: Hashable, Codable, Sendable {
         swapSeatsEachRound = try c.decodeIfPresent(Bool.self, forKey: .swapSeatsEachRound) ?? d.swapSeatsEachRound
         falseWinPenalty = try c.decodeIfPresent(Int.self, forKey: .falseWinPenalty) ?? d.falseWinPenalty
         totalHands = try c.decodeIfPresent(Int.self, forKey: .totalHands) ?? d.totalHands
+        fanCap = try c.decodeIfPresent(Int.self, forKey: .fanCap) ?? d.fanCap
+        onlyDiscarderPays = try c.decodeIfPresent(Bool.self, forKey: .onlyDiscarderPays) ?? d.onlyDiscarderPays
     }
 }
 
@@ -297,6 +331,28 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
         return copy
     }
 
+    /// 换一套规则：一场只用一套规则，前面每一局的得失分都按新规则重算。
+    /// 起和调高以后，前面不够番的和牌照样留着（`winsBelowMinimum` 能找出来），不悄悄删掉。
+    public mutating func changeRules(_ newRules: GameRules) throws {
+        self = try changingRules(newRules)
+    }
+
+    /// 换规则以后的样子，不动原来的牌局。改规则页面用它预览每个人的分数。
+    public func changingRules(_ newRules: GameRules) throws -> Game {
+        var copy = self
+        copy.rules = newRules
+        try copy.reflow(edited: nil)
+        return copy
+    }
+
+    /// 按现在的起和番数，番数不够的和牌（中途调高了起和时会有）。
+    public var winsBelowMinimum: [HandRecord] {
+        records.filter { record in
+            guard case .win(let win) = record.outcome else { return false }
+            return win.totalFan - win.flowerFan < rules.minimumFan
+        }
+    }
+
     /// 删掉某一局，后面的跟着重算。
     public mutating func remove(_ id: UUID) {
         guard let index = records.firstIndex(where: { $0.id == id }) else { return }
@@ -368,8 +424,7 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
     private func deltas(for outcome: HandOutcome) -> [Int] {
         switch outcome {
         case .win(let win):
-            Payment.winDeltas(winner: win.winner, discarder: win.discarder,
-                              totalFan: win.totalFan, basePoints: rules.basePoints)
+            Payment.winDeltas(winner: win.winner, discarder: win.discarder, totalFan: rules.paidFan(win), rules: rules)
         case .drawn: [0, 0, 0, 0]
         case .falseWin(let offender): Payment.falseWinDeltas(offender: offender, penalty: rules.falseWinPenalty)
         case .manual(let deltas, _): deltas
@@ -385,20 +440,29 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
 
 /// 国标收付。
 public enum Payment {
-    /// 自摸：三家各付「底分 + 番数」；点炮：点炮者付「底分 + 番数」，另外两家各付底分。
-    public static func winDeltas(winner: Int, discarder: Int?, totalFan: Int, basePoints: Int) -> [Int] {
+    /// 自摸：三家各付「底分 + 番数」；点炮：点炮者付「底分 + 番数」，另外两家各付底分
+    /// （`onlyDiscarderPays` 时另外两家不付）。番数先按 `fanCap` 封顶（0 为不封顶）。
+    public static func winDeltas(winner: Int, discarder: Int?, totalFan: Int, basePoints: Int,
+                                 fanCap: Int = 0, onlyDiscarderPays: Bool = false) -> [Int] {
+        let fan = fanCap > 0 ? min(totalFan, fanCap) : totalFan
         var deltas = [0, 0, 0, 0]
         for player in 0..<4 where player != winner {
             let pays: Int
             if let discarder {
-                pays = player == discarder ? basePoints + totalFan : basePoints
+                pays = player == discarder ? basePoints + fan : (onlyDiscarderPays ? 0 : basePoints)
             } else {
-                pays = basePoints + totalFan
+                pays = basePoints + fan
             }
             deltas[player] -= pays
             deltas[winner] += pays
         }
         return deltas
+    }
+
+    /// 按一场的规则（底分、封顶、点炮谁付）算一把和牌的得失分。
+    public static func winDeltas(winner: Int, discarder: Int?, totalFan: Int, rules: GameRules) -> [Int] {
+        winDeltas(winner: winner, discarder: discarder, totalFan: totalFan, basePoints: rules.basePoints,
+                  fanCap: rules.fanCap, onlyDiscarderPays: rules.onlyDiscarderPays)
     }
 
     /// 错和：赔另外三家各 `penalty` 分。

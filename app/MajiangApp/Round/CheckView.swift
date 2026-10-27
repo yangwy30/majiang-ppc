@@ -490,7 +490,7 @@ struct CheckView: View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("花牌").font(.system(size: 16))
-                Text("每张 1 番，不算进 8 番").font(.system(size: 12)).foregroundStyle(Theme.gray)
+                Text("每张 1 番，不算进起和").font(.system(size: 12)).foregroundStyle(Theme.gray)
             }
             Spacer()
             HStack(spacing: 14) {

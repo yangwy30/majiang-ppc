@@ -21,6 +21,85 @@ final class GameTests: XCTestCase {
         XCTAssertEqual(Payment.falseWinDeltas(offender: 3, penalty: 10), [10, 10, 10, -30])
     }
 
+    func testHouseRulePayments() {
+        // 封顶 64：88 番按 64 算
+        XCTAssertEqual(Payment.winDeltas(winner: 3, discarder: 2, totalFan: 88, basePoints: 8, fanCap: 64), [-8, -8, -72, 88])
+        // 只有点炮的人付
+        XCTAssertEqual(Payment.winDeltas(winner: 2, discarder: 1, totalFan: 10, basePoints: 8, onlyDiscarderPays: true),
+                       [0, -18, 18, 0])
+        // 自摸不受「只有点炮的人付」影响
+        XCTAssertEqual(Payment.winDeltas(winner: 0, discarder: nil, totalFan: 10, basePoints: 5, onlyDiscarderPays: true),
+                       [45, -15, -15, -15])
+    }
+
+    func testPresets() {
+        var rules = GameRules.standard
+        rules.yuanPerPoint = 2
+        XCTAssertTrue(rules.scoresLike(.standard), "1 分几元不算家规")
+        rules.fanCap = 64
+        XCTAssertFalse(rules.scoresLike(.standard))
+        XCTAssertEqual(rules.cappedFan(88), 64)
+        XCTAssertEqual(GameRules.beginner.minimumFan, 1)
+    }
+
+    func testChangingRulesRecomputesEveryHand() throws {
+        var game = makeGame()
+        try game.recordWin(win(0, discarder: nil, fan: 32))
+        try game.recordWin(win(2, discarder: 1, fan: 8))
+        try game.recordDraw()
+        try game.recordWin(win(3, discarder: nil, fan: 30))
+        XCTAssertEqual(game.scores, [74, -94, -46, 66])
+
+        var rules = game.rules
+        rules.basePoints = 5
+        let preview = try game.changingRules(rules)
+        XCTAssertEqual(preview.scores, [71, -85, -49, 63])
+        XCTAssertEqual(game.scores, [74, -94, -46, 66], "预览不改原来的牌局")
+
+        rules.fanCap = 16
+        try game.changeRules(rules)
+        XCTAssertEqual(game.scores, [63 - 5 - 21, -21 - 13 - 21, -21 + 23 - 21, -21 - 5 + 63])
+        XCTAssertEqual(game.scores.reduce(0, +), 0)
+
+        // 起和调高：前面不够番的和牌留着，标出来
+        rules.minimumFan = 10
+        try game.changeRules(rules)
+        XCTAssertEqual(game.records.count, 4)
+        XCTAssertEqual(game.winsBelowMinimum.map(\.handIndex), [1])
+
+        // 中途改成不带花：前面带花的那手去掉花牌的番再算
+        var flowers = makeGame()
+        try flowers.recordWin(win(0, discarder: nil, fan: 8, flowers: 2))
+        XCTAssertEqual(flowers.scores[0], 3 * (8 + 10))
+        var noFlowers = flowers.rules
+        noFlowers.includeFlowers = false
+        try flowers.changeRules(noFlowers)
+        XCTAssertEqual(flowers.scores[0], 3 * (8 + 8))
+
+        // 打了 4 局，不能改成只打 0 圈
+        rules.totalHands = 0
+        XCTAssertThrowsError(try game.changeRules(rules))
+    }
+
+    func testRulesRememberedPerGroupOfPlayers() {
+        var archive = GameArchive()
+        var house = GameRules()
+        house.fanCap = 64
+        archive.start(Game(players: ["杨", "阿强", "莉莉", "小张"].map { Player(name: $0) }, rules: house,
+                           startedAt: Date(timeIntervalSince1970: 100)))
+        archive.start(Game(players: ["杨", "小周", "阿乐", "老王"].map { Player(name: $0) },
+                           startedAt: Date(timeIntervalSince1970: 200)))
+        XCTAssertEqual(archive.lastRules(forPlayers: ["小张", "杨", "莉莉", "阿强"])?.fanCap, 64, "座位换了也认得")
+        XCTAssertNil(archive.lastRules(forPlayers: ["杨", "阿强", "莉莉", "老王"]))
+    }
+
+    func testOldRulesWithoutHouseRuleFieldsStillLoad() throws {
+        let json = #"{"yuanPerPoint":1,"basePoints":8,"minimumFan":8,"includeFlowers":true}"#
+        let rules = try JSONDecoder().decode(GameRules.self, from: Data(json.utf8))
+        XCTAssertEqual(rules.fanCap, 0)
+        XCTAssertFalse(rules.onlyDiscarderPays)
+    }
+
     func testDealerAndWindsRotateWithoutSwap() {
         var game = makeGame()
         XCTAssertEqual(game.dealer, 0)

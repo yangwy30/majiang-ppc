@@ -37,6 +37,15 @@ struct ResultSheet: View {
                     Text("番").font(Theme.serif(22))
                 }
                 .frame(maxWidth: .infinity)
+                if game.rules.paidFan(record) < record.totalFan {
+                    Text("家规封顶 \(game.rules.fanCap) 番：\(record.totalFan) 番按 \(game.rules.fanCap) 算")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.gray)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Theme.lineSoft, in: Capsule())
+                        .frame(maxWidth: .infinity)
+                }
 
                 VStack(spacing: 0) {
                     ForEach(record.fans, id: \.fan) { entry in
@@ -44,7 +53,7 @@ struct ResultSheet: View {
                                plain: entry.fan.explanation, points: entry.points)
                     }
                     if record.flowerFan > 0 {
-                        FanRow(name: "花牌 ×\(record.flowerFan)", plain: "每张 1 番，不算进 8 番", points: record.flowerFan)
+                        FanRow(name: "花牌 ×\(record.flowerFan)", plain: "每张 1 番，不算进起和", points: record.flowerFan)
                     }
                 }
                 .padding(.top, 14)
@@ -90,14 +99,16 @@ struct ResultSheet: View {
     private func explanation(_ record: WinRecord, _ deltas: [Int]) -> String {
         let game = flow.game
         let base = game.rules.basePoints
-        let fan = record.totalFan
+        let fan = game.rules.paidFan(record)
         var lines: [String]
         if let discarder = record.discarder {
-            lines = ["点炮：\(game.players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，另外两家各付 \(base) 分。"]
+            lines = [game.rules.onlyDiscarderPays
+                     ? "点炮：\(game.players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，按家规另外两家不用付。"
+                     : "点炮：\(game.players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，另外两家各付 \(base) 分。"]
         } else {
             lines = ["自摸：三家各付 \(base) + \(fan) = \(base + fan) 分。"]
         }
-        lines.append("\(base) 分是底分，不管几番每人都要先付。")
+        if base > 0 { lines.append("\(base) 分是底分，不管几番都要先付。") }
         if game.rules.yuanPerPoint != 1 {
             lines.append("按 1 分 = \(game.rules.yuanPerPoint.formatted()) 元，\(game.players[record.winner].name)这局赢 \(game.moneyText(deltas[record.winner]))。")
         }
