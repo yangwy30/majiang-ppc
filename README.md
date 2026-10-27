@@ -1,28 +1,58 @@
-# majiang-ppc
+<p align="center">
+  <img src="docs/assets/app-icon/C1.svg" width="96" alt="拍照算番">
+</p>
 
-国标麻将拍照算番 + 记账 iOS App（Guobiao mahjong photo scoring + ledger iOS app）。
+<h1 align="center">拍照算番</h1>
 
-## 想法
+<p align="center">国标麻将，和了拍一下。认牌、算番、记账，一个 App。</p>
 
-打完一局国标麻将，对着和牌的牌型拍一张照片，App 自动识别手牌，算出番种和番数，并把这一局的输赢记入牌局账本，多局自动累计。
+<p align="center">
+  <img src="docs/assets/app-store/01-capture.png" width="200" alt="拍照">
+  <img src="docs/assets/app-store/04-result.png" width="200" alt="算番">
+  <img src="docs/assets/app-store/06-settle.png" width="200" alt="结算">
+</p>
 
-## 核心流程
+## 它做什么
 
-1. **拍照**：拍下和牌者的手牌（含已吃碰杠的副露）。
-2. **识别**：视觉模型识别每张牌（34 种牌 + 8 张花牌）。
-3. **确认 / 修正**：用户一键修正识别错的牌。
-4. **补充信息**：照片看不出的信息，如自摸还是点炮、和的是哪张、门风圈风、花牌数量等。
-5. **算番**：按国标 81 番规则计算番种与总番数。
-6. **记账**：记录每局得分，按玩家累计，整场结束出结算。
+- **拍照认牌**：只拍和牌者的手牌。手机上的端侧模型先认一遍，马上进核对页；Gemini 3.8 Flash（低思考，约 7 秒）再逐张复核。两边一致直接用，不一致给两个候选，标出哪张能和，点一下就改。
+- **算番**：模型只读牌，和没和、几番由国标 81 番规则引擎决定。不成和时说明差在哪。
+- **记账**：庄家、圈风、门风自动轮转，自摸、点炮、荒庄、错和照规矩收付。以前的局随时改或删，后面的分数跟着重算。打完算出最少几笔转账。
+- **分享和同步**：账本生成一张图发到微信群；牌局存在本机和自己的 iCloud 里，可导出导入。不用注册，没有广告。
 
-## 文档索引
+## 状态
+
+1.0 已提交 TestFlight（2026-10-27）。正式版认牌走 `server/` 里的中转站，App 里不带 Key。
+
+## 怎么跑
+
+```sh
+open app/Majiang.xcodeproj           # Xcode 16+，iOS 17+，选 iPhone 模拟器运行
+cd app/MajiangKit && swift test      # 牌、算番、账本、识别的逻辑测试，Mac 或 Linux 都行
+cd server && npm install && npm test # 中转站本地测试；npm run deploy 部署
+```
+
+开发版怎么填 Key、怎么装端侧模型、怎么截图，见 [app/README.md](app/README.md)；中转站的限额和运维见 [server/README.md](server/README.md)。
+
+## 仓库结构
+
+```
+app/        iOS App：Xcode 工程、SwiftUI 界面（MajiangApp）、纯逻辑 Swift 包（MajiangKit）
+server/     认牌中转站（Cloudflare Worker）：持有 Gemini Key，按手机限次数，只放行 Flash
+docs/       产品文档：可行性、用户流程、名字和图标、产品页文案；assets/ 是截图和图标
+research/   调研报告；results/ 是测试的原始 JSON
+tools/      调研和截图用的脚本，见 tools/README.md
+data/       标准答案、照片来源表、番种测试用例，见 data/README.md
+```
+
+## 文档
 
 **产品**
 
-- [可行性评估](docs/feasibility.md)：结论、技术路线、MVP 范围和工期
-- [用户流程设计](docs/user-flow.md)：完整流程图、每个页面的截图、视觉规范和用词
-- [App 名字和图标](docs/app-name-and-icon.md)：为什么叫「拍照算番」、图标 C1 的源文件、怎么在 App Store Connect 里占名字
-- [Yang 的全部消息](docs/yang-messages.md)：项目里 Yang 发过的所有提示词和消息，按时间原文汇总
+- [可行性评估](docs/feasibility.md)：结论、技术路线、MVP 范围
+- [用户流程设计](docs/user-flow.md)：每个页面的截图、视觉规范「墨与朱」和用词
+- [App 名字和图标](docs/app-name-and-icon.md)：为什么叫「拍照算番」，图标 C1 的源文件
+- [产品页和 TestFlight 文案](docs/app-store.md)
+- [Yang 的全部消息](docs/yang-messages.md)：项目里 Yang 发过的所有消息，按时间原文汇总
 
 **调研**（总览和关键结论见 [research/README.md](research/README.md)）
 
@@ -32,21 +62,12 @@
 - [竞品离线认牌模型评测 + 端侧/Gemini 双读模拟](research/competitor-offline-model.md)
 - [国标规则与算番引擎](research/guobiao-rules.md)
 
-## 仓库结构
+## 不在仓库里的东西
 
-```
-docs/       产品文档：可行性评估、用户流程；assets/user-flow/ 是 App 的页面截图
-research/   调研报告；results/ 是测试的原始 JSON
-tools/      调研用的测试脚本（Gemini 识牌、竞品模型、双读模拟），见 tools/README.md
-data/       标准答案、照片来源表、番种测试用例，见 data/README.md
-server/     认牌中转站（Cloudflare Worker，持有 Gemini Key、限次数），见 server/README.md
-app/        iOS App：Xcode 工程、SwiftUI 界面、MajiangKit 逻辑包，见 app/README.md
-```
+- **端侧模型权重**：现在用的是竞品 [AR麻将助手](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 YOLOv8n 模型，没有许可证，只放在本地、只是临时的。上架前换成自己训练的模型（Jon Chan Roboflow 数据集，CC BY 4.0），接口不变。
+- **测试照片和牌面参考图**：没有可再分发的许可证，存放位置见 [data/README.md](data/README.md)。
+- **API Key**：开发版存手机钥匙串，正式版只在中转站的 Worker 密钥里。
 
-测试照片、牌面参考图和竞品模型权重**没有可再分发的许可证，不进仓库**，存放位置见 [data/README.md](data/README.md)。API Key 也不进仓库。
+## 致谢
 
-## 状态
-
-调研阶段已完成（2026-10-26）：认牌路线定为 Gemini Flash + 端侧模型双读 + 规则校验 + 用户核对，用户流程 v0.1 已出。
-
-App v0.1 开始编码（2026-10-26）：算番引擎、牌局账本、识别接口和 10 个页面已写，见 [app/README.md](app/README.md)。下一步是在 Mac 上编译跑通，再用真实牌桌照片验证识别效果。
+算番引擎来自 [ChineseOfficialMahjongHelper](https://github.com/summerinsects/ChineseOfficialMahjongHelper)（MIT），代码放在 `app/MajiangKit/Sources/CGuobiao/vendor/`，许可证见同目录 `LICENSE`。
