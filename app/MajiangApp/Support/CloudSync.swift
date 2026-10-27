@@ -1,6 +1,7 @@
 import CloudKit
 import Foundation
 import MajiangKit
+import os
 
 /// iCloud 同步：牌局存在用户自己 iCloud 的私有库里，每场一条记录（内容就是存档里那场的 JSON）。
 /// 打开 App、回到前台、每次保存后同步一次：先收云端改过的，再传本机改过的。
@@ -109,9 +110,13 @@ final class CloudSync {
         } catch let error as CKError where [.networkUnavailable, .networkFailure, .serviceUnavailable, .requestRateLimited].contains(error.code) {
             status = .failed("没有网络，联网后会自动同步。")
         } catch {
-            status = .failed(error.localizedDescription)
+            // 原始错误只记日志，界面上不出现英文报错
+            Self.log.error("iCloud 同步失败：\(String(describing: error), privacy: .public)")
+            status = .failed("iCloud 同步暂时没成功，牌局都存在这台手机上，不会丢。稍后会自动再试。")
         }
     }
+
+    private static let log = Logger(subsystem: "com.yangwy30.majiang", category: "CloudSync")
 
     private func prepareZone() async throws {
         guard !state.zoneReady else { return }
