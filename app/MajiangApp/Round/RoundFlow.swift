@@ -273,7 +273,6 @@ final class RoundFlow {
 
     var deltas: [Int]? {
         guard let record = winRecord else { return nil }
-        return Payment.winDeltas(winner: winner, discarder: record.discarder,
-                                 totalFan: record.totalFan, basePoints: game.rules.basePoints)
+        return Payment.winDeltas(winner: winner, discarder: record.discarder, totalFan: record.totalFan, rules: game.rules)
     }
 }

@@ -10,7 +10,8 @@ extension HandRecord {
             var parts = [win.discarder.map { "\(name(win.winner))和 · \(name($0))点炮" } ?? "\(name(win.winner))自摸"]
             // 大番种值得写出来（清一色、七对……），小番种不写
             if let top = win.fans.first, top.fan.points >= 6, top.fan != .chickenHand { parts.append(top.fan.name) }
-            parts.append("\(win.totalFan) 番")
+            let paid = game.rules.cappedFan(win.totalFan)
+            parts.append(paid < win.totalFan ? "\(win.totalFan) 番按 \(paid) 算" : "\(win.totalFan) 番")
             return parts.joined(separator: " · ")
         case .drawn:
             return "这局没人和"
@@ -73,11 +74,39 @@ extension Game {
 }
 
 extension GameRules {
-    var summary: String {
-        var parts = ["国标", includeFlowers ? "带花" : "不带花"]
+    /// 跟国标不一样的地方，一项一个短语：「底分 5」「封顶 64 番」。全按国标就是空的。
+    var houseRuleParts: [String] {
+        let standard = GameRules.standard
+        var parts: [String] = []
+        if basePoints != standard.basePoints { parts.append("底分 \(basePoints)") }
+        if minimumFan != standard.minimumFan { parts.append(minimumFan == 1 ? "和了就算" : "\(minimumFan) 番起和") }
+        if fanCap > 0 { parts.append("封顶 \(fanCap) 番") }
+        if !includeFlowers { parts.append("不带花") }
+        if onlyDiscarderPays { parts.append("点炮一家付") }
+        if falseWinPenalty != standard.falseWinPenalty { parts.append("错和赔 \(falseWinPenalty)") }
+        if totalHands != standard.totalHands { parts.append("\(totalHands / 4) 圈") }
         if swapSeatsEachRound { parts.append("每圈换座") }
-        parts.append("1 分 = \(yuanPerPoint.formatted(.number.precision(.fractionLength(0...2)))) 元")
-        return parts.joined(separator: " · ")
+        return parts
+    }
+
+    /// 分享图、结算页：「国标 · 带花 · 1 分 = 1 元」；有家规时只写改了的：「国标 · 封顶 64 番 · 1 分 = 2 元」。
+    var summary: String {
+        let house = houseRuleParts
+        return (["国标"] + (house.isEmpty ? ["带花"] : house) + ["1 分 = \(yuanPerPoint.yuanText) 元"])
+            .joined(separator: " · ")
+    }
+
+    /// 开局页那一行：「标准国标 · 1 分 1 元」「新手局 · 1 分 1 元」「封顶 64 番 · 1 分 2 元」。
+    var shortSummary: String {
+        let name = scoresLike(.standard) ? "标准国标" : scoresLike(.beginner) ? "新手局" : houseRuleParts.joined(separator: " · ")
+        return "\(name) · 1 分 \(yuanPerPoint.yuanText) 元"
+    }
+
+    /// 牌桌顶上那一行，只有家规跟国标不一样时才有：「家规 · 封顶 64 番 · 1 分 2 元」。
+    var houseRuleBadge: String? {
+        let house = houseRuleParts
+        guard !house.isEmpty else { return nil }
+        return (["家规"] + house + ["1 分 \(yuanPerPoint.yuanText) 元"]).joined(separator: " · ")
     }
 }
 

@@ -104,7 +104,7 @@ final class AppModel {
         if let active = loaded.activeGame { path = [.table(active.id)] }
         switch demoScreen {
         case .home, .emptyHome, .backup: path = []
-        case .newGame: path = [.newGame]
+        case .newGame, .houseRules: path = [.newGame]
         case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
         default: break
         }

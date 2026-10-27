@@ -9,6 +9,7 @@ struct TableView: View {
     @State private var recording = false
     @State private var manualScoring = false
     @State private var showGuide = false
+    @State private var editingRules = false
     @State private var confirmEnd = false
     @State private var pickingFalseWin = false
     /// 点开要改的那一局。
@@ -29,6 +30,23 @@ struct TableView: View {
     private func content(_ game: Game) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
+                // 家规跟国标不一样时才露一行，点开能改
+                if let badge = game.rules.houseRuleBadge {
+                    Button { editingRules = true } label: {
+                        Text(badge + " ›")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.gray)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Theme.lineSoft, in: Capsule())
+                            .contentShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 2)
+                }
                 TableDiagram(game: game)
                     .padding(.top, 10)
 
@@ -106,6 +124,7 @@ struct TableView: View {
                         Button("有人和错了") { pickingFalseWin = true }
                     }
                     Button("直接改分") { manualScoring = true }
+                    Button("这场的规则") { editingRules = true }
                     Button("规则和番种说明") { showGuide = true }
                     Divider()
                     if !game.isFinished {
@@ -154,12 +173,18 @@ struct TableView: View {
             }
         }
         .sheet(isPresented: $showGuide) { RulesGuideView() }
+        .sheet(isPresented: $editingRules) {
+            GameRulesSheet(game: game) { rules in
+                edit { try $0.changeRules(rules) }
+            }
+        }
         .onAppear {
             if model.demoScreen == .table { justRecorded = game.records.last }
             if model.demoScreen == .editHand, game.records.count > 1 {
                 editing = EditTarget(record: game.records[1], number: 2)
             }
             if model.demoScreen?.opensRound == true { recording = true }
+            if model.demoScreen == .gameRules { editingRules = true }
         }
         .alert("没有记上", isPresented: Binding(get: { recordError != nil }, set: { if !$0 { recordError = nil } })) {
             Button("好") { recordError = nil }

@@ -1,12 +1,17 @@
 import SwiftUI
 import MajiangKit
 
-/// 开局：按出牌顺序填四个名字，第一个是第一局的庄。规则收成一行，一般设一次就不再改。
+/// 开局：按出牌顺序填四个名字，第一个是第一局的庄。规则收成一行，一般设一次就不再改；
+/// 填的 4 个人以前一起打过，就自动用上次那场的家规。
 struct NewGameView: View {
     @Environment(AppModel.self) private var model
     @State private var names = ["", "", "", ""]
     @State private var rules = GameRules()
     @State private var editingRules = false
+    /// 规则是按这 4 个人上次那场自动带上的。
+    @State private var rulesFromGroup = false
+    /// 自己点开改过规则，就不再按名字自动换。
+    @State private var rulesTouched = false
     @FocusState private var focused: Int?
 
     private var trimmed: [String] { names.map { $0.trimmingCharacters(in: .whitespaces) } }
@@ -63,16 +68,24 @@ struct NewGameView: View {
                 Button {
                     editingRules = true
                 } label: {
-                    HStack {
-                        Text("规则").font(.system(size: 16))
-                        Spacer()
-                        Text(rules.summary + " ›")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Theme.gray)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack {
+                            Text("规则").font(.system(size: 16))
+                            Spacer()
+                            Text(rules.shortSummary + " ›")
+                                .font(.system(size: 15))
+                                .foregroundStyle(Theme.gray)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                        if rulesFromGroup {
+                            Text("上次跟这 4 位就这么打的")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.gray)
+                        }
                     }
-                    .frame(height: 56)
+                    .padding(.vertical, 10)
+                    .frame(minHeight: 56)
                     .block(radius: 18)
                     .contentShape(Rectangle())
                 }
@@ -101,6 +114,27 @@ struct NewGameView: View {
         }
         .onAppear {
             rules = model.archive.lastRules
+            if model.demoScreen == .houseRules {
+                rules.fanCap = 64
+                rules.yuanPerPoint = 2
+                editingRules = true
+            }
+        }
+        .onChange(of: trimmed) { _, names in
+            guard !rulesTouched else { return }
+            if let remembered = model.archive.lastRules(forPlayers: names) {
+                rules = remembered
+                rulesFromGroup = true
+            } else if rulesFromGroup {
+                rules = model.archive.lastRules
+                rulesFromGroup = false
+            }
+        }
+        .onChange(of: rules) {
+            if editingRules {
+                rulesTouched = true
+                rulesFromGroup = false
+            }
         }
     }
 
@@ -123,55 +157,18 @@ struct NewGameView: View {
     }
 }
 
-/// 规则：1 分几元、带不带花、每圈换不换座。底分 8、8 番起和是国标固定的，只在说明里写。
+/// 规则：家规表单，开局时改。
 private struct RulesSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var rules: GameRules
-    @State private var yuanText = ""
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text("1 分算")
-                            Spacer()
-                            TextField("1", text: $yuanText)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 80)
-                            Text("元").foregroundStyle(Theme.gray)
-                        }
-                        .frame(height: 54)
-                        Hairline(color: Theme.lineSoft)
-                        Toggle(isOn: $rules.includeFlowers) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("带花")
-                                Text("每张花 1 番，不算进 8 番").font(.system(size: 12)).foregroundStyle(Theme.gray)
-                            }
-                        }
-                        .frame(minHeight: 60)
-                        Hairline(color: Theme.lineSoft)
-                        Toggle(isOn: $rules.swapSeatsEachRound) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("每圈换座")
-                                Text("比赛这么打；朋友局一般不换").font(.system(size: 12)).foregroundStyle(Theme.gray)
-                            }
-                        }
-                        .frame(minHeight: 60)
-                    }
-                    .font(.system(size: 16))
-                    .tint(Theme.ink)
-                    .block()
-
-                    Text("国标规则：每人先付 8 分，再付番数；要 8 番才能和。")
-                        .font(.system(size: 13))
-                        .foregroundStyle(Theme.gray)
-                        .padding(.top, 10)
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 8)
+                HouseRulesForm(rules: $rules)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 4)
+                    .padding(.bottom, 24)
             }
             .page()
             .navigationTitle("规则")
@@ -182,13 +179,7 @@ private struct RulesSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium])
-        .onAppear { yuanText = rules.yuanPerPoint.formatted(.number.precision(.fractionLength(0...2)).grouping(.never)) }
-        .onChange(of: yuanText) { _, text in
-            if let value = Double(text.replacingOccurrences(of: ",", with: ".")), value > 0 {
-                rules.yuanPerPoint = value
-            }
-        }
+        .presentationDetents([.large])
     }
 }
 

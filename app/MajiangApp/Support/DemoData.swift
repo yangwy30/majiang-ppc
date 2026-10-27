@@ -10,6 +10,8 @@ enum DemoScreen: String {
     case reviewing = "check-reviewing", dualRead = "check-dual"
     /// 发到群里的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
     case shareSettle = "share-settle", shareLive = "share-live", backup
+    /// 家规：开局页的规则表单 / 牌桌上打到一半改这场的规则（这场带封顶 64、1 分 2 元）。
+    case houseRules = "house-rules", gameRules = "game-rules"
 
     static var current: DemoScreen? {
         #if DEBUG
@@ -46,7 +48,12 @@ enum DemoData {
         last.end()
         archive.upsert(last)
 
-        var active = Game(players: players)
+        var houseRules = GameRules()
+        if DemoScreen.current == .gameRules {
+            houseRules.fanCap = 64
+            houseRules.yuanPerPoint = 2
+        }
+        var active = Game(players: players, rules: houseRules)
         win(&active, winner: 0, discarder: nil, hand: "1112233445566p 7p")
         win(&active, winner: 2, discarder: 1, hand: "123m 456m 789s 234p 55s")
         _ = try? active.recordDraw()

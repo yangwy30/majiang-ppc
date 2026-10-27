@@ -38,6 +38,17 @@ public struct GameArchive: Codable, Hashable, Sendable {
         }
     }
 
+    /// 这 4 个人最近一场用的规则（不管座位顺序）。没一起打过就是 nil。
+    /// 直接从历史牌局里找，不用另存，换手机同步过来也一样。
+    public func lastRules(forPlayers names: [String]) -> GameRules? {
+        let wanted = Set(names)
+        guard wanted.count == 4 else { return nil }
+        return games
+            .filter { Set($0.players.map(\.name)) == wanted }
+            .max { $0.startedAt < $1.startedAt }?
+            .rules
+    }
+
     /// 记住用过的名字，新建牌局时可以一点就加。
     public mutating func remember(_ players: [Player]) {
         for player in players where !player.name.isEmpty {
