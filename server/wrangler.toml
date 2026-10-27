@@ -7,6 +7,9 @@ workers_dev = true
 [vars]
 # 用哪个模型，只能是 Flash / Flash-Lite（代码里会拦 Pro）。改完 `npm run deploy` 生效，App 不用更新。
 MODEL = "gemini-3.8-flash"
+# 思考深度：low 比默认快约 3 倍（每张第一次调用平均 7 秒），33 张里 30 张全对（默认 32 张）。
+# 留空用模型默认；3.8 Flash 不支持 minimal；换成 2.5 系列模型时要留空。
+THINKING_LEVEL = "low"
 # 每台手机每分钟、每天最多几次；同一个 IP 每天；所有人加起来每天（防止账单失控）。按 UTC 日期算。
 DEVICE_PER_MINUTE = "10"
 DEVICE_DAILY_LIMIT = "150"

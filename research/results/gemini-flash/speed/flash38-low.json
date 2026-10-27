@@ -1,0 +1,1073 @@
+[
+ {
+  "id": "g01",
+  "truth_win": true,
+  "first": {
+   "got": "1p 1p 1p 2p 2p 3p 3p 4p 4p 5p 5p 6p 6p 7p",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 15.7,
+  "tok_in": 2691,
+  "tok_out": 1652,
+  "final": {
+   "got": "1p 1p 1p 2p 2p 3p 3p 4p 4p 5p 5p 6p 6p 7p",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 15.7,
+  "rechecked": false
+ },
+ {
+  "id": "g02",
+  "truth_win": false,
+  "first": {
+   "got": "2m 3m 3m 4m 9m 9m 8p 3s 3s 5s 5s 7s 南 发",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.4,
+  "tok_in": 5551,
+  "tok_out": 193,
+  "final": {
+   "got": "2m 3m 3m 4m 9m 9m 8p 3s 3s 5s 5s 7s 南 发",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 6.8,
+  "rechecked": true
+ },
+ {
+  "id": "g03",
+  "truth_win": false,
+  "first": {
+   "got": "3m 4m 4m 5m 5m 6m 2p 3p 5p 6p 7p 9p 北 北",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.4,
+  "tok_in": 5551,
+  "tok_out": 193,
+  "final": {
+   "got": "3m 4m 4m 5m 5m 6m 2p 3p 5p 6p 7p 9p 北 北",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 8.6,
+  "rechecked": true
+ },
+ {
+  "id": "g04",
+  "truth_win": false,
+  "first": {
+   "got": "5m 7m 3p 4p 5p 1s 2s 2s 6s 7s 8s 白 白",
+   "missing": [
+    "3s"
+   ],
+   "extra": [
+    "2s"
+   ],
+   "exact": false,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 10.4,
+  "tok_in": 5547,
+  "tok_out": 1152,
+  "final": {
+   "got": "5m 7m 3p 4p 5p 1s 2s 2s 6s 7s 8s 白 白",
+   "missing": [
+    "3s"
+   ],
+   "extra": [
+    "2s"
+   ],
+   "exact": false,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 13.8,
+  "rechecked": true
+ },
+ {
+  "id": "g05",
+  "truth_win": false,
+  "first": {
+   "got": "1m 1m 2m 2m 3m 6m 6m 7p 8p 9p 4s 5s 7s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.4,
+  "tok_in": 5549,
+  "tok_out": 187,
+  "final": {
+   "got": "1m 1m 2m 2m 3m 6m 6m 7p 8p 9p 4s 5s 7s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 6.8,
+  "rechecked": true
+ },
+ {
+  "id": "g06",
+  "truth_win": false,
+  "first": {
+   "got": "1m 1m 1p 3p 3p 5p 7p 7p 4s 4s 5s 南 南",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 6.0,
+  "tok_in": 5547,
+  "tok_out": 580,
+  "final": {
+   "got": "1m 1m 1p 3p 3p 5p 7p 7p 4s 4s 5s 南 南",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 9.6,
+  "rechecked": true
+ },
+ {
+  "id": "g07",
+  "truth_win": true,
+  "first": {
+   "got": "2m 3m 4m 1p 1p 2p 2p 3p 3p 5p 5p 1s 2s 3s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.3,
+  "tok_in": 2733,
+  "tok_out": 120,
+  "final": {
+   "got": "2m 3m 4m 1p 1p 2p 2p 3p 3p 5p 5p 1s 2s 3s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 3.3,
+  "rechecked": false
+ },
+ {
+  "id": "g08",
+  "truth_win": false,
+  "first": {
+   "got": "1p 2p 3p 2s 4s 7s 8s 9s 北 北 发 发 发",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.5,
+  "tok_in": 5544,
+  "tok_out": 177,
+  "final": {
+   "got": "1p 2p 3p 2s 4s 7s 8s 9s 北 北 发 发 发",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 4.9,
+  "rechecked": true
+ },
+ {
+  "id": "g09",
+  "truth_win": false,
+  "first": {
+   "got": "3m 5m 8m 8m 8p 9p 9p 2s 2s 4s 5s 6s 7s 8s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.1,
+  "tok_in": 5625,
+  "tok_out": 197,
+  "final": {
+   "got": "3m 5m 8m 8m 8p 9p 9p 2s 2s 4s 5s 6s 7s 8s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 5.4,
+  "rechecked": true
+ },
+ {
+  "id": "g10",
+  "truth_win": false,
+  "first": {
+   "got": "3m 4m 6m 7m 2p 3p 5p 6p 5s 5s 7s 8s 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.9,
+  "tok_in": 5565,
+  "tok_out": 193,
+  "final": {
+   "got": "3m 4m 6m 7m 2p 3p 5p 6p 5s 5s 7s 8s 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 5.1,
+  "rechecked": true
+ },
+ {
+  "id": "w01",
+  "truth_win": true,
+  "first": {
+   "got": "1m 9m 1p 9p 1s 9s 东 南 西 北 中 发 白",
+   "missing": [
+    "西"
+   ],
+   "extra": [],
+   "exact": false,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 9.9,
+  "tok_in": 5542,
+  "tok_out": 173,
+  "final": {
+   "got": "1m 9m 1p 9p 1s 9s 东 南 西 北 中 发 白",
+   "missing": [
+    "西"
+   ],
+   "extra": [],
+   "exact": false,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 12.4,
+  "rechecked": true
+ },
+ {
+  "id": "w02",
+  "truth_win": false,
+  "first": {
+   "got": "1m 2m 3m 4m 5m 5m 5m 6m 6m 7m 7m 8m 9m",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.6,
+  "tok_in": 5549,
+  "tok_out": 187,
+  "final": {
+   "got": "1m 2m 3m 4m 5m 5m 5m 6m 6m 7m 7m 8m 9m",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 5.3,
+  "rechecked": true
+ },
+ {
+  "id": "w03",
+  "truth_win": true,
+  "first": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含1杠)",
+   "melds": [
+    {
+     "kind": "pung",
+     "tiles": [
+      "5s",
+      "5s",
+      "5s"
+     ]
+    },
+    {
+     "kind": "concealed_kong",
+     "tiles": [
+      "东",
+      "东",
+      "东",
+      "东"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "9p",
+      "9p",
+      "9p"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "1m",
+      "1m",
+      "1m"
+     ]
+    }
+   ],
+   "flowers": 0
+  },
+  "t_first": 33.9,
+  "tok_in": 2693,
+  "tok_out": 3690,
+  "final": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含1杠)",
+   "melds": [
+    {
+     "kind": "pung",
+     "tiles": [
+      "5s",
+      "5s",
+      "5s"
+     ]
+    },
+    {
+     "kind": "concealed_kong",
+     "tiles": [
+      "东",
+      "东",
+      "东",
+      "东"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "9p",
+      "9p",
+      "9p"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "1m",
+      "1m",
+      "1m"
+     ]
+    }
+   ],
+   "flowers": 0
+  },
+  "t_total": 33.9,
+  "rechecked": false
+ },
+ {
+  "id": "w04",
+  "truth_win": true,
+  "first": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含1杠)",
+   "melds": [
+    {
+     "kind": "pung",
+     "tiles": [
+      "5s",
+      "5s",
+      "5s"
+     ]
+    },
+    {
+     "kind": "kong",
+     "tiles": [
+      "东",
+      "东",
+      "东",
+      "东"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "9p",
+      "9p",
+      "9p"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "1m",
+      "1m",
+      "1m"
+     ]
+    }
+   ],
+   "flowers": 0
+  },
+  "t_first": 17.7,
+  "tok_in": 2719,
+  "tok_out": 1786,
+  "final": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含1杠)",
+   "melds": [
+    {
+     "kind": "pung",
+     "tiles": [
+      "5s",
+      "5s",
+      "5s"
+     ]
+    },
+    {
+     "kind": "kong",
+     "tiles": [
+      "东",
+      "东",
+      "东",
+      "东"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "9p",
+      "9p",
+      "9p"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "1m",
+      "1m",
+      "1m"
+     ]
+    }
+   ],
+   "flowers": 0
+  },
+  "t_total": 17.7,
+  "rechecked": false
+ },
+ {
+  "id": "w05",
+  "truth_win": true,
+  "first": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含1杠)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 35.5,
+  "tok_in": 2707,
+  "tok_out": 3988,
+  "final": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含1杠)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 35.5,
+  "rechecked": false
+ },
+ {
+  "id": "w06",
+  "truth_win": true,
+  "first": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.8,
+  "tok_in": 2693,
+  "tok_out": 117,
+  "final": {
+   "got": "1m 1m 1m 4p 4p 9p 9p 9p 5s 5s 5s 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.8,
+  "rechecked": false
+ },
+ {
+  "id": "w07",
+  "truth_win": true,
+  "first": {
+   "got": "1m 9m 1p 9p 1s 9s 东 南 西 北 中 发 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "十三幺",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 7.7,
+  "tok_in": 2691,
+  "tok_out": 841,
+  "final": {
+   "got": "1m 9m 1p 9p 1s 9s 东 南 西 北 中 发 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "十三幺",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 7.7,
+  "rechecked": false
+ },
+ {
+  "id": "w08",
+  "truth_win": true,
+  "first": {
+   "got": "4m 4m 4m 2p 2p 2p 4p 4p 4p 2s 2s 6s 6s 6s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.3,
+  "tok_in": 2712,
+  "tok_out": 120,
+  "final": {
+   "got": "4m 4m 4m 2p 2p 2p 4p 4p 4p 2s 2s 6s 6s 6s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 3.3,
+  "rechecked": false
+ },
+ {
+  "id": "w09",
+  "truth_win": true,
+  "first": {
+   "got": "1s 1s 1s 2s 2s 2s 3s 3s 3s 8s 8s 8s",
+   "missing": [
+    "4s",
+    "4s"
+   ],
+   "extra": [],
+   "exact": false,
+   "rule": null,
+   "melds": [
+    {
+     "kind": "pung",
+     "tiles": [
+      "2s",
+      "2s",
+      "2s"
+     ]
+    }
+   ],
+   "flowers": 3
+  },
+  "t_first": 3.0,
+  "tok_in": 5626,
+  "tok_out": 253,
+  "final": {
+   "got": "1s 1s 1s 2s 2s 2s 3s 3s 3s 4s 4s 8s 8s 8s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [
+    {
+     "kind": "pung",
+     "tiles": [
+      "2s",
+      "2s",
+      "2s"
+     ]
+    },
+    {
+     "kind": "pung",
+     "tiles": [
+      "4s",
+      "4s"
+     ]
+    }
+   ],
+   "flowers": 3
+  },
+  "t_total": 6.0,
+  "rechecked": true
+ },
+ {
+  "id": "w10",
+  "truth_win": true,
+  "first": {
+   "got": "1p 2p 2p 2p 3p 4p 5p 6p 6p 7p 7p 8p 8p 9p",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 13.5,
+  "tok_in": 2691,
+  "tok_out": 1518,
+  "final": {
+   "got": "1p 2p 2p 2p 3p 4p 5p 6p 6p 7p 7p 8p 8p 9p",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 13.5,
+  "rechecked": false
+ },
+ {
+  "id": "w11",
+  "truth_win": true,
+  "first": {
+   "got": "8m 8m 4p 5p 6p 中 中 中 发 发 发 白 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.6,
+  "tok_in": 2683,
+  "tok_out": 111,
+  "final": {
+   "got": "8m 8m 4p 5p 6p 中 中 中 发 发 发 白 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.6,
+  "rechecked": false
+ },
+ {
+  "id": "w12",
+  "truth_win": true,
+  "first": {
+   "got": "2m 2m 东 东 东 南 南 南 西 西 西 北 北 北",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.8,
+  "tok_in": 2683,
+  "tok_out": 197,
+  "final": {
+   "got": "2m 2m 东 东 东 南 南 南 西 西 西 北 北 北",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.8,
+  "rechecked": false
+ },
+ {
+  "id": "w13",
+  "truth_win": true,
+  "first": {
+   "got": "9m 9m 9m 5s 5s 5s 西 西 西 中 中 中 发 发",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.9,
+  "tok_in": 2672,
+  "tok_out": 112,
+  "final": {
+   "got": "9m 9m 9m 5s 5s 5s 西 西 西 中 中 中 发 发",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.9,
+  "rechecked": false
+ },
+ {
+  "id": "w14",
+  "truth_win": true,
+  "first": {
+   "got": "9m 9m 9m 1p 1p 1p 1s 1s 1s 东 东 中 中 中",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.6,
+  "tok_in": 2719,
+  "tok_out": 115,
+  "final": {
+   "got": "9m 9m 9m 1p 1p 1p 1s 1s 1s 东 东 中 中 中",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.6,
+  "rechecked": false
+ },
+ {
+  "id": "w15",
+  "truth_win": true,
+  "first": {
+   "got": "1s 2s 3s 5s 5s 5s 6s 7s 8s 9s 9s 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 5.5,
+  "tok_in": 2719,
+  "tok_out": 531,
+  "final": {
+   "got": "1s 2s 3s 5s 5s 5s 6s 7s 8s 9s 9s 东 东 东",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 5.5,
+  "rechecked": false
+ },
+ {
+  "id": "w16",
+  "truth_win": true,
+  "first": {
+   "got": "9m 9m 9m 1p 1p 1p 9p 9p 9p 1s 1s 1s 9s 9s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 4.3,
+  "tok_in": 2731,
+  "tok_out": 363,
+  "final": {
+   "got": "9m 9m 9m 1p 1p 1p 9p 9p 9p 1s 1s 1s 9s 9s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 4.3,
+  "rechecked": false
+ },
+ {
+  "id": "w17",
+  "truth_win": true,
+  "first": {
+   "got": "1s 2s 3s 5s 5s 5s 6s 6s 6s 6s 7s 8s 9s 9s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.8,
+  "tok_in": 2695,
+  "tok_out": 120,
+  "final": {
+   "got": "1s 2s 3s 5s 5s 5s 6s 6s 6s 6s 7s 8s 9s 9s",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.8,
+  "rechecked": false
+ },
+ {
+  "id": "w18",
+  "truth_win": true,
+  "first": {
+   "got": "8m 8m 6p 6p 6p 6p 6s 6s 6s 6s 西 西 西 西 中 中 中 中",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含4杠)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.2,
+  "tok_in": 2677,
+  "tok_out": 136,
+  "final": {
+   "got": "8m 8m 6p 6p 6p 6p 6s 6s 6s 6s 西 西 西 西 中 中 中 中",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(含4杠)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 3.2,
+  "rechecked": false
+ },
+ {
+  "id": "w19",
+  "truth_win": true,
+  "first": {
+   "got": "2m 3m 4m 5s 5s 5s 中 中 中 发 发 白 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 3.8,
+  "tok_in": 2695,
+  "tok_out": 249,
+  "final": {
+   "got": "2m 3m 4m 5s 5s 5s 中 中 中 发 发 白 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 3.8,
+  "rechecked": false
+ },
+ {
+  "id": "w20",
+  "truth_win": true,
+  "first": {
+   "got": "9m 9m 9m 东 东 南 南 南 西 西 西 北 北 北",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 4.1,
+  "tok_in": 2731,
+  "tok_out": 364,
+  "final": {
+   "got": "9m 9m 9m 东 东 南 南 南 西 西 西 北 北 北",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 4.1,
+  "rechecked": false
+ },
+ {
+  "id": "w21",
+  "truth_win": true,
+  "first": {
+   "got": "8m 8m 8m 1p 2p 3p 4p 5p 6p 7p 8p 9p 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 6.5,
+  "tok_in": 2661,
+  "tok_out": 611,
+  "final": {
+   "got": "8m 8m 8m 1p 2p 3p 4p 5p 6p 7p 8p 9p 白 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 6.5,
+  "rechecked": false
+ },
+ {
+  "id": "w23",
+  "truth_win": false,
+  "first": {
+   "got": "1p 1p 1p 2p 3p 4p 5p 6p 7p 8p 9p 9p 9p 9p",
+   "missing": [],
+   "extra": [
+    "9p"
+   ],
+   "exact": false,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 2.6,
+  "tok_in": 2706,
+  "tok_out": 120,
+  "final": {
+   "got": "1p 1p 1p 2p 3p 4p 5p 6p 7p 8p 9p 9p 9p 9p",
+   "missing": [],
+   "extra": [
+    "9p"
+   ],
+   "exact": false,
+   "rule": "标准型(4组+1对)",
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 2.6,
+  "rechecked": false
+ },
+ {
+  "id": "w24",
+  "truth_win": false,
+  "first": {
+   "got": "1m 9m 1p 9p 1s 9s 东 南 西 北 中 发 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_first": 6.7,
+  "tok_in": 5478,
+  "tok_out": 799,
+  "final": {
+   "got": "1m 9m 1p 9p 1s 9s 东 南 西 北 中 发 白",
+   "missing": [],
+   "extra": [],
+   "exact": true,
+   "rule": null,
+   "melds": [],
+   "flowers": 0
+  },
+  "t_total": 8.9,
+  "rechecked": true
+ }
+]

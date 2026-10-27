@@ -7,6 +7,7 @@ import { isAllowedModel } from "./models.js";
 
 const DEVICE_RE = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 const BODY_KEYS = new Set(["contents", "generationConfig"]);
+const THINKING_LEVELS = new Set(["minimal", "low", "medium", "high"]);
 
 
 /// 出错时的回答。majiang: true 让 App 知道这是中转站自己的话，直接显示 message。
@@ -52,6 +53,16 @@ export default {
       return fail(400, "请求格式不对");
     }
 
+    // 思考深度也由服务器决定，覆盖 App 发来的。研究里 3.8 Flash 调成 low 快了约 3 倍，准确率只少一点。
+    // 设成空就用模型默认；换成 2.5 系列模型时要设成空（它们不认 thinkingLevel）。
+    let forward = body;
+    const thinking = env.THINKING_LEVEL ?? "";
+    if (thinking) {
+      if (!THINKING_LEVELS.has(thinking)) return fail(500, "服务器配置的思考深度不对");
+      json.generationConfig = { ...json.generationConfig, thinkingConfig: { thinkingLevel: thinking } };
+      forward = JSON.stringify(json);
+    }
+
     // 计数和转发都在一个 Durable Object 里做：计数不会被并发请求挤乱，
     // 而且它放在北美（LOCATION_HINT），从那里调 Google 不会碰上「所在地区不支持」。
     const stub = env.RELAY.get(env.RELAY.idFromName("relay"), { locationHint: env.LOCATION_HINT || "wnam" });
@@ -63,7 +74,7 @@ export default {
         "X-Majiang-IP": request.headers.get("CF-Connecting-IP") ?? "unknown",
         "X-Majiang-Model": model,
       },
-      body,
+      body: forward,
     });
   },
 };

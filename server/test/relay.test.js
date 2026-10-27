@@ -27,7 +27,7 @@ before(async () => {
   const vars = {
     GEMINI_BASE: `http://127.0.0.1:${fake.address().port}`,
     GEMINI_API_KEY: "fake-key",
-    DEVICE_PER_MINUTE: "3",
+    DEVICE_PER_MINUTE: "4",
     DEVICE_DAILY_LIMIT: "5",
   };
   worker = spawn("npx", ["wrangler", "dev", "--port", String(WORKER_PORT), "--persist-to", `.wrangler/test-${WORKER_PORT}`,
@@ -72,14 +72,25 @@ test("带上 Key 转发给服务器配置的模型，App 指定的模型不算",
   const last = received.at(-1);
   assert.equal(last.url, "/models/gemini-3.8-flash:generateContent");
   assert.equal(last.key, "fake-key");
-  assert.equal(last.body, BODY);
+  const sent = JSON.parse(last.body);
+  assert.deepEqual(sent.contents, JSON.parse(BODY).contents);
+  assert.deepEqual(sent.generationConfig.thinkingConfig, { thinkingLevel: "low" });
+});
+
+test("思考深度用服务器的设置，App 发来的会被覆盖，其他生成参数保留", async () => {
+  const body = JSON.stringify({ ...JSON.parse(BODY),
+    generationConfig: { responseMimeType: "application/json", thinkingConfig: { thinkingLevel: "high" } } });
+  assert.equal((await post({}, body)).status, 200);
+  const sent = JSON.parse(received.at(-1).body);
+  assert.equal(sent.generationConfig.responseMimeType, "application/json");
+  assert.deepEqual(sent.generationConfig.thinkingConfig, { thinkingLevel: "low" });
 });
 
 test("Google 出错不扣每天的次数，每分钟限额生效", async () => {
   nextStatus = 500;
   assert.equal((await post()).status, 500);
   nextStatus = 200;
-  // 每分钟上限 3：上一个测试 1 次 + 500 那次（每天的退回了，每分钟的不退）+ 这一次
+  // 每分钟上限 4：前面两个测试 2 次 + 500 那次（每天的退回了，每分钟的不退）+ 这一次
   assert.equal((await post()).status, 200);
   const blocked = await post();
   assert.equal(blocked.status, 429);
