@@ -82,6 +82,7 @@ swift test --filter OnDeviceEvaluationTests
 - **iCloud 同步**（`Support/CloudSync.swift`）：CloudKit 私有库 `iCloud.com.yangwy30.majiang`，自定义 zone `Majiang`，每场牌局一条 `Game` 记录（字段 `json` 是那场的 JSON），常用牌友和上次规则一条 `Meta`。打开、回到前台、保存后 2 秒同步：先收再传。该传哪些、两边都改过时留哪份由 MajiangKit 的 `SyncBook` 决定（有测试）。
 - **导出 / 导入**：首页「备份与换手机」，导出全部牌局为 JSON 文件，导入时用 `GameArchive.merge` 只加不删。
 - 真机要用开发者 Team 93RUQ2A6KX 签名，iCloud 容器要在开发者账号里存在（第一次真机构建时 Xcode 自动注册）。
+- **记录类型要先发布到生产环境**：从 Xcode 装的开发版用 CloudKit 开发环境，第一次保存时会自动建 `Game`、`Meta`；TestFlight 和 App Store 版用生产环境，生产环境不会自动建，没发布时会报 “Cannot create new type Game in production schema”。表结构存在 `CloudKit/schema.ckdb`。改了记录类型或字段后：先确认开发环境里有（用开发版同步一次，或 `xcrun cktool import-schema --team-id 93RUQ2A6KX --container-id iCloud.com.yangwy30.majiang --environment development --file app/CloudKit/schema.ckdb`，要先 `xcrun cktool save-token`），再到 [CloudKit Console](https://icloud.developer.apple.com/) → 这个容器 → Deploy Schema Changes 发布到生产。
 
 ## 还没做 / 待验证
 
