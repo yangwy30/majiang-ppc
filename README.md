@@ -59,12 +59,12 @@ data/       标准答案、照片来源表、番种测试用例，见 data/READM
 - [开源数据集调研](research/datasets.md)
 - [测试照片集](research/test-photos.md)
 - [Gemini 识牌测试与改进方法对比](research/gemini-recognition.md)
-- [竞品离线认牌模型评测 + 端侧/Gemini 双读模拟](research/competitor-offline-model.md)
+- [开源端侧认牌模型评测 + 端侧/Gemini 双读模拟](research/on-device-model.md)
 - [国标规则与算番引擎](research/guobiao-rules.md)
 
 ## 不在仓库里的东西
 
-- **端侧模型权重**：现在用的是竞品 [AR麻将助手](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 YOLOv8n 模型，没有许可证，只放在本地、只是临时的。上架前换成自己训练的模型（Jon Chan Roboflow 数据集，CC BY 4.0），接口不变。
+- **端侧模型权重**：用的是开源项目 [AR麻将助手](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 YOLOv8n 认牌模型，在本地下载、转换后放进 App，见 [app/README.md](app/README.md)。
 - **测试照片和牌面参考图**：没有可再分发的许可证，存放位置见 [data/README.md](data/README.md)。
 - **API Key**：开发版存手机钥匙串，正式版只在中转站的 Worker 密钥里。
 

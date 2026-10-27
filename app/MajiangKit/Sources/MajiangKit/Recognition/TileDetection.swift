@@ -63,7 +63,7 @@ public struct TileDetection: Hashable, Sendable {
 
 /// 模型的类别名 → 牌。模型自带类别名（Core ML 元数据里的 `names`），换模型时不用改代码。
 public enum TileClassNames {
-    /// Roboflow 上 Jon Chan 数据集的 42 类，竞品模型（AR麻将助手）就是按这个顺序训练的。
+    /// Roboflow 上 Jon Chan 数据集的 42 类，端侧模型（AR麻将助手）就是按这个顺序训练的。
     /// B 条、C 万、D 饼，F/S 花牌；EW SW WW NW 东南西北，RD GD WD 中发白。
     public static let jonChan: [String] = """
         1B 1C 1D 1F 1S 2B 2C 2D 2F 2S 3B 3C 3D 3F 3S 4B 4C 4D 4F 4S 5B 5C 5D 6B 6C 6D 7B 7C 7D \

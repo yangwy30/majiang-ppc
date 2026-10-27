@@ -1,4 +1,4 @@
-# 测试照片、参考牌面图、竞品模型权重没有可用的许可证，不进仓库（见 data/README.md）
+# 测试照片、参考牌面图没有可再分发的许可证，模型权重在本地下载，都不进仓库（见 data/README.md）
 /data/**/*.jpg
 /data/**/*.jpeg
 /data/**/*.png
@@ -6,7 +6,7 @@
 /tools/**/*.jpeg
 /tools/**/*.png
 *.onnx
-# 端侧认牌模型（竞品权重转的 Core ML，同样没有许可证）只放在本地，见 app/README.md
+# 端侧认牌模型（开源权重转的 Core ML）只放在本地，见 app/README.md
 *.mlpackage
 *.mlmodel
 *.mlmodelc

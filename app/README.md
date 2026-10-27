@@ -38,9 +38,9 @@ app/
 - `DualReadRecognizer`：端侧和 Gemini 同时跑。端侧几百毫秒先出结果，App 马上进核对页（牌面先锁住，可以先选自摸/点炮）；Gemini 复核完按顺序对齐合并：读得一样的直接用，同一位置不一样的给两个候选，只有一边读到的问「照片里有这张吗」，副露以 Gemini 为准。`RecognitionResolver` 在候选里挑出唯一能和的组合，标成「选这个能和」。Gemini 失败时留着端侧结果并提示。
 - `MockRecognizer`：演示数据。
 
-### 端侧模型（原型阶段，只放本地）
+### 端侧模型（只放本地）
 
-现在用的是竞品 [AR麻将助手](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 YOLOv8n 模型（42 类，研究见 [competitor-offline-model](../research/competitor-offline-model.md)）。**它没有许可证，训练框架 Ultralytics 是 AGPL，所以模型文件不进仓库、不能上架**；`.gitignore` 已经挡住了 `*.onnx`、`*.mlpackage` 和 `MajiangApp/Resources/Models/`。上架前换成我们自己训练的模型（Jon Chan Roboflow 数据集，CC BY 4.0，非 AGPL 的检测框架），只要输入输出照下面的约定，代码不用改。
+用的是开源项目 [AR麻将助手](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 YOLOv8n 认牌模型（42 类，研究见 [on-device-model](../research/on-device-model.md)）。模型文件不进仓库，在本地下载、转换后放进 App；`.gitignore` 已经挡住了 `*.onnx`、`*.mlpackage` 和 `MajiangApp/Resources/Models/`。换别的模型时只要输入输出照下面的约定，代码不用改。
 
 放进 App：
 
@@ -51,7 +51,7 @@ curl -L -o /tmp/weights.onnx https://github.com/LYiHub/AR-Mahjong-Assistant-prev
 python3 -m venv /tmp/coreml && /tmp/coreml/bin/pip install torch onnx onnx2torch coremltools onnxruntime numpy
 #    Intel 版 Python 3.9 只装得上 torch 2.2，要再装 'numpy<2'，否则报 Numpy is not available
 mkdir -p app/MajiangApp/Resources/Models
-YOLOV8_ONNX=/tmp/weights.onnx /tmp/coreml/bin/python tools/competitor-model/convert_coreml.py \
+YOLOV8_ONNX=/tmp/weights.onnx /tmp/coreml/bin/python tools/on-device-model/convert_coreml.py \
     app/MajiangApp/Resources/Models/MahjongTileDetector.mlpackage
 ```
 
@@ -88,5 +88,5 @@ swift test --filter OnDeviceEvaluationTests
 - iCloud 同步还没在真机上跑过（模拟器没登录 iCloud）。
 
 - 给 Gemini 的参考图改成了 App 自己画的扁平牌面（研究用的参考图没有许可证，不能打包），提示词也改成了分开读立牌和副露。这两处对准确率的影响要用测试照片重新跑一次。
-- 端侧模型是竞品的，上架前要换成自己训练的（见上）。端侧分不出吃碰杠，只有 Gemini 一路时副露要手动加。
+- 端侧分不出吃碰杠，只有 Gemini 一路时副露要手动加。
 - 拍照页的实时检查（牌数、光线、对焦）还没做，取景器里只有一句提示。

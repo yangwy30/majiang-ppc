@@ -1,16 +1,15 @@
-"""Convert the competitor YOLOv8 tile detector (ONNX) to Core ML for the iOS app's on-device recognizer.
+"""Convert the open-source YOLOv8 tile detector (ONNX) to Core ML for the iOS app's on-device recognizer.
 
-Prototype only: the weights have no license (and were trained with AGPL Ultralytics), so neither the
-ONNX file nor the converted model may be committed or shipped. Run this locally and drop the output into
-app/MajiangApp/Resources/Models/ (gitignored). See app/README.md.
+The weights come from LYiHub/AR-Mahjong-Assistant-preview and are not kept in the repo. Run this locally and
+drop the output into app/MajiangApp/Resources/Models/ (gitignored). See app/README.md.
 
     pip install torch onnx onnx2torch coremltools onnxruntime numpy
-    YOLOV8_ONNX=path/to/weights.onnx python3 tools/competitor-model/convert_coreml.py \
+    YOLOV8_ONNX=path/to/weights.onnx python3 tools/on-device-model/convert_coreml.py \
         app/MajiangApp/Resources/Models/MahjongTileDetector.mlpackage
 
 The model keeps its raw output (1 x 46 x 8400: 4 box values + 42 class scores per anchor); the app does
-letterboxing, decoding and NMS itself (MajiangKit/Recognition/TileDetection.swift), so a future model of our
-own only has to keep the same input/output convention and list its class names in the "names" metadata.
+letterboxing, decoding and NMS itself (MajiangKit/Recognition/TileDetection.swift), so any other model only
+has to keep the same input/output convention and list its class names in the "names" metadata.
 """
 import os
 import sys
@@ -52,9 +51,9 @@ def main():
         minimum_deployment_target=ct.target.iOS17,
         compute_precision=ct.precision.FLOAT16,
     )
-    mlmodel.short_description = "Mahjong tile detector (YOLOv8n, 42 classes). Prototype only, not licensed for release."
+    mlmodel.short_description = "Mahjong tile detector (YOLOv8n, 42 classes)."
     mlmodel.user_defined_metadata["names"] = ",".join(NAMES)
-    mlmodel.user_defined_metadata["source"] = "LYiHub/AR-Mahjong-Assistant-preview weights.onnx (no license)"
+    mlmodel.user_defined_metadata["source"] = "LYiHub/AR-Mahjong-Assistant-preview weights.onnx"
     mlmodel.save(out)
     print("saved", out)
 
