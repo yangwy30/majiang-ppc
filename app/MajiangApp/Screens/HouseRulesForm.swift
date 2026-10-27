@@ -1,7 +1,7 @@
 import SwiftUI
 import MajiangKit
 
-/// 家规：一行一项，左边名字和一句白话，右边大数字。跟国标一样的值是浅灰，改过的是墨色，
+/// 家规：一行一项，左边名字和一句白话，右边大数字。跟国标一样的值是灰色细体，改过的是墨色，
 /// 不用别的标记就看得出改了哪几项。点一行从底下弹出几个常用值来选。
 /// 开局页和牌桌上「这场的规则」都用它。
 struct HouseRulesForm: View {
@@ -133,7 +133,8 @@ private struct RuleRow: View {
 
     var body: some View {
         let value = item.value(rules)
-        let color = item.isStandard(rules) ? Theme.faint : Theme.ink
+        // 跟国标一样：灰色、更细；改过：墨色。灰色要在牌桌灯下也看得清，不用更淡的 faint
+        let standard = item.isStandard(rules)
         Button(action: action) {
             VStack(spacing: 0) {
                 HStack(spacing: 12) {
@@ -148,13 +149,14 @@ private struct RuleRow: View {
                     Spacer(minLength: 8)
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(value.text)
-                            .font(large ? .system(size: value.isNumber ? 34 : 20, weight: .thin).monospacedDigit()
-                                  : .system(size: 16))
+                            .font(large ? .system(size: value.isNumber ? 34 : 20, weight: standard ? .thin : .light)
+                                    .monospacedDigit()
+                                  : .system(size: 16, weight: standard ? .regular : .medium))
                         if !value.unit.isEmpty {
                             Text(value.unit).font(.system(size: 14))
                         }
                     }
-                    .foregroundStyle(color)
+                    .foregroundStyle(standard ? Theme.gray : Theme.ink)
                 }
                 .frame(minHeight: large ? 84 : 56)
                 Hairline()
@@ -245,7 +247,7 @@ private struct RulePicker: View {
     }
 
     private func height(_ count: Int) -> CGFloat {
-        CGFloat(130 + (count + (item == .rate ? 1 : 0)) * 53 + 30)
+        CGFloat(110 + (count + (item == .rate ? 1 : 0)) * 53)
     }
 }
 
