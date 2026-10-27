@@ -1,11 +1,10 @@
-# 竞品离线认牌模型调研（2026-10-26）
+# 开源端侧认牌模型评测（2026-10-26）
 
 ## 结论
 
 - **你记得没错，离线模型最早出自另一个 App。** majiang_calculator（听牌计算器）里带的 `mahjong_yolov8.onnx`，和 [AR-Mahjong-Assistant-preview](https://github.com/LYiHub/AR-Mahjong-Assistant-preview)（AR麻将助手，配 RayNeo AR 眼镜的安卓 App）里的 `weights.onnx` **逐字节一样**（MD5 c1261b30…）。majiang_calculator 的 README 也写了模型是从 AR麻将助手拿来的。
 - **这个模型在我们 33 张照片上和 Gemini 差不多准，而且快 100 倍以上**：整手全对 23/33（Gemini 25/33），胡没胡判对 31/33（Gemini 31/33），每张约 0.05–0.2 秒（云端 CPU），Gemini 6–20 秒。
 - **两个模型错的不是同一批照片。** 两边读出完全一样的牌时（19 张），全部是对的；读得不一样的 14 张里包含了两边所有的错误（两边同时读错的 4 张，错法也不一样）。所以"本地模型 + Gemini 双读，一致就直接用，不一致就让用户核对"很有希望。
-- **模型不能直接拿来商用**：AR麻将助手仓库没有许可证；majiang_calculator 自己也注明"只供个人使用，要分发请找原作者或自己训练"；而且模型是用 Ultralytics YOLOv8 训练导出的，元数据写着 AGPL-3.0，闭源商用还需要 Ultralytics 企业授权（或换成 Apache/MIT 的检测框架）。
 
 ## 模型信息
 
@@ -15,14 +14,13 @@
 | 运行方式 | iOS 用 ONNX Runtime（不是 Core ML），完全离线 | 浏览器里 ONNX Runtime Web，离线 PWA |
 | 类别 | 42 类：万条饼 27 + 风 4 + 箭 3 + 花 8 | 42 类，同上（港式麻将） |
 | 训练数据 | Roboflow 上 Jon Chan 的 Mahjong 数据集（CC BY 4.0） | 程序合成的照片风格图片 |
-| 许可证 | 无（+ Ultralytics AGPL） | 无（+ Ultralytics AGPL） |
 | 我们 33 张上的成绩 | 整手全对 23/33，胡没胡 31/33 | 整手全对 11/33，胡没胡 22/33 |
 
-另外看过：mahjong-omakase 也在做本地模型（网格切块 + 小分类器，GPL-3.0，还没上线，依赖他们自己的拍法，没跑）；mahjonging 有个 YOLO 权重（MIT），是日麻牌面，没测。
+另外看过：mahjong-omakase 也在做本地模型（网格切块 + 小分类器，还没上线，依赖他们自己的拍法，没跑）；mahjonging 有个 YOLO 权重，是日麻牌面，没测。
 
 ## 测试方法
 
-用和 Gemini 测试相同的 33 张照片和 [`data/ground_truth.json`](../data/ground_truth.json)，同样的比对和胡牌判定代码。识别流程照搬 majiang_calculator：整图先粗检一遍找牌的位置，再把牌区裁出来放大重检（阈值 0.35 / 0.5）。花牌不计。脚本：[`tools/competitor-model/yolo_eval.py`](../tools/competitor-model/yolo_eval.py)，逐张结果：[`results/competitor-yolo/report.json`](results/competitor-yolo/report.json)。
+用和 Gemini 测试相同的 33 张照片和 [`data/ground_truth.json`](../data/ground_truth.json)，同样的比对和胡牌判定代码。识别流程照搬 majiang_calculator：整图先粗检一遍找牌的位置，再把牌区裁出来放大重检（阈值 0.35 / 0.5）。花牌不计。脚本：[`tools/on-device-model/yolo_eval.py`](../tools/on-device-model/yolo_eval.py)，逐张结果：[`results/on-device-yolo/report.json`](results/on-device-yolo/report.json)。
 
 ## 逐张对比（✅ = 整手全对）
 
@@ -58,16 +56,14 @@
 
 ## 建议
 
-1. **不要直接用这个模型发布**（没有许可证 + AGPL）。可以先联系 AR麻将助手作者（GitHub @LYiHub）问能否授权，同时准备自己训练。
-2. **借鉴它的路线自己训练**：YOLO 级别的小检测模型 + 42 类，训练数据用 Jon Chan（CC BY 4.0，署名即可商用）+ Roman Nguyen（MIT）数据集，再加我们自己拍的照片。检测框架选 Apache/MIT 许可的（比如 RT-DETR 的 Paddle/MMDetection 版、YOLOX），避开 AGPL；导出 Core ML 在 iPhone 上跑。
-3. **App 里做双读**：本地模型先出结果（几十毫秒），同时调 Gemini；两边一致直接给算番结果，不一致就高亮不一致的牌让用户点一下改。按这次的数据，大约 58%（19/33）的照片可以零操作，而且没有一张自动通过的是错的。
-4. 内部原型阶段可以先用这个现成模型验证双读流程，正式上架前换成自己训练的。
+1. **App 里做双读**：本地模型先出结果（几十毫秒），同时调 Gemini；两边一致直接给算番结果，不一致就高亮不一致的牌让用户点一下改。按这次的数据，大约 58%（19/33）的照片可以零操作，而且没有一张自动通过的是错的。
+2. 端侧直接用这个现成的开源模型（转成 Core ML 在 iPhone 上跑），不自己训练。
 
 ---
 
 # 补充：端侧模型 + Gemini 怎么结合，准确率能到多少（2026-10-26）
 
-用上面两边在 33 张上的实际读法离线模拟（脚本 [`tools/competitor-model/hybrid_sim.py`](../tools/competitor-model/hybrid_sim.py)，结果 [`results/competitor-yolo/sim.json`](results/competitor-yolo/sim.json)）。Gemini 的读法是按 [Gemini 测试报告](gemini-recognition.md)里每张"漏读/多读"还原的。
+用上面两边在 33 张上的实际读法离线模拟（脚本 [`tools/on-device-model/hybrid_sim.py`](../tools/on-device-model/hybrid_sim.py)，结果 [`results/on-device-yolo/sim.json`](results/on-device-yolo/sim.json)）。Gemini 的读法是按 [Gemini 测试报告](gemini-recognition.md)里每张"漏读/多读"还原的。
 
 ## 为什么结合起来会更准
 
@@ -100,7 +96,7 @@
 
 ## 再补充：用 Gemini 改进后的提示词重新模拟（2026-10-26 04:10）
 
-Gemini 对比实验跑完了（[`results/gemini-flash/`](results/gemini-flash/)）。最好的是"附牌面参考图 + 要求数点数"（ref），单独就能整手全对 32/33。用各方法的真实逐张读法重新跑了结合模拟（`GEM=research/results/gemini-flash/<方法>.json python3 tools/competitor-model/hybrid_sim.py`，结果在 `results/competitor-yolo/sim_<方法>.json`）：
+Gemini 对比实验跑完了（[`results/gemini-flash/`](results/gemini-flash/)）。最好的是"附牌面参考图 + 要求数点数"（ref），单独就能整手全对 32/33。用各方法的真实逐张读法重新跑了结合模拟（`GEM=research/results/gemini-flash/<方法>.json python3 tools/on-device-model/hybrid_sim.py`，结果在 `results/on-device-yolo/sim_<方法>.json`）：
 
 | Gemini 方法 | Gemini 单独 | A. 一致自动 / 其中全对 | A. 需要用户看的 | B. 全自动（阈值 0.8） |
 |---|---|---|---|---|

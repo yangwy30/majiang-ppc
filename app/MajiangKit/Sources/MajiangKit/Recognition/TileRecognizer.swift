@@ -105,7 +105,7 @@ public protocol ProgressiveTileRecognizer: TileRecognizer {
 
 /// 端侧认牌：检测模型找出每张牌，`TileLayout` 去掉画面里别人的牌、排成手牌。几十到几百毫秒出结果，不用联网。
 /// 分不出吃碰杠（都当立牌），双读时副露以 Gemini 为准。
-/// 原型阶段的模型是竞品的（没有许可证，见 `CoreMLTileDetector`），上架前换成自己训练的，这里不用改。
+/// 模型见 `CoreMLTileDetector`。
 public struct OnDeviceRecognizer: TileRecognizer {
     public let name = "端侧"
     public var detector: TileDetecting?

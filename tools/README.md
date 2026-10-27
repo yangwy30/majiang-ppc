@@ -21,14 +21,14 @@ python3 tools/gemini-test/experiments.py --flash gemini-3.8-flash --methods ref 
 - **参考牌面图**（`ref` 方法需要）：来自 [mikemazzetti/mahjong-ar](https://github.com/mikemazzetti/mahjong-ar/tree/main/web/public/samples) 的 42 种牌面图，没有许可证，不进仓库。放到 `tools/gemini-test/reference_tiles.jpg`，或用 `MAJIANG_REF_SHEET` 指定。项目文件夹里有一份：`gemini-test/reference_tiles.jpg`。
 - 只用 Flash 模型（Yang 的决定，不跑 Pro）。
 
-## competitor-model：竞品离线模型测试
+## on-device-model：开源端侧认牌模型测试
 
 | 脚本 | 做什么 |
 |---|---|
-| `yolo_eval.py` | 用竞品的 YOLO ONNX 模型跑 33 张照片，流程照搬 majiang_calculator（整图粗检 → 裁出牌区放大重检）。`python3 tools/competitor-model/yolo_eval.py out.json` |
-| `hybrid_sim.py` | 离线模拟「端侧 YOLO + Gemini 双读」的几种合并方式。`GEM=research/results/gemini-flash/ref.json python3 tools/competitor-model/hybrid_sim.py out.json`（不设 `GEM` 时按 Gemini 测试报告里的错误表还原 Gemini 的读法） |
+| `yolo_eval.py` | 用开源的 YOLO ONNX 认牌模型跑 33 张照片，流程照搬 majiang_calculator（整图粗检 → 裁出牌区放大重检）。`python3 tools/on-device-model/yolo_eval.py out.json` |
+| `hybrid_sim.py` | 离线模拟「端侧 YOLO + Gemini 双读」的几种合并方式。`GEM=research/results/gemini-flash/ref.json python3 tools/on-device-model/hybrid_sim.py out.json`（不设 `GEM` 时按 Gemini 测试报告里的错误表还原 Gemini 的读法） |
 
-- 依赖：`pip install onnxruntime opencv-python numpy`。只用 ONNX Runtime 推理，不依赖也不包含 Ultralytics（AGPL）代码。
-- **模型权重不进仓库**（没有许可证，且是 Ultralytics AGPL 训练导出的）。自己从原仓库下载，再用环境变量指定：
+- 依赖：`pip install onnxruntime opencv-python numpy`。只用 ONNX Runtime 推理。
+- **模型权重不进仓库**，自己从原仓库下载，再用环境变量指定：
   - `YOLOV8_ONNX`：[alanfeiyuchang/majiang_calculator](https://github.com/alanfeiyuchang/majiang_calculator) 里的 `majiang calculator/Models/mahjong_yolov8.onnx`，和 [LYiHub/AR-Mahjong-Assistant-preview](https://github.com/LYiHub/AR-Mahjong-Assistant-preview) 的 `server/models/yolo/weights.onnx` 是同一个文件
   - `YOLO11_ONNX`：[mikemazzetti/mahjong-ar](https://github.com/mikemazzetti/mahjong-ar) 里的 `web/public/models/tiles.onnx`

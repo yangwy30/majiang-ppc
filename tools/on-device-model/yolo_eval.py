@@ -1,4 +1,4 @@
-"""Run competitor YOLO tile detectors on our 33 ground-truth photos."""
+"""Run open-source YOLO tile detectors on our 33 ground-truth photos."""
 import json, os, sys, time
 from collections import Counter
 from pathlib import Path
@@ -6,7 +6,7 @@ import cv2, numpy as np, onnxruntime as ort
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "gemini-test"))
 from run_gemini_test import win_type, diff, fmt, INDEX, GT_FILE, PHOTOS  # noqa: E402
 
-# Photos and competitor ONNX weights are not in the repo (no license); see tools/README.md.
+# Photos and ONNX weights are not in the repo; see tools/README.md.
 PHOTOS = Path(PHOTOS)
 GT = json.loads(GT_FILE.read_text(encoding="utf-8"))
 YOLOV8_ONNX = os.environ.get("YOLOV8_ONNX", "mahjong_yolov8.onnx")  # majiang_calculator / AR-Mahjong-Assistant

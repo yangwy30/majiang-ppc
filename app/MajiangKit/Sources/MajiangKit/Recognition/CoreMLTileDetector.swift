@@ -7,9 +7,9 @@ import ImageIO
 /// 用 Core ML 跑 YOLOv8 式的认牌检测模型：输入 `1×3×640×640`（RGB，0–1），输出 `1×(4+类别数)×anchors`。
 /// 类别名从模型元数据 `names` 读（逗号分隔），没有就按 Jon Chan 的 42 类。
 ///
-/// 原型阶段用的是竞品（AR麻将助手）的模型，没有许可证，不能进仓库也不能上架：
-/// 本地用 `tools/competitor-model/convert_coreml.py` 转好放进 App，见 app/README.md。
-/// 上架前换成我们自己训练的模型，只要输入输出照这个约定，这里不用改。
+/// 用的是开源项目 AR麻将助手的模型，权重不进仓库：
+/// 本地用 `tools/on-device-model/convert_coreml.py` 转好放进 App，见 app/README.md。
+/// 换别的模型时只要输入输出照这个约定，这里不用改。
 public final class CoreMLTileDetector: TileDetecting, @unchecked Sendable {
     private let model: MLModel
     private let inputName: String

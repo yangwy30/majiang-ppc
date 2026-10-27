@@ -12,10 +12,10 @@
 | `app/` | 按 App 实际识别流程（PR #7 的提示词、立牌副露分开读、规则校验重看）重测：`app.json` 用 App 自己画的参考图，`research.json` 用研究参考图 |
 | `speed/` | 提速对比：`flash38-low.json`（3.8 Flash 思考 low）、`lite35*.json`（3.5 Flash-Lite），汇总在 `summary.md` 和 `summary-lite35.md` |
 
-## competitor-yolo/（竞品离线模型）
+## on-device-yolo/（开源端侧认牌模型）
 
 | 文件 | 内容 |
 |---|---|
-| `report.json` | 两个竞品 YOLO 模型在 33 张上的逐张结果（`yolo_eval.py`） |
+| `report.json` | 两个开源 YOLO 认牌模型在 33 张上的逐张结果（`yolo_eval.py`） |
 | `sim.json` | 双读模拟，Gemini 读法按第一轮测试报告的错误表还原（`hybrid_sim.py`） |
 | `sim_base.json` `sim_ref.json` `sim_crop.json` `sim_combo.json` | 双读模拟，Gemini 读法用对应改进方法的真实结果（`GEM=… hybrid_sim.py`） |

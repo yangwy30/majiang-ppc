@@ -38,7 +38,7 @@
 ## 顺便找到的
 
 - [guobiao-fan-cases_mahjong-omakase.json](../data/guobiao-fan-cases_mahjong-omakase.json)：64 条国标番种的文字测试用例（每条是一手牌加它应有的番种），来自 mahjong-omakase（GPL-3.0），可以直接拿来测算番引擎。
-- [alanfeiyuchang/majiang_calculator](https://github.com/alanfeiyuchang/majiang_calculator) 是一个已经做出来的 iOS App：用设备端模型拍照识牌，支持国标麻将算番，可以当作竞品参考。
+- [alanfeiyuchang/majiang_calculator](https://github.com/alanfeiyuchang/majiang_calculator) 是一个已经做出来的 iOS App：用设备端模型拍照识牌，支持国标麻将算番，可以参考它的做法。
 
 ---
 
