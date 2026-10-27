@@ -38,6 +38,16 @@ final class RecognitionTests: XCTestCase {
         XCTAssertFalse(request.url!.absoluteString.contains("test-key"), "Key 不能出现在 URL 里")
     }
 
+    func testThinkingLevelDefaultsToLow() throws {
+        func thinking(_ config: GeminiConfiguration) -> Any? {
+            let body = GeminiRecognizer(configuration: config).requestBody(for: RecognitionRequest(image: Data()))
+            return (body["generationConfig"] as? [String: Any])?["thinkingConfig"]
+        }
+        let low = thinking(GeminiConfiguration(endpoint: .direct(FixedKey()))) as? [String: String]
+        XCTAssertEqual(low, ["thinkingLevel": "low"])
+        XCTAssertNil(thinking(GeminiConfiguration(endpoint: .direct(FixedKey()), thinkingLevel: nil)))
+    }
+
     func testProxyRequestCarriesNoKey() throws {
         let config = GeminiConfiguration(endpoint: .proxy(url: URL(string: "https://example.com/recognize")!, token: "t", deviceID: "d"))
         let request = try GeminiRecognizer(configuration: config).makeURLRequest(for: RecognitionRequest(image: Data()))

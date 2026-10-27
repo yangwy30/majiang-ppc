@@ -9,6 +9,8 @@
 | `gemini-3.8-flash.json` | 第一轮测试的逐张结果（`run_gemini_test.py`）。注意这一轮用的是复核前的标准答案 |
 | `base.json` `high.json` `crop.json` `ref.json` `vote.json` `retry.json` `combo.json` | 各种改进方法的逐张结果（`experiments.py`），标准答案已改正 |
 | `summary.md` | 方法对比汇总表 |
+| `app/` | 按 App 实际识别流程（PR #7 的提示词、立牌副露分开读、规则校验重看）重测：`app.json` 用 App 自己画的参考图，`research.json` 用研究参考图 |
+| `speed/` | 提速对比：`flash38-low.json`（3.8 Flash 思考 low）、`lite35*.json`（3.5 Flash-Lite），汇总在 `summary.md` 和 `summary-lite35.md` |
 
 ## competitor-yolo/（竞品离线模型）
 

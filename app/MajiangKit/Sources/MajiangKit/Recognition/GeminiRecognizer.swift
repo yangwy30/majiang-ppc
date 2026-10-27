@@ -37,13 +37,19 @@ public struct GeminiConfiguration: Sendable {
     /// 牌面参考图。研究里「参考图 + 数点数」是最好的方法（33 张里 32 张全对）。
     /// 注意：研究用的参考图没有许可证，不能打包进 App，这里要用我们自己画的牌面。
     public var referenceSheet: (data: Data, mimeType: String)?
+    /// 思考深度（Gemini 3 的 thinkingLevel）。研究里 3.8 Flash 调成 low：33 张里 30 张全对（默认 32 张），
+    /// 第一次调用平均从二十多秒降到 7 秒，见 research/gemini-recognition.md。3.8 Flash 不支持 minimal。
+    /// nil 用模型默认。走中转站时以服务器的设置为准。
+    public var thinkingLevel: String?
     public var timeout: TimeInterval
 
     public init(endpoint: Endpoint, model: String = "gemini-3.8-flash",
-                referenceSheet: (data: Data, mimeType: String)? = nil, timeout: TimeInterval = 60) {
+                referenceSheet: (data: Data, mimeType: String)? = nil, thinkingLevel: String? = "low",
+                timeout: TimeInterval = 60) {
         self.endpoint = endpoint
         self.model = model
         self.referenceSheet = referenceSheet
+        self.thinkingLevel = thinkingLevel
         self.timeout = timeout
     }
 }
@@ -116,10 +122,11 @@ public struct GeminiRecognizer: TileRecognizer {
             contents.append(["role": "model", "parts": [["text": Self.encodeAnswer(previous)]]])
             contents.append(["role": "user", "parts": [["text": feedback + "\n请对照照片逐张重新数点数，再输出一次 JSON。"]]])
         }
-        return [
-            "contents": contents,
-            "generationConfig": ["responseMimeType": "application/json", "responseSchema": Self.schema],
-        ]
+        var generationConfig: [String: Any] = ["responseMimeType": "application/json", "responseSchema": Self.schema]
+        if let level = configuration.thinkingLevel {
+            generationConfig["thinkingConfig"] = ["thinkingLevel": level]
+        }
+        return ["contents": contents, "generationConfig": generationConfig]
     }
 
     static func imagePart(_ data: Data, _ mimeType: String) -> [String: Any] {
