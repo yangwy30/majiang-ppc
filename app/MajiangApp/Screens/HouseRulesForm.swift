@@ -8,6 +8,8 @@ struct HouseRulesForm: View {
     @Binding var rules: GameRules
     /// 已经打了几局：中途改规则时，圈数不能少于这个。
     var playedHands = 0
+    /// 截图用：一打开就点开这一项。
+    var opening: RuleItem?
 
     @State private var picking: RuleItem?
     @State private var showMore = false
@@ -58,6 +60,7 @@ struct HouseRulesForm: View {
         .onAppear {
             // 「更多」里有改过的就直接展开，免得藏着
             showMore = RuleItem.more.contains { !$0.isStandard(rules) }
+            if let opening { picking = opening }
         }
     }
 

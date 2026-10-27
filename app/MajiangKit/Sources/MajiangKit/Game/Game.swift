@@ -55,6 +55,11 @@ public struct GameRules: Hashable, Codable, Sendable {
         fanCap > 0 ? min(fan, fanCap) : fan
     }
 
+    /// 一把和牌按几番收钱：不带花时去掉花牌的番（中途改成不带花，前面的局也一样），再封顶。
+    public func paidFan(_ win: WinRecord) -> Int {
+        cappedFan(includeFlowers ? win.totalFan : win.totalFan - win.flowerFan)
+    }
+
     enum CodingKeys: String, CodingKey {
         case yuanPerPoint, basePoints, minimumFan, includeFlowers, swapSeatsEachRound, falseWinPenalty, totalHands
         case fanCap, onlyDiscarderPays
@@ -419,7 +424,7 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
     private func deltas(for outcome: HandOutcome) -> [Int] {
         switch outcome {
         case .win(let win):
-            Payment.winDeltas(winner: win.winner, discarder: win.discarder, totalFan: win.totalFan, rules: rules)
+            Payment.winDeltas(winner: win.winner, discarder: win.discarder, totalFan: rules.paidFan(win), rules: rules)
         case .drawn: [0, 0, 0, 0]
         case .falseWin(let offender): Payment.falseWinDeltas(offender: offender, penalty: rules.falseWinPenalty)
         case .manual(let deltas, _): deltas

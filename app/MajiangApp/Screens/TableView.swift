@@ -174,7 +174,7 @@ struct TableView: View {
         }
         .sheet(isPresented: $showGuide) { RulesGuideView() }
         .sheet(isPresented: $editingRules) {
-            GameRulesSheet(game: game) { rules in
+            GameRulesSheet(game: game, draft: demoRulesDraft(game)) { rules in
                 edit { try $0.changeRules(rules) }
             }
         }
@@ -191,6 +191,14 @@ struct TableView: View {
         } message: {
             Text(recordError ?? "")
         }
+    }
+
+    /// 截图用：打开「这场的规则」时预先把底分改成 5，好看到重算预览。
+    private func demoRulesDraft(_ game: Game) -> GameRules? {
+        guard model.demoScreen == .gameRules else { return nil }
+        var rules = game.rules
+        rules.basePoints = 5
+        return rules
     }
 
     /// 记一条到这场牌局；失败时弹窗说明，不悄悄丢掉。

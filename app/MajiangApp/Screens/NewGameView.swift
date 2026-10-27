@@ -110,11 +110,11 @@ struct NewGameView: View {
             }
         }
         .sheet(isPresented: $editingRules) {
-            RulesSheet(rules: $rules)
+            RulesSheet(rules: $rules, opening: model.demoScreen == .rulePicker ? .cap : nil)
         }
         .onAppear {
             rules = model.archive.lastRules
-            if model.demoScreen == .houseRules {
+            if model.demoScreen == .houseRules || model.demoScreen == .rulePicker {
                 rules.fanCap = 64
                 rules.yuanPerPoint = 2
                 editingRules = true
@@ -161,11 +161,13 @@ struct NewGameView: View {
 private struct RulesSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var rules: GameRules
+    /// 截图用：一打开就点开这一项。
+    var opening: RuleItem?
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                HouseRulesForm(rules: $rules)
+                HouseRulesForm(rules: $rules, opening: opening)
                     .padding(.horizontal, 24)
                     .padding(.top, 4)
                     .padding(.bottom, 24)

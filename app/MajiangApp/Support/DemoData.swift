@@ -10,8 +10,13 @@ enum DemoScreen: String {
     case reviewing = "check-reviewing", dualRead = "check-dual"
     /// 发到群里的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
     case shareSettle = "share-settle", shareLive = "share-live", backup
-    /// 家规：开局页的规则表单 / 牌桌上打到一半改这场的规则（这场带封顶 64、1 分 2 元）。
-    case houseRules = "house-rules", gameRules = "game-rules"
+    /// 家规：开局页的规则表单、点开一项的选项；牌桌上打到一半改这场的规则（预览底分改成 5）、
+    /// 带家规的牌桌、封顶起作用的结果页、带家规的账本图。
+    case houseRules = "house-rules", rulePicker = "rule-picker", gameRules = "game-rules"
+    case tableHouse = "table-house", resultCapped = "result-capped", shareHouse = "share-house"
+
+    /// 这几页的牌局带家规：封顶 64（结果页用 16，好让示例那手封顶）、1 分 2 元。
+    var usesHouseRules: Bool { [.gameRules, .tableHouse, .resultCapped, .shareHouse].contains(self) }
 
     static var current: DemoScreen? {
         #if DEBUG
@@ -24,7 +29,7 @@ enum DemoScreen: String {
     }
 
     /// 在牌桌上自动打开记一局。
-    var opensRound: Bool { [.capture, .check, .notWin, .result, .reviewing, .dualRead].contains(self) }
+    var opensRound: Bool { [.capture, .check, .notWin, .result, .resultCapped, .reviewing, .dualRead].contains(self) }
 }
 
 #if DEBUG
@@ -49,8 +54,8 @@ enum DemoData {
         archive.upsert(last)
 
         var houseRules = GameRules()
-        if DemoScreen.current == .gameRules {
-            houseRules.fanCap = 64
+        if let screen = DemoScreen.current, screen.usesHouseRules {
+            houseRules.fanCap = screen == .resultCapped ? 16 : 64
             houseRules.yuanPerPoint = 2
         }
         var active = Game(players: players, rules: houseRules)
@@ -84,7 +89,7 @@ enum DemoData {
     static func shareGame(_ screen: DemoScreen, in archive: GameArchive) -> Game? {
         switch screen {
         case .shareSettle: archive.finishedGames.first
-        case .shareLive: archive.activeGame
+        case .shareLive, .shareHouse: archive.activeGame
         default: nil
         }
     }
@@ -111,7 +116,7 @@ enum DemoData {
             let onDevice = Recognition(concealed: Tile.parseList("111223p 9s 3445566p 7p"), source: "端侧")
             flow.load(DualReadRecognizer.merge(gemini, with: onDevice))
             flow.steps = [.check]
-        case .result:
+        case .result, .resultCapped:
             flow.load(samples[0])
             flow.choose(Tile(suit: .dots, rank: 5)!, at: 9)
             flow.steps = [.check]

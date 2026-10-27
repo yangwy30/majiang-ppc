@@ -8,10 +8,11 @@ struct GameRulesSheet: View {
     var onSave: (GameRules) -> Void
     @State private var draft: GameRules
 
-    init(game: Game, onSave: @escaping (GameRules) -> Void) {
+    /// `draft` 是打开时预先改好的规则（截图用），平时就是这场现在的规则。
+    init(game: Game, draft: GameRules? = nil, onSave: @escaping (GameRules) -> Void) {
         self.game = game
         self.onSave = onSave
-        _draft = State(initialValue: game.rules)
+        _draft = State(initialValue: draft ?? game.rules)
     }
 
     private var changed: Bool { draft != game.rules }

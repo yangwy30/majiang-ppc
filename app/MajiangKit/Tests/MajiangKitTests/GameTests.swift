@@ -67,6 +67,15 @@ final class GameTests: XCTestCase {
         XCTAssertEqual(game.records.count, 4)
         XCTAssertEqual(game.winsBelowMinimum.map(\.handIndex), [1])
 
+        // 中途改成不带花：前面带花的那手去掉花牌的番再算
+        var flowers = makeGame()
+        try flowers.recordWin(win(0, discarder: nil, fan: 8, flowers: 2))
+        XCTAssertEqual(flowers.scores[0], 3 * (8 + 10))
+        var noFlowers = flowers.rules
+        noFlowers.includeFlowers = false
+        try flowers.changeRules(noFlowers)
+        XCTAssertEqual(flowers.scores[0], 3 * (8 + 8))
+
         // 打了 4 局，不能改成只打 0 圈
         rules.totalHands = 0
         XCTAssertThrowsError(try game.changeRules(rules))

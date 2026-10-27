@@ -10,7 +10,7 @@ extension HandRecord {
             var parts = [win.discarder.map { "\(name(win.winner))和 · \(name($0))点炮" } ?? "\(name(win.winner))自摸"]
             // 大番种值得写出来（清一色、七对……），小番种不写
             if let top = win.fans.first, top.fan.points >= 6, top.fan != .chickenHand { parts.append(top.fan.name) }
-            let paid = game.rules.cappedFan(win.totalFan)
+            let paid = game.rules.paidFan(win)
             parts.append(paid < win.totalFan ? "\(win.totalFan) 番按 \(paid) 算" : "\(win.totalFan) 番")
             return parts.joined(separator: " · ")
         case .drawn:

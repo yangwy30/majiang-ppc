@@ -37,7 +37,7 @@ struct ResultSheet: View {
                     Text("番").font(Theme.serif(22))
                 }
                 .frame(maxWidth: .infinity)
-                if game.rules.cappedFan(record.totalFan) < record.totalFan {
+                if game.rules.paidFan(record) < record.totalFan {
                     Text("家规封顶 \(game.rules.fanCap) 番：\(record.totalFan) 番按 \(game.rules.fanCap) 算")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.gray)
@@ -99,7 +99,7 @@ struct ResultSheet: View {
     private func explanation(_ record: WinRecord, _ deltas: [Int]) -> String {
         let game = flow.game
         let base = game.rules.basePoints
-        let fan = game.rules.cappedFan(record.totalFan)
+        let fan = game.rules.paidFan(record)
         var lines: [String]
         if let discarder = record.discarder {
             lines = [game.rules.onlyDiscarderPays
