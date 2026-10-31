@@ -56,6 +56,11 @@ final class AppModel {
 
     static let defaultProxyURL = "https://majiang-relay.yangwang9710.workers.dev/recognize"
 
+    /// AI 认牌的邀请码（中转站确认过才存）。走中转站时没码就不调 Gemini，只用端侧认牌。
+    private(set) var inviteCode: String? = InviteKeychain.read()
+    /// 认牌时码被中转站拒了（停用了之类），说一句为什么，邀请码页上显示。
+    var inviteNotice: String?
+
     private let archiveURL: URL
     /// iCloud 同步；截图模式下不同步。
     let cloud: CloudSync
@@ -103,7 +108,7 @@ final class AppModel {
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
         switch demoScreen {
-        case .home, .emptyHome, .backup: path = []
+        case .home, .emptyHome, .backup, .invite: path = []
         case .newGame, .houseRules, .rulePicker: path = [.newGame]
         case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
         default: break
@@ -173,8 +178,38 @@ final class AppModel {
     /// 这次拍照实际走哪一路（「自动」在这里落到具体的一路）。
     var effectiveRecognitionMode: RecognitionMode {
         guard recognitionMode == .auto else { return recognitionMode }
-        let hasKey = GeminiKeychain.hasKey || URL(string: proxyURL)?.scheme == "https"
-        return .resolveAuto(hasKey: hasKey, hasModel: Self.onDeviceModelURL != nil)
+        return .resolveAuto(hasKey: canUseGemini, hasModel: Self.onDeviceModelURL != nil)
+    }
+
+    /// 走中转站（https 地址），而不是开发版直连 Google。
+    var usesProxy: Bool { URL(string: proxyURL)?.scheme == "https" }
+
+    /// 能不能调 Gemini：开发版有 Key 直连；走中转站要有邀请码。
+    var canUseGemini: Bool { usesProxy ? inviteCode != nil : GeminiKeychain.hasKey }
+
+    /// 拍照页要不要提示「AI 认牌需邀请码」：走中转站、还没码、识别方式是自动。
+    var needsInvite: Bool { demoScreen == nil && recognitionMode == .auto && usesProxy && inviteCode == nil }
+
+    // MARK: 邀请码
+
+    /// 问中转站码对不对，对了就存下。失败时返回给用户看的一句话。
+    func redeemInvite(_ input: String) async -> String? {
+        guard let proxy = URL(string: proxyURL), usesProxy else { return "还没连上我们的服务器" }
+        do {
+            let redemption = try await InviteCode.redeem(input, proxy: proxy, deviceID: DeviceID.current)
+            InviteKeychain.save(redemption.code)
+            inviteCode = redemption.code
+            inviteNotice = nil
+            return nil
+        } catch {
+            return (error as? RecognitionError)?.message ?? error.localizedDescription
+        }
+    }
+
+    func removeInvite(notice: String? = nil) {
+        InviteKeychain.save(nil)
+        inviteCode = nil
+        inviteNotice = notice
     }
 
     func makeRecognizer() -> TileRecognizer {
@@ -183,12 +218,12 @@ final class AppModel {
         case .auto, .demo:
             return demoRecognizer
         case .gemini:
-            return RuleCheckedRecognizer(base: gemini())
+            return checkedGemini()
         case .onDevice:
             return OnDeviceRecognizer(detector: onDeviceDetector)
         case .dual:
             return DualReadRecognizer(primary: OnDeviceRecognizer(detector: onDeviceDetector),
-                                      secondary: RuleCheckedRecognizer(base: gemini()))
+                                      secondary: checkedGemini())
         }
     }
 
@@ -219,10 +254,19 @@ final class AppModel {
         return try? CoreMLTileDetector(compiledModelAt: url)
     }
 
+    /// Gemini + 规则校验；中转站说码有问题时清掉码，下次拍照页提示重新输入。
+    private func checkedGemini() -> TileRecognizer {
+        InviteCheckedRecognizer(base: RuleCheckedRecognizer(base: gemini())) { [weak self] in
+            await MainActor.run {
+                self?.removeInvite(notice: "上次的邀请码不能用了：中转站说它停用了或者不对，找给你码的人再要一个")
+            }
+        }
+    }
+
     private func gemini() -> GeminiRecognizer {
         let endpoint: GeminiConfiguration.Endpoint
         if let url = URL(string: proxyURL), url.scheme == "https" {
-            endpoint = .proxy(url: url, deviceID: DeviceID.current)
+            endpoint = .proxy(url: url, deviceID: DeviceID.current, inviteCode: inviteCode)
         } else {
             endpoint = .direct(GeminiKeychain())
         }

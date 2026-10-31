@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var showGuide = false
     @State private var showSettings = false
     @State private var showBackup = false
+    @State private var showInvite = false
 
     private var isEmpty: Bool { model.archive.games.isEmpty }
 
@@ -23,7 +24,11 @@ struct HomeView: View {
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showGuide) { RulesGuideView() }
         .sheet(isPresented: $showBackup) { BackupView() }
-        .onAppear { if model.demoScreen == .backup { showBackup = true } }
+        .sheet(isPresented: $showInvite) { InviteView() }
+        .onAppear {
+            if model.demoScreen == .backup { showBackup = true }
+            if model.demoScreen == .invite { showInvite = true }
+        }
         #if DEBUG
         .sheet(isPresented: $showSettings) { SettingsView() }
         #endif
@@ -65,6 +70,11 @@ struct HomeView: View {
                     .padding(.top, 10)
                 Button("备份与换手机 ›") { showBackup = true }
                     .buttonStyle(.text(size: 14))
+                // 走我们的服务器时才有邀请码（开发版直连 Google 用不着）
+                if model.usesProxy || model.demoScreen == .invite {
+                    Button(model.inviteCode == nil ? "有邀请码？开启 AI 认牌 ›" : "AI 认牌 · 已开启 ›") { showInvite = true }
+                        .buttonStyle(.text(size: 14))
+                }
 
                 if let error = model.loadError {
                     Text(error)

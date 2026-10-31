@@ -15,6 +15,7 @@ struct CaptureView: View {
     /// 端侧模型零点几秒就认完了，转圈晚一点出来，免得一闪而过。
     @State private var slow = false
     @State private var autoShot = false
+    @State private var showInvite = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -24,13 +25,24 @@ struct CaptureView: View {
             viewfinder
                 .padding(.top, 20)
 
-            Text(status ?? " ")
-                .font(.system(size: 13))
-                .foregroundStyle(flow.recognitionError == nil ? Color.white.opacity(0.72) : Color(hex: 0xF2A08F))
-                .multilineTextAlignment(.center)
-                .lineLimit(3)
-                .frame(minHeight: 34)
-                .padding(.top, 10)
+            Group {
+                if status == nil && model.needsInvite {
+                    // 走我们的服务器但还没邀请码：只用离线认牌，给个入口填码
+                    Button { showInvite = true } label: {
+                        Text("离线认牌 · ").foregroundStyle(.white.opacity(0.55))
+                            + Text("有邀请码？开启 AI 认牌").foregroundStyle(.white)
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    Text(status ?? " ")
+                        .foregroundStyle(flow.recognitionError == nil ? Color.white.opacity(0.72) : Color(hex: 0xF2A08F))
+                }
+            }
+            .font(.system(size: 13))
+            .multilineTextAlignment(.center)
+            .lineLimit(3)
+            .frame(minHeight: 34)
+            .padding(.top, 10)
 
             controls
                 .padding(.top, 8)
@@ -48,6 +60,7 @@ struct CaptureView: View {
             NavClose(color: .white, action: close)
         }
         .photosPicker(isPresented: $choosingPhoto, selection: $pickerItem, matching: .images)
+        .sheet(isPresented: $showInvite) { InviteView() }
         .onChange(of: pickerItem) { _, item in
             guard let item else { return }
             Task {
