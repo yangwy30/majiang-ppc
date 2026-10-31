@@ -69,9 +69,7 @@ struct SettingsView: View {
             .navigationTitle("开发设置")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("好") { dismiss() }.fontWeight(.semibold)
-                }
+                NavClose("关闭") { dismiss() }
             }
         }
     }

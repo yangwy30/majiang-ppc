@@ -40,10 +40,7 @@ struct GameRulesSheet: View {
             .navigationTitle("这场的规则")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("取消") { dismiss() }
-                        .buttonStyle(.text(size: 17))
-                }
+                NavClose { dismiss() }
             }
             .bottomBar {
                 // 重算的结果贴在按钮上面，改哪一项都看得到，不用往下翻

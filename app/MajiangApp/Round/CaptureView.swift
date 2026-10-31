@@ -45,15 +45,7 @@ struct CaptureView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: close) {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(.white)
-                        .frame(width: 44, height: 44, alignment: .leading)
-                }
-                .accessibilityLabel("关闭")
-            }
+            NavClose(color: .white, action: close)
         }
         .photosPicker(isPresented: $choosingPhoto, selection: $pickerItem, matching: .images)
         .onChange(of: pickerItem) { _, item in

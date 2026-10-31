@@ -104,10 +104,7 @@ struct NewGameView: View {
         .page()
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button("取消") { model.path.removeLast() }
-                    .buttonStyle(.text(size: 17))
-            }
+            NavBack("首页") { model.path.removeLast() }
         }
         .sheet(isPresented: $editingRules) {
             RulesSheet(rules: $rules, opening: model.demoScreen == .rulePicker ? .cap : nil)
@@ -175,10 +172,10 @@ private struct RulesSheet: View {
             .page()
             .navigationTitle("规则")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("好") { dismiss() }.fontWeight(.semibold)
-                }
+            // 改了就生效，没有「取消」；底部的按钮收起来
+            .bottomBar {
+                Button("好") { dismiss() }
+                    .buttonStyle(.primary)
             }
         }
         .presentationDetents([.large])

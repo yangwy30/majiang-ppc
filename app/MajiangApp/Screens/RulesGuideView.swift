@@ -62,9 +62,7 @@ struct RulesGuideView: View {
             .navigationTitle("规则和番种")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("好") { dismiss() }.fontWeight(.semibold)
-                }
+                NavClose("关闭") { dismiss() }
             }
         }
     }
