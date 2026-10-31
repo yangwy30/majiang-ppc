@@ -16,6 +16,14 @@ DEVICE_DAILY_LIMIT = "150"
 IP_DAILY_LIMIT = "500"
 GLOBAL_DAILY_LIMIT = "3000"
 MAX_BODY_BYTES = "8000000"
+# 邀请码（在 /admin 网页上生成、停用）。没码能不能用 AI 认牌：先 false，带输入框的新版 App 发出去以后，
+# 在管理网页上点「改成要码」（网页上拨过就以网页为准，这里只是没拨过时的默认值）。
+INVITE_REQUIRED = "false"
+# 每个码默认最多绑几台手机、每天最多几次（生成码时可以单独改）
+CODE_DEVICE_LIMIT = "2"
+CODE_DAILY_LIMIT = "50"
+# 同一个 IP 或同一台手机每天最多输错几次邀请码，防猜码
+INVITE_TRIES_PER_DAY = "20"
 # 计数和转发放在北美西部，避开 Gemini 不支持的地区（比如香港机房）
 LOCATION_HINT = "wnam"
 

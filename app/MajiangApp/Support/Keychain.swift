@@ -83,3 +83,32 @@ enum DeviceID {
         return id
     }()
 }
+
+/// 用户填好的 AI 认牌邀请码（中转站已经确认过）。存钥匙串，只在这台手机上。
+enum InviteKeychain {
+    private static let base: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrService as String: "majiang-ppc.invite",
+        kSecAttrAccount as String: "code",
+    ]
+
+    static func read() -> String? {
+        var query = base
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        guard SecItemCopyMatching(query as CFDictionary, &item) == errSecSuccess, let data = item as? Data,
+              let code = String(data: data, encoding: .utf8), !code.isEmpty else { return nil }
+        return code
+    }
+
+    /// nil 就是删掉。
+    static func save(_ code: String?) {
+        SecItemDelete(base as CFDictionary)
+        guard let code, !code.isEmpty else { return }
+        var add = base
+        add[kSecValueData as String] = Data(code.utf8)
+        add[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        SecItemAdd(add as CFDictionary, nil)
+    }
+}

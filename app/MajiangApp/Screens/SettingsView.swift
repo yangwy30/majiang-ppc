@@ -18,12 +18,12 @@ struct SettingsView: View {
                     }
                     if model.recognitionMode == .auto {
                         LabeledContent("现在用", value: RecognitionMode.resolveAuto(
-                            hasKey: hasKey || URL(string: model.proxyURL)?.scheme == "https",
+                            hasKey: model.usesProxy ? model.inviteCode != nil : hasKey,
                             hasModel: AppModel.onDeviceModelURL != nil).title)
                     }
                     LabeledContent("端侧模型", value: AppModel.onDeviceModelURL == nil ? "没装" : "已装")
                 } footer: {
-                    Text("自动：填了 Key 又装了端侧模型就双读，只有一样就用那一样，都没有才是演示数据。演示数据不看照片，按顺序给出三手示例牌。双读：端侧模型先出结果，Gemini 再认一遍，两边不一样的牌让你选。端侧模型没装时双读只剩 Gemini（装法见 app/README.md）。")
+                    Text("自动：填了 Key（走我们的服务器时是填了邀请码）又装了端侧模型就双读，只有一样就用那一样，都没有才是演示数据。演示数据不看照片，按顺序给出三手示例牌。双读：端侧模型先出结果，Gemini 再认一遍，两边不一样的牌让你选。端侧模型没装时双读只剩 Gemini（装法见 app/README.md）。")
                 }
 
                 Section {

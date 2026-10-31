@@ -76,6 +76,8 @@ public enum RecognitionError: Error, Hashable, Sendable {
     case notConfigured
     case network(String)
     case badResponse(String)
+    /// 中转站说邀请码有问题（没有、不对、停用了、手机绑满了）。App 收到就把存着的码清掉。
+    case inviteRejected(String)
 
     public var message: String {
         switch self {
@@ -84,6 +86,7 @@ public enum RecognitionError: Error, Hashable, Sendable {
         case .notConfigured: "还没有设置识别服务（在设置里填 Gemini API Key 或代理地址）"
         case .network(let why): "网络出错：\(why)"
         case .badResponse(let why): "识别结果看不懂：\(why)"
+        case .inviteRejected(let why): why
         }
     }
 }

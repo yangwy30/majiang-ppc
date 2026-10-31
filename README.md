@@ -37,7 +37,7 @@ cd server && npm install && npm test # 中转站本地测试；npm run deploy �
 
 ```
 app/        iOS App：Xcode 工程、SwiftUI 界面（MajiangApp）、纯逻辑 Swift 包（MajiangKit）
-server/     认牌中转站（Cloudflare Worker）：持有 Gemini Key，按手机限次数，只放行 Flash
+server/     认牌中转站（Cloudflare Worker）：持有 Gemini Key，查邀请码，按手机限次数，只放行 Flash
 docs/       产品文档：可行性、用户流程、名字和图标、产品页文案；assets/ 是截图和图标
 research/   调研报告；results/ 是测试的原始 JSON
 tools/      调研和截图用的脚本，见 tools/README.md

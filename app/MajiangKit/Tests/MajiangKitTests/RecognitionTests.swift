@@ -67,6 +67,100 @@ final class RecognitionTests: XCTestCase {
         }
     }
 
+    func testProxyRequestCarriesInviteCode() throws {
+        let url = URL(string: "https://example.com/recognize")!
+        let withCode = try GeminiRecognizer(configuration: GeminiConfiguration(endpoint: .proxy(url: url, deviceID: "d", inviteCode: "K7MPQ4")))
+            .makeURLRequest(for: RecognitionRequest(image: Data()))
+        XCTAssertEqual(withCode.value(forHTTPHeaderField: "X-Majiang-Invite"), "K7MPQ4")
+        let without = try GeminiRecognizer(configuration: GeminiConfiguration(endpoint: .proxy(url: url, deviceID: "d")))
+            .makeURLRequest(for: RecognitionRequest(image: Data()))
+        XCTAssertNil(without.value(forHTTPHeaderField: "X-Majiang-Invite"))
+    }
+
+    func testInviteRefusalClearsCodeAndShowsMessage() async throws {
+        let http = FakeHTTP(replies: [#"{"error":{"code":403,"message":"这个邀请码已经停用了","majiang":true,"invite":true}}"#], status: 403)
+        let gemini = GeminiRecognizer(configuration: GeminiConfiguration(endpoint: .proxy(url: URL(string: "https://example.com")!)), http: http)
+        let cleared = Flag()
+        let guarded = InviteCheckedRecognizer(base: RuleCheckedRecognizer(base: gemini)) { await cleared.set() }
+        do {
+            _ = try await guarded.recognize(RecognitionRequest(image: Data()))
+            XCTFail("应该失败")
+        } catch let error as RecognitionError {
+            XCTAssertEqual(error, .inviteRejected("这个邀请码已经停用了"))
+            XCTAssertEqual(error.message, "这个邀请码已经停用了")
+        }
+        let wasCleared = await cleared.value
+        XCTAssertTrue(wasCleared)
+    }
+
+    func testOtherRefusalsKeepTheCode() async throws {
+        let http = FakeHTTP(replies: [#"{"error":{"code":429,"message":"这个邀请码今天的次数用完了","majiang":true}}"#], status: 429)
+        let gemini = GeminiRecognizer(configuration: GeminiConfiguration(endpoint: .proxy(url: URL(string: "https://example.com")!)), http: http)
+        let cleared = Flag()
+        let guarded = InviteCheckedRecognizer(base: gemini) { await cleared.set() }
+        do {
+            _ = try await guarded.recognize(RecognitionRequest(image: Data()))
+            XCTFail("应该失败")
+        } catch let error as RecognitionError {
+            XCTAssertEqual(error, .unavailable("这个邀请码今天的次数用完了"))
+        }
+        let wasCleared = await cleared.value
+        XCTAssertFalse(wasCleared)
+    }
+
+    func testInviteCodeNormalize() {
+        XCTAssertEqual(InviteCode.normalize(" k7m-pq4 "), "K7MPQ4")
+        XCTAssertEqual(InviteCode.normalize("K7MPQ4"), "K7MPQ4")
+        XCTAssertNil(InviteCode.normalize("K7MPQ"), "太短")
+        XCTAssertNil(InviteCode.normalize("K7MPQ40"), "太长")
+        XCTAssertNil(InviteCode.normalize("K7MPQO"), "O 不在字表里")
+        XCTAssertNil(InviteCode.normalize("K1MPQ4"), "1 不在字表里")
+        XCTAssertEqual(InviteCode.redeemURL(forProxy: URL(string: "https://relay.example.com/recognize")!).absoluteString,
+                       "https://relay.example.com/invite")
+    }
+
+    func testRedeemInvite() async throws {
+        let ok = FakeHTTP(replies: [#"{"ok":true,"code":"K7MPQ4","dailyLimit":50,"remaining":48}"#], status: 299)
+        let proxy = URL(string: "https://relay.example.com/recognize")!
+        // FakeHTTP 只在非 200 时原样返回，这里包一层把状态改成 200
+        let redemption = try await InviteCode.redeem("k7mpq4", proxy: proxy, deviceID: "d", http: StatusOverride(base: ok, status: 200))
+        XCTAssertEqual(redemption, InviteCode.Redemption(code: "K7MPQ4", dailyLimit: 50, remaining: 48))
+        let sent = try XCTUnwrap(ok.requests.first)
+        XCTAssertEqual(sent.url?.absoluteString, "https://relay.example.com/invite")
+        XCTAssertEqual(sent.value(forHTTPHeaderField: "X-Majiang-Device"), "d")
+        XCTAssertEqual(try JSONSerialization.jsonObject(with: sent.httpBody!) as? [String: String], ["code": "K7MPQ4"])
+
+        let bad = FakeHTTP(replies: [#"{"error":{"code":403,"message":"邀请码不对，核对一下再输","majiang":true,"invite":true}}"#], status: 403)
+        do {
+            _ = try await InviteCode.redeem("ZZZZZZ", proxy: proxy, deviceID: "d", http: bad)
+            XCTFail("应该失败")
+        } catch let error as RecognitionError {
+            XCTAssertEqual(error, .inviteRejected("邀请码不对，核对一下再输"))
+        }
+
+        let unused = FakeHTTP(replies: [])
+        do {
+            _ = try await InviteCode.redeem("abc", proxy: proxy, deviceID: "d", http: unused)
+            XCTFail("格式不对不该发请求")
+        } catch let error as RecognitionError {
+            guard case .inviteRejected = error else { return XCTFail("\(error)") }
+        }
+        XCTAssertTrue(unused.requests.isEmpty)
+    }
+
+    private actor Flag {
+        var value = false
+        func set() { value = true }
+    }
+
+    private struct StatusOverride: HTTPClient {
+        var base: HTTPClient
+        var status: Int
+        func send(_ request: URLRequest) async throws -> (Data, Int) {
+            (try await base.send(request).0, status)
+        }
+    }
+
     func testRuleCheckRetriesOnceWithFeedback() async throws {
         let bad = #"{"concealed":["1p","1p","1p","2p","2p","3p","3p","4p","4p","5p","4p","6p","6p","7p"],"melds":[],"flowers":0}"#
         let good = #"{"concealed":["1p","1p","1p","2p","2p","3p","3p","4p","4p","5p","5p","6p","6p","7p"],"melds":[],"flowers":0}"#
