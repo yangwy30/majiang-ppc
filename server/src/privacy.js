@@ -48,7 +48,7 @@ export const PRIVACY_HTML = `<!doctype html>
 <p>只用来拍或选一张和牌照片，用于上面说的识别。</p>
 
 <h2>联系</h2>
-<p>有问题可以在 TestFlight 里截图反馈，或在 App Store 的产品页联系开发者。</p>
+<p>有问题可以在 <a href="https://github.com/yangwy30/majiang-ppc/issues">GitHub</a> 上留言，也可以看<a href="/support">帮助</a>。</p>
 <hr>
 </main>
 </body>
