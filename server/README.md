@@ -2,7 +2,10 @@
 
 App 正式版不带 Gemini Key，认牌请求发到这里，由中转站带上 Key 转发给 Google。
 
-- 地址：`https://majiang-relay.yangwang9710.workers.dev/recognize`（`/health` 回 `ok`）
+- 地址：`https://majiang-relay.yangwang9710.workers.dev`
+  - `/recognize` 认牌，`/invite` 填码（见下面）
+  - `/privacy` 隐私说明（`src/privacy.js`），`/support` 帮助页（`src/support.js`），App Store 产品页链的就是这两页
+  - `/admin` 邀请码管理网页，`/health` 回 `ok`
 - 账号：Yang 的 Cloudflare（免费套餐够用）
 - Key：Worker 密钥 `GEMINI_API_KEY`，不进代码、不进仓库
 
@@ -21,7 +24,7 @@ AI 认牌是邀请制：App 在请求头 `X-Majiang-Invite` 带上用户填的�
 - **码**：6 位，只用 `23456789ABCDEFGHJKLMNPQRSTUVWXYZ`（没有 0 O 1 I），不分大小写，空格和横线忽略。
 - **填码**：App 先 POST `/invite`（`{"code":"…"}` + `X-Majiang-Device`），码对就把这台手机绑上，回 `{ok, code, dailyLimit, remaining}`。
 - **限制**：每个码默认最多绑 2 台手机（`CODE_DEVICE_LIMIT`）、每天 50 次（`CODE_DAILY_LIMIT`），生成时可以单独改。原来按手机、IP、全站的限额照旧。同一个 IP 或手机每天输错 20 次（`INVITE_TRIES_PER_DAY`）以后，只认已经绑在这台手机上的码。
-- **没码的请求**：「必须有邀请码」关着时照常转发（给还没更新的旧版 App 留的过渡期），打开后回 403。这个开关在管理网页上拨，不用重新部署；没拨过时按 `wrangler.toml` 的 `INVITE_REQUIRED`。
+- **没码的请求**：「必须有邀请码」关着时照常转发（给还没更新的旧版 App 留的过渡期），打开后回 403。这个开关在管理网页上拨，不用重新部署；没拨过时按 `wrangler.toml` 的 `INVITE_REQUIRED`。**线上现在是开着的**（2026-10-31 起），旧版 App 没码就用不了 AI 认牌。
 - **码的问题**（没有、不对、停用了、手机绑满了）回 403，`error.invite` 是 `true`，App 收到就把存着的码清掉。次数用完回 429，不带 `invite`。
 
 ### 管理网页
@@ -36,7 +39,7 @@ npm run admin-setup   # 生成随机密码，存进 Worker 密钥和这台 Mac �
 
 打开打印出来的地址（`/admin#token=…`），密码会存进这个浏览器，以后直接开 `/admin` 就行。
 
-上架审核：生成一个「审核专用」码（手机数可以给多一点，比如 10），写进 App Store Connect 的审核备注；审核过了在网页上停用。
+上架审核：1.0 送审时已生成一个「审核专用」码（10 台手机、每天 200 次），写在 App Store Connect 的审核备注里。**上架以后在网页上停用它**；以后再送审就再生成一个。
 
 中转站自己拒绝的请求回 `{"error":{"message":"…","majiang":true}}`，App 把 `message` 直接显示给用户。
 
@@ -59,4 +62,4 @@ npx wrangler tail        # 看线上实时日志
 
 ## 以后可以加
 
-现在的防护挡得住随手乱用，挡不住有人专门改设备编号刷次数（全局每天 3000 次兜底，账单有上限）。真要上架、用户多了，再加 Apple App Attest 验证请求确实来自我们的 App。
+现在靠邀请码挡人：没码的请求直接拒，每个码限手机数和每天次数，再加全局每天 3000 次兜底。码一旦给出去，拿到的人每天能用满这个码的次数，发现被滥用就在管理网页停用。用户多了，再加 Apple App Attest 验证请求确实来自我们的 App。
