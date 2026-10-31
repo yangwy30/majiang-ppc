@@ -1,6 +1,7 @@
 import { DurableObject } from "cloudflare:workers";
 import { isAllowedModel } from "./models.js";
 import { PRIVACY_HTML } from "./privacy.js";
+import { SUPPORT_HTML } from "./support.js";
 import { ADMIN_HTML } from "./admin.js";
 import { normalizeCode, newCode, sameSecret } from "./invites.js";
 
@@ -36,6 +37,9 @@ export default {
     if (url.pathname === "/health" && request.method === "GET") return new Response("ok");
     if (url.pathname === "/privacy" && request.method === "GET") {
       return new Response(PRIVACY_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+    if (url.pathname === "/support" && request.method === "GET") {
+      return new Response(SUPPORT_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
     if (url.pathname === "/admin" && request.method === "GET") {
       return new Response(ADMIN_HTML, { headers: {
