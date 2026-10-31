@@ -27,6 +27,12 @@ struct TableView: View {
         }
     }
 
+    /// 从结算页点「看每一局」进来的回结算，平时回首页。
+    private var backTitle: String {
+        if model.path.count >= 2, case .settle = model.path[model.path.count - 2] { return "结算" }
+        return "首页"
+    }
+
     private func content(_ game: Game) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -107,18 +113,15 @@ struct TableView: View {
         .page()
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarRole(.editor)
+        .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            NavBack(backTitle) { model.path.removeLast() }
+            NavTool {
                 // 一点就把现在的账本图发到微信群，大家不用凑过来看
-                Button { ShareSheet.share(game) } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.system(size: 17, weight: .medium))
-                        .frame(width: 44, height: 44)
-                }
-                .accessibilityLabel("把账本发到群里")
+                Button("发到群") { ShareSheet.share(game) }
+                    .accessibilityLabel("把账本发到群里")
             }
-            ToolbarItem(placement: .topBarTrailing) {
+            NavTool {
                 Menu {
                     if !game.isFinished {
                         Button("有人和错了") { pickingFalseWin = true }
@@ -131,11 +134,12 @@ struct TableView: View {
                         Button("结束牌局", role: .destructive) { confirmEnd = true }
                     }
                 } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 18, weight: .medium))
-                        .frame(width: 44, height: 44, alignment: .trailing)
+                    Text("更多")
+                        .font(.system(size: 16))
+                        .foregroundStyle(Theme.gray)
+                        .fixedSize()
+                        .frame(minHeight: 44)
                 }
-                .accessibilityLabel("更多")
             }
         }
         .confirmationDialog("谁和错了？", isPresented: $pickingFalseWin, titleVisibility: .visible) {

@@ -52,3 +52,15 @@ struct RootView: View {
         }
     }
 }
+
+/// 返回键是自己画的（见 `NavBack`），系统会顺手关掉从左边缘右滑返回；这里打开回来。只有一页时不响应。
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        viewControllers.count > 1
+    }
+}

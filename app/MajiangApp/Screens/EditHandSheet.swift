@@ -162,9 +162,7 @@ struct EditHandSheet: View {
             .navigationTitle("改第 \(number) 局")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("取消") { dismiss() }
-                }
+                NavClose { dismiss() }
             }
             .confirmationDialog("删掉第 \(number) 局？", isPresented: $confirmDelete, titleVisibility: .visible) {
                 Button("删掉", role: .destructive) {

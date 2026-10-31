@@ -100,20 +100,7 @@ struct CheckView: View {
         // 系统在这里还会多画一个返回键（iOS 27 模拟器上看到的），藏掉
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    flow.steps.removeAll()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Theme.ink)
-                }
-                .accessibilityLabel("返回拍照")
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("重拍") { flow.steps.removeAll() }
-                    .buttonStyle(.text(size: 16))
-            }
+            NavBack("重拍") { flow.steps.removeAll() }
         }
         .sheet(item: $editing) { target in sheet(for: target) }
         .task {

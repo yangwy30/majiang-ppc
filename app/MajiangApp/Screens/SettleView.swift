@@ -107,10 +107,7 @@ struct SettleView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("完成") { model.path = [] }
-                    .font(.system(size: 17, weight: .semibold))
-            }
+            NavBack("首页") { model.path = [] }
         }
     }
 }

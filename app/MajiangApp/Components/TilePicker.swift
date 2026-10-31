@@ -54,9 +54,7 @@ struct TileEditSheet: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("取消") { dismiss() }
-                }
+                NavClose { dismiss() }
             }
         }
         .presentationDetents([.medium, .large])
@@ -97,9 +95,7 @@ struct MeldEditSheet: View {
             .navigationTitle("加一组亮在桌上的牌")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("取消") { dismiss() }
-                }
+                NavClose { dismiss() }
             }
         }
     }

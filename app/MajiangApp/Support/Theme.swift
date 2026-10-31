@@ -141,6 +141,98 @@ extension ButtonStyle where Self == TextButtonStyle {
     }
 }
 
+// MARK: - 顶部按钮
+
+/// 顶部按钮的规矩：左上是回去或关掉（推进来的页写「‹ 回到哪儿」，弹出层有改动写「取消」、只是看看写「关闭」），
+/// 右上只放这一页的工具，用浅一档的字。确认不放顶上，一律用页面底部的黑色主按钮。
+/// 都是直接写在纸上的字：iOS 26 起系统会给导航栏按钮包一层玻璃泡，这里关掉。
+struct NavBack: ToolbarContent {
+    var title: String
+    var action: () -> Void
+
+    init(_ title: String, action: @escaping () -> Void) {
+        self.title = title
+        self.action = action
+    }
+
+    var body: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button(action: action) {
+                HStack(spacing: 3) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 17, weight: .semibold))
+                    Text(title)
+                }
+            }
+            .buttonStyle(NavButtonStyle())
+            .accessibilityLabel("回到\(title)")
+        }
+        .withoutGlass()
+    }
+}
+
+/// 弹出层左上的「取消」「关闭」。
+struct NavClose: ToolbarContent {
+    var title: String
+    /// 拍照页是深色底，用白字。
+    var color: Color
+    var action: () -> Void
+
+    init(_ title: String = "取消", color: Color = Theme.ink, action: @escaping () -> Void) {
+        self.title = title
+        self.color = color
+        self.action = action
+    }
+
+    var body: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button(title, action: action)
+                .buttonStyle(NavButtonStyle(color: color))
+        }
+        .withoutGlass()
+    }
+}
+
+/// 右上的工具：一个词，灰一点，免得和左上的回去抢。
+struct NavTool<Label: View>: ToolbarContent {
+    @ViewBuilder var label: () -> Label
+
+    var body: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            label()
+                .buttonStyle(NavButtonStyle(color: Theme.gray, size: 16))
+        }
+        .withoutGlass()
+    }
+}
+
+struct NavButtonStyle: ButtonStyle {
+    var color: Color = Theme.ink
+    var size: CGFloat = 17
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: size))
+            .foregroundStyle(color)
+            // 导航栏给的宽度很窄，不撑开的话「首页」会折成两行
+            .fixedSize()
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
+            .opacity(configuration.isPressed ? 0.4 : 1)
+    }
+}
+
+extension ToolbarContent {
+    @ToolbarContentBuilder
+    func withoutGlass() -> some ToolbarContent {
+        if #available(iOS 26, *) {
+            sharedBackgroundVisibility(.hidden)
+        } else {
+            self
+        }
+    }
+}
+
 /// 朱红印章「庄」。
 struct DealerStamp: View {
     var size: CGFloat = 22

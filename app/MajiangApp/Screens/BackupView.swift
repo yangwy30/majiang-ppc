@@ -40,9 +40,7 @@ struct BackupView: View {
             .navigationTitle("备份与换手机")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("好") { dismiss() }.fontWeight(.semibold)
-                }
+                NavClose("关闭") { dismiss() }
             }
             .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
                 switch result {
