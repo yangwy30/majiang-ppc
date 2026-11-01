@@ -21,7 +21,7 @@
 
 ## 状态
 
-1.0（build 2）2026-10-31 已提交 App Store 审核，审核通过后自动上架；中国大陆暂不上（要 ICP 备案）。测试版在 [TestFlight](https://testflight.apple.com/join/fTaXVapc)。
+1.0 已于 2026-11-01 在 App Store 上架，175 个国家和地区（含中国大陆），免费。测试版在 [TestFlight](https://testflight.apple.com/join/fTaXVapc)。已知问题：中转站在 `workers.dev` 上，中国大陆大多连不上，那边只能用离线认牌；要换自定义域名再发 1.0.1，见 [docs/app-store.md](docs/app-store.md)。
 
 AI 认牌是邀请制：填了邀请码才走 `server/` 里的中转站用 Gemini，没码也能用手机上的离线认牌和手动选牌。App 里不带 Key。
 
@@ -53,7 +53,7 @@ data/       标准答案、照片来源表、番种测试用例，见 data/READM
 - [可行性评估](docs/feasibility.md)：结论、技术路线、MVP 范围
 - [用户流程设计](docs/user-flow.md)：每个页面的截图、视觉规范「墨与朱」和用词
 - [App 名字和图标](docs/app-name-and-icon.md)：为什么叫「拍照算番」，图标 C1 的源文件
-- [产品页、送审和 TestFlight 文案](docs/app-store.md)：App Store 1.0 填了什么、审核备注、上架后要做的事
+- [产品页、送审和 TestFlight 文案](docs/app-store.md)：App Store 1.0 填了什么、审核备注、上架状态和还没做的事
 - [Yang 的全部消息](docs/yang-messages.md)：项目里 Yang 发过的所有消息，按时间原文汇总
 
 **调研**（总览和关键结论见 [research/README.md](research/README.md)）

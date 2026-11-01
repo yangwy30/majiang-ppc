@@ -1,16 +1,19 @@
 # 产品页、送审和 TestFlight 文案
 
-## 现在的状态（2026-10-31）
+## 现在的状态（2026-11-01）
 
-- **App Store 1.0（build 2）已提交审核**（2026-10-31 20:49 UTC），状态「等待审核」，审核通过后**自动上架**。build 2 带端侧认牌模型和填码页。
-- **上架地区**：174 个国家和地区，**不含中国大陆**（大陆上架要 ICP 备案，以后再说）。价格免费。
+- **App Store 1.0（build 2）已上架**：2026-10-31 20:49 UTC 提交，2026-11-01 审核通过，自动上架。build 2 带端侧认牌模型和填码页。
+- **上架地区**：全部 175 个国家和地区，**含中国大陆**（10-31 23:48 UTC 加上的）。价格免费。
 - **TestFlight** 公开链接 https://testflight.apple.com/join/fTaXVapc 继续可用。
 - **「必须有邀请码」已打开**：没码的请求中转站直接拒，所以还没更新到新版的 TestFlight 旧版本用不了 AI 认牌，要更新到新版再填码。
 
-**上架以后要做的**
+**已知问题：中国大陆用不了 AI 认牌。** App 里写死的中转站地址在 `workers.dev` 上，大陆大多连不上，AI 复核会失败，只剩端侧认牌和手动改。办法是给中转站绑一个自己的域名，再发 1.0.1 把 App 里的地址换过去（`app/MajiangApp/App/AppModel.swift` 的 `defaultProxyURL`）。旧地址保留，老版本照样能用。
 
-1. 在 [管理网页](https://majiang-relay.yangwang9710.workers.dev/admin) 停用备注为「审核专用」的码（码本身写在 App Store Connect 的审核备注里，不进仓库）。
-2. 欧盟的 DSA「交易商」声明还没填，只影响欧盟地区上架，要在欧盟上时再填。
+**还没做的**
+
+1. 在 [管理网页](https://majiang-relay.yangwang9710.workers.dev/admin) 停用备注为「审核专用」的码（码本身写在 App Store Connect 的审核备注里，不进仓库）。11-01 查过：它一次都没被用过。
+2. 中转站换自定义域名 + 发 1.0.1（见上面的已知问题）。
+3. 欧盟的 DSA「交易商」声明还没填。不填的话欧盟 27 国的 App Store 不会显示这个 App，要在欧盟上时去 App Store Connect 的「商务」里填。
 
 截图在 `docs/assets/app-store/`（6.9 寸，1320×2868），由 `tools/app-store/frame.swift` 从模拟器截图生成。
 
