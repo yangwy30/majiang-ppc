@@ -2,7 +2,8 @@
 
 App 正式版不带 Gemini Key，认牌请求发到这里，由中转站带上 Key 转发给 Google。
 
-- 地址：`https://majiang-relay.yangwang9710.workers.dev`
+- 地址：`https://majiang.acrossus.app`（1.0.1 起 App 用这个，域名 acrossus.app 是 Yang 在 Cloudflare 上已有的）
+  - 旧地址 `https://majiang-relay.yangwang9710.workers.dev` 是同一个 Worker，留给 1.0 和旧的 TestFlight 版本；中国大陆大多连不上 workers.dev，所以换了域名
   - `/recognize` 认牌，`/invite` 填码（见下面）
   - `/privacy` 隐私说明（`src/privacy.js`），`/support` 帮助页（`src/support.js`），App Store 产品页链的就是这两页
   - `/admin` 邀请码管理网页，`/health` 回 `ok`
@@ -29,7 +30,7 @@ AI 认牌是邀请制：App 在请求头 `X-Majiang-Invite` 带上用户填的�
 
 ### 管理网页
 
-`https://majiang-relay.yangwang9710.workers.dev/admin`：生成码（可写「给谁」）、看每个码绑了几台手机、今天和一共用了几次、停用 / 重新启用、换手机时清掉绑定、拨「必须有邀请码」。
+`https://majiang.acrossus.app/admin`（旧地址下的 `/admin` 也能用）：生成码（可写「给谁」）、看每个码绑了几台手机、今天和一共用了几次、停用 / 重新启用、换手机时清掉绑定、拨「必须有邀请码」。
 
 网页要管理密码，存在 Worker 密钥 `ADMIN_TOKEN` 里。第一次设置（之后换密码也一样）：
 

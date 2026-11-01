@@ -9,11 +9,11 @@
 - **审核专用邀请码已停用**（2026-11-01，停用前一次都没被用过）。
 - **「必须有邀请码」已打开**：没码的请求中转站直接拒，所以还没更新到新版的 TestFlight 旧版本用不了 AI 认牌，要更新到新版再填码。
 
-**已知问题：中国大陆用不了 AI 认牌。** App 里写死的中转站地址在 `workers.dev` 上，大陆大多连不上，AI 复核会失败，只剩端侧认牌和手动改。办法是给中转站绑一个自己的域名，再发 1.0.1 把 App 里的地址换过去（`app/MajiangApp/App/AppModel.swift` 的 `defaultProxyURL`）。旧地址保留，老版本照样能用。
+**中国大陆用不了 AI 认牌（1.0.1 修）。** 1.0 里写死的中转站地址在 `workers.dev` 上，大陆连不上（11-01 用国内 5 个城市的节点实测，全部失败），AI 复核会失败，只剩端侧认牌和手动改。11-01 中转站加了自己的域名 `majiang.acrossus.app`（Yang 已有的 acrossus.app 下的子域名，同一个 Worker），国内 8 个城市实测全通、约 1 秒。1.0.1 把 App 里的地址换成新域名（`app/MajiangApp/App/AppModel.swift` 的 `defaultProxyURL`）。旧地址保留，1.0 照样能用（大陆以外）。
 
 **还没做的**
 
-- 中转站换自定义域名 + 发 1.0.1（见上面的已知问题）。
+- 发 1.0.1（build 3）。产品页的隐私政策和支持网址也换成新域名，大陆用户才打得开。
 
 截图在 `docs/assets/app-store/`（6.9 寸，1320×2868），由 `tools/app-store/frame.swift` 从模拟器截图生成。
 
@@ -22,8 +22,8 @@
 - **名称**：拍照算番
 - **副标题**（30 字内）：AI 拍照认牌，国标自动算番
 - **类别**：工具（次要：桌面游戏）
-- **隐私政策**：https://majiang-relay.yangwang9710.workers.dev/privacy
-- **App 支持**：https://majiang-relay.yangwang9710.workers.dev/support（怎么用、邀请码、认错怎么改、换手机、联系，代码在 `server/src/support.js`）
+- **隐私政策**：https://majiang.acrossus.app/privacy（1.0 填的是旧地址 majiang-relay.yangwang9710.workers.dev，两个都能打开，大陆只能开新的）
+- **App 支持**：https://majiang.acrossus.app/support（怎么用、邀请码、认错怎么改、换手机、联系，代码在 `server/src/support.js`）
 - **价格**：免费
 - **年龄分级**：4+（只记分，没有真钱交易，不算赌博）
 - **隐私标签**：收集「照片」和「设备编号」两项，都只用于 App 功能，不关联身份，不用于追踪
@@ -79,3 +79,9 @@
 **给 TestFlight 审核看的说明**（Beta App Review notes）
 
 > 不需要登录。打开后点「开一局」，填四个名字开始；点「有人和了」拍一张麻将牌的照片即可体验识别和算番。没有麻将牌时，可以用相册里任意一张麻将和牌的图片。
+
+## 1.0.1
+
+**此版本新增内容**（What's New）
+
+> 修好了中国大陆用不了 AI 认牌的问题。
