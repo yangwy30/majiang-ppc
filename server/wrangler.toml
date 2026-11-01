@@ -2,7 +2,9 @@
 name = "majiang-relay"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
+# workers.dev 地址给 1.0 用（中国大陆大多连不上）；1.0.1 起 App 走自己的域名。两个地址是同一个 Worker。
 workers_dev = true
+routes = [{ pattern = "majiang.acrossus.app", custom_domain = true }]
 
 [vars]
 # 用哪个模型，只能是 Flash / Flash-Lite（代码里会拦 Pro）。改完 `npm run deploy` 生效，App 不用更新。

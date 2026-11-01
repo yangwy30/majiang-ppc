@@ -7,7 +7,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-const BASE = process.env.MAJIANG_RELAY_URL || "https://majiang-relay.yangwang9710.workers.dev";
+const BASE = process.env.MAJIANG_RELAY_URL || "https://majiang.acrossus.app";
 const token = randomBytes(24).toString("base64url");
 
 const put = spawnSync("npx", ["wrangler", "secret", "put", "ADMIN_TOKEN"], { input: token, stdio: ["pipe", "inherit", "inherit"] });
