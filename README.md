@@ -21,7 +21,7 @@
 
 ## 状态
 
-1.0 已于 2026-11-01 在 App Store 上架，175 个国家和地区（含中国大陆），免费。测试版在 [TestFlight](https://testflight.apple.com/join/fTaXVapc)。已知问题：中转站在 `workers.dev` 上，中国大陆大多连不上，那边只能用离线认牌；要换自定义域名再发 1.0.1，见 [docs/app-store.md](docs/app-store.md)。
+1.0 已于 2026-11-01 在 App Store 上架，175 个国家和地区（含中国大陆），免费。测试版在 [TestFlight](https://testflight.apple.com/join/fTaXVapc)。1.0 的中转站地址在 `workers.dev` 上，中国大陆连不上，那边只能用离线认牌；中转站已加上自己的域名 `majiang.acrossus.app`，1.0.1 改用它，见 [docs/app-store.md](docs/app-store.md)。
 
 AI 认牌是邀请制：填了邀请码才走 `server/` 里的中转站用 Gemini，没码也能用手机上的离线认牌和手动选牌。App 里不带 Key。
 
