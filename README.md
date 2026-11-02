@@ -54,7 +54,6 @@ data/       标准答案、照片来源表、番种测试用例，见 data/READM
 - [用户流程设计](docs/user-flow.md)：每个页面的截图、视觉规范「墨与朱」和用词
 - [App 名字和图标](docs/app-name-and-icon.md)：为什么叫「拍照算番」，图标 C1 的源文件
 - [产品页、送审和 TestFlight 文案](docs/app-store.md)：App Store 1.0 填了什么、审核备注、上架状态和还没做的事
-- [Yang 的全部消息](docs/yang-messages.md)：项目里 Yang 发过的所有消息，按时间原文汇总
 
 **调研**（总览和关键结论见 [research/README.md](research/README.md)）
 
