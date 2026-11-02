@@ -6,14 +6,15 @@
 - **上架地区**：全部 175 个国家和地区，**含中国大陆**（10-31 23:48 UTC 加上的）。价格免费。
 - **TestFlight** 公开链接 https://testflight.apple.com/join/fTaXVapc 继续可用。
 - **欧盟 DSA 已声明为「非交易商」**（2026-11-01，整个开发者账号通用，状态 Active），欧盟 27 国可以上架，不公开个人联系方式。
-- **审核专用邀请码已停用**（2026-11-01，停用前一次都没被用过）。
+- **App Store 1.0.1（build 3）已提交审核**（2026-11-02 00:13 UTC），通过后自动上架。只改了中转站地址（见下），产品页的支持网址和隐私政策网址也已换成 `majiang.acrossus.app`。
+- **审核专用邀请码**：1.0 上架后停用过，送审 1.0.1 时临时重新启用给审核员用，**1.0.1 通过后要再停用**。
 - **「必须有邀请码」已打开**：没码的请求中转站直接拒，所以还没更新到新版的 TestFlight 旧版本用不了 AI 认牌，要更新到新版再填码。
 
 **中国大陆用不了 AI 认牌（1.0.1 修）。** 1.0 里写死的中转站地址在 `workers.dev` 上，大陆连不上（11-01 用国内 5 个城市的节点实测，全部失败），AI 复核会失败，只剩端侧认牌和手动改。11-01 中转站加了自己的域名 `majiang.acrossus.app`（Yang 已有的 acrossus.app 下的子域名，同一个 Worker），国内 8 个城市实测全通、约 1 秒。1.0.1 把 App 里的地址换成新域名（`app/MajiangApp/App/AppModel.swift` 的 `defaultProxyURL`）。旧地址保留，1.0 照样能用（大陆以外）。
 
 **还没做的**
 
-- 发 1.0.1（build 3）。产品页的隐私政策和支持网址也换成新域名，大陆用户才打得开。
+- 1.0.1 通过后，在管理网页停用「审核专用」码。
 
 截图在 `docs/assets/app-store/`（6.9 寸，1320×2868），由 `tools/app-store/frame.swift` 从模拟器截图生成。
 
@@ -22,7 +23,7 @@
 - **名称**：拍照算番
 - **副标题**（30 字内）：AI 拍照认牌，国标自动算番
 - **类别**：工具（次要：桌面游戏）
-- **隐私政策**：https://majiang.acrossus.app/privacy（1.0 填的是旧地址 majiang-relay.yangwang9710.workers.dev，两个都能打开，大陆只能开新的）
+- **隐私政策**：https://majiang.acrossus.app/privacy（1.0.1 起；1.0 填的是旧地址 majiang-relay.yangwang9710.workers.dev，大陆打不开）
 - **App 支持**：https://majiang.acrossus.app/support（怎么用、邀请码、认错怎么改、换手机、联系，代码在 `server/src/support.js`）
 - **价格**：免费
 - **年龄分级**：4+（只记分，没有真钱交易，不算赌博）
