@@ -2,7 +2,7 @@ import CoreText
 import SwiftUI
 import UIKit
 
-/// 视觉「墨与朱」：纸白底、墨色字，整个 App 只用一种朱红（庄的印章、赢的分数）。
+/// 视觉「墨与朱」：纸白底、墨色字，整个 App 只用一种朱红（庄的印章、赢的分数、和牌相关的提示）。删除和报错也用墨色，不用朱红。
 /// 输的分数用墨色加负号，不用红绿。
 enum Theme {
     static let paper = Color(hex: 0xF7F6F2)
@@ -329,6 +329,30 @@ struct NameChip: View {
                 .lineLimit(1)
                 .padding(.horizontal, 16)
                 .frame(minHeight: 36)
+                .foregroundStyle(selected ? Color.white : Theme.ink)
+                .background(selected ? Theme.ink : Theme.white, in: Capsule())
+                .overlay(Capsule().strokeBorder(selected ? Color.clear : Theme.line))
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+/// 一排等宽的选项（核对页的谁和了、怎么和的）：选中黑底白字，没选白底细线。名字长了缩小，不折行。
+struct ChoiceChip: View {
+    var title: String
+    var selected: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 15, weight: selected ? .medium : .regular))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .padding(.horizontal, 6)
+                .frame(maxWidth: .infinity, minHeight: 40)
                 .foregroundStyle(selected ? Color.white : Theme.ink)
                 .background(selected ? Theme.ink : Theme.white, in: Capsule())
                 .overlay(Capsule().strokeBorder(selected ? Color.clear : Theme.line))

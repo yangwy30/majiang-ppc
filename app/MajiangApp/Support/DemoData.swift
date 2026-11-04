@@ -100,6 +100,8 @@ enum DemoData {
     @MainActor
     static func prepare(_ flow: RoundFlow, for screen: DemoScreen) {
         let samples = MockRecognizer.defaultSamples
+        // 截图里当作在拍照页已经点了庄家和牌；自摸还是点炮留给核对页选
+        if screen != .capture { flow.pickWinner(flow.game.dealer) }
         switch screen {
         case .check:
             flow.load(samples[0])
@@ -121,6 +123,7 @@ enum DemoData {
         case .result, .resultCapped:
             flow.load(samples[0])
             flow.choose(Tile(suit: .dots, rank: 5)!, at: 9)
+            flow.pickSelfDrawn()
             flow.steps = [.check]
             flow.showResult = true
         default:

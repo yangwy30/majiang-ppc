@@ -12,7 +12,10 @@ final class RoundFlow {
     let game: Game
     var steps: [RoundStep] = []
 
+    /// 谁和了。没选之前先按庄家算番（门风要用），但不能记账。
     var winner: Int
+    /// 拍照页或核对页上点过谁和了。不替人预先选，免得没留意就记到庄家头上。
+    var winnerChosen = false
     var photo: UIImage?
     var isRecognizing = false
     /// 双读时端侧的结果已经显示在核对页，Gemini 还在复核（界面上叫「再认一遍」，不提 Gemini）。复核完之前牌面不能改。
@@ -37,6 +40,10 @@ final class RoundFlow {
     var selfDrawn = true
     /// 点炮的人。不预先猜，让用户自己点，免得记错人。
     var discarder: Int?
+    /// 点过「自摸」或某个人点炮。没点之前按自摸算番，但不能记账。
+    var wayChosen = false
+    /// 这手牌用户动手改过几次（换、加、删、确认拿不准的）。离线认牌改得多时，核对页提一句邀请码。
+    var corrections = 0
     var specials: Set<SpecialWin> = []
     var flowerCount = 0
     var showResult = false
@@ -76,6 +83,30 @@ final class RoundFlow {
         return false
     }
 
+    // MARK: 谁和了、怎么和的
+
+    func pickWinner(_ player: Int) {
+        winner = player
+        winnerChosen = true
+        // 点炮的人不能是和牌的人：原来选的点炮者变成了和牌者，就得重新选
+        if !selfDrawn && discarder == player {
+            discarder = nil
+            wayChosen = false
+        }
+    }
+
+    func pickSelfDrawn() {
+        selfDrawn = true
+        discarder = nil
+        wayChosen = true
+    }
+
+    func pickDiscarder(_ player: Int) {
+        selfDrawn = false
+        discarder = player
+        wayChosen = true
+    }
+
     var pendingReviewCount: Int { tiles.filter(\.needsReview).count }
 
     /// 第一张还拿不准的牌，核对页一次问一张。
@@ -94,7 +125,9 @@ final class RoundFlow {
         case .success:
             break
         }
-        if !selfDrawn && (discarder == nil || discarder == winner) { return "选一下是谁打的" }
+        if !winnerChosen { return "选一下谁和了" }
+        if !wayChosen { return "选一下怎么和的" }
+        if !selfDrawn && (discarder == nil || discarder == winner) { return "选一下是谁点的炮" }
         return nil
     }
 
@@ -197,6 +230,7 @@ final class RoundFlow {
         notes = recognition.notes
         winningIndex = tiles.indices.last
         previewFlowerCount = nil
+        corrections = 0
         reviewAtLoad = recognition.reviewCount
         let resolution = RecognitionResolver.resolve(recognition, context: context, minimumFan: game.rules.minimumFan)
         recommended = resolution.recommended
@@ -214,6 +248,7 @@ final class RoundFlow {
     func choose(_ tile: Tile, at index: Int) {
         guard tiles.indices.contains(index) else { return }
         tiles[index].tile = tile
+        corrections += 1
         tiles[index].alternatives = []
         tiles[index].uncertain = false
         recommended[index] = nil
@@ -223,6 +258,7 @@ final class RoundFlow {
     /// 补一张牌。补的是漏读的牌，和张不跟着跳；还没有和张时才用这张。
     func append(_ tile: Tile) {
         tiles.append(RecognizedTile(tile: tile))
+        corrections += 1
         if winningIndex == nil { winningIndex = tiles.indices.last }
     }
 
@@ -230,6 +266,7 @@ final class RoundFlow {
     func insert(_ tile: Tile, after index: Int) {
         guard tiles.indices.contains(index) else { return append(tile) }
         tiles.insert(RecognizedTile(tile: tile), at: index + 1)
+        corrections += 1
         if let w = winningIndex, w > index { winningIndex = w + 1 }
         shiftRecommendations(after: index, by: 1)
     }
@@ -237,6 +274,7 @@ final class RoundFlow {
     func remove(at index: Int) {
         guard tiles.indices.contains(index) else { return }
         tiles.remove(at: index)
+        corrections += 1
         recommended[index] = nil
         recommendedRemovals.remove(index)
         shiftRecommendations(after: index, by: -1)
@@ -265,7 +303,8 @@ final class RoundFlow {
     // MARK: 记账
 
     var winRecord: WinRecord? {
-        guard case .success(let result) = scoring, result.meetsMinimum(game.rules.minimumFan) else { return nil }
+        guard winnerChosen, wayChosen,
+              case .success(let result) = scoring, result.meetsMinimum(game.rules.minimumFan) else { return nil }
         // 拍照页回头改了和牌者时，之前选的点炮者可能就是和牌者本人，这时不能记账
         if !selfDrawn && (discarder == nil || discarder == winner) { return nil }
         return WinRecord(winner: winner, discarder: selfDrawn ? nil : discarder, hand: hand, context: context, result: result)
