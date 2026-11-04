@@ -79,7 +79,7 @@ struct MeldEditSheet: View {
                 VStack(alignment: .leading, spacing: 16) {
                     SegmentedSwitch(options: Kind.allCases.map { ($0, $0.rawValue) }, selection: $kind)
                     Text(kind == .chow ? "选这组里最小的那张（567 饼就选 5 饼）" : "选是哪张牌")
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                     TilePickerGrid(selected: nil) { tile in
                         if let meld = makeMeld(tile) {

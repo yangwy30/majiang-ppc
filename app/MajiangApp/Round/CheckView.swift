@@ -54,9 +54,10 @@ struct CheckView: View {
                 }
 
                 tileGrid.padding(.top, 22)
-                if !flow.tiles.isEmpty {
+                // 教怎么用的说明句，记过几手以后就收起来
+                if !flow.tiles.isEmpty && !model.isSeasoned {
                     Text(flow.isReviewing ? "最右边那张算和的牌。" : "最右边那张算和的牌。不对就点一下改。")
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 6)
                 }
@@ -110,6 +111,8 @@ struct CheckView: View {
             NavBack("重拍") { flow.steps.removeAll() }
         }
         .sheet(item: $editing) { target in sheet(for: target) }
+        // 牌落进格子时很轻地震一下
+        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.6), trigger: landed) { _, new in new }
         .task {
             // 等页面升上来再落牌（onAppear 里直接改，第一帧还没画，看不到动画）
             flipStart = Date().addingTimeInterval(reduceMotion ? 0 : 1.3)
@@ -215,7 +218,7 @@ struct CheckView: View {
             && !flow.isReviewing && flow.firstPending == nil && flow.isValidWin {
             Button { showInvite = true } label: {
                 Text("这手有 \(flow.corrections) 处要你动手改。有邀请码可以开 AI 认牌，更准 ›")
-                    .font(.system(size: 13))
+                    .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
@@ -248,10 +251,15 @@ struct CheckView: View {
                             TileFace(tile: tile.tile, width: tileWidth,
                                      state: tile.needsReview ? .doubt : index == suspect ? .wrong : .normal)
                         }
-                        Text(index == winningIndex ? "和" : " ")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(Theme.vermilion)
-                            .frame(height: 14)
+                        // 和的那张下面盖一个朱红小印「和」
+                        Group {
+                            if index == winningIndex {
+                                Seal(text: "和", size: 16).accessibilityLabel("和的那张")
+                            } else {
+                                Color.clear
+                            }
+                        }
+                        .frame(height: 16)
                     }
                     // 「和」字跟着牌一起落
                     .opacity(landed || reduceMotion ? 1 : 0)
@@ -271,7 +279,7 @@ struct CheckView: View {
                             .strokeBorder(Theme.faint, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
                             .frame(width: tileWidth, height: (tileWidth * 1.32).rounded())
                             .overlay(Image(systemName: "plus").foregroundStyle(Theme.gray))
-                        Text(" ").font(.system(size: 11)).frame(height: 14)
+                        Color.clear.frame(height: 16)
                     }
                 }
                 .buttonStyle(.plain)
@@ -286,13 +294,13 @@ struct CheckView: View {
         if flow.melds.isEmpty {
             if !flow.isReviewing {
                 Button("有吃、碰、杠亮在桌上？加上 ›") { editing = .meld }
-                    .buttonStyle(.text(size: 13))
+                    .buttonStyle(.text(size: 14))
             }
         } else {
             HStack {
                 SectionLabel("亮在桌上的")
                 Button("加一组 ›") { editing = .meld }
-                    .buttonStyle(.text(size: 13))
+                    .buttonStyle(.text(size: 14))
                     .disabled(flow.isReviewing)
             }
             .padding(.top, 14)
@@ -324,7 +332,7 @@ struct CheckView: View {
                     Text(note)
                 }
             }
-            .font(.system(size: 13))
+            .font(.system(size: 14))
             .foregroundStyle(Theme.gray)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.top, 10)
@@ -344,7 +352,7 @@ struct CheckView: View {
                     flow.cancelRecognition()
                     flow.notes.append("没等第二遍认完，只有第一遍的读法，对照照片看一眼")
                 }
-                .buttonStyle(.text(size: 13))
+                .buttonStyle(.text(size: 14))
                 .transition(.opacity)
             }
         }
@@ -427,7 +435,7 @@ struct CheckView: View {
         } label: {
             Text(flow.tiles.isEmpty ? "其实是和错了？记下来（赔三家各 \(game.rules.falseWinPenalty) 分）›"
                  : "牌没认错，是真的和错了？记下来（赔三家各 \(game.rules.falseWinPenalty) 分）›")
-                .font(.system(size: 13))
+                .font(.system(size: 14))
                 .foregroundStyle(Theme.gray)
                 .multilineTextAlignment(.leading)
         }
@@ -470,11 +478,13 @@ struct CheckView: View {
                     }
                 }
             }
-            Text(wayNote)
-                .font(.system(size: 14))
-                .foregroundStyle(Theme.gray)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, flow.winnerChosen ? 10 : 0)
+            if let wayNote {
+                Text(wayNote)
+                    .font(.system(size: 14))
+                    .foregroundStyle(Theme.gray)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, flow.winnerChosen ? 10 : 0)
+            }
         }
         // 牌还凑不成和的时候，先改牌
         .opacity(shapeBroken ? 0.5 : 1)
@@ -491,8 +501,9 @@ struct CheckView: View {
         .padding(.top, 22)
     }
 
-    private var wayNote: String {
+    private var wayNote: String? {
         if !flow.winnerChosen { return "先选上面谁和了。" }
+        if model.isSeasoned { return nil }
         if !flow.wayChosen { return "自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。" }
         if flow.selfDrawn { return "自己摸到和的那张，三家都要付。" }
         return "和的是\(flow.discarder.map { game.players[$0].name } ?? "别人")打出的牌。"
@@ -533,7 +544,7 @@ struct CheckView: View {
                             (Text(special.name) + Text(" · \(special.fanPoints) 番").foregroundStyle(Theme.gray))
                                 .font(.system(size: 15))
                             Text(special.plain)
-                                .font(.system(size: 13))
+                                .font(.system(size: 14))
                                 .foregroundStyle(Theme.gray)
                         }
                         Spacer()
@@ -561,7 +572,9 @@ struct CheckView: View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("花牌").font(.system(size: 16))
-                Text("每张 1 番，不算进起和").font(.system(size: 12)).foregroundStyle(Theme.gray)
+                if !model.isSeasoned {
+                    Text("每张 1 番，不算进起和").font(.system(size: 14)).foregroundStyle(Theme.gray)
+                }
             }
             Spacer()
             HStack(spacing: 14) {
@@ -580,7 +593,7 @@ struct CheckView: View {
     private func stepButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: 13, weight: .medium))
+                .font(.system(size: 14, weight: .medium))
                 .frame(width: 32, height: 32)
                 .overlay(Circle().strokeBorder(Theme.line))
                 .contentShape(Circle())
@@ -636,7 +649,7 @@ private struct QuestionCard: View {
                         RoundedRectangle(cornerRadius: 30 * 0.16, style: .continuous)
                             .strokeBorder(Theme.faint, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
                             .frame(width: 30, height: 40)
-                            .overlay(Image(systemName: "xmark").font(.system(size: 12)).foregroundStyle(Theme.gray))
+                            .overlay(Image(systemName: "xmark").font(.system(size: 13)).foregroundStyle(Theme.gray))
                     } action: {
                         flow.remove(at: index)
                     }
@@ -644,7 +657,7 @@ private struct QuestionCard: View {
             }
             .padding(.top, 14)
             Button("都不是，自己选 ›", action: other)
-                .buttonStyle(.text(size: 13))
+                .buttonStyle(.text(size: 14))
                 .padding(.top, 4)
         }
         .padding(.top, 18)
@@ -661,7 +674,7 @@ private struct QuestionCard: View {
                     Text(title).font(.system(size: 16, weight: .medium))
                     if let wins {
                         Text(wins ? "选这个能和" : "选这个和不了")
-                            .font(.system(size: 12))
+                            .font(.system(size: 13))
                             .foregroundStyle(wins ? Theme.vermilion : Theme.gray)
                     }
                 }

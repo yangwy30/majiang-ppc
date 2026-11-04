@@ -178,20 +178,25 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
     public var endedAt: Date?
     /// 开局时的座位：下标 0 东、1 南、2 西、3 北。东家是第一局的庄。
     public var players: [Player]
+    /// 用这台手机的人是 `players` 里的第几个（牌桌图上画在最下面，首页历史显示他的输赢）。
+    /// 跟第一局的庄分开：自己不坐庄也能如实填。旧存档没有这一项，按第一个人算。
+    public var me: Int
     public var rules: GameRules
     public private(set) var records: [HandRecord]
 
-    public init(id: UUID = UUID(), players: [Player], rules: GameRules = GameRules(), startedAt: Date = Date()) {
+    public init(id: UUID = UUID(), players: [Player], me: Int = 0, rules: GameRules = GameRules(), startedAt: Date = Date()) {
         precondition(players.count == 4, "国标麻将固定 4 人")
+        precondition((0..<4).contains(me), "我必须是四个人之一")
         self.id = id
         self.players = players
+        self.me = me
         self.rules = rules
         self.records = []
         self.startedAt = startedAt
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, startedAt, endedAt, players, rules, records
+        case id, startedAt, endedAt, players, me, rules, records
     }
 
     public init(from decoder: Decoder) throws {
@@ -200,6 +205,8 @@ public struct Game: Identifiable, Hashable, Codable, Sendable {
         startedAt = try c.decode(Date.self, forKey: .startedAt)
         endedAt = try c.decodeIfPresent(Date.self, forKey: .endedAt)
         players = try c.decode([Player].self, forKey: .players)
+        let me = try c.decodeIfPresent(Int.self, forKey: .me) ?? 0
+        self.me = (0..<4).contains(me) ? me : 0
         rules = try c.decodeIfPresent(GameRules.self, forKey: .rules) ?? GameRules()
         records = try c.decodeIfPresent([HandRecord].self, forKey: .records) ?? []
     }

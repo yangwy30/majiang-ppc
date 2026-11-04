@@ -13,6 +13,11 @@ struct SettleView: View {
         }
     }
 
+    /// 「+¥76」「−¥12.5」「¥0」。
+    private func signedMoney(_ game: Game, _ points: Int) -> String {
+        points > 0 ? "+" + game.moneyText(points) : game.moneyText(points)
+    }
+
     private func content(_ game: Game) -> some View {
         let scores = game.scores
         let ranking = Settlement.ranking(scores: scores)
@@ -31,7 +36,13 @@ struct SettleView: View {
                                 .frame(width: 14)
                             Text(game.players[player].name).font(.system(size: 17, weight: .medium))
                             Spacer()
-                            Text(Theme.signed(scores[player]))
+                            // 结算是拿来转钱的：大字写钱，1 分不是 1 元时旁边小字写分，跟下面的转账对得上
+                            if game.rules.yuanPerPoint != 1 {
+                                Text("\(Theme.signed(scores[player])) 分")
+                                    .font(.system(size: 14).monospacedDigit())
+                                    .foregroundStyle(Theme.gray)
+                            }
+                            Text(signedMoney(game, scores[player]))
                                 .font(Theme.score(26))
                                 .foregroundStyle(Theme.scoreColor(scores[player]))
                         }
@@ -56,7 +67,7 @@ struct SettleView: View {
                             HStack(spacing: 10) {
                                 Text(game.players[t.from].name)
                                 Image(systemName: "arrow.right")
-                                    .font(.system(size: 13, weight: .medium))
+                                    .font(.system(size: 14, weight: .medium))
                                     .foregroundStyle(Theme.faint)
                                     .accessibilityLabel("转给")
                                 Text(game.players[t.to].name)

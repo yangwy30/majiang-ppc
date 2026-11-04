@@ -324,6 +324,25 @@ final class ArchiveAndParsingTests: XCTestCase {
         XCTAssertEqual(archive.games.first?.rules.yuanPerPoint, 2)
         XCTAssertEqual(archive.games.first?.rules.totalHands, 16)
         XCTAssertEqual(archive.version, 1)
+        // 旧存档没有「我」，按第一个人算
+        XCTAssertEqual(archive.games.first?.me, 0)
+    }
+
+    func testMeIsKeptSeparateFromFirstDealer() throws {
+        let players = ["阿强", "杨", "莉莉", "小张"].map { Player(name: $0) }
+        let game = Game(players: players, me: 1)
+        XCTAssertEqual(game.dealer, 0)
+        XCTAssertEqual(game.me, 1)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let decoded = try decoder.decode(Game.self, from: encoder.encode(game))
+        XCTAssertEqual(decoded.me, 1)
+
+        var archive = GameArchive()
+        _ = archive.start(game)
+        XCTAssertEqual(archive.lastMeName, "杨")
     }
 
     func testUnreadableArchiveIsBackedUpNotOverwritten() throws {
