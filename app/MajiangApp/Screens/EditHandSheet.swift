@@ -156,7 +156,7 @@ struct EditHandSheet: View {
                 .buttonStyle(.primary)
                 .disabled(blockedReason != nil)
                 Button("删掉这一局") { confirmDelete = true }
-                    .buttonStyle(.text(Theme.vermilion))
+                    .buttonStyle(.text)
             }
             .page()
             .navigationTitle("改第 \(number) 局")

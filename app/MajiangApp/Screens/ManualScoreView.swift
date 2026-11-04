@@ -44,7 +44,7 @@ struct ManualScoreView: View {
                     }
                 } footer: {
                     if hasInvalid {
-                        Text("只能填整数，输的分前面加负号").foregroundStyle(Theme.vermilion)
+                        Text("只能填整数，输的分前面加负号").foregroundStyle(Theme.ink)
                     } else {
                         Text(sum != 0 ? "四个人加起来要等于 0，现在差 \(-sum)"
                              : values.allSatisfy { $0 == 0 } ? "输的分前面加负号，四个人加起来要等于 0" : "合计为 0，可以保存")

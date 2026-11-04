@@ -4,6 +4,7 @@ import MajiangKit
 /// 核对：一页里核对牌面、补上照片看不出来的（自摸还是点炮、少见情况、花牌）。
 /// 拿不准的牌一次问一张；凑不成和牌时原地说最可能认错了哪张。
 struct CheckView: View {
+    @Environment(AppModel.self) private var model
     @Bindable var flow: RoundFlow
     var finish: (HandOutcome) -> Void
 
@@ -18,6 +19,8 @@ struct CheckView: View {
     @State private var flipStart = Date()
     /// 再认一遍等久了才给「不等了」。
     @State private var canSkip = false
+    @State private var showPhoto = false
+    @State private var showInvite = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     enum EditTarget: Identifiable {
@@ -45,7 +48,10 @@ struct CheckView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                PageTitle(title: "核对一下", subtitle: subtitle)
+                HStack(alignment: .top, spacing: 16) {
+                    PageTitle(title: "核对一下", subtitle: subtitle)
+                    photoThumbnail
+                }
 
                 tileGrid.padding(.top, 22)
                 if !flow.tiles.isEmpty {
@@ -56,6 +62,7 @@ struct CheckView: View {
                 }
                 melds
                 notes
+                inviteLine
 
                 if flow.isReviewing {
                     reviewingLine.padding(.top, 14)
@@ -116,6 +123,12 @@ struct CheckView: View {
             try? await Task.sleep(for: .seconds(12))
             if !Task.isCancelled { canSkip = true }
         }
+        .fullScreenCover(isPresented: $showPhoto) {
+            if let photo = flow.photo {
+                PhotoViewer(photo: photo) { showPhoto = false }
+            }
+        }
+        .sheet(isPresented: $showInvite) { InviteView() }
         .sheet(isPresented: $flow.showResult) {
             ResultSheet(flow: flow, finish: finish)
         }
@@ -134,9 +147,16 @@ struct CheckView: View {
                 if flow.melds.indices.contains(index) { flow.melds.remove(at: index) }
             }
         }
-        .confirmationDialog("\(winnerName)和错了？", isPresented: $confirmFalseWin, titleVisibility: .visible) {
-            Button("记下：赔三家各 \(game.rules.falseWinPenalty) 分", role: .destructive) {
-                finish(.falseWin(offender: flow.winner))
+        .confirmationDialog(flow.winnerChosen ? "\(winnerName)和错了？" : "谁和错了？",
+                            isPresented: $confirmFalseWin, titleVisibility: .visible) {
+            if flow.winnerChosen {
+                Button("记下：赔三家各 \(game.rules.falseWinPenalty) 分", role: .destructive) {
+                    finish(.falseWin(offender: flow.winner))
+                }
+            } else {
+                ForEach(0..<4, id: \.self) { i in
+                    Button(game.players[i].name, role: .destructive) { finish(.falseWin(offender: i)) }
+                }
             }
         } message: {
             Text("这一局不算打完，接着打。")
@@ -148,10 +168,11 @@ struct CheckView: View {
     }
 
     private var subtitle: String {
-        if flow.source == "手动输入" { return "\(winnerName)和了 · 手动输入" }
+        let who = flow.winnerChosen ? "\(winnerName)和了 · " : ""
+        if flow.source == "手动输入" { return who + "手动输入" }
         // 演示数据不看照片，一定要说清楚，不然会以为是认错了（截图模式除外）
         if flow.source == "演示" && DemoScreen.current == nil { return "演示数据，没看你的照片 · 长按首页标题填 Key" }
-        let count = "\(winnerName)和了 · 认出 \(flow.hand.allTiles.count) 张"
+        let count = who + "认出 \(flow.hand.allTiles.count) 张"
         if flow.isReviewing { return count }
         if flow.source == "双读" {
             return count + (flow.reviewAtLoad == 0 ? " · 两遍读得一样" : " · \(flow.reviewAtLoad) 张两遍不一样")
@@ -164,6 +185,46 @@ struct CheckView: View {
     private var actionTitle: String {
         guard let i = actionTile, flow.tiles.indices.contains(i) else { return "" }
         return "第 \(i + 1) 张 · \(flow.tiles[i].tile.displayName)"
+    }
+
+    // MARK: 照片
+
+    /// 标题右边一张小图，点开全屏看：核对时要对照照片，不用退回去重拍。
+    @ViewBuilder
+    private var photoThumbnail: some View {
+        if let photo = flow.photo {
+            Button { showPhoto = true } label: {
+                Image(uiImage: photo)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 56, height: 56)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Theme.line))
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 4)
+            .accessibilityLabel("看拍的照片")
+        }
+    }
+
+    /// 没邀请码、用离线认牌时，这手牌要动手改过、牌也对了，才提一句 AI 认牌。拍照页不提，免得打扰。
+    @ViewBuilder
+    private var inviteLine: some View {
+        if model.needsInvite && flow.source != "手动输入" && flow.corrections > 0
+            && !flow.isReviewing && flow.firstPending == nil && flow.isValidWin {
+            Button { showInvite = true } label: {
+                Text("这手有 \(flow.corrections) 处要你动手改。有邀请码可以开 AI 认牌，更准 ›")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.gray)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.vertical, 8)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 6)
+        }
     }
 
     // MARK: 牌面
@@ -273,7 +334,7 @@ struct CheckView: View {
     /// 第一遍已经读出来了，后台再认一遍：牌在上面翻，这里只说一句。
     private var reviewingLine: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("每张翻过来再认一遍，几秒就好。可以先选下面是自摸还是点炮。")
+            Text("每张翻过来再认一遍，几秒就好。可以先选下面谁和的、怎么和的。")
                 .font(.system(size: 14))
                 .foregroundStyle(Theme.gray)
                 .fixedSize(horizontal: false, vertical: true)
@@ -314,7 +375,8 @@ struct CheckView: View {
         } else if let suggestion {
             reason = reason + Text("好像少认了一张：补一张 \(suggestion.to.displayName) 就能和。")
         } else if case .failure = flow.scoring {
-            reason = reason + Text("改一张也凑不成，可能不止一张认错了，对照照片再看看。")
+            reason = reason + Text(flow.photo == nil ? "改一张也凑不成，可能不止一张认错了，对照桌上的牌再看看。"
+                                    : "改一张也凑不成，可能不止一张认错了，点右上角的照片对照着再看看。")
         }
 
         return VStack(alignment: .leading, spacing: 0) {
@@ -379,25 +441,40 @@ struct CheckView: View {
         return false
     }
 
+    /// 谁和了、怎么和的：都不预先选。「怎么和的」一排四个：自摸，或者另外三个人谁点的炮，点一下两件事都说清。
     @ViewBuilder
     private var howWon: some View {
-        SectionLabel("怎么和的")
+        SectionLabel("谁和了")
             .padding(.top, 28)
             .padding(.bottom, 10)
+        HStack(spacing: 8) {
+            ForEach(0..<4, id: \.self) { i in
+                ChoiceChip(title: game.players[i].name, selected: flow.winnerChosen && flow.winner == i) {
+                    flow.pickWinner(i)
+                }
+            }
+        }
+
+        SectionLabel("怎么和的")
+            .padding(.top, 24)
+            .padding(.bottom, 10)
         VStack(alignment: .leading, spacing: 0) {
-            SegmentedSwitch(options: [(true, "自摸"), (false, "点炮")], selection: $flow.selfDrawn)
-            Text(flow.selfDrawn ? "自己摸到和的那张，三家都要付。" : "和的是别人打出的牌。是谁打的？")
-                .font(.system(size: 14))
-                .foregroundStyle(Theme.gray)
-                .padding(.top, 10)
-            if !flow.selfDrawn {
+            if flow.winnerChosen {
                 HStack(spacing: 8) {
+                    ChoiceChip(title: "自摸", selected: flow.wayChosen && flow.selfDrawn) { flow.pickSelfDrawn() }
                     ForEach((0..<4).filter { $0 != flow.winner }, id: \.self) { i in
-                        NameChip(name: game.players[i].name, selected: flow.discarder == i) { flow.discarder = i }
+                        ChoiceChip(title: "\(game.players[i].name)点炮",
+                                   selected: flow.wayChosen && !flow.selfDrawn && flow.discarder == i) {
+                            flow.pickDiscarder(i)
+                        }
                     }
                 }
-                .padding(.top, 10)
             }
+            Text(wayNote)
+                .font(.system(size: 14))
+                .foregroundStyle(Theme.gray)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, flow.winnerChosen ? 10 : 0)
         }
         // 牌还凑不成和的时候，先改牌
         .opacity(shapeBroken ? 0.5 : 1)
@@ -412,6 +489,13 @@ struct CheckView: View {
         }
         .block()
         .padding(.top, 22)
+    }
+
+    private var wayNote: String {
+        if !flow.winnerChosen { return "先选上面谁和了。" }
+        if !flow.wayChosen { return "自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。" }
+        if flow.selfDrawn { return "自己摸到和的那张，三家都要付。" }
+        return "和的是\(flow.discarder.map { game.players[$0].name } ?? "别人")打出的牌。"
     }
 
     private var availableRare: [SpecialWin] { SpecialWin.allCases.filter { flow.isAvailable($0) } }
@@ -604,6 +688,63 @@ private struct QuestionCard: View {
         if flow.pendingReviewCount == 1 { return flow.wins(removing: index) }
         if flow.recommendedRemovals.contains(index) { return true }
         return flow.recommended[index] == nil ? nil : false
+    }
+}
+
+/// 全屏看拍的照片：双指放大、拖动，双击放大或复原。
+private struct PhotoViewer: View {
+    var photo: UIImage
+    var close: () -> Void
+
+    @State private var scale: CGFloat = 1
+    @State private var lastScale: CGFloat = 1
+    @State private var offset: CGSize = .zero
+    @State private var lastOffset: CGSize = .zero
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            Color.black.ignoresSafeArea()
+            Image(uiImage: photo)
+                .resizable()
+                .scaledToFit()
+                .scaleEffect(scale)
+                .offset(offset)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle())
+                .gesture(
+                    MagnifyGesture()
+                        .onChanged { scale = min(5, max(1, lastScale * $0.magnification)) }
+                        .onEnded { _ in
+                            lastScale = scale
+                            if scale == 1 { resetOffset() }
+                        }
+                )
+                .simultaneousGesture(
+                    DragGesture()
+                        .onChanged { value in
+                            guard scale > 1 else { return }
+                            offset = CGSize(width: lastOffset.width + value.translation.width,
+                                            height: lastOffset.height + value.translation.height)
+                        }
+                        .onEnded { _ in lastOffset = offset }
+                )
+                .onTapGesture(count: 2) {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        scale = scale > 1 ? 1 : 2.5
+                        lastScale = scale
+                        if scale == 1 { resetOffset() }
+                    }
+                }
+            Button("关闭", action: close)
+                .buttonStyle(NavButtonStyle(color: .white))
+                .padding(.horizontal, 20)
+        }
+        .statusBarHidden()
+    }
+
+    private func resetOffset() {
+        offset = .zero
+        lastOffset = .zero
     }
 }
 

@@ -32,7 +32,7 @@ struct InviteView: View {
 
                         Text(error ?? model.inviteNotice ?? " ")
                             .font(.system(size: 13))
-                            .foregroundStyle(Theme.vermilion)
+                            .foregroundStyle(Theme.ink)
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.top, 14)
 
