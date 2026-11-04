@@ -14,7 +14,7 @@ struct HomeView: View {
     var body: some View {
         Group {
             if isEmpty {
-                EmptyHome(openGuide: { showGuide = true }, openSettings: { showSettings = true },
+                EmptyHome(more: moreMenu, openGuide: { showGuide = true }, openSettings: { showSettings = true },
                           openBackup: { showBackup = true }, start: { model.path.append(.newGame) })
             } else {
                 list
@@ -105,6 +105,7 @@ struct HomeView: View {
     }
 
     /// 右上角的「更多」：番怎么算、备份、邀请码。跟牌桌页右上的「更多」一样是灰字。
+    /// 第一次打开的空首页也有，审核员和新用户一打开就能找到填邀请码的地方。
     private var moreMenu: some View {
         Menu {
             Button("番怎么算") { showGuide = true }
@@ -190,7 +191,9 @@ private struct HistoryRow: View {
 }
 
 /// 第一次打开、还没有任何牌局时的首页：一句话加三步，说清这个 App 是干什么的。
-private struct EmptyHome: View {
+private struct EmptyHome<More: View>: View {
+    /// 右上角的「更多」菜单（跟有牌局时的首页同一个）。
+    var more: More
     var openGuide: () -> Void
     var openSettings: () -> Void
     var openBackup: () -> Void
@@ -203,7 +206,11 @@ private struct EmptyHome: View {
             ScrollView {
                 // 品牌标在顶上；标题和步骤作为一块往下放，剩下的空白上 : 下 ≈ 5 : 3，两段都至少 32
                 FiveThreeLayout(height: geo.size.height - topInset) {
-                    brand
+                    HStack(alignment: .center) {
+                        brand
+                        Spacer()
+                        more
+                    }
                     VStack(alignment: .leading, spacing: 0) {
                         headline
                         steps.padding(.top, 40)
