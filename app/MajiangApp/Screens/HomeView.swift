@@ -160,25 +160,27 @@ private struct MoreSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("更多")
-                .font(.system(size: 17, weight: .semibold))
+                .font(.system(size: 20, weight: .semibold))
                 .padding(.top, 28)
                 .padding(.bottom, 8)
-            row("番怎么算", "国标的番种和收付，都是白话", .guide)
-            row("备份与换手机", backupLine, .backup)
+            row("番怎么算", "国标的番种和收付，都是白话", .guide, last: false)
+            row("备份与换手机", backupLine, .backup, last: !showsInvite)
             if showsInvite {
-                row(inviteOn ? "AI 认牌 · 已开启" : "AI 认牌", inviteOn ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准", .invite)
+                row(inviteOn ? "AI 认牌 · 已开启" : "AI 认牌", inviteOn ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准",
+                    .invite, last: true)
             }
         }
         .padding(.horizontal, 24)
         .frame(maxHeight: .infinity, alignment: .top)
         .foregroundStyle(Theme.ink)
-        .presentationDetents([.height(showsInvite ? 312 : 236)])
+        .presentationDetents([.height(showsInvite ? 296 : 222)])
         .presentationDragIndicator(.visible)
         .presentationCornerRadius(28)
         .presentationBackground(Theme.paper)
     }
 
-    private func row(_ title: String, _ detail: String, _ target: MoreTarget) -> some View {
+    /// 最后一行底下不画线，免得线下面空一截。
+    private func row(_ title: String, _ detail: String, _ target: MoreTarget, last: Bool) -> some View {
         Button { pick(target) } label: {
             VStack(spacing: 0) {
                 HStack(spacing: 12) {
@@ -194,7 +196,7 @@ private struct MoreSheet: View {
                         .foregroundStyle(Theme.faint)
                 }
                 .frame(minHeight: 72)
-                Hairline()
+                if !last { Hairline() }
             }
             .contentShape(Rectangle())
         }
