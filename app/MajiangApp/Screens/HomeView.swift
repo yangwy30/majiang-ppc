@@ -8,6 +8,9 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showBackup = false
     @State private var showInvite = false
+    @State private var showMore = false
+    /// 「更多」页里点了哪一项：等「更多」收下去再打开那一页，两层弹出不叠在一起。
+    @State private var moreTarget: MoreTarget?
 
     private var isEmpty: Bool { model.archive.games.isEmpty }
 
@@ -25,9 +28,18 @@ struct HomeView: View {
         .sheet(isPresented: $showGuide) { RulesGuideView() }
         .sheet(isPresented: $showBackup) { BackupView() }
         .sheet(isPresented: $showInvite) { InviteView() }
+        .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
+            MoreSheet(showsInvite: model.usesProxy || model.demoScreen == .invite || model.demoScreen == .more,
+                      inviteOn: model.inviteCode != nil,
+                      backupLine: backupLine) { target in
+                moreTarget = target
+                showMore = false
+            }
+        }
         .onAppear {
             if model.demoScreen == .backup { showBackup = true }
             if model.demoScreen == .invite { showInvite = true }
+            if model.demoScreen == .more { showMore = true }
         }
         #if DEBUG
         .sheet(isPresented: $showSettings) { SettingsView() }
@@ -104,17 +116,10 @@ struct HomeView: View {
         }
     }
 
-    /// 右上角的「更多」：番怎么算、备份、邀请码。跟牌桌页右上的「更多」一样是灰字。
+    /// 右上角的「更多」：灰字，点开从底下升起一页（App 自己的样式，不用系统菜单）。
     /// 第一次打开的空首页也有，审核员和新用户一打开就能找到填邀请码的地方。
     private var moreMenu: some View {
-        Menu {
-            Button("番怎么算") { showGuide = true }
-            Button("备份与换手机") { showBackup = true }
-            // 走我们的服务器时才有邀请码（开发版直连 Google 用不着）
-            if model.usesProxy || model.demoScreen == .invite {
-                Button(model.inviteCode == nil ? "填邀请码，开启 AI 认牌" : "AI 认牌 · 已开启") { showInvite = true }
-            }
-        } label: {
+        Button { showMore = true } label: {
             Text("更多")
                 .font(.system(size: 16))
                 .foregroundStyle(Theme.gray)
@@ -122,6 +127,80 @@ struct HomeView: View {
                 .frame(minHeight: 44)
                 .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+    }
+
+    /// 「备份与换手机」那行下面的一句：iCloud 开没开。
+    private var backupLine: String {
+        model.cloud.enabled ? "iCloud 同步已打开" : "导出、导入牌局，或者打开 iCloud 同步"
+    }
+
+    private func openMoreTarget() {
+        switch moreTarget {
+        case .guide: showGuide = true
+        case .backup: showBackup = true
+        case .invite: showInvite = true
+        case nil: break
+        }
+        moreTarget = nil
+    }
+}
+
+private enum MoreTarget {
+    case guide, backup, invite
+}
+
+/// 「更多」：纸白底，一项一行，名字下面一句说明，右边一个 ›。跟账本、家规一样是细线列表。
+private struct MoreSheet: View {
+    var showsInvite: Bool
+    var inviteOn: Bool
+    var backupLine: String
+    var pick: (MoreTarget) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("更多")
+                .font(.system(size: 20, weight: .semibold))
+                .padding(.top, 28)
+                .padding(.bottom, 8)
+            row("番怎么算", "国标的番种和收付，都是白话", .guide, last: false)
+            row("备份与换手机", backupLine, .backup, last: !showsInvite)
+            if showsInvite {
+                row(inviteOn ? "AI 认牌 · 已开启" : "AI 认牌", inviteOn ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准",
+                    .invite, last: true)
+            }
+        }
+        .padding(.horizontal, 24)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .foregroundStyle(Theme.ink)
+        .presentationDetents([.height(showsInvite ? 296 : 222)])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(28)
+        .presentationBackground(Theme.paper)
+    }
+
+    /// 最后一行底下不画线，免得线下面空一截。
+    private func row(_ title: String, _ detail: String, _ target: MoreTarget, last: Bool) -> some View {
+        Button { pick(target) } label: {
+            VStack(spacing: 0) {
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(title).font(.system(size: 17))
+                        Text(detail)
+                            .font(.system(size: 14))
+                            .foregroundStyle(Theme.gray)
+                    }
+                    Spacer(minLength: 8)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(Theme.faint)
+                }
+                .frame(minHeight: 72)
+                if !last { Hairline() }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }
 

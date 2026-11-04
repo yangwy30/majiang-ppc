@@ -112,7 +112,7 @@ final class AppModel {
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
         switch demoScreen {
-        case .home, .emptyHome, .backup, .invite: path = []
+        case .home, .emptyHome, .backup, .invite, .more: path = []
         case .newGame, .houseRules, .rulePicker: path = [.newGame]
         case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
         default: break
