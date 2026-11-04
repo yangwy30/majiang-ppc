@@ -25,11 +25,22 @@ struct ResultSheet: View {
         let name = { (i: Int) in game.players[i].name }
         return ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Text(record.discarder.map { "\(name(record.winner)) · \(name($0))点炮" } ?? "\(name(record.winner)) · 自摸")
-                    .font(.system(size: 15))
-                    .foregroundStyle(Theme.gray)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 28)
+                // 谁和、怎么和的是记错最常见的地方：墨色写清楚，点一下收起结果回核对页改
+                Button { flow.showResult = false } label: {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(record.discarder.map { "\(name(record.winner)) · \(name($0))点炮" } ?? "\(name(record.winner)) · 自摸")
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundStyle(Theme.ink)
+                        Text("改 ›")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Theme.gray)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint("回到核对页改谁和了、怎么和的")
+                .padding(.top, 20)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text("\(record.totalFan)")
                         .font(.system(size: 88, weight: .ultraLight).monospacedDigit())
@@ -39,7 +50,7 @@ struct ResultSheet: View {
                 .frame(maxWidth: .infinity)
                 if game.rules.paidFan(record) < record.totalFan {
                     Text("家规封顶 \(game.rules.fanCap) 番：\(record.totalFan) 番按 \(game.rules.fanCap) 算")
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
@@ -66,7 +77,7 @@ struct ResultSheet: View {
                     HStack(alignment: .top, spacing: 8) {
                         ForEach(0..<4, id: \.self) { i in
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(name(i)).font(.system(size: 13)).foregroundStyle(Theme.gray).lineLimit(1)
+                                Text(name(i)).font(.system(size: 14)).foregroundStyle(Theme.gray).lineLimit(1)
                                 Text(Theme.signed(deltas[i]))
                                     .font(Theme.score(24))
                                     .foregroundStyle(Theme.scoreColor(deltas[i]))
@@ -81,7 +92,7 @@ struct ResultSheet: View {
                     Hairline()
                 }
                 Text(explanation(record, deltas))
-                    .font(.system(size: 13))
+                    .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
@@ -126,7 +137,7 @@ private struct FanRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(name).font(.system(size: 16, weight: .medium))
                 Text(plain)
-                    .font(.system(size: 13))
+                    .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
                     .fixedSize(horizontal: false, vertical: true)
             }

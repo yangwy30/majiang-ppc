@@ -26,7 +26,7 @@ struct HouseRulesForm: View {
             .padding(.top, 4)
 
             Text(example)
-                .font(.system(size: 13))
+                .font(.system(size: 14))
                 .foregroundStyle(Theme.gray)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.top, 14)
@@ -110,7 +110,7 @@ private struct PresetTabs: View {
         } label: {
             Text(label)
                 .font(.system(size: 15, weight: on ? .medium : .regular))
-                .foregroundStyle(on ? Theme.ink : Theme.faint)
+                .foregroundStyle(on ? Theme.ink : Theme.gray)
                 .padding(.vertical, 10)
                 .overlay(alignment: .bottom) {
                     Rectangle().fill(on ? Theme.ink : .clear).frame(height: 2)
@@ -142,7 +142,7 @@ private struct RuleRow: View {
                         Text(item.title).font(.system(size: 16))
                         if large {
                             Text(item.hint)
-                                .font(.system(size: 12))
+                                .font(.system(size: 13))
                                 .foregroundStyle(Theme.gray)
                         }
                     }
@@ -186,7 +186,7 @@ private struct RulePicker: View {
                 .font(.system(size: 17, weight: .semibold))
                 .padding(.top, 30)
             Text(item.note)
-                .font(.system(size: 13))
+                .font(.system(size: 14))
                 .foregroundStyle(Theme.gray)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.top, 8)
@@ -203,7 +203,7 @@ private struct RulePicker: View {
                             .font(.system(size: 17, weight: selected ? .semibold : .regular))
                         Spacer()
                         if let tag = option.tag {
-                            Text(tag).font(.system(size: 13)).foregroundStyle(Theme.gray)
+                            Text(tag).font(.system(size: 14)).foregroundStyle(Theme.gray)
                         }
                         Image(systemName: "checkmark")
                             .font(.system(size: 14, weight: .semibold))

@@ -45,7 +45,7 @@ struct RulesGuideView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(fan.name).font(.system(size: 16, weight: .medium))
                                 Text(fan.explanation)
-                                    .font(.system(size: 13))
+                                    .font(.system(size: 14))
                                     .foregroundStyle(Theme.gray)
                                     .fixedSize(horizontal: false, vertical: true)
                             }

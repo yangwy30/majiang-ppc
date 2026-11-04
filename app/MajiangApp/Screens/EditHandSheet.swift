@@ -208,7 +208,7 @@ struct EditHandSheet: View {
             .block()
             .padding(.top, 22)
         Text(fanNote)
-            .font(.system(size: 13))
+            .font(.system(size: 14))
             .foregroundStyle(Theme.gray)
             .padding(.top, 10)
             .fixedSize(horizontal: false, vertical: true)
@@ -275,7 +275,7 @@ struct EditHandSheet: View {
             ForEach(0..<4, id: \.self) { i in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(game.players[i].name)
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .lineLimit(1)
                     Text(Theme.signed(deltas[i]))
@@ -294,7 +294,7 @@ struct EditHandSheet: View {
     private func stepButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: 13, weight: .medium))
+                .font(.system(size: 14, weight: .medium))
                 .frame(width: 32, height: 32)
                 .overlay(Circle().strokeBorder(Theme.line))
                 .contentShape(Circle())

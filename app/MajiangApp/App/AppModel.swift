@@ -128,9 +128,22 @@ final class AppModel {
         save()
     }
 
+    /// 已经记过 3 手和牌：页面上教怎么用的说明句就收起来，只留真要做判断时的提示。
+    /// 截图（demo）时按新手的样子显示。
+    var isSeasoned: Bool {
+        guard demoScreen == nil else { return false }
+        var wins = 0
+        for game in archive.games {
+            for record in game.records {
+                if case .win = record.outcome { wins += 1 }
+            }
+        }
+        return wins >= 3
+    }
+
     @discardableResult
-    func startGame(players: [Player], rules: GameRules) -> Game {
-        let game = archive.start(Game(players: players, rules: rules))
+    func startGame(players: [Player], me: Int = 0, rules: GameRules) -> Game {
+        let game = archive.start(Game(players: players, me: me, rules: rules))
         archive.remember(players)
         archive.lastRules = rules
         save()

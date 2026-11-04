@@ -1,11 +1,14 @@
 import SwiftUI
 import MajiangKit
 
-/// 开局：按出牌顺序填四个名字，第一个是第一局的庄。规则收成一行，一般设一次就不再改；
-/// 填的 4 个人以前一起打过，就自动用上次那场的家规。
+/// 开局：第一行是自己，往下按出牌顺序填下家、对家、上家；第一局谁坐庄另外点（默认自己）。
+/// 「我」和「第一局的庄」分开：牌桌图上自己总在最下面，首页历史显示自己的输赢。
+/// 规则收成一行，一般设一次就不再改；填的 4 个人以前一起打过，就自动用上次那场的家规。
 struct NewGameView: View {
     @Environment(AppModel.self) private var model
     @State private var names = ["", "", "", ""]
+    /// 第一局坐庄的是第几行（0 是自己）。
+    @State private var dealerRow = 0
     @State private var rules = GameRules()
     @State private var editingRules = false
     /// 规则是按这 4 个人上次那场自动带上的。
@@ -30,22 +33,23 @@ struct NewGameView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                PageTitle(title: "谁在打？", subtitle: "从第一局的庄家开始，按出牌顺序填。")
+                PageTitle(title: "谁在打？", subtitle: "第一行是你，往下按出牌顺序填。")
 
                 VStack(spacing: 0) {
                     ForEach(0..<4, id: \.self) { i in
                         HStack(spacing: 14) {
-                            Text(Wind(rawValue: i)!.name)
+                            // 门风跟着第一局的庄走：庄是东，往下南、西、北
+                            Text(Wind(rawValue: (i - dealerRow + 4) % 4)!.name)
                                 .font(Theme.serif(15))
-                                .foregroundStyle(Theme.faint)
+                                .foregroundStyle(Theme.gray)
                                 .frame(width: 22, alignment: .leading)
-                            TextField("名字", text: $names[i])
+                            TextField(Self.seatHints[i], text: $names[i])
                                 .font(.system(size: 17))
                                 .focused($focused, equals: i)
                                 .submitLabel(i < 3 ? .next : .done)
                                 .onSubmit { focused = i < 3 ? i + 1 : nil }
-                                .accessibilityLabel("第 \(i + 1) 位")
-                            if i == 0 { DealerStamp() }
+                                .accessibilityLabel(Self.seatNames[i])
+                            if i == dealerRow { DealerStamp() }
                         }
                         .frame(height: 58)
                         if i < 3 { Hairline(color: Theme.lineSoft) }
@@ -53,6 +57,17 @@ struct NewGameView: View {
                 }
                 .block(radius: 22)
                 .padding(.top, 28)
+
+                SectionLabel("第一局谁坐庄")
+                    .padding(.top, 24)
+                    .padding(.bottom, 10)
+                HStack(spacing: 8) {
+                    ForEach(0..<4, id: \.self) { i in
+                        ChoiceChip(title: trimmed[i].isEmpty ? Self.seatNames[i] : trimmed[i], selected: dealerRow == i) {
+                            dealerRow = i
+                        }
+                    }
+                }
 
                 if !frequentNames.isEmpty {
                     SectionLabel("常一起打的")
@@ -80,7 +95,7 @@ struct NewGameView: View {
                         }
                         if rulesFromGroup {
                             Text("上次跟这 4 位就这么打的")
-                                .font(.system(size: 12))
+                                .font(.system(size: 13))
                                 .foregroundStyle(Theme.gray)
                         }
                     }
@@ -110,6 +125,8 @@ struct NewGameView: View {
             RulesSheet(rules: $rules, opening: model.demoScreen == .rulePicker ? .cap : nil)
         }
         .onAppear {
+            // 第一行是自己：用上一场的名字先填上，常一起打的人就会往下填
+            if names[0].isEmpty, let me = model.archive.lastMeName { names[0] = me }
             rules = model.archive.lastRules
             if model.demoScreen == .houseRules || model.demoScreen == .rulePicker {
                 rules.fanCap = 64
@@ -135,6 +152,9 @@ struct NewGameView: View {
         }
     }
 
+    private static let seatNames = ["你", "下家", "对家", "上家"]
+    private static let seatHints = ["你的名字", "下家", "对家", "上家"]
+
     private var frequentNames: [String] {
         model.archive.frequentPlayers.map(\.name).filter { !trimmed.contains($0) }
     }
@@ -148,8 +168,10 @@ struct NewGameView: View {
 
     private func start() {
         let known = Dictionary(model.archive.frequentPlayers.map { ($0.name, $0) }, uniquingKeysWith: { a, _ in a })
-        let players = trimmed.map { known[$0] ?? Player(name: $0) }
-        let game = model.startGame(players: players, rules: rules)
+        // 存的时候从第一局的庄开始排（东南西北），记下自己是第几个
+        let seated = (0..<4).map { trimmed[(dealerRow + $0) % 4] }
+        let players = seated.map { known[$0] ?? Player(name: $0) }
+        let game = model.startGame(players: players, me: (4 - dealerRow) % 4, rules: rules)
         model.path = [.table(game.id)]
     }
 }

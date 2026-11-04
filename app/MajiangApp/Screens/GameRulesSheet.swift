@@ -81,7 +81,7 @@ struct GameRulesSheet: View {
                     ForEach(0..<4, id: \.self) { i in
                         VStack(alignment: .leading, spacing: 1) {
                             Text(game.players[i].name)
-                                .font(.system(size: 13))
+                                .font(.system(size: 14))
                                 .foregroundStyle(Theme.gray)
                                 .lineLimit(1)
                             Text(Theme.signed(new[i]))
@@ -91,7 +91,7 @@ struct GameRulesSheet: View {
                                 .minimumScaleFactor(0.6)
                             if old[i] != new[i] {
                                 Text("原来 \(Theme.signed(old[i]))")
-                                    .font(.system(size: 12).monospacedDigit())
+                                    .font(.system(size: 13).monospacedDigit())
                                     .foregroundStyle(Theme.gray)
                                     .lineLimit(1)
                             }
@@ -103,7 +103,7 @@ struct GameRulesSheet: View {
             }
             if !below.isEmpty {
                 Text("\(below.joined(separator: "、"))的番数不够新的起和，先照样算着；要删可以在账本里点那一局。")
-                    .font(.system(size: 12))
+                    .font(.system(size: 13))
                     .foregroundStyle(Theme.gray)
                     .fixedSize(horizontal: false, vertical: true)
             }

@@ -65,20 +65,9 @@ struct HomeView: View {
                     }
                 }
 
-                Button("第一次打国标？看看番怎么算 ›") { showGuide = true }
-                    .buttonStyle(.text(size: 14))
-                    .padding(.top, 10)
-                Button("备份与换手机 ›") { showBackup = true }
-                    .buttonStyle(.text(size: 14))
-                // 走我们的服务器时才有邀请码（开发版直连 Google 用不着）
-                if model.usesProxy || model.demoScreen == .invite {
-                    Button(model.inviteCode == nil ? "有邀请码？开启 AI 认牌 ›" : "AI 认牌 · 已开启 ›") { showInvite = true }
-                        .buttonStyle(.text(size: 14))
-                }
-
                 if let error = model.loadError {
                     Text(error)
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 16)
                 }
@@ -94,17 +83,43 @@ struct HomeView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("拍照算番")
-                .font(.system(size: 34, weight: .semibold))
-                .tracking(-0.5)
-                #if DEBUG
-                // 开发版的设置（识别方式、API Key）藏在长按标题里，正式版没有设置页
-                .onLongPressGesture { showSettings = true }
-                #endif
-            Text("打完一手，拍一下和牌的人的牌，App 帮你算番记账。")
-                .font(.system(size: 15))
+            HStack(alignment: .firstTextBaseline) {
+                Text("拍照算番")
+                    .font(.system(size: 34, weight: .semibold))
+                    .tracking(-0.5)
+                    #if DEBUG
+                    // 开发版的设置（识别方式、API Key）藏在长按标题里，正式版没有设置页
+                    .onLongPressGesture { showSettings = true }
+                    #endif
+                Spacer()
+                moreMenu
+            }
+            // 记过几手就不用再说 App 是干什么的
+            if !model.isSeasoned {
+                Text("打完一手，拍一下和牌的人的牌，App 帮你算番记账。")
+                    .font(.system(size: 15))
+                    .foregroundStyle(Theme.gray)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    /// 右上角的「更多」：番怎么算、备份、邀请码。跟牌桌页右上的「更多」一样是灰字。
+    private var moreMenu: some View {
+        Menu {
+            Button("番怎么算") { showGuide = true }
+            Button("备份与换手机") { showBackup = true }
+            // 走我们的服务器时才有邀请码（开发版直连 Google 用不着）
+            if model.usesProxy || model.demoScreen == .invite {
+                Button(model.inviteCode == nil ? "填邀请码，开启 AI 认牌" : "AI 认牌 · 已开启") { showInvite = true }
+            }
+        } label: {
+            Text("更多")
+                .font(.system(size: 16))
                 .foregroundStyle(Theme.gray)
-                .fixedSize(horizontal: false, vertical: true)
+                .fixedSize()
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
         }
     }
 }
@@ -123,7 +138,7 @@ private struct ActiveGameCard: View {
                 ForEach(0..<4, id: \.self) { i in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(game.players[i].name)
-                            .font(.system(size: 13))
+                            .font(.system(size: 14))
                             .foregroundStyle(Theme.gray)
                             .lineLimit(1)
                         Text(Theme.signed(game.scores[i]))
@@ -151,15 +166,21 @@ private struct HistoryRow: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(game.startedAt.dayLabel).font(.system(size: 16, weight: .medium))
                     Text(game.players.map(\.name).joined(separator: "、") + " · \(game.currentHandIndex) 局")
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .lineLimit(1)
                 }
                 Spacer()
-                // 第一位当作「我」：开局时第一个填的是自己
-                Text(Theme.signed(game.scores[0]))
-                    .font(Theme.score(20))
-                    .foregroundStyle(Theme.scoreColor(game.scores[0]))
+                // 自己这场的输赢，前面写上名字，不用猜是谁的分
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(game.players[game.me].name)
+                        .font(.system(size: 14))
+                        .foregroundStyle(Theme.gray)
+                        .lineLimit(1)
+                    Text(Theme.signed(game.scores[game.me]))
+                        .font(Theme.score(20))
+                        .foregroundStyle(Theme.scoreColor(game.scores[game.me]))
+                }
             }
             .padding(.vertical, 14)
             Hairline()
@@ -200,7 +221,7 @@ private struct EmptyHome: View {
                 .padding(.top, 10)
             // 新手机上没装 iCloud 同步时，从旧手机导出的文件导入
             Button("换了手机？导入以前的记录", action: openBackup)
-                .buttonStyle(.text(Theme.faint, size: 13))
+                .buttonStyle(.text(size: 14))
         }
     }
 }
@@ -301,7 +322,7 @@ private struct StepRow<Sample: View>: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title).font(.system(size: 17, weight: .semibold))
                     Text(detail)
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .lineLimit(1)
                         .minimumScaleFactor(0.85)

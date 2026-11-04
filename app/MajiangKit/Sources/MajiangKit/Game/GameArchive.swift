@@ -49,6 +49,11 @@ public struct GameArchive: Codable, Hashable, Sendable {
             .rules
     }
 
+    /// 上一场里「我」的名字，开新局时预先填在第一行。
+    public var lastMeName: String? {
+        games.max { $0.startedAt < $1.startedAt }.map { $0.players[$0.me].name }
+    }
+
     /// 记住用过的名字，新建牌局时可以一点就加。
     public mutating func remember(_ players: [Player]) {
         for player in players where !player.name.isEmpty {

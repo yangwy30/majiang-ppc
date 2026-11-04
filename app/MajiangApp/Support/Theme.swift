@@ -238,12 +238,22 @@ struct DealerStamp: View {
     var size: CGFloat = 22
 
     var body: some View {
-        Text("庄")
+        Seal(text: "庄", size: size)
+            .accessibilityLabel("庄家")
+    }
+}
+
+/// 朱红小方印，一个宋体字：「庄」，核对页和的那张牌下面的「和」（跟 App 图标一个样子）。
+struct Seal: View {
+    var text: String
+    var size: CGFloat = 22
+
+    var body: some View {
+        Text(text)
             .font(Theme.serif(size * 0.6))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
             .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: size * 0.24, style: .continuous))
-            .accessibilityLabel("庄家")
     }
 }
 
@@ -255,7 +265,7 @@ struct SectionLabel: View {
 
     var body: some View {
         Text(text)
-            .font(.system(size: 13, weight: .medium))
+            .font(.system(size: 14, weight: .medium))
             .foregroundStyle(Theme.gray)
             .frame(maxWidth: .infinity, alignment: .leading)
     }

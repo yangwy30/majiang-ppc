@@ -15,6 +15,8 @@ struct CaptureView: View {
     /// 端侧模型零点几秒就认完了，转圈晚一点出来，免得一闪而过。
     @State private var slow = false
     @State private var autoShot = false
+    /// 按一次快门加一，触发一下轻震。
+    @State private var shots = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,7 +29,7 @@ struct CaptureView: View {
             // 邀请码不在这里提：拍照时只管拍。离线认牌这手要改牌时，核对页再说一句
             Text(status ?? " ")
                 .foregroundStyle(flow.recognitionError == nil ? Color.white.opacity(0.72) : Color.white)
-                .font(.system(size: 13))
+                .font(.system(size: 14))
                 .multilineTextAlignment(.center)
                 .lineLimit(3)
                 .frame(minHeight: 34)
@@ -79,6 +81,7 @@ struct CaptureView: View {
             #endif
         }
         .onDisappear { camera.stop() }
+        .sensoryFeedback(.impact(weight: .medium), trigger: shots)
         .task(id: flow.isRecognizing) {
             slow = false
             guard flow.isRecognizing else { return }
@@ -204,6 +207,7 @@ struct CaptureView: View {
     }
 
     private func shoot() {
+        shots += 1
         if cameraOn {
             Task {
                 if let image = await camera.capture() { use(image) }

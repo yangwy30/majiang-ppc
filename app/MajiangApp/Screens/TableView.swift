@@ -15,9 +15,11 @@ struct TableView: View {
     /// 点开要改的那一局。
     @State private var editing: EditTarget?
     @State private var recordError: String?
-    /// 刚记下的一局，底部显示 5 秒「撤销」。
+    /// 刚记下的一局，底部显示 8 秒「撤销」（牌桌上大家还在说话，5 秒常常反应不过来）。
     @State private var justRecorded: HandRecord?
     @State private var undoTimer: Task<Void, Never>?
+    /// 点了撤销就加一，触发一下轻震。
+    @State private var undoCount = 0
 
     var body: some View {
         if let game = model.game(gameID) {
@@ -40,7 +42,7 @@ struct TableView: View {
                 if let badge = game.rules.houseRuleBadge {
                     Button { editingRules = true } label: {
                         Text(badge + " ›")
-                            .font(.system(size: 13))
+                            .font(.system(size: 14))
                             .foregroundStyle(Theme.gray)
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
@@ -57,11 +59,11 @@ struct TableView: View {
                     .padding(.top, 10)
 
                 HStack(alignment: .firstTextBaseline) {
-                    Text("账本").font(.system(size: 13, weight: .medium))
+                    Text("账本").font(.system(size: 14, weight: .medium))
                     Spacer()
                     Text(game.isFinished ? "打了 \(game.currentHandIndex) 局"
                          : "打了 \(game.currentHandIndex) 局 · 还剩 \(game.remainingHands) 局")
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                 }
                 .foregroundStyle(Theme.gray)
                 .padding(.top, 26)
@@ -70,7 +72,7 @@ struct TableView: View {
 
                 if game.records.isEmpty {
                     Text("还没有记录。有人和了就点下面的按钮。")
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.vertical, 14)
                 }
@@ -84,10 +86,10 @@ struct TableView: View {
                     .buttonStyle(.plain)
                     .accessibilityHint("点一下可以改或删掉这一局")
                 }
-                if !game.records.isEmpty {
+                if !game.records.isEmpty && !model.isSeasoned {
                     Text("记错了？点那一局就能改，后面的分数会跟着重算。")
-                        .font(.system(size: 13))
-                        .foregroundStyle(Theme.faint)
+                        .font(.system(size: 14))
+                        .foregroundStyle(Theme.gray)
                         .padding(.top, 14)
                         .padding(.bottom, 8)
                 }
@@ -111,6 +113,9 @@ struct TableView: View {
             }
         }
         .page()
+        // 记下一局轻轻「成功」一下；撤销轻震一下
+        .sensoryFeedback(.success, trigger: justRecorded?.id) { _, new in new != nil }
+        .sensoryFeedback(.impact(weight: .light), trigger: undoCount)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -223,7 +228,7 @@ struct TableView: View {
         undoTimer?.cancel()
         withAnimation(.easeOut(duration: 0.2)) { justRecorded = record }
         undoTimer = Task {
-            try? await Task.sleep(for: .seconds(5))
+            try? await Task.sleep(for: .seconds(8))
             guard !Task.isCancelled else { return }
             withAnimation(.easeIn(duration: 0.2)) { justRecorded = nil }
         }
@@ -251,6 +256,7 @@ struct TableView: View {
         guard var updated = model.game(gameID), updated.records.last?.id == record.id else { return }
         updated.undoLast()
         model.update(updated)
+        undoCount += 1
         withAnimation(.easeIn(duration: 0.2)) { justRecorded = nil }
     }
 
@@ -269,21 +275,21 @@ private struct EditTarget: Identifiable {
     var id: UUID { record.id }
 }
 
-/// 方桌：我（第一个填的人）在下面，下家在右，对家在上，上家在左。
+/// 方桌：我（开局时填在第一行的人）在下面，下家在右，对家在上，上家在左。
 private struct TableDiagram: View {
     var game: Game
 
     var body: some View {
         let hand = game.displayHand
         let seating = game.seating(ofRound: game.roundIndex(ofHand: hand))
-        let me = game.position(of: 0, inHand: hand)
+        let me = game.position(of: game.me, inHand: hand)
         let at = { (offset: Int) in seating[(me + offset) % 4] }
         ZStack {
             VStack(spacing: 6) {
                 Text(game.prevalentWind(ofHand: hand).name)
                     .font(Theme.serif(56))
                 Text(game.isFinished ? "打完了" : "风圈 · 第 \(hand % 4 + 1) 局")
-                    .font(.system(size: 13))
+                    .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
             }
             .frame(width: 168, height: 168)
@@ -349,13 +355,13 @@ private struct RecordRow: View {
         VStack(spacing: 0) {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 Text("\(number)")
-                    .font(.system(size: 13).monospacedDigit())
+                    .font(.system(size: 14).monospacedDigit())
                     .foregroundStyle(Theme.gray)
                     .frame(width: 18, alignment: .leading)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(record.title(in: game)).font(.system(size: 16))
                     Text(record.detail(in: game))
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                 }
                 Spacer(minLength: 8)
