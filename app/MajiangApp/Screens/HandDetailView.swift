@@ -218,7 +218,7 @@ struct HandPhotoView: View {
                 ShareLink(item: Image(uiImage: photo), preview: SharePreview(caption, image: Image(uiImage: photo))) {
                     Text("分享")
                 }
-                .buttonStyle(NavButtonStyle(color: Theme.faint, size: 16))
+                .buttonStyle(NavButtonStyle(color: .white.opacity(0.72), size: 16))
             }
             .padding(.horizontal, 20)
 

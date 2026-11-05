@@ -76,21 +76,21 @@ struct HandTiles: View {
     var hand: Hand
     @State private var available: CGFloat = 345
 
-    private struct Group: Identifiable {
+    private struct TileGroup: Identifiable {
         var id: Int
         var tiles: [Tile]
         var mark: String?
         var isWinning = false
     }
 
-    private var groups: [Group] {
+    private var groups: [TileGroup] {
         var result = hand.melds.enumerated().map { i, meld in
-            Group(id: i, tiles: meld.tiles, mark: meld.kindName)
+            TileGroup(id: i, tiles: meld.tiles, mark: meld.kindName)
         }
         var standing = hand.concealed
         if let i = standing.lastIndex(of: hand.winningTile) { standing.remove(at: i) }
-        if !standing.isEmpty { result.append(Group(id: 100, tiles: standing)) }
-        result.append(Group(id: 200, tiles: [hand.winningTile], mark: "和", isWinning: true))
+        if !standing.isEmpty { result.append(TileGroup(id: 100, tiles: standing)) }
+        result.append(TileGroup(id: 200, tiles: [hand.winningTile], mark: "和", isWinning: true))
         return result
     }
 
