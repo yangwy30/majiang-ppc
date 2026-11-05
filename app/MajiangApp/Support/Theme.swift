@@ -18,6 +18,10 @@ enum Theme {
     /// 拍照页的底色。
     static let darkroom = Color(hex: 0x0F0F0D)
 
+    /// 页面内容最宽多少（含两边 24 的留白）。iPhone Duo 内屏有 669 点宽、横过来 951 点，
+    /// 字和按钮不铺满，收在中间一栏，跟在普通 iPhone 上看到的比例差不多。窄屏上不起作用。
+    static let columnWidth: CGFloat = 560
+
     // 牌面
     static let tileFace = Color(hex: 0xFFFDF8)
     static let tileDim = Color(hex: 0xE9E5DA)
@@ -72,9 +76,11 @@ extension Color {
 // MARK: - 通用组件
 
 extension View {
-    /// 纸白底的页面。
+    /// 纸白底的页面。页面宽过 `Theme.columnWidth` 时（iPhone Duo 内屏），滚动内容收在中间一栏，
+    /// 两边空白仍然能滑动。
     func page() -> some View {
         self
+            .modifier(ReadableColumn())
             .scrollContentBackground(.hidden)
             .background(Theme.paper.ignoresSafeArea())
             .foregroundStyle(Theme.ink)
@@ -93,11 +99,26 @@ extension View {
     func bottomBar<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
         safeAreaInset(edge: .bottom) {
             VStack(spacing: 4, content: content)
+                .frame(maxWidth: Theme.columnWidth - 48)
                 .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity)
                 .padding(.top, 12)
                 .padding(.bottom, 8)
                 .background(Theme.paper)
         }
+    }
+}
+
+/// 宽屏上给滚动内容两边加空白，让内容停在中间一栏。用整页的宽度算，不用屏幕宽度（Duo 分屏时窗口比屏幕窄）。
+private struct ReadableColumn: ViewModifier {
+    @State private var margin: CGFloat = 0
+
+    func body(content: Content) -> some View {
+        content
+            .contentMargins(.horizontal, margin, for: .scrollContent)
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                max(0, ((proxy.size.width - Theme.columnWidth) / 2).rounded())
+            } action: { margin = $0 }
     }
 }
 

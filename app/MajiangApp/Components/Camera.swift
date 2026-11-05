@@ -10,6 +10,12 @@ final class CameraController: NSObject, AVCapturePhotoCaptureDelegate, @unchecke
     private let queue = DispatchQueue(label: "majiang.camera")
     private var configured = false
     private var pending: CheckedContinuation<UIImage?, Never>?
+    /// 在 `queue` 上配置好以后才有；之后只在主线程读。
+    private var device: AVCaptureDevice?
+    /// 取景和照片的方向跟着手机怎么拿：iPhone Duo 内屏不管 App 锁没锁竖屏都会转，
+    /// 横着拿时取景不能是歪的，横着拍的一排牌在照片里也是横的。只在主线程读写。
+    private var rotation: AVCaptureDevice.RotationCoordinator?
+    private var rotationObservation: NSKeyValueObservation?
 
     static var hasCamera: Bool { AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) != nil }
 
@@ -41,10 +47,34 @@ final class CameraController: NSObject, AVCapturePhotoCaptureDelegate, @unchecke
     @MainActor
     func capture() async -> UIImage? {
         guard session.isRunning, pending == nil else { return nil }
+        if let angle = rotation?.videoRotationAngleForHorizonLevelCapture,
+           let connection = output.connection(with: .video), connection.isVideoRotationAngleSupported(angle) {
+            connection.videoRotationAngle = angle
+        }
         return await withCheckedContinuation { continuation in
             pending = continuation
             output.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
         }
+    }
+
+    /// 取景画面每次放上屏幕时调一次（重拍时是新的一层）：画面随界面方向转正。
+    @MainActor
+    func attach(_ layer: AVCaptureVideoPreviewLayer) {
+        guard let device else { return }
+        let coordinator = AVCaptureDevice.RotationCoordinator(device: device, previewLayer: layer)
+        rotation = coordinator
+        Self.apply(coordinator.videoRotationAngleForHorizonLevelPreview, to: layer)
+        rotationObservation = coordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.new]) { [weak layer] coordinator, _ in
+            let angle = coordinator.videoRotationAngleForHorizonLevelPreview
+            DispatchQueue.main.async {
+                if let layer { Self.apply(angle, to: layer) }
+            }
+        }
+    }
+
+    private static func apply(_ angle: CGFloat, to layer: AVCaptureVideoPreviewLayer) {
+        guard let connection = layer.connection, connection.isVideoRotationAngleSupported(angle) else { return }
+        connection.videoRotationAngle = angle
     }
 
     private func configure() {
@@ -56,6 +86,7 @@ final class CameraController: NSObject, AVCapturePhotoCaptureDelegate, @unchecke
         if session.canAddOutput(output) { session.addOutput(output) }
         session.commitConfiguration()
         configured = session.inputs.contains(input) && session.outputs.contains(output)
+        if configured { self.device = device }
     }
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -69,16 +100,24 @@ final class CameraController: NSObject, AVCapturePhotoCaptureDelegate, @unchecke
 
 /// 取景画面，铺满父视图。
 struct CameraPreview: UIViewRepresentable {
-    var session: AVCaptureSession
+    var camera: CameraController
 
     final class PreviewView: UIView {
         override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
         var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
+        var camera: CameraController?
+
+        // 放进窗口以后才知道界面朝哪边
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            if window != nil { camera?.attach(previewLayer) }
+        }
     }
 
     func makeUIView(context: Context) -> PreviewView {
         let view = PreviewView()
-        view.previewLayer.session = session
+        view.camera = camera
+        view.previewLayer.session = camera.session
         view.previewLayer.videoGravity = .resizeAspectFill
         view.backgroundColor = .black
         return view

@@ -42,8 +42,14 @@ struct CheckView: View {
     private var game: Game { flow.game }
     private var winnerName: String { game.players[flow.winner].name }
 
-    /// 每行 7 张，按屏幕宽度算牌的大小，最大 44。
-    private var tileWidth: CGFloat { min(44, (UIScreen.main.bounds.width - 48 - 6 * 6) / 7) }
+    /// 这一页有多宽（不用屏幕宽度：Duo 分屏时窗口比屏幕窄）。
+    @State private var pageWidth: CGFloat = 0
+
+    /// 每行 7 张，按页面宽度算牌的大小，最大 44。宽屏上内容收在中间一栏，按那一栏算。
+    private var tileWidth: CGFloat {
+        guard pageWidth > 0 else { return 44 }
+        return max(24, min(44, (min(pageWidth, Theme.columnWidth) - 48 - 6 * 6) / 7))
+    }
 
     var body: some View {
         ScrollView {
@@ -83,6 +89,7 @@ struct CheckView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { pageWidth = $0 }
         .bottomBar {
             Button {
                 flow.showResult = true

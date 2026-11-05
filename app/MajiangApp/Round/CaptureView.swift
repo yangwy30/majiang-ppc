@@ -129,7 +129,7 @@ struct CaptureView: View {
                         .scaledToFill()
                 }
             } else if cameraOn {
-                CameraPreview(session: camera.session)
+                CameraPreview(camera: camera)
             } else {
                 // 没有相机（模拟器）或没给权限：画一手示意牌
                 RadialGradient(colors: [Color(hex: 0x46443B), Color(hex: 0x2B2A25), Color(hex: 0x201F1B)],
