@@ -40,6 +40,7 @@ struct RootView: View {
                     switch route {
                     case .newGame: NewGameView()
                     case .table(let id): TableView(gameID: id)
+                    case .hand(let game, let record): HandDetailView(gameID: game, recordID: record)
                     case .settle(let id): SettleView(gameID: id)
                     }
                 }

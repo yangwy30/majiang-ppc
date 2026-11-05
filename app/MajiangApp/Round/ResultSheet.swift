@@ -58,40 +58,14 @@ struct ResultSheet: View {
                         .frame(maxWidth: .infinity)
                 }
 
-                VStack(spacing: 0) {
-                    ForEach(record.fans, id: \.fan) { entry in
-                        FanRow(name: entry.count > 1 ? "\(entry.fan.name) ×\(entry.count)" : entry.fan.name,
-                               plain: entry.fan.explanation, points: entry.points)
-                    }
-                    if record.flowerFan > 0 {
-                        FanRow(name: "花牌 ×\(record.flowerFan)", plain: "每张 1 番，不算进起和", points: record.flowerFan)
-                    }
-                }
-                .padding(.top, 14)
+                FanList(win: record)
+                    .padding(.top, 14)
 
                 SectionLabel("这局谁付多少")
                     .padding(.top, 22)
                     .padding(.bottom, 6)
-                VStack(spacing: 0) {
-                    Hairline()
-                    HStack(alignment: .top, spacing: 8) {
-                        ForEach(0..<4, id: \.self) { i in
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(name(i)).font(.system(size: 14)).foregroundStyle(Theme.gray).lineLimit(1)
-                                Text(Theme.signed(deltas[i]))
-                                    .font(Theme.score(24))
-                                    .foregroundStyle(Theme.scoreColor(deltas[i]))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.6)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                    .padding(.top, 14)
-                    .padding(.bottom, 12)
-                    Hairline()
-                }
-                Text(explanation(record, deltas))
+                DeltaGrid(game: game, deltas: deltas)
+                Text(game.paymentExplanation(record, deltas: deltas))
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
                     .lineSpacing(3)
@@ -104,47 +78,5 @@ struct ResultSheet: View {
             Button("记下") { finish(.win(record)) }
                 .buttonStyle(.primary)
         }
-    }
-
-    /// 「自摸：三家各付 8 + 32 = 40 分。」再说一句 8 分是什么。
-    private func explanation(_ record: WinRecord, _ deltas: [Int]) -> String {
-        let game = flow.game
-        let base = game.rules.basePoints
-        let fan = game.rules.paidFan(record)
-        var lines: [String]
-        if let discarder = record.discarder {
-            lines = [game.rules.onlyDiscarderPays
-                     ? "点炮：\(game.players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，按家规另外两家不用付。"
-                     : "点炮：\(game.players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，另外两家各付 \(base) 分。"]
-        } else {
-            lines = ["自摸：三家各付 \(base) + \(fan) = \(base + fan) 分。"]
-        }
-        if base > 0 { lines.append("\(base) 分是底分，不管几番都要先付。") }
-        if game.rules.yuanPerPoint != 1 {
-            lines.append("按 1 分 = \(game.rules.yuanPerPoint.formatted()) 元，\(game.players[record.winner].name)这局赢 \(game.moneyText(deltas[record.winner]))。")
-        }
-        return lines.joined(separator: "\n")
-    }
-}
-
-private struct FanRow: View {
-    var name: String
-    var plain: String
-    var points: Int
-
-    var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(name).font(.system(size: 16, weight: .medium))
-                Text(plain)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Theme.gray)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            Spacer()
-            Text("\(points)").font(.system(size: 16).monospacedDigit())
-        }
-        .padding(.vertical, 11)
-        .overlay(alignment: .top) { Hairline() }
     }
 }

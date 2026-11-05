@@ -5,6 +5,8 @@ import MajiangKit
 enum Route: Hashable {
     case newGame
     case table(UUID)
+    /// 账本里点开的一局和牌：牌局编号、那一局的编号。
+    case hand(UUID, UUID)
     case settle(UUID)
 }
 
@@ -83,7 +85,11 @@ final class AppModel {
             // 截图用的假数据放临时目录，每次启动重新生成
             url = FileManager.default.temporaryDirectory.appendingPathComponent("demo-archive.json")
             try? FileManager.default.removeItem(at: url)
-            if screen != .emptyHome { try? DemoData.archive().save(to: url) }
+            if screen != .emptyHome {
+                let archive = DemoData.archive()
+                try? archive.save(to: url)
+                DemoData.preparePhotos(archive)
+            }
         }
         #endif
         // 读不出来时原文件会被改名备份，之后保存不会覆盖掉旧记录
@@ -115,7 +121,16 @@ final class AppModel {
         case .home, .emptyHome, .backup, .invite, .more: path = []
         case .newGame, .houseRules, .rulePicker: path = [.newGame]
         case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
+        case .handDetail, .handPhoto, .handDiscard:
+            let i = demoScreen == .handDiscard ? 1 : 0
+            if let game = loaded.activeGame, game.records.indices.contains(i) {
+                path = [.table(game.id), .hand(game.id, game.records[i].id)]
+            }
         default: break
+        }
+        // 账本里已经没有的局（别的设备删了、同步过来），照片也删掉。读档失败时不动，免得把照片全清了
+        if failure == nil && demoScreen == nil {
+            HandPhotos.prune(keeping: Set(loaded.games.flatMap { $0.records.map(\.id) }))
         }
     }
 
