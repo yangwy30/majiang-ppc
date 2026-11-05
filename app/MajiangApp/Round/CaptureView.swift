@@ -137,11 +137,12 @@ struct CaptureView: View {
                 // 没有相机（模拟器）或没给权限：画一手示意牌
                 RadialGradient(colors: [Color(hex: 0x46443B), Color(hex: 0x2B2A25), Color(hex: 0x201F1B)],
                                center: UnitPoint(x: 0.5, y: 0.45), startRadius: 0, endRadius: 320)
-                HStack(spacing: 2) {
-                    ForEach(Array(Tile.parseList("11122334455667p").enumerated()), id: \.offset) { _, tile in
-                        TileFace(tile: tile, width: 20, state: .dim)
-                    }
+                // 外屏这种窄取景框里放不下 20 宽的牌，换小一号
+                ViewThatFits(in: .horizontal) {
+                    sampleHand(tileWidth: 20)
+                    sampleHand(tileWidth: 16)
                 }
+                .padding(.horizontal, 26)
             }
 
             if flow.photo == nil {
@@ -174,6 +175,14 @@ struct CaptureView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+    }
+
+    private func sampleHand(tileWidth: CGFloat) -> some View {
+        HStack(spacing: 2) {
+            ForEach(Array(Tile.parseList("11122334455667p").enumerated()), id: \.offset) { _, tile in
+                TileFace(tile: tile, width: tileWidth, state: .dim)
+            }
+        }
     }
 
     private var controls: some View {

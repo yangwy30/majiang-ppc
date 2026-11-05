@@ -99,7 +99,6 @@ struct TableView: View {
             }
             .padding(.horizontal, 24)
         }
-        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
         .bottomBar {
             if let record = justRecorded {
                 UndoBar(text: "已记下第 \(record.handIndex + 1) 局") { undo(record) }
@@ -116,6 +115,8 @@ struct TableView: View {
                     .buttonStyle(.text)
             }
         }
+        // 量在底部按钮区外面，量到的是整页（不含导航栏），不随撤销条出没变
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
         .page()
         // 记下一局轻轻「成功」一下；撤销轻震一下
         .sensoryFeedback(.success, trigger: justRecorded?.id) { _, new in new != nil }
