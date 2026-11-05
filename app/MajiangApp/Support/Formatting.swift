@@ -2,6 +2,14 @@ import Foundation
 import MajiangKit
 
 extension HandRecord {
+    /// 和牌的那一局才有。
+    var win: WinRecord? {
+        if case .win(let win) = outcome { return win }
+        return nil
+    }
+
+    var isWin: Bool { win != nil }
+
     /// 账本里的一行标题：「莉莉和 · 阿强点炮 · 8 番」「这局没人和」。
     func title(in game: Game) -> String {
         let name = { (i: Int) in game.players[i].name }
@@ -71,6 +79,35 @@ extension Game {
 
     /// 规则一行：「国标 · 带花 · 1 分 = 1 元」。
     var rulesSummary: String { rules.summary }
+
+    /// 结果页和「这一局」底下那几行：「自摸：三家各付 8 + 32 = 40 分。」再说一句 8 分是什么。
+    func paymentExplanation(_ win: WinRecord, deltas: [Int]) -> String {
+        let base = rules.basePoints
+        let fan = rules.paidFan(win)
+        var lines: [String]
+        if let discarder = win.discarder {
+            lines = [rules.onlyDiscarderPays
+                     ? "点炮：\(players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，按家规另外两家不用付。"
+                     : "点炮：\(players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，另外两家各付 \(base) 分。"]
+        } else {
+            lines = ["自摸：三家各付 \(base) + \(fan) = \(base + fan) 分。"]
+        }
+        if base > 0 { lines.append("\(base) 分是底分，不管几番都要先付。") }
+        if rules.yuanPerPoint != 1 {
+            lines.append("按 1 分 = \(rules.yuanPerPoint.formatted()) 元，\(players[win.winner].name)这局赢 \(moneyText(deltas[win.winner]))。")
+        }
+        return lines.joined(separator: "\n")
+    }
+
+    /// 「这一局」牌下面的一句话：「自己摸到 7饼，和了。」「阿强打出 6饼，莉莉和了。」
+    func winSentence(_ win: WinRecord) -> String? {
+        guard let tile = win.hand?.winningTile.displayName else { return nil }
+        let winner = players[win.winner].name
+        guard let discarder = win.discarder.map({ players[$0].name }) else {
+            return win.context.kongInvolved ? "开杠补摸到 \(tile)，和了。" : "自己摸到 \(tile)，和了。"
+        }
+        return win.context.kongInvolved ? "\(discarder)补杠的 \(tile) 被抢，\(winner)和了。" : "\(discarder)打出 \(tile)，\(winner)和了。"
+    }
 }
 
 extension GameRules {

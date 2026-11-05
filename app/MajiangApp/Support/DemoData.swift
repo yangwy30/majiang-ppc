@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 import MajiangKit
 
 /// 截图用：启动参数 `-demo-screen <页面>` 打开一份假数据，直接停在某个页面。
@@ -16,6 +16,9 @@ enum DemoScreen: String {
     /// 带家规的牌桌、封顶起作用的结果页、带家规的账本图。
     case houseRules = "house-rules", rulePicker = "rule-picker", gameRules = "game-rules"
     case tableHouse = "table-house", resultCapped = "result-capped", shareHouse = "share-house"
+    /// 「这一局」：自摸、拍过照的第 1 局；打开那张照片；点炮、有一组碰、没留照片的第 2 局。
+    /// 照片默认用演示牌画一张，`-demo-photo <路径>` 可以换成真照片（模拟器能直接读 Mac 上的文件）。
+    case handDetail = "hand-detail", handPhoto = "hand-photo", handDiscard = "hand-discard"
 
     /// 这几页的牌局带家规：封顶 64（结果页用 16，好让示例那手封顶）、1 分 2 元。
     var usesHouseRules: Bool { [.gameRules, .tableHouse, .resultCapped, .shareHouse].contains(self) }
@@ -62,7 +65,7 @@ enum DemoData {
         }
         var active = Game(players: players, rules: houseRules)
         win(&active, winner: 0, discarder: nil, hand: "1112233445566p 7p")
-        win(&active, winner: 2, discarder: 1, hand: "123m 456m 789s 234p 55s")
+        win(&active, winner: 2, discarder: 1, melds: [.pung(Tile(suit: .honors, rank: 6)!)], hand: "234m 345s 45p 88s 6p")
         _ = try? active.recordDraw()
         win(&active, winner: 3, discarder: nil, hand: "234m 456m 678m 东东东 99m")
         archive.upsert(active)
@@ -72,9 +75,9 @@ enum DemoData {
     }
 
     /// 按真的算番记一手；凑不成或不够番时退回 8 番的无番和，保证有数据。
-    private static func win(_ game: inout Game, winner: Int, discarder: Int?, hand text: String) {
+    private static func win(_ game: inout Game, winner: Int, discarder: Int?, melds: [Meld] = [], hand text: String) {
         let tiles = Tile.parseList(text)
-        let hand = Hand(concealed: tiles, winningTile: tiles.last)
+        let hand = Hand(melds: melds, concealed: tiles, winningTile: tiles.last)
         var context = game.winContext(for: winner)
         context.selfDrawn = discarder == nil
         let record: WinRecord
@@ -85,6 +88,32 @@ enum DemoData {
                                fans: [FanEntry(fan: .chickenHand, count: 1)], flowerFan: 0)
         }
         _ = try? game.recordWin(record)
+    }
+
+    /// 「这一局」截图用的照片：没打完那场的第 1 局有照片，第 2 局没有。
+    @MainActor
+    static func preparePhotos(_ archive: GameArchive) {
+        let directory = HandPhotos.directory
+        for file in (try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? [] {
+            try? FileManager.default.removeItem(at: file)
+        }
+        guard let record = archive.activeGame?.records.first, let hand = record.win?.hand else { return }
+        let args = ProcessInfo.processInfo.arguments
+        var image: UIImage?
+        if let i = args.firstIndex(of: "-demo-photo"), i + 1 < args.count { image = UIImage(contentsOfFile: args[i + 1]) }
+        if image == nil {
+            // 没给真照片：在牌桌颜色的底上摆一排牌
+            let renderer = ImageRenderer(content:
+                TileRow(tiles: hand.allTiles, width: 60)
+                    .padding(.horizontal, 60)
+                    .frame(width: 1200, height: 900)
+                    .background(Color(hex: 0xC9796B)))
+            renderer.scale = 1
+            image = renderer.uiImage
+        }
+        if let image, let data = HandPhotos.compressed(image) {
+            try? data.write(to: HandPhotos.url(for: record.id), options: .atomic)
+        }
     }
 
     /// 账本图截图用哪场牌局。

@@ -77,17 +77,17 @@ struct TableView: View {
                         .padding(.vertical, 14)
                 }
                 ForEach(Array(game.records.enumerated().reversed()), id: \.element.id) { index, record in
-                    // 每一局都能点开改或删，打完的牌局也一样
+                    // 和牌的局点进去看怎么和的（在里面也能改）；别的局直接改或删。打完的牌局也一样
                     Button {
-                        editing = EditTarget(record: record, number: index + 1)
+                        open(record, number: index + 1)
                     } label: {
                         RecordRow(number: index + 1, record: record, game: game)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityHint("点一下可以改或删掉这一局")
+                    .accessibilityHint(record.isWin ? "点一下看这一局怎么和的" : "点一下可以改或删掉这一局")
                 }
                 if !game.records.isEmpty && !model.isSeasoned {
-                    Text("记错了？点那一局就能改，后面的分数会跟着重算。")
+                    Text("点一局，看那把怎么和的；记错了也在里面改。")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 14)
@@ -159,6 +159,7 @@ struct TableView: View {
                 edit { try $0.replace(target.record.id, with: outcome) }
             } onDelete: {
                 edit { $0.remove(target.record.id) }
+                HandPhotos.delete(target.record.id)
             }
         }
         .alert("结束这场牌局？", isPresented: $confirmEnd) {
@@ -168,9 +169,11 @@ struct TableView: View {
             Text("结束后就不能再记了，会算出谁该给谁转多少。")
         }
         .fullScreenCover(isPresented: $recording) {
-            RoundFlowView(game: game, demo: model.demoScreen) { outcome in
+            RoundFlowView(game: game, demo: model.demoScreen) { outcome, photo in
                 switch outcome {
-                case .win(let win): record { try $0.recordWin(win) }
+                case .win(let win):
+                    // 照片只留在这台手机上，跟着这一局的编号存
+                    if let saved = record({ try $0.recordWin(win) }), let photo { HandPhotos.save(photo, for: saved.id) }
                 case .falseWin(let offender): record { try $0.recordFalseWin(offender: offender) }
                 default: break
                 }
@@ -211,17 +214,31 @@ struct TableView: View {
     }
 
     /// 记一条到这场牌局；失败时弹窗说明，不悄悄丢掉。
-    private func record(_ change: (inout Game) throws -> HandRecord) {
-        guard var updated = model.game(gameID) else { return }
+    @discardableResult
+    private func record(_ change: (inout Game) throws -> HandRecord) -> HandRecord? {
+        guard var updated = model.game(gameID) else { return nil }
         do {
             let record = try change(&updated)
             model.update(updated)
             showUndo(for: record)
+            return record
         } catch let error as GameError {
             recordError = error.message
         } catch {
             recordError = error.localizedDescription
         }
+        return nil
+    }
+
+    /// 点账本里的一局：和牌的推进「这一局」，别的弹出改局。进去之前收起「撤销」，免得回来撤掉的是改过的版本。
+    private func open(_ record: HandRecord, number: Int) {
+        guard record.isWin else {
+            editing = EditTarget(record: record, number: number)
+            return
+        }
+        undoTimer?.cancel()
+        justRecorded = nil
+        model.path.append(.hand(gameID, record.id))
     }
 
     private func showUndo(for record: HandRecord) {
@@ -257,6 +274,7 @@ struct TableView: View {
         updated.undoLast()
         model.update(updated)
         undoCount += 1
+        HandPhotos.delete(record.id)
         withAnimation(.easeIn(duration: 0.2)) { justRecorded = nil }
     }
 

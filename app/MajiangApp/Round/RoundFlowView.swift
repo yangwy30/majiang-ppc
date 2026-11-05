@@ -7,9 +7,10 @@ struct RoundFlowView: View {
     @State private var flow: RoundFlow
     /// 状态栏跟着谁在最上面：核对页升到顶以后才换成深色字，不然升的半路上是黑底黑字。
     @State private var lightBars = false
-    var onFinish: (HandOutcome) -> Void
+    /// 记下的结果，和拍的那张照片（手动输入的没有）。
+    var onFinish: (HandOutcome, UIImage?) -> Void
 
-    init(game: Game, demo: DemoScreen? = nil, onFinish: @escaping (HandOutcome) -> Void) {
+    init(game: Game, demo: DemoScreen? = nil, onFinish: @escaping (HandOutcome, UIImage?) -> Void) {
         let flow = RoundFlow(game: game)
         #if DEBUG
         if let demo { DemoData.prepare(flow, for: demo) }
@@ -58,7 +59,7 @@ struct RoundFlowView: View {
 
     private func finish(_ outcome: HandOutcome) {
         flow.showResult = false
-        onFinish(outcome)
+        onFinish(outcome, flow.photo)
         dismiss()
     }
 }
