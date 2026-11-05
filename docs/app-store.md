@@ -18,7 +18,7 @@
 
 - 1.0.1 通过后，在管理网页停用「审核专用」码。
 
-截图在 `docs/assets/app-store/`（6.9 寸，1320×2868；1.0.3 起第 7 张是「每一局，怎么和的都在」），由 `tools/app-store/frame.swift` 从模拟器截图生成。iPhone Duo 外屏的图（1398×2034）用同一个脚本，最后加参数 `1398x2034`，截图从 Duo 模拟器外屏截，放在 `docs/assets/app-store/duo/`。
+截图在 `docs/assets/app-store/`（6.9 寸，1320×2868；1.0.3 起第 7 张是「每一局，怎么和的都在」），由 `tools/app-store/frame.swift` 从模拟器截图生成。iPhone Duo 外屏的图（1398×2034）用同一个脚本，最后加参数 `1398x2034`，截图从 Duo 模拟器外屏截。1.0.3 先不传 Duo 的图：交了 Duo 截图，产品页会标「为 iPhone Duo 打造」，而内屏还没在真机上看过、模拟器也拍不了内屏。
 
 ## App Store
 
