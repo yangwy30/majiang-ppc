@@ -122,7 +122,9 @@ struct HandTiles: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        // minWidth: 0：这一层只按给的宽度算，不被牌排撑宽。不然哪次量大了（iPhone Duo 外屏刚开时侧边状态栏还没让出来），
+        // 牌按大的宽度画、把这一层撑宽，再量还是大的，牌就一直超出屏幕
+        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { available = $0 }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityText)

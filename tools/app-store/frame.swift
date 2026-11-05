@@ -2,7 +2,9 @@ import AppKit
 import CoreText
 
 // 产品页截图：纸白底、墨色宋体标题、一点朱红，下面放模拟器截图。
-// 用法：swift frame.swift <font.ttf> <shots dir> <out dir>
+// 用法：swift frame.swift <font.ttf> <shots dir> <out dir> [宽x高]
+//   宽x高：成图尺寸，默认 1320x2868（6.9 寸 iPhone）；iPhone Duo 外屏用 1398x2034（截图也要用 Duo 模拟器外屏截）。
+//   版面按宽度等比缩放，截图按自己的像素比例放进下半截。
 //   font.ttf：Noto Serif SC 可变字体（SIL OFL），https://github.com/google/fonts/raw/main/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf
 //   shots：iPhone 6.9 寸模拟器（1320×2868）截的图，文件名对应下面 frames 里的 file，截法见 docs/user-flow.md「截图怎么更新」
 let args = CommandLine.arguments
@@ -32,10 +34,14 @@ let frames = [
     Frame(file: "result", title: "番数，自动算好", sub: "国标八十一番，谁付多少一清二楚"),
     Frame(file: "table", title: "一桌四人，一本账", sub: "庄家、风圈自动轮转，每局输赢随手记"),
     Frame(file: "settle", title: "打完，一键结账", sub: "最少几笔转账，账本图发到微信群"),
+    Frame(file: "hand-detail", title: "每一局，怎么和的都在", sub: "点开账本里的一局，牌、番种、照片都能翻"),
 ]
 
-let W: CGFloat = 1320, H: CGFloat = 2868
-let margin: CGFloat = 116
+let size = args.count > 4 ? args[4].split(separator: "x").compactMap { Double($0) } : [1320, 2868]
+let W = CGFloat(size[0]), H = CGFloat(size[1])
+/// 版面是按 1320 宽设计的，别的宽度等比缩放。
+let k = W / 1320
+let margin: CGFloat = 116 * k
 
 for (i, f) in frames.enumerated() {
     guard let shot = NSImage(contentsOf: shots.appendingPathComponent(f.file + ".png")) else { fatalError(f.file) }
@@ -53,38 +59,42 @@ for (i, f) in frames.enumerated() {
     paper.setFill(); NSRect(x: 0, y: 0, width: W, height: H).fill()
 
     // 朱红小印 + 序号
-    let sealY: CGFloat = 230
+    // 矮的图（Duo 外屏）顶上留白少一点
+    let top: CGFloat = H / W < 1.8 ? 150 * k : 230 * k
+    let sealY = top
     vermilion.setFill()
-    NSBezierPath(roundedRect: NSRect(x: margin, y: sealY, width: 14, height: 14), xRadius: 2, yRadius: 2).fill()
+    NSBezierPath(roundedRect: NSRect(x: margin, y: sealY, width: 14 * k, height: 14 * k), xRadius: 2 * k, yRadius: 2 * k).fill()
     let num = NSAttributedString(string: String(format: "%02d", i + 1), attributes: [
-        .font: NSFont.systemFont(ofSize: 34, weight: .regular), .foregroundColor: gray, .kern: 4,
+        .font: NSFont.systemFont(ofSize: 34 * k, weight: .regular), .foregroundColor: gray, .kern: 4 * k,
     ])
-    num.draw(at: NSPoint(x: margin + 34, y: sealY - 12))
+    num.draw(at: NSPoint(x: margin + 34 * k, y: sealY - 12 * k))
 
     let para = NSMutableParagraphStyle(); para.lineSpacing = 0
     let title = NSMutableAttributedString(string: f.title, attributes: [
-        .font: serif(96, weight: 620), .foregroundColor: ink, .kern: 5, .paragraphStyle: para,
+        .font: serif(96 * k, weight: 620), .foregroundColor: ink, .kern: 5 * k, .paragraphStyle: para,
     ])
     // 标题里的「AI」用朱红、无衬线，突出拍照认牌
     if let r = f.title.range(of: "AI") {
-        title.addAttributes([.foregroundColor: vermilion, .font: NSFont.systemFont(ofSize: 92, weight: .semibold)],
+        title.addAttributes([.foregroundColor: vermilion, .font: NSFont.systemFont(ofSize: 92 * k, weight: .semibold)],
                             range: NSRange(r, in: f.title))
     }
-    title.draw(at: NSPoint(x: margin - 4, y: 304))
+    title.draw(at: NSPoint(x: margin - 4 * k, y: top + 74 * k))
     let sub = NSAttributedString(string: f.sub, attributes: [
-        .font: NSFont.systemFont(ofSize: 46, weight: .regular), .foregroundColor: gray, .kern: 2,
+        .font: NSFont.systemFont(ofSize: 46 * k, weight: .regular), .foregroundColor: gray, .kern: 2 * k,
     ])
-    sub.draw(at: NSPoint(x: margin, y: 456))
+    sub.draw(at: NSPoint(x: margin, y: top + 226 * k))
 
-    // 截图：等比缩小，圆角，细边，很淡的影子
-    let scale: CGFloat = 0.70
-    let sw = 1320 * scale, sh = 2868 * scale
-    let rect = NSRect(x: (W - sw) / 2, y: 700, width: sw, height: sh)
-    let radius: CGFloat = 62
+    // 截图：等比缩小，圆角，细边，很淡的影子。6.9 寸时是原图的 0.70；矮的图按剩下的高度缩
+    let pixels = shot.representations.first.map { CGSize(width: $0.pixelsWide, height: $0.pixelsHigh) } ?? shot.size
+    let shotTop = top + 470 * k
+    let scale = min(W * 0.70 / pixels.width, (H - shotTop - 160 * k) / pixels.height)
+    let sw = pixels.width * scale, sh = pixels.height * scale
+    let rect = NSRect(x: (W - sw) / 2, y: shotTop, width: sw, height: sh)
+    let radius: CGFloat = 62 * sw / 924
     let clip = NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius)
     NSGraphicsContext.saveGraphicsState()
     let shadow = NSShadow()
-    shadow.shadowColor = rgb(0x3A3426, 0.10); shadow.shadowBlurRadius = 60; shadow.shadowOffset = NSSize(width: 0, height: 24)
+    shadow.shadowColor = rgb(0x3A3426, 0.10); shadow.shadowBlurRadius = 60 * k; shadow.shadowOffset = NSSize(width: 0, height: 24 * k)
     shadow.set()
     paper.setFill(); clip.fill()
     NSGraphicsContext.restoreGraphicsState()
@@ -92,7 +102,7 @@ for (i, f) in frames.enumerated() {
     clip.addClip()
     shot.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.high])
     NSGraphicsContext.restoreGraphicsState()
-    line.setStroke(); clip.lineWidth = 2; clip.stroke()
+    line.setStroke(); clip.lineWidth = 2 * k; clip.stroke()
 
     NSGraphicsContext.restoreGraphicsState()
     // App Store 不收带透明通道的图，转成不透明 RGB
