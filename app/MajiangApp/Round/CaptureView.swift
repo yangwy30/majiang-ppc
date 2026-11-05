@@ -40,6 +40,9 @@ struct CaptureView: View {
                 .padding(.bottom, 8)
         }
         .padding(.horizontal, 24)
+        // iPhone Duo 内屏、横过来时不铺满：快门和相册按钮不至于隔得太远，四个名字也不拉成长条
+        .frame(maxWidth: 640)
+        .frame(maxWidth: .infinity)
         .background(Theme.darkroom.ignoresSafeArea())
         .foregroundStyle(.white)
         .navigationTitle("谁和了？")
