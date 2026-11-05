@@ -18,6 +18,8 @@ struct TableView: View {
     /// 刚记下的一局，底部显示 8 秒「撤销」（牌桌上大家还在说话，5 秒常常反应不过来）。
     @State private var justRecorded: HandRecord?
     @State private var undoTimer: Task<Void, Never>?
+    /// 这一页有多高：矮屏方桌画小一点。
+    @State private var pageHeight: CGFloat = 0
     /// 点了撤销就加一，触发一下轻震。
     @State private var undoCount = 0
 
@@ -55,7 +57,8 @@ struct TableView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, 2)
                 }
-                TableDiagram(game: game)
+                // 矮屏（iPhone Duo 外屏、SE、mini）方桌小一圈，账本多露出一行
+                TableDiagram(game: game, compact: pageHeight > 0 && pageHeight < 700)
                     .padding(.top, 10)
 
                 HStack(alignment: .firstTextBaseline) {
@@ -112,6 +115,8 @@ struct TableView: View {
                     .buttonStyle(.text)
             }
         }
+        // 量在底部按钮区外面，量到的是整页（不含导航栏），不随撤销条出没变
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
         .page()
         // 记下一局轻轻「成功」一下；撤销轻震一下
         .sensoryFeedback(.success, trigger: justRecorded?.id) { _, new in new != nil }
@@ -296,6 +301,7 @@ private struct EditTarget: Identifiable {
 /// 方桌：我（开局时填在第一行的人）在下面，下家在右，对家在上，上家在左。
 private struct TableDiagram: View {
     var game: Game
+    var compact = false
 
     var body: some View {
         let hand = game.displayHand
@@ -305,14 +311,14 @@ private struct TableDiagram: View {
         ZStack {
             VStack(spacing: 6) {
                 Text(game.prevalentWind(ofHand: hand).name)
-                    .font(Theme.serif(56))
+                    .font(Theme.serif(compact ? 48 : 56))
                 Text(game.isFinished ? "打完了" : "风圈 · 第 \(hand % 4 + 1) 局")
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
             }
-            .frame(width: 168, height: 168)
+            .frame(width: compact ? 140 : 168, height: compact ? 140 : 168)
             .background {
-                RoundedRectangle(cornerRadius: 26, style: .continuous)
+                RoundedRectangle(cornerRadius: compact ? 22 : 26, style: .continuous)
                     .fill(Theme.white)
                     .shadow(color: Theme.ink.opacity(0.04), radius: 1, y: 1)
                     .shadow(color: Theme.ink.opacity(0.05), radius: 12, y: 8)
@@ -327,7 +333,7 @@ private struct TableDiagram: View {
             SeatLabel(game: game, player: at(1), hand: hand, alignment: .trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .frame(height: 304)
+        .frame(height: compact ? 256 : 304)
     }
 }
 

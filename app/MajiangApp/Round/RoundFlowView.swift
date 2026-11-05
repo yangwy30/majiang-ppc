@@ -41,7 +41,9 @@ struct RoundFlowView: View {
                 .zIndex(1)
             }
         }
-        .background(Color.black.ignoresSafeArea())
+        // 拍照页被圆角裁过，边上的安全区（iPhone Duo 外屏右边竖着的状态栏、底部横条）露的是这层底色：
+        // 平时跟拍照页同色，免得有一道接缝；核对页升上来时才换成纯黑，衬出往后退的拍照页
+        .background((checking ? Color.black : Theme.darkroom).ignoresSafeArea())
         .animation(.spring(response: 0.5, dampingFraction: 0.86), value: checking)
         .tint(Theme.ink)
         // 拍照页是深色底，状态栏要白字；导航栏的 toolbarColorScheme 管不到整个全屏弹层

@@ -280,11 +280,12 @@ private struct EmptyHome<More: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            // 安全区以下留 38，离屏幕顶约 100；SE 这种矮屏只留 22，免得整页要滚
-            let topInset: CGFloat = geo.size.height < 560 ? 22 : 38
+            // 安全区以下留 38，离屏幕顶约 100；SE、iPhone Duo 外屏这种矮屏只留 22，三步也排紧一点，免得第三步被按钮切掉
+            let short = geo.size.height < 560
+            let topInset: CGFloat = short ? 22 : 38
             ScrollView {
-                // 品牌标在顶上；标题和步骤作为一块往下放，剩下的空白上 : 下 ≈ 5 : 3，两段都至少 32
-                FiveThreeLayout(height: geo.size.height - topInset) {
+                // 品牌标在顶上；标题和步骤作为一块往下放，剩下的空白上 : 下 ≈ 5 : 3，两段都至少 32（矮屏 20）
+                FiveThreeLayout(height: geo.size.height - topInset, minGap: short ? 20 : 32) {
                     HStack(alignment: .center) {
                         brand
                         Spacer()
@@ -292,7 +293,7 @@ private struct EmptyHome<More: View>: View {
                     }
                     VStack(alignment: .leading, spacing: 0) {
                         headline
-                        steps.padding(.top, 40)
+                        steps(rowPadding: short ? 14 : 24).padding(.top, short ? 24 : 40)
                     }
                 }
                 .padding(.horizontal, 28)
@@ -337,22 +338,22 @@ private extension EmptyHome {
         .font(Theme.serif(32, semibold: true))
     }
 
-    var steps: some View {
+    func steps(rowPadding: CGFloat) -> some View {
         VStack(spacing: 0) {
-            StepRow(number: "一", title: "拍", detail: "和牌的人把牌推倒，拍一张") {
+            StepRow(number: "一", title: "拍", detail: "和牌的人把牌推倒，拍一张", padding: rowPadding) {
                 HStack(spacing: 2) {
                     ForEach(Array(Tile.parseList("12355p").enumerated()), id: \.offset) { _, tile in
                         TileFace(tile: tile, width: 16)
                     }
                 }
             }
-            StepRow(number: "二", title: "算", detail: "认出牌，按国标算番") {
+            StepRow(number: "二", title: "算", detail: "认出牌，按国标算番", padding: rowPadding) {
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
                     Text("32").font(Theme.score(30, weight: .ultraLight))
                     Text("番").font(Theme.serif(13, semibold: true))
                 }
             }
-            StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账") {
+            StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账", padding: rowPadding) {
                 VStack(alignment: .trailing, spacing: 0) {
                     Text("+120").foregroundStyle(Theme.vermilion)
                     Text("−40").foregroundStyle(Theme.ink)
@@ -393,6 +394,8 @@ private struct StepRow<Sample: View>: View {
     var number: String
     var title: String
     var detail: String
+    /// 每行上下的留白，矮屏小一点。
+    var padding: CGFloat = 24
     @ViewBuilder var sample: Sample
 
     var body: some View {
@@ -417,7 +420,7 @@ private struct StepRow<Sample: View>: View {
                 Spacer(minLength: 12)
                 sample.accessibilityHidden(true)
             }
-            .padding(.vertical, 24)
+            .padding(.vertical, padding)
             Hairline()
         }
     }
