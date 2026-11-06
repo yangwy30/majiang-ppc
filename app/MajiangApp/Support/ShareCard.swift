@@ -159,10 +159,10 @@ struct ShareCard: View {
 }
 
 extension Game {
-    /// 「最大的一手：杨，清一色 32 番」。
+    /// 「最大一手：杨 清一色 32 番」。分享图、结算页、文字版都用这一句。
     var biggestWinLine: String? {
         guard let biggest = biggestWin else { return nil }
-        return "最大的一手：\(players[biggest.win.winner].name)，"
+        return "最大一手：\(players[biggest.win.winner].name) "
             + (biggest.win.fans.first.map { "\($0.fan.name) " } ?? "") + "\(biggest.win.totalFan) 番"
     }
 
@@ -200,10 +200,7 @@ extension Game {
                     "\(players[$0.from].name) → \(players[$0.to].name)\(gap)\(moneyText($0.points))"
                 })
             }
-            if let biggest = biggestWin {
-                let fan = biggest.win.fans.first.map { "\($0.fan.name) " } ?? ""
-                sections.append(["最大一手：\(players[biggest.win.winner].name) \(fan)\(biggest.win.totalFan) 番"])
-            }
+            if let line = biggestWinLine { sections.append([line]) }
         } else if let last = records.last {
             sections.append(["上一局：" + last.title(in: self).replacingOccurrences(of: " · ", with: " ")])
         }
