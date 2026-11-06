@@ -6,6 +6,7 @@ App 正式版不带 Gemini Key，认牌请求发到这里，由中转站带上 K
   - 旧地址 `https://majiang-relay.yangwang9710.workers.dev` 是同一个 Worker，留给 1.0 和旧的 TestFlight 版本；中国大陆大多连不上 workers.dev，所以换了域名
   - `/recognize` 认牌，`/invite` 填码（见下面）
   - `/privacy` 隐私说明（`src/privacy.js`），`/support` 帮助页（`src/support.js`），App Store 产品页链的就是这两页
+  - `/` 在浏览器里直接打开域名时的介绍页（`src/home.js`）：一句话、App Store 下载、帮助和隐私的链接
   - `/admin` 邀请码管理网页，`/health` 回 `ok`
 - 账号：Yang 的 Cloudflare（免费套餐够用）
 - Key：Worker 密钥 `GEMINI_API_KEY`，不进代码、不进仓库

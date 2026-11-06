@@ -29,9 +29,7 @@ struct HomeView: View {
         .sheet(isPresented: $showBackup) { BackupView() }
         .sheet(isPresented: $showInvite) { InviteView() }
         .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
-            MoreSheet(showsInvite: model.usesProxy || model.demoScreen == .invite || model.demoScreen == .more,
-                      inviteOn: model.inviteCode != nil,
-                      backupLine: backupLine) { target in
+            MoreSheet(items: moreItems) { target in
                 moreTarget = target
                 showMore = false
             }
@@ -130,9 +128,19 @@ struct HomeView: View {
         .buttonStyle(.plain)
     }
 
-    /// 「备份与换手机」那行下面的一句：iCloud 开没开。
-    private var backupLine: String {
-        model.cloud.enabled ? "iCloud 同步已打开" : "导出、导入牌局，或者打开 iCloud 同步"
+    /// 「更多」里的几项。AI 认牌只在连我们服务器的版本里有（开发版直连 Google 时不出）。
+    private var moreItems: [MoreSheet<MoreTarget>.Item] {
+        var items: [MoreSheet<MoreTarget>.Item] = [
+            .init(target: .guide, title: "番怎么算", detail: "国标的番种和收付，都是白话"),
+            .init(target: .backup, title: "备份与换手机",
+                  detail: model.cloud.enabled ? "iCloud 同步已打开" : "导出、导入牌局，或者打开 iCloud 同步"),
+        ]
+        if model.usesProxy || model.demoScreen == .invite || model.demoScreen == .more {
+            let on = model.inviteCode != nil
+            items.append(.init(target: .invite, title: on ? "AI 认牌 · 已开启" : "AI 认牌",
+                               detail: on ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准"))
+        }
+        return items
     }
 
     private func openMoreTarget() {
@@ -148,60 +156,6 @@ struct HomeView: View {
 
 private enum MoreTarget {
     case guide, backup, invite
-}
-
-/// 「更多」：纸白底，一项一行，名字下面一句说明，右边一个 ›。跟账本、家规一样是细线列表。
-private struct MoreSheet: View {
-    var showsInvite: Bool
-    var inviteOn: Bool
-    var backupLine: String
-    var pick: (MoreTarget) -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("更多")
-                .font(.system(size: 20, weight: .semibold))
-                .padding(.top, 28)
-                .padding(.bottom, 8)
-            row("番怎么算", "国标的番种和收付，都是白话", .guide, last: false)
-            row("备份与换手机", backupLine, .backup, last: !showsInvite)
-            if showsInvite {
-                row(inviteOn ? "AI 认牌 · 已开启" : "AI 认牌", inviteOn ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准",
-                    .invite, last: true)
-            }
-        }
-        .padding(.horizontal, 24)
-        .frame(maxHeight: .infinity, alignment: .top)
-        .foregroundStyle(Theme.ink)
-        .presentationDetents([.height(showsInvite ? 296 : 222)])
-        .presentationDragIndicator(.visible)
-        .presentationCornerRadius(28)
-        .presentationBackground(Theme.paper)
-    }
-
-    /// 最后一行底下不画线，免得线下面空一截。
-    private func row(_ title: String, _ detail: String, _ target: MoreTarget, last: Bool) -> some View {
-        Button { pick(target) } label: {
-            VStack(spacing: 0) {
-                HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(title).font(.system(size: 17))
-                        Text(detail)
-                            .font(.system(size: 14))
-                            .foregroundStyle(Theme.gray)
-                    }
-                    Spacer(minLength: 8)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Theme.faint)
-                }
-                .frame(minHeight: 72)
-                if !last { Hairline() }
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
 }
 
 private struct ActiveGameCard: View {

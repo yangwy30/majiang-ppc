@@ -118,6 +118,15 @@ const newInvite = async (body = {}) => {
   return res.json();
 };
 
+test("直接打开域名看到介绍页，别的地址还是 404", async () => {
+  const home = await fetch(`${BASE}/`);
+  assert.equal(home.status, 200);
+  assert.match(home.headers.get("content-type"), /text\/html/);
+  assert.match(await home.text(), /apps\.apple\.com\/app\/id6827328659/);
+  for (const path of ["/support", "/privacy"]) assert.equal((await fetch(`${BASE}${path}`)).status, 200, path);
+  assert.equal((await fetch(`${BASE}/nope`)).status, 404);
+});
+
 test("管理接口要管理密码，网页本身能打开", async () => {
   assert.equal((await adminApi("codes", undefined, "")).status, 401);
   assert.equal((await adminApi("codes", undefined, "wrong")).status, 401);
@@ -200,6 +209,7 @@ test("「必须有邀请码」打开后，没码的请求（旧版 App）被拒�
   const err = (await blocked.json()).error;
   assert.equal(err.invite, true);
   assert.equal(err.majiang, true);
+  assert.match(err.message, /「更多」/, "说清楚码填在哪");
 
   const c = await newInvite();
   assert.equal((await post({ "X-Majiang-Device": device(21), "X-Majiang-Invite": c.code })).status, 200);
