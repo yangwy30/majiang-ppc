@@ -44,6 +44,9 @@ struct CheckView: View {
 
     /// 这一页有多宽（不用屏幕宽度：Duo 分屏时窗口比屏幕窄）。
     @State private var pageWidth: CGFloat = 0
+    /// 问题卡已经滚出来过一次：第一次要等牌落完再滚。
+    @State private var askedOnce = false
+    private static let questionID = "question"
 
     /// 每行 7 张，按页面宽度算牌的大小，最大 44。宽屏上内容收在中间一栏，按那一栏算。
     private var tileWidth: CGFloat {
@@ -52,6 +55,12 @@ struct CheckView: View {
     }
 
     var body: some View {
+        ScrollViewReader { proxy in
+            page(proxy)
+        }
+    }
+
+    private func page(_ proxy: ScrollViewProxy) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top, spacing: 16) {
@@ -76,6 +85,7 @@ struct CheckView: View {
                 } else if let index = flow.firstPending {
                     QuestionCard(flow: flow, index: index) { editing = .replace(index) }
                         .padding(.top, 18)
+                        .id(Self.questionID)
                 } else if !flow.tiles.isEmpty && !flow.isValidWin {
                     problemCard.padding(.top, 18)
                 } else if flow.tiles.isEmpty {
@@ -117,7 +127,7 @@ struct CheckView: View {
         .toolbar {
             NavBack("重拍") { flow.steps.removeAll() }
         }
-        .sheet(item: $editing) { target in sheet(for: target) }
+        .sheet(item: $editing) { target in sheet(for: target).presentationCornerRadius(30) }
         // 牌落进格子时很轻地震一下
         .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.6), trigger: landed) { _, new in new }
         .task {
@@ -125,6 +135,14 @@ struct CheckView: View {
             flipStart = Date().addingTimeInterval(reduceMotion ? 0 : 1.3)
             try? await Task.sleep(for: .seconds(0.3))
             landed = true
+        }
+        // 拿不准的牌要先选：矮屏（Duo 外屏、牌多排成三行时）问题卡会掉到底下按钮后面，滚上来让人看得到
+        .task(id: flow.firstPending) {
+            guard flow.firstPending != nil else { return }
+            try? await Task.sleep(for: .seconds(askedOnce ? 0.3 : 1.6))
+            askedOnce = true
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.35)) { proxy.scrollTo(Self.questionID, anchor: .bottom) }
         }
         .task(id: flow.isReviewing) {
             canSkip = false
@@ -138,7 +156,7 @@ struct CheckView: View {
                 PhotoViewer(photo: photo) { showPhoto = false }
             }
         }
-        .sheet(isPresented: $showInvite) { InviteView() }
+        .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
         .sheet(isPresented: $flow.showResult) {
             ResultSheet(flow: flow, finish: finish)
         }

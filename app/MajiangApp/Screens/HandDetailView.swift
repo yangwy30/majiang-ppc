@@ -161,6 +161,7 @@ struct HandDetailView: View {
             } onDelete: {
                 pendingChange = .delete
             }
+            .presentationCornerRadius(30)
         }
         .fullScreenCover(isPresented: $showPhoto) {
             if let photo {

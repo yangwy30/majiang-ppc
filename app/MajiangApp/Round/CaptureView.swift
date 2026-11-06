@@ -24,18 +24,21 @@ struct CaptureView: View {
     var body: some View {
         Group {
             if sizeClass == .regular {
-                HStack(spacing: 20) {
-                    VStack(spacing: 0) {
-                        winnerPicker
-                            .frame(maxWidth: 520)
-                            .padding(.top, 10)
-                        viewfinder
-                            .padding(.top, 20)
-                        statusLine
-                            .padding(.top, 10)
-                            .padding(.bottom, 8)
+                // 四个名字跟标题对齐在整页中间；取景框和右边的快门并排
+                VStack(spacing: 0) {
+                    winnerPicker
+                        .frame(maxWidth: 520)
+                        .padding(.top, 10)
+                    HStack(spacing: 20) {
+                        VStack(spacing: 0) {
+                            viewfinder
+                            statusLine
+                                .padding(.top, 10)
+                                .padding(.bottom, 8)
+                        }
+                        sideControls
                     }
-                    sideControls
+                    .padding(.top, 20)
                 }
                 .padding(.horizontal, 24)
             } else {

@@ -25,9 +25,9 @@ struct HomeView: View {
         }
         .page()
         .toolbar(.hidden, for: .navigationBar)
-        .sheet(isPresented: $showGuide) { RulesGuideView() }
-        .sheet(isPresented: $showBackup) { BackupView() }
-        .sheet(isPresented: $showInvite) { InviteView() }
+        .sheet(isPresented: $showGuide) { RulesGuideView().presentationCornerRadius(30) }
+        .sheet(isPresented: $showBackup) { BackupView().presentationCornerRadius(30) }
+        .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
         .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
             MoreSheet(items: moreItems) { target in
                 moreTarget = target
@@ -40,7 +40,7 @@ struct HomeView: View {
             if model.demoScreen == .more { showMore = true }
         }
         #if DEBUG
-        .sheet(isPresented: $showSettings) { SettingsView() }
+        .sheet(isPresented: $showSettings) { SettingsView().presentationCornerRadius(30) }
         #endif
     }
 

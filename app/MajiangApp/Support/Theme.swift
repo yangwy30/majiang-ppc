@@ -108,6 +108,13 @@ extension View {
                 .padding(.top, 12)
                 .padding(.bottom, 8)
                 .background(Theme.paper)
+                // 上沿淡出一小段：滚到按钮底下的字是慢慢隐去，不是被横着切成半个字（矮屏上最明显）
+                .background(alignment: .top) {
+                    LinearGradient(colors: [Theme.paper.opacity(0), Theme.paper], startPoint: .top, endPoint: .bottom)
+                        .frame(height: 24)
+                        .offset(y: -24)
+                        .allowsHitTesting(false)
+                }
         }
     }
 }

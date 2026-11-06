@@ -123,6 +123,7 @@ struct TableView: View {
                 edit { $0.remove(target.record.id) }
                 HandPhotos.delete(target.record.id)
             }
+            .presentationCornerRadius(30)
         }
         .alert("结束这场牌局？", isPresented: $confirmEnd) {
             Button("结束", role: .destructive) { settle(game) }
@@ -145,12 +146,14 @@ struct TableView: View {
             ManualScoreView(game: game) { deltas, note in
                 record { try $0.recordManual(deltas: deltas, note: note) }
             }
+            .presentationCornerRadius(30)
         }
-        .sheet(isPresented: $showGuide) { RulesGuideView() }
+        .sheet(isPresented: $showGuide) { RulesGuideView().presentationCornerRadius(30) }
         .sheet(isPresented: $editingRules) {
             GameRulesSheet(game: game, draft: demoRulesDraft(game)) { rules in
                 edit { try $0.changeRules(rules) }
             }
+            .presentationCornerRadius(30)
         }
         .onAppear {
             if model.demoScreen == .table { justRecorded = game.records.last }

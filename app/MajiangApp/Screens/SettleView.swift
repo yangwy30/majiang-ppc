@@ -49,14 +49,14 @@ struct SettleView: View {
                                 .font(Theme.score(26))
                                 .foregroundStyle(Theme.scoreColor(scores[player]))
                         }
-                        .frame(height: short ? 48 : 60)
+                        .frame(height: short ? 42 : 60)
                         Hairline()
                     }
                 }
-                .padding(.top, short ? 14 : 26)
+                .padding(.top, short ? 10 : 26)
 
                 SectionLabel("这样转账最省事")
-                    .padding(.top, short ? 22 : 32)
+                    .padding(.top, short ? 16 : 32)
                     .padding(.bottom, 10)
                 VStack(spacing: 0) {
                     if transfers.isEmpty {
@@ -80,7 +80,7 @@ struct SettleView: View {
                             Text(game.moneyText(t.points))
                                 .font(.system(size: 17, weight: .semibold).monospacedDigit())
                         }
-                        .frame(height: short ? 48 : 54)
+                        .frame(height: short ? 44 : 54)
                         if index < transfers.count - 1 { Hairline(color: Theme.lineSoft) }
                     }
                 }
