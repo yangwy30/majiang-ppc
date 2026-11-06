@@ -123,6 +123,7 @@ struct NewGameView: View {
         }
         .sheet(isPresented: $editingRules) {
             RulesSheet(rules: $rules, opening: model.demoScreen == .rulePicker ? .cap : nil)
+                .presentationCornerRadius(30)
         }
         .onAppear {
             // 第一行是自己：用上一场的名字先填上，常一起打的人就会往下填
