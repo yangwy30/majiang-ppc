@@ -106,9 +106,12 @@ extension View {
 
 /// 底部按钮区。下面还有内容被按钮挡住时，按钮区上沿淡出一小段：被挡住的字是慢慢隐去，
 /// 不是被横着切成半个字（Duo 外屏这种矮屏上最明显）。内容到底了就不淡，免得最后一句说明被盖淡。
+/// 只在矮屏上淡：大屏上按钮区上沿盖住的多半是最后一行完整的字，一淡反而像没显示全。
 private struct BottomBar<Bar: View>: ViewModifier {
     var bar: Bar
     @State private var moreBelow = false
+    @State private var pageHeight: CGFloat = 0
+    private var short: Bool { pageHeight > 0 && pageHeight < Theme.shortPage }
 
     func body(content: Content) -> some View {
         content
@@ -125,10 +128,12 @@ private struct BottomBar<Bar: View>: ViewModifier {
                         LinearGradient(colors: [Theme.paper.opacity(0), Theme.paper], startPoint: .top, endPoint: .bottom)
                             .frame(height: 24)
                             .offset(y: -24)
-                            .opacity(moreBelow ? 1 : 0)
+                            .opacity(moreBelow && short ? 1 : 0)
                             .allowsHitTesting(false)
                     }
             }
+            // 量在按钮区外面，量到的是整页（不含导航栏），不随按钮区变高变矮
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
     }
 }
 
@@ -139,9 +144,8 @@ private struct TrackMoreBelow: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 18.0, *) {
             content.onScrollGeometryChange(for: Bool.self) { geo in
-                let visibleBottom = geo.contentOffset.y + geo.containerSize.height - geo.contentInsets.bottom
-                // 页面末尾一般留 24～32 的空白，只挡住空白不算
-                return geo.contentSize.height - visibleBottom > 36
+                // visibleRect 包括按钮区底下那段，减掉才是看得见的部分。页面末尾一般留 24～32 的空白，只挡住空白不算
+                return geo.contentSize.height - (geo.visibleRect.maxY - geo.contentInsets.bottom) > 36
             } action: { _, new in moreBelow = new }
         } else {
             content
