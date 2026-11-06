@@ -170,7 +170,8 @@ export class Relay extends DurableObject {
       code TEXT NOT NULL, device TEXT NOT NULL, first_seen TEXT NOT NULL, PRIMARY KEY (code, device))`);
     // 在管理网页上改的开关（现在只有「必须有邀请码」）
     this.sql.exec("CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT NOT NULL)");
-    // 「提意见」：用户写的话和自己留的联系方式。不存 IP，设备编号只用来防刷。
+    // 「提意见」：用户写的话和自己留的联系方式。不存 IP，也不存设备编号（device 列一直写空）：
+    // 防刷只按当天的计数（hits 表），这样意见和认错的照片都关联不到哪台手机。
     this.sql.exec(`CREATE TABLE IF NOT EXISTS feedback (
       id INTEGER PRIMARY KEY AUTOINCREMENT, created TEXT NOT NULL, device TEXT NOT NULL,
       text TEXT NOT NULL, contact TEXT NOT NULL DEFAULT '', app TEXT NOT NULL DEFAULT '', model TEXT NOT NULL DEFAULT '',
@@ -252,6 +253,9 @@ export class Relay extends DurableObject {
       this.sql.exec("DELETE FROM hits WHERE win < ?", day);
       const keep = limit(this.env, "MISREAD_KEEP_DAYS", 180);
       this.sql.exec("DELETE FROM misreads WHERE created < ?", new Date(Date.now() - keep * 86_400_000).toISOString());
+      // 早先的版本存过设备编号，清掉
+      this.sql.exec("UPDATE feedback SET device = '' WHERE device != ''");
+      this.sql.exec("UPDATE misreads SET device = '' WHERE device != ''");
       this.bump("_cleanup", day);
     }
 
@@ -365,7 +369,7 @@ export class Relay extends DurableObject {
       limit(env, "FEEDBACK_DEVICE_DAILY", 10), limit(env, "FEEDBACK_IP_DAILY", 30), limit(env, "FEEDBACK_GLOBAL_DAILY", 500));
     if (busy) return fail(429, busy);
     this.sql.exec("INSERT INTO feedback (created, device, text, contact, app, model) VALUES (?, ?, ?, ?, ?, ?)",
-      now, request.headers.get("X-Majiang-Device"), text, short(body.contact, 80), short(body.app, 40), short(body.device, 40));
+      now, "", text, short(body.contact, 80), short(body.app, 40), short(body.device, 40));
     return Response.json({ ok: true });
   }
 
@@ -385,7 +389,7 @@ export class Relay extends DurableObject {
       limit(env, "MISREAD_DEVICE_DAILY", 30), limit(env, "MISREAD_IP_DAILY", 60), limit(env, "MISREAD_GLOBAL_DAILY", 1000));
     if (busy) return fail(429, busy);
     this.sql.exec(`INSERT INTO misreads (created, device, source, app, model, recognized, corrected, photo)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, now, request.headers.get("X-Majiang-Device"), short(body.source, 20),
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, now, "", short(body.source, 20),
       short(body.app, 40), short(body.device, 40), recognized, corrected, photo.buffer);
     return Response.json({ ok: true });
   }
