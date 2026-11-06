@@ -260,9 +260,11 @@ struct TableView: View {
     }
 
     /// 底部的按钮：刚记下时的「撤销」条、有人和了、这局没人和（打完了是看结算）。
+    /// 矮屏上撤销条不另占一行，那 8 秒顶替「这局没人和」（刚记完一局不会马上又流局），账本不被挤成一行。
     @ViewBuilder
     private func actions(_ game: Game) -> some View {
-        if let record = justRecorded {
+        let inline = short && !wide && !game.isFinished
+        if let record = justRecorded, !inline {
             UndoBar(text: "已记下第 \(record.handIndex + 1) 局") { undo(record) }
                 .padding(.bottom, 12)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -273,8 +275,14 @@ struct TableView: View {
         } else {
             Button("有人和了") { recording = true }
                 .buttonStyle(.primary)
-            Button("这局没人和") { record { try $0.recordDraw() } }
-                .buttonStyle(.text)
+            if let record = justRecorded, inline {
+                UndoBar(text: "已记下第 \(record.handIndex + 1) 局") { undo(record) }
+                    .frame(minHeight: 44)
+                    .transition(.opacity)
+            } else {
+                Button("这局没人和") { record { try $0.recordDraw() } }
+                    .buttonStyle(.text)
+            }
         }
     }
 
