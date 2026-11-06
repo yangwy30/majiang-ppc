@@ -252,7 +252,8 @@ App 里只保留 4 个术语，打麻将的人都懂：**庄、自摸、点炮�
 ```bash
 # 在 Mac 上，先用 Xcode 或 xcodebuild 把 App 装到已启动的模拟器
 xcrun simctl status_bar booted override --time 9:41 --batteryState charged --batteryLevel 100
-xcrun simctl launch booted com.yangwy30.majiang -demo-screen check
+# 一定要带语言参数：模拟器系统语言是英文时，中文标点按全宽排，字会变宽、折行，跟用户手机上看到的不一样
+xcrun simctl launch booted com.yangwy30.majiang -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN -demo-screen check
 xcrun simctl io booted screenshot 06-check.png
 sips -Z 1200 06-check.png   # 缩小一点再放进 docs/assets/user-flow/
 ```
