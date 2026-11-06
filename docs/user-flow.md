@@ -100,11 +100,21 @@ flowchart TD
 <tr>
 <td width="33%"><img src="assets/user-flow/13-hand-discard.png" alt="这一局：点炮、有碰"></td>
 <td width="33%"><img src="assets/user-flow/10-edit-hand.png" alt="改一局"></td>
-<td width="33%"></td>
+<td width="33%"><img src="assets/user-flow/14-table-more.png" alt="牌桌的更多"></td>
 </tr>
 <tr>
 <td align="center">点炮、有一组碰、没留照片</td>
 <td align="center">右上「改」：改这一局</td>
+<td align="center">右上「更多」</td>
+</tr>
+<tr>
+<td width="33%"><img src="assets/user-flow/15-manual-score.png" alt="直接改分"></td>
+<td width="33%"><img src="assets/user-flow/16-backup.png" alt="备份与换手机"></td>
+<td width="33%"></td>
+</tr>
+<tr>
+<td align="center">直接改分：赢 / 输加数字</td>
+<td align="center">备份与换手机（首页「更多」里）</td>
 <td></td>
 </tr>
 </table>
