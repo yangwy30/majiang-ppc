@@ -22,6 +22,9 @@ enum Theme {
     /// 字和按钮不铺满，收在中间一栏，跟在普通 iPhone 上看到的比例差不多。窄屏上不起作用。
     static let columnWidth: CGFloat = 560
 
+    /// 一页（不含导航栏）矮过这么多就算矮屏：iPhone Duo 外屏、SE、mini。矮屏上排紧一点，要紧的东西不掉到下面。
+    static let shortPage: CGFloat = 700
+
     // 牌面
     static let tileFace = Color(hex: 0xFFFDF8)
     static let tileDim = Color(hex: 0xE9E5DA)

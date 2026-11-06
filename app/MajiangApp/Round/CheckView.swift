@@ -675,19 +675,24 @@ private struct QuestionCard: View {
     private func option(title: String, wins: Bool?, @ViewBuilder face: () -> some View,
                         action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 face()
+                // iPhone Duo 外屏这一格只有 140 宽：字缩一点也不折成两行（「选这个能 / 和」很难看）
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title).font(.system(size: 16, weight: .medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                     if let wins {
                         Text(wins ? "选这个能和" : "选这个和不了")
                             .font(.system(size: 13))
                             .foregroundStyle(wins ? Theme.vermilion : Theme.gray)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
                 Spacer(minLength: 0)
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 12)
             .frame(height: 64)
             .background(Color(hex: 0xFBFAF7), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Theme.line))
