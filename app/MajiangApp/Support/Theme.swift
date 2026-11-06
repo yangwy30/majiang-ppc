@@ -140,7 +140,8 @@ private struct TrackMoreBelow: ViewModifier {
         if #available(iOS 18.0, *) {
             content.onScrollGeometryChange(for: Bool.self) { geo in
                 let visibleBottom = geo.contentOffset.y + geo.containerSize.height - geo.contentInsets.bottom
-                return geo.contentSize.height - visibleBottom > 4
+                // 页面末尾一般留 24～32 的空白，只挡住空白不算
+                return geo.contentSize.height - visibleBottom > 36
             } action: { _, new in moreBelow = new }
         } else {
             content
