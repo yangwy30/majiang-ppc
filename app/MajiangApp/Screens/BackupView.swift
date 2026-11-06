@@ -12,32 +12,41 @@ struct BackupView: View {
     var body: some View {
         @Bindable var cloud = model.cloud
         NavigationStack {
-            Form {
-                Section {
-                    Toggle("iCloud 同步", isOn: $cloud.enabled)
-                        .onChange(of: cloud.enabled) { _, on in
-                            if on { Task { await model.syncNow() } }
-                        }
-                    if let line = statusLine {
-                        Text(line)
-                            .font(.system(size: 14))
-                            .foregroundStyle(Theme.gray)
-                    }
-                } footer: {
-                    Text("牌局存在你自己的 iCloud 里，别人看不到。换新手机时登录同一个 Apple ID，打开 App 记录就都回来了；iPad 上装了也会同步。")
-                }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    PageTitle(title: "备份与换手机", subtitle: "换了新手机，以前的牌局也跟着走。")
 
-                Section {
-                    Button("导出全部牌局") { export() }
-                    Button("从文件导入") { importing = true }
-                } header: {
-                    Text("不用 iCloud")
-                } footer: {
-                    Text("导出一个文件，存到「文件」或隔空投送到新手机，在新手机上点「从文件导入」。导入只会添加和更新，不会删掉这台手机上已有的牌局。")
+                    Hairline()
+                        .padding(.top, 28)
+                    MenuRow(title: "iCloud 同步", detail: statusLine ?? "存在你自己的 iCloud 里，别人看不到", detailLines: nil) {
+                        Toggle("iCloud 同步", isOn: $cloud.enabled)
+                            .labelsHidden()
+                            .tint(Theme.ink)
+                    }
+                    note("换新手机时登录同一个 Apple ID，打开 App 记录就都回来了；iPad 上装了也会同步。")
+
+                    SectionLabel("不用 iCloud")
+                        .padding(.top, 36)
+                        .padding(.bottom, 2)
+                    Hairline()
+                    Button { export() } label: {
+                        MenuRow(title: "导出全部牌局", detail: "存成一个文件，放到「文件」里或者隔空投送", detailLines: nil) { chevron }
+                    }
+                    .buttonStyle(.plain)
+                    Button { importing = true } label: {
+                        MenuRow(title: "从文件导入", detail: "在新手机上选导出的那个文件", detailLines: nil) { chevron }
+                    }
+                    .buttonStyle(.plain)
+                    note("导入只会添加和更新，不会删掉这台手机上已有的牌局。")
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 8)
+                .padding(.bottom, 24)
             }
             .page()
-            .navigationTitle("备份与换手机")
+            .onChange(of: cloud.enabled) { _, on in
+                if on { Task { await model.syncNow() } }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 NavClose("关闭") { dismiss() }
@@ -52,6 +61,20 @@ struct BackupView: View {
                 Button("好") { message = nil }
             }
         }
+    }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(Theme.faint)
+    }
+
+    private func note(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 14))
+            .foregroundStyle(Theme.gray)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.top, 12)
     }
 
     private var statusLine: String? {

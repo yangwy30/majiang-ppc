@@ -12,6 +12,8 @@ enum DemoScreen: String {
     case shareSettle = "share-settle", shareLive = "share-live", backup
     /// 首页上打开填邀请码的页；首页右上「更多」升起的那一页。
     case invite, more
+    /// 牌桌右上「更多」升起的那一页；牌桌上打开「直接改分」。
+    case tableMore = "table-more", manualScore = "manual-score"
     /// 家规：开局页的规则表单、点开一项的选项；牌桌上打到一半改这场的规则（预览底分改成 5）、
     /// 带家规的牌桌、封顶起作用的结果页、带家规的账本图。
     case houseRules = "house-rules", rulePicker = "rule-picker", gameRules = "game-rules"

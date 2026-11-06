@@ -25,12 +25,12 @@ export const PRIVACY_HTML = `<!doctype html>
 <main>
 <span class="seal"></span>
 <h1>拍照算番 · 隐私说明</h1>
-<p class="date">2026 年 10 月 31 日</p>
+<p class="date">2026 年 11 月 6 日</p>
 
 <p>拍照算番是一个国标麻将算番记账的小工具。没有账号、没有广告，也不追踪你。</p>
 
 <h2>你拍的牌</h2>
-<p>点「识别」时，照片会通过我们的服务器转给 Google Gemini 读出牌面，读完就把结果还给 App。我们的服务器不保存照片。Google 按 Gemini API 的条款处理这次请求。</p>
+<p>填了邀请码、开了 AI 认牌时，拍完的照片会通过我们的服务器转给 Google Gemini 读出牌面，读完就把结果还给 App。我们的服务器不保存照片。Google 按 Gemini API 的条款处理这次请求。</p>
 <p>和没和、几番、谁付多少，都在手机上算，不联网。</p>
 
 <h2>为了限制次数</h2>
@@ -41,11 +41,11 @@ export const PRIVACY_HTML = `<!doctype html>
 <ul>
 <li>牌局、牌友名字和分数存在你的手机上。</li>
 <li>打开 iCloud 时，会同步到你自己的 iCloud 私有空间，只有你的 Apple ID 能看到，我们看不到。</li>
-<li>「发到微信群」「导出」只在你点的时候，通过系统分享面板发出去。</li>
+<li>「分享」「导出」只在你点的时候，通过系统分享面板发出去。</li>
 </ul>
 
 <h2>相机和相册</h2>
-<p>只用来拍或选一张和牌照片，用于上面说的识别。</p>
+<p>只用来拍或选一张和牌照片，用于上面说的识别。这张照片存在你的手机上、跟着那一局，在账本里点开那一局可以看，也可以删掉。开了 iCloud 同步也不会同步照片。</p>
 
 <h2>联系</h2>
 <p>有问题可以在 <a href="https://github.com/yangwy30/majiang-ppc/issues">GitHub</a> 上留言，也可以看<a href="/support">帮助</a>。</p>
