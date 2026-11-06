@@ -3,6 +3,7 @@ import MajiangKit
 
 /// 结果：从下往上弹出的一层。大番数、每个番种一句白话、这局谁付多少。
 struct ResultSheet: View {
+    @Environment(AppModel.self) private var model
     var flow: RoundFlow
     var finish: (HandOutcome) -> Void
     /// 这一层有多高：矮屏（Duo 外屏、SE）大番数小一号，最后一句「谁付多少」不被底下的按钮切掉一半。
@@ -79,9 +80,64 @@ struct ResultSheet: View {
             .padding(.horizontal, 24)
         }
         .bottomBar {
-            Button("记下") { finish(.win(record)) }
-                .buttonStyle(.primary)
+            // AI 认错过、用户改对了：问一句要不要把照片发给我们。勾不勾都能记下，记住上一次的选择
+            if flow.misreadCount > 0 {
+                Toggle(isOn: Binding(get: { model.sharesMisreads }, set: { model.sharesMisreads = $0 })) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("把照片发给我们，让 AI 认得更准")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Theme.ink)
+                        Text("AI 认错了 \(flow.misreadCount) 张，照片只用来改进认牌")
+                            .font(.system(size: 13))
+                            .foregroundStyle(Theme.gray)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .toggleStyle(CheckToggleStyle())
+                .padding(.bottom, 12)
+            }
+            Button("记下") {
+                if flow.misreadCount > 0, model.sharesMisreads, let photo = flow.photo, let recognized = flow.recognizedHand {
+                    model.reportMisread(photo: photo, recognized: recognized, corrected: flow.correctedHand, source: flow.source)
+                }
+                finish(.win(record))
+            }
+            .buttonStyle(.primary)
         }
         .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
+    }
+}
+
+/// 圆圈勾选：没勾是一圈浅灰，勾上是墨色实心圆里一个白勾。整行都能点。
+struct CheckToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            HStack(alignment: .top, spacing: 12) {
+                ZStack {
+                    Circle()
+                        .strokeBorder(configuration.isOn ? Theme.ink : Theme.faint, lineWidth: 1.5)
+                    if configuration.isOn {
+                        Circle().fill(Theme.ink)
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+                .frame(width: 22, height: 22)
+                .padding(.top, 1)
+                configuration.label
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .contentShape(Rectangle())
+            .animation(.easeOut(duration: 0.15), value: configuration.isOn)
+        }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.selection, trigger: configuration.isOn)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isToggle)
+        .accessibilityValue(configuration.isOn ? "已勾选" : "没勾选")
     }
 }

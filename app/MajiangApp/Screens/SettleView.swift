@@ -122,7 +122,7 @@ struct SettleView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
-            NavBack("首页") { model.path = [] }
+            NavBack("首页") { model.leaveSettle(game) }
         }
     }
 }

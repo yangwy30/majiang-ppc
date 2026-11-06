@@ -1,4 +1,7 @@
-// /admin：Yang 管邀请码的网页。生成码、看用了几次、停用、清掉绑定的手机、拨「必须有邀请码」的开关。
+// /admin：Yang 的管理网页。三页：
+// - 意见：App「提意见」里收到的话，看完点「处理了」；
+// - 认错了：用户勾了「把照片发给我们」的那手牌，照片 + 认出来的牌 + 改对的牌；
+// - 邀请码：生成码、看用了几次、停用、清掉绑定的手机、拨「必须有邀请码」的开关。
 // 网页本身谁都能打开，里面的数据和操作都要管理密码（Worker 密钥 ADMIN_TOKEN）。
 // 第一次用：打开 /admin#token=<管理密码>，密码存进这个浏览器，地址栏里的会马上抹掉。
 
@@ -8,7 +11,7 @@ export const ADMIN_HTML = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>拍照算番 · 邀请码</title>
+<title>拍照算番 · 管理</title>
 <style>
   :root { color-scheme: light; --ink: #16150F; --gray: #6E6C64; --faint: #A9A69C; --line: #E7E4DC;
     --paper: #F7F6F2; --card: #FFFFFF; --red: #C23B22; }
@@ -46,12 +49,20 @@ export const ADMIN_HTML = `<!doctype html>
   .err { color: var(--red); font-size: 14px; min-height: 1.6em; margin-top: 8px; }
   details summary { cursor: pointer; color: var(--gray); font-size: 14px; margin-top: 12px; }
   .hidden { display: none; }
+  nav { display: flex; gap: 22px; margin: -14px 0 8px; border-bottom: 1px solid var(--line); }
+  nav button { padding: 10px 0; color: var(--gray); font-size: 15px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  nav button.on { color: var(--ink); border-color: var(--ink); font-weight: 600; }
+  .text { white-space: pre-wrap; word-break: break-word; }
+  .item.done .text { color: var(--faint); }
+  .tiles { font: 15px/1.7 ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+  .tiles b { color: var(--red); font-weight: 600; }
+  .photo { width: 100%; border-radius: 12px; background: var(--line); display: block; margin: 10px 0 6px; min-height: 120px; object-fit: contain; }
 </style>
 </head>
 <body>
 <main>
 <span class="seal"></span>
-<h1>邀请码</h1>
+<h1 id="title">管理</h1>
 
 <section id="login" class="hidden">
   <div class="card">
@@ -62,6 +73,23 @@ export const ADMIN_HTML = `<!doctype html>
 </section>
 
 <section id="app" class="hidden">
+<nav>
+  <button data-tab="fb">意见</button>
+  <button data-tab="mis">认错了</button>
+  <button data-tab="codes">邀请码</button>
+</nav>
+
+<div id="tab-fb" class="tab">
+  <h2 id="fbTitle">收到的意见</h2>
+  <div class="card" id="fbList"></div>
+</div>
+
+<div id="tab-mis" class="tab">
+  <h2 id="misTitle">用户发来的认错的牌</h2>
+  <div class="card" id="misList"></div>
+</div>
+
+<div id="tab-codes" class="tab">
   <div class="card switch">
     <div>
       <div id="reqTitle"></div>
@@ -91,6 +119,7 @@ export const ADMIN_HTML = `<!doctype html>
 
   <h2 id="listTitle">发出去的</h2>
   <div class="card" id="list"></div>
+</div>
 </section>
 
 <div class="err" id="err"></div>
@@ -184,7 +213,118 @@ export const ADMIN_HTML = `<!doctype html>
   }
 
   async function load() {
-    try { state = await api("codes"); render(); } catch (e) { showError(e.message); }
+    try {
+      state = await api("codes"); render();
+      fbState = await api("feedback"); renderFeedback();
+    } catch (e) { showError(e.message); }
+  }
+
+  // MARK: 意见、认错了
+
+  let fbState = null;
+  let tab = localStorage.getItem("majiang-admin-tab") || "fb";
+  const photoURLs = new Map();
+
+  function stamp(iso) {
+    const d = new Date(iso);
+    const pad = (n) => String(n).padStart(2, "0");
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  function setTab(next) {
+    tab = next;
+    localStorage.setItem("majiang-admin-tab", tab);
+    for (const b of document.querySelectorAll("nav button")) b.classList.toggle("on", b.dataset.tab === tab);
+    for (const t of document.querySelectorAll(".tab")) t.classList.toggle("hidden", t.id !== "tab-" + tab);
+  }
+  for (const b of document.querySelectorAll("nav button")) b.onclick = () => setTab(b.dataset.tab);
+  setTab(tab);
+
+  /// 一手牌写成一行：暗手 + 副露。改对的那手里，认出来的牌里没有的标红。
+  function handLine(hand, against) {
+    const left = new Map();
+    if (against) for (const t of [...against.concealed, ...against.melds.flatMap(meldTiles)]) left.set(t, (left.get(t) || 0) + 1);
+    const line = el("div", { class: "tiles" });
+    const add = (t) => {
+      if (against && (left.get(t) || 0) > 0) { left.set(t, left.get(t) - 1); line.append(t + " "); }
+      else if (against) line.append(el("b", {}, t), " ");
+      else line.append(t + " ");
+    };
+    hand.concealed.forEach(add);
+    for (const m of hand.melds) { line.append("[" ); meldTiles(m).forEach(add); line.append("] "); }
+    return line;
+  }
+
+  function meldTiles(m) {
+    if (m.kind === "chow") {
+      const r = Number(m.tile[0]), s = m.tile.slice(1);
+      return [r, r + 1, r + 2].map((n) => n + s);
+    }
+    return Array(m.kind === "kong" ? 4 : 3).fill(m.tile);
+  }
+
+  async function photo(id) {
+    if (photoURLs.has(id)) return photoURLs.get(id);
+    const res = await fetch("/admin/api/misreads/" + id + "/photo", { headers: { "Authorization": "Bearer " + token } });
+    if (!res.ok) throw new Error("照片没打开（" + res.status + "）");
+    const url = URL.createObjectURL(await res.blob());
+    photoURLs.set(id, url);
+    return url;
+  }
+
+  function renderFeedback() {
+    $("title").textContent = "管理";
+    const open = fbState.open;
+    document.querySelector('nav [data-tab="fb"]').textContent = open ? "意见 · " + open : "意见";
+    document.querySelector('nav [data-tab="mis"]').textContent = fbState.totalMisreads ? "认错了 · " + fbState.totalMisreads : "认错了";
+
+    const list = $("fbList");
+    list.replaceChildren();
+    $("fbTitle").textContent = open ? "没处理的 " + open + " 条" : "收到的意见";
+    if (!fbState.feedback.length) list.append(el("div", { class: "muted" }, "还没收到意见"));
+    for (const f of fbState.feedback) {
+      const meta = [stamp(f.created), f.app, f.model].filter(Boolean).join(" · ");
+      list.append(el("div", { class: "item" + (f.done ? " done" : "") },
+        el("div", { class: "text" }, f.text),
+        f.contact ? el("div", { class: "muted" }, "联系方式：" + f.contact) : null,
+        el("div", { class: "faint" }, f.done ? "已处理 · " + meta : meta),
+        el("div", { class: "actions" },
+          el("button", { class: "link" + (f.done ? "" : " red"), onclick: () => fbAct(f, f.done ? "undone" : "done") },
+            f.done ? "改回没处理" : "处理了"),
+          f.contact ? el("button", { class: "link", onclick: () => copy(f.contact) }, "复制联系方式") : null,
+          el("button", { class: "link", onclick: () => fbAct(f, "delete") }, "删掉"))));
+    }
+
+    const mis = $("misList");
+    mis.replaceChildren();
+    $("misTitle").textContent = fbState.misreads.length ? "最近 " + fbState.misreads.length + " 手" : "用户发来的认错的牌";
+    if (!fbState.misreads.length) mis.append(el("div", { class: "muted" }, "还没有人发来"));
+    for (const m of fbState.misreads) {
+      const img = el("img", { class: "photo", alt: "那手牌的照片" });
+      photo(m.id).then((url) => { img.src = url; }).catch((e) => { img.alt = e.message; });
+      mis.append(el("div", { class: "item" },
+        img,
+        el("label", {}, "认出来的（" + (m.source || "?") + "）"),
+        handLine(m.recognized),
+        el("label", { style: "margin-top:6px" }, "改对的（红字是认错或漏认的）"),
+        handLine(m.corrected, m.recognized),
+        el("div", { class: "faint" }, [stamp(m.created), m.app, m.model, Math.round(m.bytes / 1024) + " KB"].filter(Boolean).join(" · ")),
+        el("div", { class: "actions" },
+          el("button", { class: "link", onclick: async () => {
+            const a = el("a", { href: await photo(m.id), download: "misread-" + m.id + ".jpg" }); a.click();
+          } }, "下载照片"),
+          el("button", { class: "link", onclick: () => misAct(m) }, "删掉"))));
+    }
+  }
+
+  async function fbAct(f, action) {
+    if (action === "delete" && !confirm("删掉这条意见？")) return;
+    try { fbState = await api("feedback/" + f.id, { action }); renderFeedback(); } catch (e) { showError(e.message); }
+  }
+
+  async function misAct(m) {
+    if (!confirm("删掉这手牌和照片？")) return;
+    try { fbState = await api("misreads/" + m.id, { action: "delete" }); renderFeedback(); } catch (e) { showError(e.message); }
   }
 
   function show() {

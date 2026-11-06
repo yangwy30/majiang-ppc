@@ -31,6 +31,7 @@ before(async () => {
     DEVICE_DAILY_LIMIT: "5",
     ADMIN_TOKEN: "admin-secret",
     INVITE_TRIES_PER_DAY: "3",
+    FEEDBACK_DEVICE_DAILY: "3",
   };
   worker = spawn("npx", ["wrangler", "dev", "--port", String(WORKER_PORT), "--persist-to", `.wrangler/test-${WORKER_PORT}`,
     ...Object.entries(vars).flatMap(([k, v]) => ["--var", `${k}:${v}`])], { stdio: "ignore" });
@@ -216,6 +217,59 @@ test("「必须有邀请码」打开后，没码的请求（旧版 App）被拒�
 
   await adminApi("settings", { inviteRequired: false });
   assert.equal((await post({ "X-Majiang-Device": device(20) })).status, 200);
+});
+
+const send = (path, body, dev = device(40)) => fetch(`${BASE}/${path}`, {
+  method: "POST", headers: { "Content-Type": "application/json", "X-Majiang-Device": dev },
+  body: typeof body === "string" ? body : JSON.stringify(body),
+});
+
+test("提意见：存下来，管理网页能看、能标处理了；没内容、没设备标识的不收；每台手机每天有上限", async () => {
+  assert.equal((await send("feedback", { text: "  " })).status, 400);
+  assert.equal((await fetch(`${BASE}/feedback`, { method: "POST", body: JSON.stringify({ text: "x" }) })).status, 400);
+  const ok = await send("feedback", { text: " 杠上开花没算出来 ", contact: "wx_1", app: "1.0.4 (9)", device: "iPhone18,1" });
+  assert.equal(ok.status, 200);
+  assert.equal((await adminApi("feedback", undefined, "wrong")).status, 401);
+  let list = await (await adminApi("feedback")).json();
+  const f = list.feedback.find((x) => x.text === "杠上开花没算出来");
+  assert.ok(f);
+  assert.equal(f.contact, "wx_1");
+  assert.equal(f.model, "iPhone18,1");
+  assert.equal(f.done, false);
+  assert.equal(f.device, undefined, "管理网页上不给设备编号");
+  list = await (await adminApi(`feedback/${f.id}`, { action: "done" })).json();
+  assert.equal(list.feedback.find((x) => x.id === f.id).done, true);
+
+  for (let i = 0; i < 2; i++) assert.equal((await send("feedback", { text: `第${i}条` })).status, 200);
+  const busy = await send("feedback", { text: "第四条" });
+  assert.equal(busy.status, 429);
+  assert.equal((await busy.json()).error.majiang, true);
+  assert.equal((await send("feedback", { text: "别的手机" }, device(41))).status, 200);
+});
+
+test("认错了：只收 JPEG 和像样的牌，照片只能用管理密码取", async () => {
+  const jpeg = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 1, 2, 3, 4]);
+  const hand = { concealed: ["1p", "2p", "中"], melds: [{ kind: "pung", tile: "东", isConcealed: false }] };
+  const body = { photo: jpeg.toString("base64"), recognized: hand, corrected: { concealed: ["1p", "3p", "中"], melds: hand.melds },
+    source: "双读", app: "1.0.4 (9)", device: "iPhone18,1" };
+  assert.equal((await send("misread", { ...body, photo: Buffer.from("PNG...").toString("base64") })).status, 400);
+  assert.equal((await send("misread", { ...body, recognized: { concealed: "1p" } })).status, 400);
+  assert.equal((await send("misread", body)).status, 200);
+
+  const list = await (await adminApi("feedback")).json();
+  const m = list.misreads[0];
+  assert.deepEqual(m.corrected.concealed, ["1p", "3p", "中"]);
+  assert.equal(m.source, "双读");
+  assert.equal(m.bytes, jpeg.length);
+  assert.equal(m.photo, undefined, "列表里不带照片");
+
+  assert.equal((await fetch(`${BASE}/admin/api/misreads/${m.id}/photo`)).status, 401);
+  const photo = await adminApi(`misreads/${m.id}/photo`);
+  assert.equal(photo.headers.get("Content-Type"), "image/jpeg");
+  assert.deepEqual(Buffer.from(await photo.arrayBuffer()), jpeg);
+
+  const after = await (await adminApi(`misreads/${m.id}`, { action: "delete" })).json();
+  assert.ok(!after.misreads.some((x) => x.id === m.id));
 });
 
 // 放最后：本地所有请求都是同一个 IP，输错满了以后别的新手机也绑不上

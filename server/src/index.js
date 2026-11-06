@@ -11,10 +11,14 @@ import { normalizeCode, newCode, sameSecret } from "./invites.js";
 // Key 只存在 Worker 密钥 GEMINI_API_KEY 里，不进代码、不进仓库。
 // 邀请码（X-Majiang-Invite）也在这里查：有码才转发，App 里的输入框只是个入口，挡人靠服务器。
 // /admin 是 Yang 管邀请码的网页，接口要管理密码（Worker 密钥 ADMIN_TOKEN）。
+// /feedback 收 App「提意见」里写的话，/misread 收用户勾了「把照片发给我们」的认错的牌，都在 /admin 上看。
 
 const DEVICE_RE = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 const BODY_KEYS = new Set(["contents", "generationConfig"]);
 const THINKING_LEVELS = new Set(["minimal", "low", "medium", "high"]);
+// 「认错了」的照片：App 压到长边 1600、约 300 KB；Durable Object 的 SQLite 一格最多 2 MB
+const MAX_MISREAD_PHOTO = 1_800_000;
+const MAX_MISREAD_BODY = 2_600_000;
 
 
 /// 出错时的回答。majiang: true 让 App 知道这是中转站自己的话，直接显示 message。
@@ -50,12 +54,12 @@ export default {
       return new Response(ADMIN_HTML, { headers: {
         "Content-Type": "text/html; charset=utf-8",
         "Cache-Control": "no-store",
-        "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'",
+        "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src blob:; frame-ancestors 'none'",
         "Referrer-Policy": "no-referrer",
       } });
     }
     if (url.pathname.startsWith("/admin/api/")) return admin(request, env, url);
-    if (url.pathname !== "/recognize" && url.pathname !== "/invite") return fail(404, "地址不对");
+    if (!["/recognize", "/invite", "/feedback", "/misread"].includes(url.pathname)) return fail(404, "地址不对");
     if (request.method !== "POST") return fail(405, "只收 POST");
 
     const device = request.headers.get("X-Majiang-Device") ?? "";
@@ -73,6 +77,19 @@ export default {
       return relay(env).fetch("https://relay/invite", {
         method: "POST",
         headers: { "X-Majiang-Device": device.toLowerCase(), "X-Majiang-IP": ip, "X-Majiang-Invite": code.slice(0, 32) },
+      });
+    }
+
+    // 「提意见」和「认错了」：检查一下大小和格式，存进 Durable Object
+    if (url.pathname === "/feedback" || url.pathname === "/misread") {
+      const max = url.pathname === "/feedback" ? 20_000 : MAX_MISREAD_BODY;
+      if (Number(request.headers.get("Content-Length") ?? 0) > max) return fail(413, "太大了");
+      const text = await request.text();
+      if (text.length > max) return fail(413, "太大了");
+      return relay(env).fetch(`https://relay${url.pathname}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Majiang-Device": device.toLowerCase(), "X-Majiang-IP": ip },
+        body: text,
       });
     }
 
@@ -153,6 +170,16 @@ export class Relay extends DurableObject {
       code TEXT NOT NULL, device TEXT NOT NULL, first_seen TEXT NOT NULL, PRIMARY KEY (code, device))`);
     // 在管理网页上改的开关（现在只有「必须有邀请码」）
     this.sql.exec("CREATE TABLE IF NOT EXISTS settings (name TEXT PRIMARY KEY, value TEXT NOT NULL)");
+    // 「提意见」：用户写的话和自己留的联系方式。不存 IP，设备编号只用来防刷。
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, created TEXT NOT NULL, device TEXT NOT NULL,
+      text TEXT NOT NULL, contact TEXT NOT NULL DEFAULT '', app TEXT NOT NULL DEFAULT '', model TEXT NOT NULL DEFAULT '',
+      done INTEGER NOT NULL DEFAULT 0)`);
+    // 「认错了」：照片 + 认出来的牌 + 用户改对的牌（JSON），拿来改进认牌。超过 MISREAD_KEEP_DAYS 天自动删。
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS misreads (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, created TEXT NOT NULL, device TEXT NOT NULL,
+      source TEXT NOT NULL DEFAULT '', app TEXT NOT NULL DEFAULT '', model TEXT NOT NULL DEFAULT '',
+      recognized TEXT NOT NULL, corrected TEXT NOT NULL, photo BLOB NOT NULL)`);
   }
 
   count(key, win) {
@@ -223,11 +250,15 @@ export class Relay extends DurableObject {
     // 一天清一次过期的行
     if (this.count("_cleanup", day) === 0) {
       this.sql.exec("DELETE FROM hits WHERE win < ?", day);
+      const keep = limit(this.env, "MISREAD_KEEP_DAYS", 180);
+      this.sql.exec("DELETE FROM misreads WHERE created < ?", new Date(Date.now() - keep * 86_400_000).toISOString());
       this.bump("_cleanup", day);
     }
 
     if (path === "/recognize") return this.recognize(request, now);
     if (path === "/invite") return this.checkInvite(request, day);
+    if (path === "/feedback") return this.saveFeedback(request, now, day);
+    if (path === "/misread") return this.saveMisread(request, now, day);
     if (path.startsWith("/admin/")) return this.admin(request, path, day);
     return fail(404, "地址不对");
   }
@@ -310,6 +341,67 @@ export class Relay extends DurableObject {
     });
   }
 
+  // MARK: 提意见、认错了
+
+  /// 防刷：这台手机、这个网络、所有人今天各发了几条。都没超就记一次，超了返回给用户看的话。
+  takeQuota(kind, device, ip, day, perDevice, perIP, global) {
+    const checks = [
+      [`day:${kind}:dev:${device}`, perDevice, "今天发得太多了，明天再来"],
+      [`day:${kind}:ip:${ip}`, perIP, "这个网络今天发得太多了，明天再来"],
+      [`day:${kind}:all`, global, "今天收到的太多了，明天再来"],
+    ];
+    for (const [key, max, message] of checks) if (this.count(key, day) >= max) return message;
+    for (const [key] of checks) this.bump(key, day);
+    return null;
+  }
+
+  async saveFeedback(request, now, day) {
+    let body;
+    try { body = await request.json(); } catch { return fail(400, "请求不是 JSON"); }
+    const text = typeof body?.text === "string" ? body.text.trim().slice(0, 2000) : "";
+    if (!text) return fail(400, "没写内容");
+    const env = this.env;
+    const busy = this.takeQuota("fb", request.headers.get("X-Majiang-Device"), request.headers.get("X-Majiang-IP"), day,
+      limit(env, "FEEDBACK_DEVICE_DAILY", 10), limit(env, "FEEDBACK_IP_DAILY", 30), limit(env, "FEEDBACK_GLOBAL_DAILY", 500));
+    if (busy) return fail(429, busy);
+    this.sql.exec("INSERT INTO feedback (created, device, text, contact, app, model) VALUES (?, ?, ?, ?, ?, ?)",
+      now, request.headers.get("X-Majiang-Device"), text, short(body.contact, 80), short(body.app, 40), short(body.device, 40));
+    return Response.json({ ok: true });
+  }
+
+  async saveMisread(request, now, day) {
+    let body;
+    try { body = await request.json(); } catch { return fail(400, "请求不是 JSON"); }
+    let photo;
+    try { photo = Uint8Array.from(atob(String(body?.photo ?? "")), (c) => c.charCodeAt(0)); } catch { return fail(400, "照片不对"); }
+    // 只收 JPEG（FF D8 FF 开头）
+    if (photo.length < 3 || photo.length > MAX_MISREAD_PHOTO || photo[0] !== 0xff || photo[1] !== 0xd8 || photo[2] !== 0xff) {
+      return fail(400, "照片不对");
+    }
+    const recognized = handJSON(body.recognized), corrected = handJSON(body.corrected);
+    if (!recognized || !corrected) return fail(400, "牌不对");
+    const env = this.env;
+    const busy = this.takeQuota("mis", request.headers.get("X-Majiang-Device"), request.headers.get("X-Majiang-IP"), day,
+      limit(env, "MISREAD_DEVICE_DAILY", 30), limit(env, "MISREAD_IP_DAILY", 60), limit(env, "MISREAD_GLOBAL_DAILY", 1000));
+    if (busy) return fail(429, busy);
+    this.sql.exec(`INSERT INTO misreads (created, device, source, app, model, recognized, corrected, photo)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, now, request.headers.get("X-Majiang-Device"), short(body.source, 20),
+      short(body.app, 40), short(body.device, 40), recognized, corrected, photo.buffer);
+    return Response.json({ ok: true });
+  }
+
+  listFeedback() {
+    const feedback = this.sql.exec(`SELECT id, created, text, contact, app, model, done FROM feedback
+      ORDER BY id DESC LIMIT 300`).toArray().map((r) => ({ ...r, done: !!r.done }));
+    const misreads = this.sql.exec(`SELECT id, created, source, app, model, recognized, corrected, length(photo) AS bytes
+      FROM misreads ORDER BY id DESC LIMIT 300`).toArray().map((r) => ({
+      ...r, recognized: JSON.parse(r.recognized), corrected: JSON.parse(r.corrected),
+    }));
+    const open = this.sql.exec("SELECT COUNT(*) AS n FROM feedback WHERE done = 0").one().n;
+    const totalMisreads = this.sql.exec("SELECT COUNT(*) AS n FROM misreads").one().n;
+    return { feedback, misreads, open, totalMisreads };
+  }
+
   // MARK: 管理（Worker 那边已经对过管理密码）
 
   async admin(request, path, day) {
@@ -323,6 +415,34 @@ export class Relay extends DurableObject {
     }
 
     if (path === "/admin/codes" && request.method === "GET") return Response.json(this.listCodes(day));
+    if (path === "/admin/feedback" && request.method === "GET") return Response.json(this.listFeedback());
+
+    const fb = path.match(/^\/admin\/feedback\/(\d+)$/);
+    if (fb && request.method === "POST") {
+      const id = Number(fb[1]);
+      if (!this.sql.exec("SELECT 1 FROM feedback WHERE id = ?", id).toArray().length) return fail(404, "没有这一条");
+      switch (body.action) {
+        case "done": this.sql.exec("UPDATE feedback SET done = 1 WHERE id = ?", id); break;
+        case "undone": this.sql.exec("UPDATE feedback SET done = 0 WHERE id = ?", id); break;
+        case "delete": this.sql.exec("DELETE FROM feedback WHERE id = ?", id); break;
+        default: return fail(400, "不认识的操作");
+      }
+      return Response.json(this.listFeedback());
+    }
+
+    const photo = path.match(/^\/admin\/misreads\/(\d+)\/photo$/);
+    if (photo && request.method === "GET") {
+      const row = this.sql.exec("SELECT photo FROM misreads WHERE id = ?", Number(photo[1])).toArray()[0];
+      if (!row) return fail(404, "没有这张照片");
+      return new Response(row.photo, { headers: { "Content-Type": "image/jpeg", "Cache-Control": "private, no-store" } });
+    }
+
+    const mis = path.match(/^\/admin\/misreads\/(\d+)$/);
+    if (mis && request.method === "POST") {
+      if (body.action !== "delete") return fail(400, "不认识的操作");
+      this.sql.exec("DELETE FROM misreads WHERE id = ?", Number(mis[1]));
+      return Response.json(this.listFeedback());
+    }
 
     if (path === "/admin/codes" && request.method === "POST") {
       const note = typeof body.note === "string" ? body.note.trim().slice(0, 40) : "";
@@ -389,4 +509,19 @@ function optionalCount(value, max) {
   if (value === undefined || value === null || value === "") return null;
   const n = Number(value);
   return Number.isInteger(n) && n >= 1 && n <= max ? n : undefined;
+}
+
+/// 存进数据库的短字段：不是字符串就是空，太长截掉。
+function short(value, max) {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+/// App 发来的一手牌 { concealed: ["1p", …], melds: [{ kind, tile, isConcealed }, …] }，理一遍再存成 JSON；不对返回 null。
+function handJSON(hand) {
+  if (!hand || !Array.isArray(hand.concealed) || hand.concealed.length > 20) return null;
+  const melds = Array.isArray(hand.melds) ? hand.melds : [];
+  if (melds.length > 4 || !hand.concealed.every((t) => typeof t === "string" && t.length <= 4)) return null;
+  const clean = melds.map((m) => ({ kind: short(m?.kind, 12), tile: short(m?.tile, 4), isConcealed: !!m?.isConcealed }));
+  if (!clean.every((m) => m.kind && m.tile)) return null;
+  return JSON.stringify({ concealed: hand.concealed, melds: clean });
 }

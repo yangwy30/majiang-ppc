@@ -118,7 +118,12 @@ final class AppModel {
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
         switch demoScreen {
-        case .home, .emptyHome, .backup, .invite, .more: path = []
+        case .home, .emptyHome, .backup, .invite, .more, .feedback, .feedbackSent: path = []
+        case .rate:
+            path = []
+            reviewPromptPending = true
+        case .resultReport: sharesMisreads = false
+        case .resultReportOn: sharesMisreads = true
         case .newGame, .houseRules, .rulePicker: path = [.newGame]
         case .settle: path = loaded.finishedGames.first.map { [.settle($0.id)] } ?? []
         case .handDetail, .handPhoto, .handDiscard:
@@ -203,6 +208,65 @@ final class AppModel {
         let summary = archive.merge(other)
         if !summary.isEmpty || !other.frequentPlayers.isEmpty { save() }
         return summary
+    }
+
+    // MARK: 评分和意见
+
+    /// 从结算页回首页时设上，首页出现后弹苹果的评分框（弹一次就清掉）。
+    var reviewPromptPending = false
+
+    /// 打完一场、从结算页回首页：够格就让首页弹评分框。
+    /// 够格 = 这场刚打完（两小时内）、打了至少 4 局、算上这场一共打完过至少 2 场、这个版本还没弹过。
+    /// 第一次打开、打牌中间都不会弹；苹果自己还会限制一年最多 3 次。
+    func leaveSettle(_ game: Game) {
+        if ReviewPrompt.shouldAsk(game: game, finishedCount: archive.finishedGames.count, now: Date()) || demoScreen == .rate {
+            reviewPromptPending = true
+        }
+        path = []
+    }
+
+    /// 首页真的弹了评分框以后调用：记下这个版本弹过了。
+    func didAskForReview() {
+        reviewPromptPending = false
+        guard demoScreen == nil else { return }
+        ReviewPrompt.markAsked()
+    }
+
+    /// 意见和「认错了」发到哪：走中转站就是它，开发版直连 Google 时也发到正式的中转站。
+    private var feedbackProxy: URL? {
+        URL(string: usesProxy ? proxyURL : Self.defaultProxyURL)
+    }
+
+    /// 发一条意见。失败时返回给用户看的一句话。
+    func sendFeedback(text: String, contact: String) async -> String? {
+        if demoScreen != nil {
+            try? await Task.sleep(for: .seconds(0.8))
+            return nil
+        }
+        guard let proxy = feedbackProxy else { return "还没连上我们的服务器" }
+        let message = FeedbackClient.Message(text: text, contact: contact, app: AppInfo.version, device: AppInfo.deviceModel)
+        do {
+            try await FeedbackClient.send(message, proxy: proxy, deviceID: DeviceID.current)
+            return nil
+        } catch {
+            return (error as? RecognitionError)?.message ?? error.localizedDescription
+        }
+    }
+
+    /// 「认错了」那一行的勾，记住上一次的选择（第一次是不勾）。
+    var sharesMisreads = UserDefaults.standard.bool(forKey: "sharesMisreads") {
+        didSet { UserDefaults.standard.set(sharesMisreads, forKey: "sharesMisreads") }
+    }
+
+    /// 用户勾了才调：把照片和改对的牌发给中转站，后台发，发不出去就算了（不打扰用户）。
+    func reportMisread(photo: UIImage, recognized: FeedbackClient.HandTiles, corrected: FeedbackClient.HandTiles, source: String) {
+        guard demoScreen == nil, let proxy = feedbackProxy else { return }
+        Task.detached(priority: .utility) {
+            guard let data = HandPhotos.compressed(photo) else { return }
+            let report = FeedbackClient.Misread(photo: data, recognized: recognized, corrected: corrected, source: source,
+                                                app: AppInfo.version, device: AppInfo.deviceModel)
+            try? await FeedbackClient.send(report, proxy: proxy, deviceID: DeviceID.current)
+        }
     }
 
     // MARK: 识别
