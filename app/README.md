@@ -81,7 +81,7 @@ swift test --filter OnDeviceEvaluationTests
 
 ### 分享和同步
 
-- **发到微信群**：牌桌右上角和结算页把账本渲染成一张图（`Support/ShareCard.swift`，360 点宽、3 倍），走系统分享面板；结算页另有「复制文字版」。没有服务器，其他牌友在群里看图。
+- **分享**：牌桌右上角「分享」和结算页把账本渲染成一张图（`Support/ShareCard.swift`，360 点宽、3 倍），走系统分享面板；结算页另有「复制文字版」。没有服务器，其他牌友在群里看图。
 - **iCloud 同步**（`Support/CloudSync.swift`）：CloudKit 私有库 `iCloud.com.yangwy30.majiang`，自定义 zone `Majiang`，每场牌局一条 `Game` 记录（字段 `json` 是那场的 JSON），常用牌友和上次规则一条 `Meta`。打开、回到前台、保存后 2 秒同步：先收再传。该传哪些、两边都改过时留哪份由 MajiangKit 的 `SyncBook` 决定（有测试）。
 - **导出 / 导入**：首页「备份与换手机」，导出全部牌局为 JSON 文件，导入时用 `GameArchive.merge` 只加不删。
 - 真机要用开发者 Team 93RUQ2A6KX 签名，iCloud 容器要在开发者账号里存在（第一次真机构建时 Xcode 自动注册）。
