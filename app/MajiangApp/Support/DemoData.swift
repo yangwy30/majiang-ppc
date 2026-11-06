@@ -8,7 +8,7 @@ enum DemoScreen: String {
     case home, newGame = "new-game", table, editHand = "edit-hand", capture, check, notWin = "not-win", result, settle
     /// 双读：端侧结果已显示、Gemini 还在复核；复核完、有一张两边读得不一样和一张只有一边读到。
     case reviewing = "check-reviewing", dualRead = "check-dual"
-    /// 发到群里的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
+    /// 分享出去的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
     case shareSettle = "share-settle", shareLive = "share-live", backup
     /// 首页上打开填邀请码的页；首页右上「更多」升起的那一页。
     case invite, more

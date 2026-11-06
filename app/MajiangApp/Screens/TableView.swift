@@ -127,9 +127,9 @@ struct TableView: View {
         .toolbar {
             NavBack(backTitle) { model.path.removeLast() }
             NavTool {
-                // 一点就把现在的账本图发到微信群，大家不用凑过来看
-                Button("发到群") { ShareSheet.share(game) }
-                    .accessibilityLabel("把账本发到群里")
+                // 一点就把现在的账本图分享出去（系统分享面板），大家不用凑过来看
+                Button("分享") { ShareSheet.share(game) }
+                    .accessibilityLabel("分享账本图")
             }
             NavTool {
                 Menu {

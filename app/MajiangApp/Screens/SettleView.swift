@@ -95,8 +95,8 @@ struct SettleView: View {
             .padding(.top, 8)
         }
         .bottomBar {
-            // 发图：微信里大家一眼看清；要文字的复制一下贴进群里
-            Button("发到微信群") { ShareSheet.share(game) }
+            // 分享账本图（系统分享面板，微信在里面）；要文字的复制一下贴进群里
+            Button("分享") { ShareSheet.share(game) }
                 .buttonStyle(.primary)
             // 两个次要操作并排放，免得底部栏太高
             HStack(spacing: 28) {

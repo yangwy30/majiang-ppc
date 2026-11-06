@@ -2,7 +2,7 @@ import SwiftUI
 import UIKit
 import MajiangKit
 
-/// 发到微信群的账本图：打完了就是结算（名次 + 最省事的转账），没打完就是现在的分数 + 最近几局。
+/// 分享出去的账本图：打完了就是结算（名次 + 最省事的转账），没打完就是现在的分数 + 最近几局。
 /// 宽 360 点、按 3 倍渲染，在微信里点开是 1080 宽的清楚图片。
 struct ShareCard: View {
     var game: Game
