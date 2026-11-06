@@ -7,11 +7,11 @@ import MajiangKit
 enum ReviewPrompt {
     private static let askedVersionKey = "reviewPromptVersion"
 
-    /// 这场刚打完（两小时内）、至少 4 局、一共打完过至少 2 场（新手第一场不问）、这个版本还没问过。
-    static func shouldAsk(game: Game, finishedCount: Int, now: Date,
+    /// 这场刚打完（两小时内）、至少 4 局、这个版本还没问过。第一场打完就问：大多数人只打一两场，等到第二场就问不到了。
+    static func shouldAsk(game: Game, now: Date,
                           defaults: UserDefaults = .standard, version: String = AppInfo.version) -> Bool {
         guard let ended = game.endedAt, now.timeIntervalSince(ended) < 2 * 3600 else { return false }
-        guard game.records.count >= 4, finishedCount >= 2 else { return false }
+        guard game.records.count >= 4 else { return false }
         return defaults.string(forKey: askedVersionKey) != version
     }
 
