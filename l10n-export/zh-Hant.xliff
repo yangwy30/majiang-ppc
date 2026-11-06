@@ -1,0 +1,1841 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="MajiangApp/Resources/InfoPlist.xcstrings" source-language="zh-Hans" target-language="zh-Hant" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="27.2" build-num="27B52"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>拍照算番</source>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>Majiang</source>
+        <note>Bundle name</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>拍下和牌那家的牌，用来识别牌面和算番。</source>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSPhotoLibraryUsageDescription" xml:space="preserve">
+        <source>从相册选一张和牌照片来识别。</source>
+        <note>Privacy - Photo Library Usage Description</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="MajiangApp/Resources/Localizable.xcstrings" source-language="zh-Hans" target-language="zh-Hant" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="27.2" build-num="27B52"/>
+    </header>
+    <body>
+      <trans-unit id="" xml:space="preserve">
+        <source/>
+        <note/>
+      </trans-unit>
+      <trans-unit id=" · %lld 张两遍不一样" xml:space="preserve">
+        <source> · %lld 张两遍不一样</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id=" · %lld 番" xml:space="preserve">
+        <source> · %lld 番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id=" · 两遍读得一样" xml:space="preserve">
+        <source> · 两遍读得一样</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@" xml:space="preserve">
+        <source>%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ · %@点炮" xml:space="preserve">
+        <source>%1$@ · %2$@点炮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ · %lld 局" xml:space="preserve">
+        <source>%1$@ · %2$lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ · %lld 局 · %@" xml:space="preserve">
+        <source>%1$@ · %2$lld 局 · %3$@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ · 只存在这台手机上" xml:space="preserve">
+        <source>%@ · 只存在这台手机上</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ · 第 %lld 局" xml:space="preserve">
+        <source>%1$@ · 第 %2$lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ · 自摸" xml:space="preserve">
+        <source>%@ · 自摸</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ 元" xml:space="preserve">
+        <source>%@ 元</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ 分" xml:space="preserve">
+        <source>%@ 分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ 国标" xml:space="preserve">
+        <source>%@ 国标</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ 超过了 4 张，一定有牌认错了。" xml:space="preserve">
+        <source>%@ 超过了 4 张，一定有牌认错了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@。" xml:space="preserve">
+        <source>%@。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@各 %@" xml:space="preserve">
+        <source>%1$@各 %2$@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@和" xml:space="preserve">
+        <source>%@和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@和 · %@点炮" xml:space="preserve">
+        <source>%1$@和 · %2$@点炮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@和了 · " xml:space="preserve">
+        <source>%@和了 · </source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@和错了" xml:space="preserve">
+        <source>%@和错了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@和错了？" xml:space="preserve">
+        <source>%@和错了？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@填 %@，正好凑平 ›" xml:space="preserve">
+        <source>%1$@填 %2$@，正好凑平 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@打出 %@，%@和了。" xml:space="preserve">
+        <source>%1$@打出 %2$@，%3$@和了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@点炮" xml:space="preserve">
+        <source>%@点炮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@点的炮。" xml:space="preserve">
+        <source>%@点的炮。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@的番数不够新的起和，先照样算着；要删可以在账本里点那一局。" xml:space="preserve">
+        <source>%@的番数不够新的起和，先照样算着；要删可以在账本里点那一局。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@自摸" xml:space="preserve">
+        <source>%@自摸</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@补杠的 %@ 被抢，%@和了。" xml:space="preserve">
+        <source>%1$@补杠的 %2$@ 被抢，%3$@和了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@赢的分" xml:space="preserve">
+        <source>%@赢的分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@输的分" xml:space="preserve">
+        <source>%@输的分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@，拿不准" xml:space="preserve">
+        <source>%@，拿不准</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld" xml:space="preserve">
+        <source>%lld</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 分" xml:space="preserve">
+        <source>%lld 分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 分是底分，不管几番都要先付。" xml:space="preserve">
+        <source>%lld 分是底分，不管几番都要先付。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 圈" xml:space="preserve">
+        <source>%lld 圈</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 局打完" xml:space="preserve">
+        <source>%lld 局打完</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 番" xml:space="preserve">
+        <source>%lld 番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 番按 %lld 算" xml:space="preserve">
+        <source>%1$lld 番按 %2$lld 算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld 番起和" xml:space="preserve">
+        <source>%lld 番起和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="0" xml:space="preserve">
+        <source>0</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="1 分 %@" xml:space="preserve">
+        <source>1 分 %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="1 分 = %@" xml:space="preserve">
+        <source>1 分 = %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="1 分算" xml:space="preserve">
+        <source>1 分算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="?" xml:space="preserve">
+        <source>?</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="AI 认牌" xml:space="preserve">
+        <source>AI 认牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="AI 认牌 · 已开启" xml:space="preserve">
+        <source>AI 认牌 · 已开启</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="AI 认牌已开启" xml:space="preserve">
+        <source>AI 认牌已开启</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="AI 认错了 %lld 张，照片只用来改进认牌" xml:space="preserve">
+        <source>AI 认错了 %lld 张，照片只用来改进认牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Gemini API Key" xml:space="preserve">
+        <source>Gemini API Key</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="https://…" xml:space="preserve">
+        <source>https://…</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="iCloud 同步" xml:space="preserve">
+        <source>iCloud 同步</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="iCloud 同步已打开" xml:space="preserve">
+        <source>iCloud 同步已打开</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="iCloud 同步暂时没成功，牌局都存在这台手机上，不会丢。稍后会自动再试。" xml:space="preserve">
+        <source>iCloud 同步暂时没成功，牌局都存在这台手机上，不会丢。稍后会自动再试。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="iCloud 空间满了，牌局只存在这台手机上。" xml:space="preserve">
+        <source>iCloud 空间满了，牌局只存在这台手机上。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="list.clause" xml:space="preserve">
+        <source>，</source>
+        <note>两句之间的逗号</note>
+      </trans-unit>
+      <trans-unit id="seal.dealer" xml:space="preserve">
+        <source>庄</source>
+        <note>庄家的朱红小方印，只放一个字（英文 D）</note>
+      </trans-unit>
+      <trans-unit id="seal.win" xml:space="preserve">
+        <source>和</source>
+        <note>核对页和的那张牌下面的朱红小方印，只放一个字（英文 W）</note>
+      </trans-unit>
+      <trans-unit id="tile.winMark" xml:space="preserve">
+        <source>和</source>
+        <note>和的那张牌下面的小字（英文 Win）</note>
+      </trans-unit>
+      <trans-unit id="·" xml:space="preserve">
+        <source>·</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="—" xml:space="preserve">
+        <source>—</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="›" xml:space="preserve">
+        <source>›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="。原文件已备份为 %@" xml:space="preserve">
+        <source>。原文件已备份为 %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="「打一块的」就是 1 元" xml:space="preserve">
+        <source>「打一块的」就是 1 元</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="一" xml:space="preserve">
+        <source>一</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="一共 %lld 局" xml:space="preserve">
+        <source>一共 %lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="一圈 4 局。没打完也可以随时结束。" xml:space="preserve">
+        <source>一圈 4 局。没打完也可以随时结束。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="一场只用一套规则，改了以后前面的局一起重算。" xml:space="preserve">
+        <source>一场只用一套规则，改了以后前面的局一起重算。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="一把最多算几番" xml:space="preserve">
+        <source>一把最多算几番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="一炮只能一个人和" xml:space="preserve">
+        <source>一炮只能一个人和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="三" xml:space="preserve">
+        <source>三</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="三家都付底分" xml:space="preserve">
+        <source>三家都付底分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="上一局：%@" xml:space="preserve">
+        <source>上一局：%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="上家" xml:space="preserve">
+        <source>上家</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="上次的邀请码不能用了：中转站说它停用了或者不对，找给你码的人再要一个" xml:space="preserve">
+        <source>上次的邀请码不能用了：中转站说它停用了或者不对，找给你码的人再要一个</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="上次跟这 4 位就这么打的" xml:space="preserve">
+        <source>上次跟这 4 位就这么打的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="下家" xml:space="preserve">
+        <source>下家</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不够 %lld 番，和不了" xml:space="preserve">
+        <source>不够 %lld 番，和不了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不封顶" xml:space="preserve">
+        <source>不封顶</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不带" xml:space="preserve">
+        <source>不带</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不带花" xml:space="preserve">
+        <source>不带花</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不打了，算出谁该给谁转多少" xml:space="preserve">
+        <source>不打了，算出谁该给谁转多少</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不换" xml:space="preserve">
+        <source>不换</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不用 iCloud" xml:space="preserve">
+        <source>不用 iCloud</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不用转账，正好打平。" xml:space="preserve">
+        <source>不用转账，正好打平。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不等了，就用现在这些牌 ›" xml:space="preserve">
+        <source>不等了，就用现在这些牌 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不要底分" xml:space="preserve">
+        <source>不要底分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不计分" xml:space="preserve">
+        <source>不计分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="不连庄，每局庄家往下轮一位。东南西北 4 圈、16 局打完一场。App 会自己轮，不用记。" xml:space="preserve">
+        <source>不连庄，每局庄家往下轮一位。东南西北 4 圈、16 局打完一场。App 会自己轮，不用记。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="二" xml:space="preserve">
+        <source>二</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="亮在桌上的" xml:space="preserve">
+        <source>亮在桌上的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="从文件导入" xml:space="preserve">
+        <source>从文件导入</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="从相册选" xml:space="preserve">
+        <source>从相册选</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="以前的" xml:space="preserve">
+        <source>以前的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="你" xml:space="preserve">
+        <source>你</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="你的名字" xml:space="preserve">
+        <source>你的名字</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="保存" xml:space="preserve">
+        <source>保存</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="保存到钥匙串" xml:space="preserve">
+        <source>保存到钥匙串</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="保存失败：%@" xml:space="preserve">
+        <source>保存失败：%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="元" xml:space="preserve">
+        <source>元</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="先把牌加上" xml:space="preserve">
+        <source>先把牌加上</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="先把牌改对" xml:space="preserve">
+        <source>先把牌改对</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="先选上面谁和了。" xml:space="preserve">
+        <source>先选上面谁和了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="关闭" xml:space="preserve">
+        <source>关闭</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="其他" xml:space="preserve">
+        <source>其他</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="其实是和错了？记下来（赔三家各 %lld 分）›" xml:space="preserve">
+        <source>其实是和错了？记下来（赔三家各 %lld 分）›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="再打会儿" xml:space="preserve">
+        <source>再打会儿</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="写几个字再发" xml:space="preserve">
+        <source>写几个字再发</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="凑够几番才能和" xml:space="preserve">
+        <source>凑够几番才能和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="几个人同时能和同一张牌时，按点炮那家的下家、对家、上家的顺序，只算第一个。" xml:space="preserve">
+        <source>几个人同时能和同一张牌时，按点炮那家的下家、对家、上家的顺序，只算第一个。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="分" xml:space="preserve">
+        <source>分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="分享" xml:space="preserve">
+        <source>分享</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="分享账本图" xml:space="preserve">
+        <source>分享账本图</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉" xml:space="preserve">
+        <source>删掉</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉第 %lld 局？" xml:space="preserve">
+        <source>删掉第 %lld 局？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉这一局" xml:space="preserve">
+        <source>删掉这一局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉这张" xml:space="preserve">
+        <source>删掉这张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉这张照片" xml:space="preserve">
+        <source>删掉这张照片</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉这张照片？" xml:space="preserve">
+        <source>删掉这张照片？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删掉这组？" xml:space="preserve">
+        <source>删掉这组？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="删除 Key" xml:space="preserve">
+        <source>删除 Key</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="别人加杠时，正好和他加的那张" xml:space="preserve">
+        <source>别人加杠时，正好和他加的那张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="前面的分数都不受影响" xml:space="preserve">
+        <source>前面的分数都不受影响</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="加一张" xml:space="preserve">
+        <source>加一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="加一组 ›" xml:space="preserve">
+        <source>加一组 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="加一组亮在桌上的牌" xml:space="preserve">
+        <source>加一组亮在桌上的牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="加了 %lld 场牌局" xml:space="preserve">
+        <source>加了 %lld 场牌局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="加起来正好是 0。" xml:space="preserve">
+        <source>加起来正好是 0。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="加起来要等于 0" xml:space="preserve">
+        <source>加起来要等于 0</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="原来 %@" xml:space="preserve">
+        <source>原来 %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="发送" xml:space="preserve">
+        <source>发送</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="取消" xml:space="preserve">
+        <source>取消</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="只存在这台手机的钥匙串里，不会写进代码或上传。只用于开发测试；正式上架会改走我们自己的服务器，App 里不放 Key。" xml:space="preserve">
+        <source>只存在这台手机的钥匙串里，不会写进代码或上传。只用于开发测试；正式上架会改走我们自己的服务器，App 里不放 Key。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="只带 App 版本和手机型号，不带照片和牌局。" xml:space="preserve">
+        <source>只带 App 版本和手机型号，不带照片和牌局。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="只有 %lld 番，国标要 %lld 番才能和" xml:space="preserve">
+        <source>只有 %1$lld 番，国标要 %2$lld 番才能和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="只有点炮的人" xml:space="preserve">
+        <source>只有点炮的人</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="只有点炮的人付" xml:space="preserve">
+        <source>只有点炮的人付</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="可不填，比如「杠上开花按家规多给」" xml:space="preserve">
+        <source>可不填，比如「杠上开花按家规多给」</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="吃" xml:space="preserve">
+        <source>吃</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="名字不能重复" xml:space="preserve">
+        <source>名字不能重复</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="后端代理（可选）" xml:space="preserve">
+        <source>后端代理（可选）</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="含花牌 %lld 番。" xml:space="preserve">
+        <source>含花牌 %lld 番。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和 %@" xml:space="preserve">
+        <source>和 %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和了" xml:space="preserve">
+        <source>和了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和了就算" xml:space="preserve">
+        <source>和了就算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和牌一共 14 张（每个杠多 1 张），现在是 %lld 张。" xml:space="preserve">
+        <source>和牌一共 14 张（每个杠多 1 张），现在是 %lld 张。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和牌的人先从每家收 8 分底分，再收番数。自摸：三家都付 8 + 番数；点炮：点炮的人付 8 + 番数，另外两家只付 8。" xml:space="preserve">
+        <source>和牌的人先从每家收 8 分底分，再收番数。自摸：三家都付 8 + 番数；点炮：点炮的人付 8 + 番数，另外两家只付 8。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和牌的人把牌推倒，拍一张" xml:space="preserve">
+        <source>和牌的人把牌推倒，拍一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和牌要 4 组加 1 对，这 %lld 张凑不出来。" xml:space="preserve">
+        <source>和牌要 4 组加 1 对，这 %lld 张凑不出来。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和的是%@打出的牌。" xml:space="preserve">
+        <source>和的是%@打出的牌。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和的是别人打出的最后一张牌" xml:space="preserve">
+        <source>和的是别人打出的最后一张牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和的是别人打出的牌。" xml:space="preserve">
+        <source>和的是别人打出的牌。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和的这张，桌上已经亮出了 3 张" xml:space="preserve">
+        <source>和的这张，桌上已经亮出了 3 张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和的那张" xml:space="preserve">
+        <source>和的那张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="和错了" xml:space="preserve">
+        <source>和错了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="哪里不好用、想要什么，都可以说。" xml:space="preserve">
+        <source>哪里不好用、想要什么，都可以说。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="哪里不好用、番算错了，直接告诉我们" xml:space="preserve">
+        <source>哪里不好用、番算错了，直接告诉我们</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="四个人加起来要等于 0。" xml:space="preserve">
+        <source>四个人加起来要等于 0。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="回到" xml:space="preserve">
+        <source>回到</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="回到核对页改谁和了、怎么和的" xml:space="preserve">
+        <source>回到核对页改谁和了、怎么和的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="国标" xml:space="preserve">
+        <source>国标</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="国标的番种和收付，都是白话" xml:space="preserve">
+        <source>国标的番种和收付，都是白话</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="国标要凑够 8 番才能和。刚学的凑不够，可以降下来；1 番就是和了就算。" xml:space="preserve">
+        <source>国标要凑够 8 番才能和。刚学的凑不够，可以降下来；1 番就是和了就算。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="国标：点炮的人付底分加番数，另外两家也各付底分。有的桌只让点炮的人付。" xml:space="preserve">
+        <source>国标：点炮的人付底分加番数，另外两家也各付底分。有的桌只让点炮的人付。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="在后面加一张" xml:space="preserve">
+        <source>在后面加一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="在新手机上选导出的那个文件" xml:space="preserve">
+        <source>在新手机上选导出的那个文件</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="在第 %lld 张后面加" xml:space="preserve">
+        <source>在第 %lld 张后面加</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="填一个数" xml:space="preserve">
+        <source>填一个数</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="填上这一局的得失分" xml:space="preserve">
+        <source>填上这一局的得失分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="填了 https 地址后，识别请求发到这个地址，由服务器带上 Key 转发给 Gemini。" xml:space="preserve">
+        <source>填了 https 地址后，识别请求发到这个地址，由服务器带上 Key 转发给 Gemini。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="填好 4 个名字" xml:space="preserve">
+        <source>填好 4 个名字</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="填好 6 位邀请码" xml:space="preserve">
+        <source>填好 6 位邀请码</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="填邀请码" xml:space="preserve">
+        <source>填邀请码</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="备份与换手机" xml:space="preserve">
+        <source>备份与换手机</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="备注" xml:space="preserve">
+        <source>备注</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="复制文字版" xml:space="preserve">
+        <source>复制文字版</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="多一张" xml:space="preserve">
+        <source>多一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="多一番" xml:space="preserve">
+        <source>多一番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="好" xml:space="preserve">
+        <source>好</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="好像少认了一张：补一张 %@ 就能和。" xml:space="preserve">
+        <source>好像少认了一张：补一张 %@ 就能和。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="存在你自己的 iCloud 里，别人看不到" xml:space="preserve">
+        <source>存在你自己的 iCloud 里，别人看不到</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="存成一个文件，放到「文件」里或者隔空投送" xml:space="preserve">
+        <source>存成一个文件，放到「文件」里或者隔空投送</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="家规" xml:space="preserve">
+        <source>家规</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="家规不一样或者算错了时用：直接填四个人这一局赢了多少、输了多少。" xml:space="preserve">
+        <source>家规不一样或者算错了时用：直接填四个人这一局赢了多少、输了多少。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="家规不一样或者算错了，直接填这一局的得失" xml:space="preserve">
+        <source>家规不一样或者算错了，直接填这一局的得失</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="家规封顶 %lld 番：%lld 番按 %lld 算" xml:space="preserve">
+        <source>家规封顶 %1$lld 番：%2$lld 番按 %3$lld 算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="对家" xml:space="preserve">
+        <source>对家</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="导入只会添加和更新，不会删掉这台手机上已有的牌局。" xml:space="preserve">
+        <source>导入只会添加和更新，不会删掉这台手机上已有的牌局。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="导出、导入牌局，或者打开 iCloud 同步" xml:space="preserve">
+        <source>导出、导入牌局，或者打开 iCloud 同步</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="导出全部牌局" xml:space="preserve">
+        <source>导出全部牌局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="导出失败：%@" xml:space="preserve">
+        <source>导出失败：%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="封顶" xml:space="preserve">
+        <source>封顶</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="封顶 %lld 番" xml:space="preserve">
+        <source>封顶 %lld 番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="少一张" xml:space="preserve">
+        <source>少一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="少一番" xml:space="preserve">
+        <source>少一番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="少见情况" xml:space="preserve">
+        <source>少见情况</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="已保存（重新填写可替换）" xml:space="preserve">
+        <source>已保存（重新填写可替换）</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="已勾选" xml:space="preserve">
+        <source>已勾选</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="已同步 · %@" xml:space="preserve">
+        <source>已同步 · %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="已复制，去微信粘贴" xml:space="preserve">
+        <source>已复制，去微信粘贴</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="已记下第 %lld 局" xml:space="preserve">
+        <source>已记下第 %lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="带花" xml:space="preserve">
+        <source>带花</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="带花时，和牌前摸到的每张花算 1 番，不算进起和。" xml:space="preserve">
+        <source>带花时，和牌前摸到的每张花算 1 番，不算进起和。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="常一起打的" xml:space="preserve">
+        <source>常一起打的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="庄家" xml:space="preserve">
+        <source>庄家</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="庄怎么轮" xml:space="preserve">
+        <source>庄怎么轮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="底分" xml:space="preserve">
+        <source>底分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="底分 %lld" xml:space="preserve">
+        <source>底分 %lld</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="开一局" xml:space="preserve">
+        <source>开一局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="开发设置" xml:space="preserve">
+        <source>开发设置</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="开启" xml:space="preserve">
+        <source>开启</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="开启 AI 认牌，用云端大模型读牌，更准。" xml:space="preserve">
+        <source>开启 AI 认牌，用云端大模型读牌，更准。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="开始" xml:space="preserve">
+        <source>开始</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="开杠补摸到 %@，和了。" xml:space="preserve">
+        <source>开杠补摸到 %@，和了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="当时拍的照片" xml:space="preserve">
+        <source>当时拍的照片</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="微信号或邮箱，想要回复再填" xml:space="preserve">
+        <source>微信号或邮箱，想要回复再填</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="怎么和的" xml:space="preserve">
+        <source>怎么和的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="怎么算钱" xml:space="preserve">
+        <source>怎么算钱</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="怕一把输太多就封顶：番数超过这个数，按这个数收钱。" xml:space="preserve">
+        <source>怕一把输太多就封顶：番数超过这个数，按这个数收钱。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="想说的话" xml:space="preserve">
+        <source>想说的话</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="手动输入" xml:space="preserve">
+        <source>手动输入</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="手牌推倒排成一排，和的那张放最右" xml:space="preserve">
+        <source>手牌推倒排成一排，和的那张放最右</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打了 %lld 局" xml:space="preserve">
+        <source>打了 %lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打了 %lld 局 · 还剩 %lld 局" xml:space="preserve">
+        <source>打了 %1$lld 局 · 还剩 %2$lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打几圈" xml:space="preserve">
+        <source>打几圈</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打到%@" xml:space="preserve">
+        <source>打到%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打到%@第 %lld 局" xml:space="preserve">
+        <source>打到%1$@第 %2$lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打完一手，拍一下和牌的人的牌，App 帮你算番记账。" xml:space="preserve">
+        <source>打完一手，拍一下和牌的人的牌，App 帮你算番记账。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="打完了" xml:space="preserve">
+        <source>打完了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="找不到这场牌局" xml:space="preserve">
+        <source>找不到这场牌局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="把照片发给我们，让 AI 认得更准" xml:space="preserve">
+        <source>把照片发给我们，让 AI 认得更准</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="拍" xml:space="preserve">
+        <source>拍</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="拍一下，" xml:space="preserve">
+        <source>拍一下，</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="拍照" xml:space="preserve">
+        <source>拍照</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="拍照后 AI 再认一遍，两边读得不一样的牌让你选。" xml:space="preserve">
+        <source>拍照后 AI 再认一遍，两边读得不一样的牌让你选。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="拍照算番 · 拍一下，番和钱都算好" xml:space="preserve">
+        <source>拍照算番 · 拍一下，番和钱都算好</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="按 1 分 = %@，%@这局赢 %@。" xml:space="preserve">
+        <source>按 1 分 = %1$@，%2$@这局赢 %3$@。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。" xml:space="preserve">
+        <source>按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="换" xml:space="preserve">
+        <source>换</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="换一张" xml:space="preserve">
+        <source>换一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="换了手机？导入以前的记录" xml:space="preserve">
+        <source>换了手机？导入以前的记录</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="换了新手机，以前的牌局也跟着走。" xml:space="preserve">
+        <source>换了新手机，以前的牌局也跟着走。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="换座" xml:space="preserve">
+        <source>换座</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="换新手机时登录同一个 Apple ID，打开 App 记录就都回来了；iPad 上装了也会同步。" xml:space="preserve">
+        <source>换新手机时登录同一个 Apple ID，打开 App 记录就都回来了；iPad 上装了也会同步。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="推倒了凑不成和牌，赔三家各 %lld 分" xml:space="preserve">
+        <source>推倒了凑不成和牌，赔三家各 %lld 分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="推倒了却凑不成和牌，赔另外三家各 10 分，这一局接着打。" xml:space="preserve">
+        <source>推倒了却凑不成和牌，赔另外三家各 10 分，这一局接着打。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="推倒了却凑不成和牌，赔另外三家各这么多，这一局接着打。" xml:space="preserve">
+        <source>推倒了却凑不成和牌，赔另外三家各这么多，这一局接着打。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="推倒了却凑不成和牌：赔另外三家各 %lld 分，这一局接着打。" xml:space="preserve">
+        <source>推倒了却凑不成和牌：赔另外三家各 %lld 分，这一局接着打。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="提意见" xml:space="preserve">
+        <source>提意见</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="摸最后一张牌时自摸和了" xml:space="preserve">
+        <source>摸最后一张牌时自摸和了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="撤销" xml:space="preserve">
+        <source>撤销</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="收到了，谢谢" xml:space="preserve">
+        <source>收到了，谢谢</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="收起" xml:space="preserve">
+        <source>收起</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改" xml:space="preserve">
+        <source>改</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改 ›" xml:space="preserve">
+        <source>改 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改一张也凑不成，可能不止一张认错了，对照桌上的牌再看看。" xml:space="preserve">
+        <source>改一张也凑不成，可能不止一张认错了，对照桌上的牌再看看。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改一张也凑不成，可能不止一张认错了，点右上角的照片对照着再看看。" xml:space="preserve">
+        <source>改一张也凑不成，可能不止一张认错了，点右上角的照片对照着再看看。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改好了" xml:space="preserve">
+        <source>改好了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改成 %@" xml:space="preserve">
+        <source>改成 %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改第 %lld 局" xml:space="preserve">
+        <source>改第 %lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="改，前面 %lld 局一起重算" xml:space="preserve">
+        <source>改，前面 %lld 局一起重算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="文件里的牌局这台手机上都有了。" xml:space="preserve">
+        <source>文件里的牌局这台手机上都有了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="新手局" xml:space="preserve">
+        <source>新手局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="明杠" xml:space="preserve">
+        <source>明杠</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="是谁打的？" xml:space="preserve">
+        <source>是谁打的？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="暗杠" xml:space="preserve">
+        <source>暗杠</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="更多" xml:space="preserve">
+        <source>更多</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="更多规矩" xml:space="preserve">
+        <source>更多规矩</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="更多规矩 · 改过 %lld 项" xml:space="preserve">
+        <source>更多规矩 · 改过 %lld 项</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="更新了 %lld 场" xml:space="preserve">
+        <source>更新了 %lld 场</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="最可能是" xml:space="preserve">
+        <source>最可能是</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="最右边那张算和的牌。" xml:space="preserve">
+        <source>最右边那张算和的牌。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="最右边那张算和的牌。不对就点一下改。" xml:space="preserve">
+        <source>最右边那张算和的牌。不对就点一下改。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="最大一手：%@ %@ %lld 番" xml:space="preserve">
+        <source>最大一手：%1$@ %2$@ %3$lld 番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="最大一手：%@ %lld 番" xml:space="preserve">
+        <source>最大一手：%1$@ %2$lld 番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="最近几局" xml:space="preserve">
+        <source>最近几局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有人和了" xml:space="preserve">
+        <source>有人和了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有人和了，三家先各付" xml:space="preserve">
+        <source>有人和了，三家先各付</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有人和了，另外三家先各付这么多，再按番数付。" xml:space="preserve">
+        <source>有人和了，另外三家先各付这么多，再按番数付。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有人和错了" xml:space="preserve">
+        <source>有人和错了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有吃、碰、杠亮在桌上？加上 ›" xml:space="preserve">
+        <source>有吃、碰、杠亮在桌上？加上 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有这张" xml:space="preserve">
+        <source>有这张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="有邀请码就能开启，认牌更准" xml:space="preserve">
+        <source>有邀请码就能开启，认牌更准</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="杠完补牌，补到的正好和了" xml:space="preserve">
+        <source>杠完补牌，补到的正好和了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="标准国标" xml:space="preserve">
+        <source>标准国标</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="核对一下" xml:space="preserve">
+        <source>核对一下</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="正在发…" xml:space="preserve">
+        <source>正在发…</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="正在同步…" xml:space="preserve">
+        <source>正在同步…</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="正在确认…" xml:space="preserve">
+        <source>正在确认…</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="正在认牌…" xml:space="preserve">
+        <source>正在认牌…</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每一条都会看。改好了会联系你。" xml:space="preserve">
+        <source>每一条都会看。改好了会联系你。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每一条都会看，改好了会写在更新说明里。" xml:space="preserve">
+        <source>每一条都会看，改好了会写在更新说明里。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每圈换座" xml:space="preserve">
+        <source>每圈换座</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每张 1 番，不算进起和" xml:space="preserve">
+        <source>每张 1 番，不算进起和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每张翻过来再认一遍，几秒就好。可以先选下面谁和的、怎么和的。" xml:space="preserve">
+        <source>每张翻过来再认一遍，几秒就好。可以先选下面谁和的、怎么和的。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每张花 1 番，不算进起和" xml:space="preserve">
+        <source>每张花 1 番，不算进起和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="每桌自己定，换预设不会动这一项。" xml:space="preserve">
+        <source>每桌自己定，换预设不会动这一项。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="比如自摸 24 番：三家各付 %lld 分，一共赢 %@。" xml:space="preserve">
+        <source>比如自摸 24 番：三家各付 %1$lld 分，一共赢 %2$@。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="比如：杠上开花没算出来" xml:space="preserve">
+        <source>比如：杠上开花没算出来</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="比赛每圈换一次座，朋友局一般不换。" xml:space="preserve">
+        <source>比赛每圈换一次座，朋友局一般不换。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没人和" xml:space="preserve">
+        <source>没人和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没勾选" xml:space="preserve">
+        <source>没勾选</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没打完" xml:space="preserve">
+        <source>没打完</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有" xml:space="preserve">
+        <source>没有</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有导入：%@" xml:space="preserve">
+        <source>没有导入：%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有改上" xml:space="preserve">
+        <source>没有改上</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有网络，联网后会自动同步。" xml:space="preserve">
+        <source>没有网络，联网后会自动同步。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有记上" xml:space="preserve">
+        <source>没有记上</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有这张" xml:space="preserve">
+        <source>没有这张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没有邀请码？" xml:space="preserve">
+        <source>没有邀请码？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="没等第二遍认完，只有第一遍的读法，对照照片看一眼" xml:space="preserve">
+        <source>没等第二遍认完，只有第一遍的读法，对照照片看一眼</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="清空（直连 Google）" xml:space="preserve">
+        <source>清空（直连 Google）</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="演示数据，没看你的照片 · 长按首页标题填 Key" xml:space="preserve">
+        <source>演示数据，没看你的照片 · 长按首页标题填 Key</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点一下可以改或删掉这一局" xml:space="preserve">
+        <source>点一下可以改或删掉这一局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点一下改" xml:space="preserve">
+        <source>点一下改</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点一下看这一局怎么和的" xml:space="preserve">
+        <source>点一下看这一局怎么和的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点一局，看那把怎么和的；记错了也在里面改。" xml:space="preserve">
+        <source>点一局，看那把怎么和的；记错了也在里面改。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点炮" xml:space="preserve">
+        <source>点炮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点炮一家付" xml:space="preserve">
+        <source>点炮一家付</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点炮谁付" xml:space="preserve">
+        <source>点炮谁付</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点炮：%@付 %lld + %lld = %lld 分，另外两家各付 %lld 分。" xml:space="preserve">
+        <source>点炮：%1$@付 %2$lld + %3$lld = %4$lld 分，另外两家各付 %5$lld 分。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="点炮：%@付 %lld + %lld = %lld 分，按家规另外两家不用付。" xml:space="preserve">
+        <source>点炮：%1$@付 %2$lld + %3$lld = %4$lld 分，按家规另外两家不用付。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="照样能用。拍照后用手机上的离线认牌，读错的牌点一下改，也可以手动选牌。算番、记账都一样。" xml:space="preserve">
+        <source>照样能用。拍照后用手机上的离线认牌，读错的牌点一下改，也可以手动选牌。算番、记账都一样。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="牌型没问题。看看下面的少见情况有没有漏选；牌都对的话，这手就是不够番。" xml:space="preserve">
+        <source>牌型没问题。看看下面的少见情况有没有漏选；牌都对的话，这手就是不够番。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="牌没认错，是真的和错了？记下来（赔三家各 %lld 分）›" xml:space="preserve">
+        <source>牌没认错，是真的和错了？记下来（赔三家各 %lld 分）›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="现在用" xml:space="preserve">
+        <source>现在用</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="现在连不上 iCloud，稍后会再试。" xml:space="preserve">
+        <source>现在连不上 iCloud，稍后会再试。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="用我们的服务器" xml:space="preserve">
+        <source>用我们的服务器</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番" xml:space="preserve">
+        <source>番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番和钱都算好。" xml:space="preserve">
+        <source>番和钱都算好。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番怎么算" xml:space="preserve">
+        <source>番怎么算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番数" xml:space="preserve">
+        <source>番数</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番数不够 8 番不能和。花牌每张 1 番，但不算进这 8 番。" xml:space="preserve">
+        <source>番数不够 8 番不能和。花牌每张 1 番，但不算进这 8 番。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番数是手填的，没有番种明细。" xml:space="preserve">
+        <source>番数是手填的，没有番种明细。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番数是手填的，账本里不再列番种。" xml:space="preserve">
+        <source>番数是手填的，账本里不再列番种。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="番是这么算的" xml:space="preserve">
+        <source>番是这么算的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="直接改分" xml:space="preserve">
+        <source>直接改分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="直接改分 · %@" xml:space="preserve">
+        <source>直接改分 · %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="直接改的分不能在这里改。要重填就删掉这一局，再从右上角「直接改分」记一条。" xml:space="preserve">
+        <source>直接改的分不能在这里改。要重填就删掉这一局，再从右上角「直接改分」记一条。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="看当时拍的照片" xml:space="preserve">
+        <source>看当时拍的照片</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="看拍的照片" xml:space="preserve">
+        <source>看拍的照片</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="看每一局，改记错的" xml:space="preserve">
+        <source>看每一局，改记错的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="看结果" xml:space="preserve">
+        <source>看结果</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="看结算" xml:space="preserve">
+        <source>看结算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="看邀请码，或者移除" xml:space="preserve">
+        <source>看邀请码，或者移除</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="碰" xml:space="preserve">
+        <source>碰</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="移除邀请码" xml:space="preserve">
+        <source>移除邀请码</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="稍等几秒" xml:space="preserve">
+        <source>稍等几秒</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="端侧模型" xml:space="preserve">
+        <source>端侧模型</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 局" xml:space="preserve">
+        <source>第 %lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 局 · %@" xml:space="preserve">
+        <source>第 %1$lld 局 · %2$@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 局 · %@ · %@坐庄" xml:space="preserve">
+        <source>第 %1$lld 局 · %2$@ · %3$@坐庄</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 张" xml:space="preserve">
+        <source>第 %lld 张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 张 · %@" xml:space="preserve">
+        <source>第 %1$lld 张 · %2$@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 张可能是多认的，照片里有这张吗？" xml:space="preserve">
+        <source>第 %lld 张可能是多认的，照片里有这张吗？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 张是" xml:space="preserve">
+        <source>第 %lld 张是</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第 %lld 张看不太清，是哪个？" xml:space="preserve">
+        <source>第 %lld 张看不太清，是哪个？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第一局谁坐庄" xml:space="preserve">
+        <source>第一局谁坐庄</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第一次打国标？先看看番怎么算" xml:space="preserve">
+        <source>第一次打国标？先看看番怎么算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="第一行是你，往下按出牌顺序填。" xml:space="preserve">
+        <source>第一行是你，往下按出牌顺序填。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="算" xml:space="preserve">
+        <source>算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="算作一局记进账本，庄家照常往下轮。" xml:space="preserve">
+        <source>算作一局记进账本，庄家照常往下轮。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="粘贴 API Key" xml:space="preserve">
+        <source>粘贴 API Key</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="结束" xml:space="preserve">
+        <source>结束</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="结束后就不能再记了，会算出谁该给谁转多少。" xml:space="preserve">
+        <source>结束后就不能再记了，会算出谁该给谁转多少。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="结束牌局" xml:space="preserve">
+        <source>结束牌局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="结束这场牌局？" xml:space="preserve">
+        <source>结束这场牌局？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="结算" xml:space="preserve">
+        <source>结算</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="继续 ›" xml:space="preserve">
+        <source>继续 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="联系方式，可以不填" xml:space="preserve">
+        <source>联系方式，可以不填</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="联系方式：%@" xml:space="preserve">
+        <source>联系方式：%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自动：填了 Key（走我们的服务器时是填了邀请码）又装了端侧模型就双读，只有一样就用那一样，都没有才是演示数据。演示数据不看照片，按顺序给出三手示例牌。双读：端侧模型先出结果，Gemini 再认一遍，两边不一样的牌让你选。端侧模型没装时双读只剩 Gemini（装法见 app/README.md）。" xml:space="preserve">
+        <source>自动：填了 Key（走我们的服务器时是填了邀请码）又装了端侧模型就双读，只有一样就用那一样，都没有才是演示数据。演示数据不看照片，按顺序给出三手示例牌。双读：端侧模型先出结果，Gemini 再认一遍，两边不一样的牌让你选。端侧模型没装时双读只剩 Gemini（装法见 app/README.md）。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自己定" xml:space="preserve">
+        <source>自己定</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自己摸到 %@，和了。" xml:space="preserve">
+        <source>自己摸到 %@，和了。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自己摸到和的那张，三家都要付。" xml:space="preserve">
+        <source>自己摸到和的那张，三家都要付。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。" xml:space="preserve">
+        <source>自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自己改" xml:space="preserve">
+        <source>自己改</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自摸" xml:space="preserve">
+        <source>自摸</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自摸。" xml:space="preserve">
+        <source>自摸。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="自摸：三家各付 %lld + %lld = %lld 分。" xml:space="preserve">
+        <source>自摸：三家各付 %1$lld + %2$lld = %3$lld 分。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="花牌" xml:space="preserve">
+        <source>花牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="花牌 ×%lld" xml:space="preserve">
+        <source>花牌 ×%lld</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="补一张 %@" xml:space="preserve">
+        <source>补一张 %@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="要 8 番才能和" xml:space="preserve">
+        <source>要 8 番才能和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="要改番数就点加减。" xml:space="preserve">
+        <source>要改番数就点加减。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="规则" xml:space="preserve">
+        <source>规则</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="规则和番种" xml:space="preserve">
+        <source>规则和番种</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="觉得好用？去 App Store 打个分" xml:space="preserve">
+        <source>觉得好用？去 App Store 打个分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="认出 %lld 张" xml:space="preserve">
+        <source>认出 %lld 张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="认出牌，按国标算番" xml:space="preserve">
+        <source>认出牌，按国标算番</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="认错了：改成 %@ 就能和。" xml:space="preserve">
+        <source>认错了：改成 %@ 就能和。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="记" xml:space="preserve">
+        <source>记</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="记下" xml:space="preserve">
+        <source>记下</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="记下：赔三家各 %lld 分" xml:space="preserve">
+        <source>记下：赔三家各 %lld 分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="识别方式" xml:space="preserve">
+        <source>识别方式</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="读取牌局记录失败：%@" xml:space="preserve">
+        <source>读取牌局记录失败：%@</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="谁和了" xml:space="preserve">
+        <source>谁和了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="谁和了？" xml:space="preserve">
+        <source>谁和了？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="谁和错了" xml:space="preserve">
+        <source>谁和错了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="谁和错了？" xml:space="preserve">
+        <source>谁和错了？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="谁在打？" xml:space="preserve">
+        <source>谁在打？</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="谁给谁多少，自动记账" xml:space="preserve">
+        <source>谁给谁多少，自动记账</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="账本" xml:space="preserve">
+        <source>账本</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="赔另外三家各 %lld 分，不算一局。" xml:space="preserve">
+        <source>赔另外三家各 %lld 分，不算一局。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="赢" xml:space="preserve">
+        <source>赢</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="赢的比输的多 %lld 分，加起来要等于 0。" xml:space="preserve">
+        <source>赢的比输的多 %lld 分，加起来要等于 0。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="起和" xml:space="preserve">
+        <source>起和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="转给" xml:space="preserve">
+        <source>转给</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="转账" xml:space="preserve">
+        <source>转账</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="输" xml:space="preserve">
+        <source>输</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="输的比赢的多 %lld 分，加起来要等于 0。" xml:space="preserve">
+        <source>输的比赢的多 %lld 分，加起来要等于 0。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="还凑不成和牌" xml:space="preserve">
+        <source>还凑不成和牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="还有 %lld 张没确认" xml:space="preserve">
+        <source>还有 %lld 张没确认</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="还没填" xml:space="preserve">
+        <source>还没填</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="还没有记录。" xml:space="preserve">
+        <source>还没有记录。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="还没有记录。有人和了就点下面的按钮。" xml:space="preserve">
+        <source>还没有记录。有人和了就点下面的按钮。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="还没连上我们的服务器" xml:space="preserve">
+        <source>还没连上我们的服务器</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这一局" xml:space="preserve">
+        <source>这一局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这一局不算打完，接着打。" xml:space="preserve">
+        <source>这一局不算打完，接着打。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这一局已经不在账本里了" xml:space="preserve">
+        <source>这一局已经不在账本里了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这一局的分数全部退回，后面的局往前挪。" xml:space="preserve">
+        <source>这一局的分数全部退回，后面的局往前挪。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这一局的牌和分数都还在，只是不能再看照片。" xml:space="preserve">
+        <source>这一局的牌和分数都还在，只是不能再看照片。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这个文件读不出来，确认是「导出全部牌局」导出的文件。" xml:space="preserve">
+        <source>这个文件读不出来，确认是「导出全部牌局」导出的文件。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这台手机没登录 iCloud，登录后会自动同步。" xml:space="preserve">
+        <source>这台手机没登录 iCloud，登录后会自动同步。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这台手机的 iCloud 被限制了（比如家长控制）。" xml:space="preserve">
+        <source>这台手机的 iCloud 被限制了（比如家长控制）。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这台设备没有相机，从右边的相册选一张" xml:space="preserve">
+        <source>这台设备没有相机，从右边的相册选一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这台设备没有相机，从左下角的相册选一张" xml:space="preserve">
+        <source>这台设备没有相机，从左下角的相册选一张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这场的规则" xml:space="preserve">
+        <source>这场的规则</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这局没人和" xml:space="preserve">
+        <source>这局没人和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这局没人和，不计分。" xml:space="preserve">
+        <source>这局没人和，不计分。</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这局谁付多少" xml:space="preserve">
+        <source>这局谁付多少</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这张是和的那张" xml:space="preserve">
+        <source>这张是和的那张</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这手有 %lld 处要你动手改。有邀请码可以开 AI 认牌，更准 ›" xml:space="preserve">
+        <source>这手有 %lld 处要你动手改。有邀请码可以开 AI 认牌，更准 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这手牌还和不了" xml:space="preserve">
+        <source>这手牌还和不了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="这样转账最省事" xml:space="preserve">
+        <source>这样转账最省事</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选一下怎么和的" xml:space="preserve">
+        <source>选一下怎么和的</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选一下是谁点的炮" xml:space="preserve">
+        <source>选一下是谁点的炮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选一下谁和了" xml:space="preserve">
+        <source>选一下谁和了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选一下谁点的炮" xml:space="preserve">
+        <source>选一下谁点的炮</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选是哪张牌" xml:space="preserve">
+        <source>选是哪张牌</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选这个和不了" xml:space="preserve">
+        <source>选这个和不了</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选这个能和" xml:space="preserve">
+        <source>选这个能和</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="选这组里最小的那张（567 饼就选 5 饼）" xml:space="preserve">
+        <source>选这组里最小的那张（567 饼就选 5 饼）</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="邀请码" xml:space="preserve">
+        <source>邀请码</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="都不是，自己选 ›" xml:space="preserve">
+        <source>都不是，自己选 ›</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="重拍" xml:space="preserve">
+        <source>重拍</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="重算以后" xml:space="preserve">
+        <source>重算以后</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="错和赔 %lld" xml:space="preserve">
+        <source>错和赔 %lld</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="错和赔每家" xml:space="preserve">
+        <source>错和赔每家</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="顺手去 App Store 打个分" xml:space="preserve">
+        <source>顺手去 App Store 打个分</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="风圈 · 第 %lld 局" xml:space="preserve">
+        <source>风圈 · 第 %lld 局</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="首页" xml:space="preserve">
+        <source>首页</source>
+        <note/>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
