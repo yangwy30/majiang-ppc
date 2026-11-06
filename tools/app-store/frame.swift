@@ -27,14 +27,14 @@ func serif(_ size: CGFloat, weight: CGFloat) -> NSFont {
 }
 
 struct Frame { let file: String; let title: String; let sub: String }
+// 顺序就是商店里的顺序。搜索结果里只露前三张，所以前三张是「拍、算、记」。
 let frames = [
     Frame(file: "capture", title: "拍一下，AI 认牌", sub: "手牌推倒对准一拍，每张牌都认出来"),
-    Frame(file: "check-reviewing", title: "AI 再看一遍", sub: "先出结果，再逐张复核，认得又快又准"),
-    Frame(file: "check", title: "看不清的，AI 给候选", sub: "标出哪张能和，点一下就定"),
     Frame(file: "result", title: "番数，自动算好", sub: "国标八十一番，谁付多少一清二楚"),
     Frame(file: "table", title: "一桌四人，一本账", sub: "庄家、风圈自动轮转，每局输赢随手记"),
     Frame(file: "settle", title: "打完，一键结账", sub: "最少几笔转账，账本图发到微信群"),
     Frame(file: "hand-detail", title: "每一局，怎么和的都在", sub: "点开账本里的一局，牌、番种、照片都能翻"),
+    Frame(file: "check", title: "看不清的，AI 给候选", sub: "标出哪张能和，点一下就定"),
 ]
 
 let size = args.count > 4 ? args[4].split(separator: "x").compactMap { Double($0) } : [1320, 2868]

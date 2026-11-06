@@ -97,6 +97,13 @@ enum DemoData {
         _ = try? game.recordWin(record)
     }
 
+    /// 启动参数 `-demo-photo <路径>` 给的真照片（模拟器能直接读 Mac 上的文件）。
+    static var photo: UIImage? {
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-demo-photo"), i + 1 < args.count else { return nil }
+        return UIImage(contentsOfFile: args[i + 1])
+    }
+
     /// 「这一局」截图用的照片：没打完那场的第 1 局有照片，第 2 局没有。
     @MainActor
     static func preparePhotos(_ archive: GameArchive) {
@@ -105,9 +112,7 @@ enum DemoData {
             try? FileManager.default.removeItem(at: file)
         }
         guard let record = archive.activeGame?.records.first, let hand = record.win?.hand else { return }
-        let args = ProcessInfo.processInfo.arguments
-        var image: UIImage?
-        if let i = args.firstIndex(of: "-demo-photo"), i + 1 < args.count { image = UIImage(contentsOfFile: args[i + 1]) }
+        var image = photo
         if image == nil {
             // 没给真照片：在牌桌颜色的底上摆一排牌
             let renderer = ImageRenderer(content:

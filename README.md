@@ -8,8 +8,8 @@
 
 <p align="center">
   <img src="docs/assets/app-store/01-capture.png" width="200" alt="拍照">
-  <img src="docs/assets/app-store/04-result.png" width="200" alt="算番">
-  <img src="docs/assets/app-store/06-settle.png" width="200" alt="结算">
+  <img src="docs/assets/app-store/02-result.png" width="200" alt="算番">
+  <img src="docs/assets/app-store/04-settle.png" width="200" alt="结算">
 </p>
 
 ## 它做什么

@@ -247,12 +247,13 @@ App 里只保留 4 个术语，打麻将的人都懂：**庄、自摸、点炮�
 
 ## 截图怎么更新
 
-截图是开发版 App 在模拟器里截的。开发版支持启动参数 `-demo-screen <页面>`：用一份临时的假数据（不碰真的牌局记录）直接停在某个页面。页面名：`empty-home`、`home`、`invite`（首页上弹出填邀请码的页）、`more`（首页右上「更多」升起的那一页）、`backup`（备份与换手机）、`table-more`（牌桌右上「更多」）、`manual-score`（直接改分）、`new-game`、`table`、`edit-hand`、`hand-detail`、`hand-photo`、`hand-discard`（这三页可以加 `-demo-photo <照片路径>` 换成真照片）、`capture`、`check`、`not-win`、`result`、`settle`。
+截图是开发版 App 在模拟器里截的。开发版支持启动参数 `-demo-screen <页面>`：用一份临时的假数据（不碰真的牌局记录）直接停在某个页面。页面名：`empty-home`、`home`、`invite`（首页上弹出填邀请码的页）、`more`（首页右上「更多」升起的那一页）、`backup`（备份与换手机）、`table-more`（牌桌右上「更多」）、`manual-score`（直接改分）、`new-game`、`table`、`edit-hand`、`hand-detail`、`hand-photo`、`hand-discard`（这三页可以加 `-demo-photo <照片路径>` 换成真照片）、`capture`（加 `-demo-photo` 时取景框里是这张照片，商店截图用竖版的 `tools/app-store/capture-photo.jpg`）、`check`、`not-win`、`result`、`settle`。
 
 ```bash
 # 在 Mac 上，先用 Xcode 或 xcodebuild 把 App 装到已启动的模拟器
 xcrun simctl status_bar booted override --time 9:41 --batteryState charged --batteryLevel 100
-xcrun simctl launch booted com.yangwy30.majiang -demo-screen check
+# 一定要带语言参数：模拟器系统语言是英文时，中文标点按全宽排，字会变宽、折行，跟用户手机上看到的不一样
+xcrun simctl launch booted com.yangwy30.majiang -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN -demo-screen check
 xcrun simctl io booted screenshot 06-check.png
 sips -Z 1200 06-check.png   # 缩小一点再放进 docs/assets/user-flow/
 ```
