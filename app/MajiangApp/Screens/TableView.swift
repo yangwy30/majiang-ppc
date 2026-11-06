@@ -12,6 +12,9 @@ struct TableView: View {
     @State private var editingRules = false
     @State private var confirmEnd = false
     @State private var pickingFalseWin = false
+    @State private var showMore = false
+    /// 「更多」里点了哪一项：等「更多」收下去再打开，两层弹出不叠在一起。
+    @State private var moreTarget: TableMore?
     /// 点开要改的那一局。
     @State private var editing: EditTarget?
     @State private var recordError: String?
@@ -132,24 +135,14 @@ struct TableView: View {
                     .accessibilityLabel("分享账本图")
             }
             NavTool {
-                Menu {
-                    if !game.isFinished {
-                        Button("有人和错了") { pickingFalseWin = true }
-                    }
-                    Button("直接改分") { manualScoring = true }
-                    Button("这场的规则") { editingRules = true }
-                    Button("规则和番种说明") { showGuide = true }
-                    Divider()
-                    if !game.isFinished {
-                        Button("结束牌局", role: .destructive) { confirmEnd = true }
-                    }
-                } label: {
-                    Text("更多")
-                        .font(.system(size: 16))
-                        .foregroundStyle(Theme.gray)
-                        .fixedSize()
-                        .frame(minHeight: 44)
-                }
+                // 跟首页的「更多」一样从底下升起一页，不用系统菜单
+                Button("更多") { showMore = true }
+            }
+        }
+        .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
+            MoreSheet(items: moreItems(game)) { target in
+                moreTarget = target
+                showMore = false
             }
         }
         .confirmationDialog("谁和错了？", isPresented: $pickingFalseWin, titleVisibility: .visible) {
@@ -202,12 +195,43 @@ struct TableView: View {
             }
             if model.demoScreen?.opensRound == true { recording = true }
             if model.demoScreen == .gameRules { editingRules = true }
+            if model.demoScreen == .tableMore { showMore = true }
+            if model.demoScreen == .manualScore { manualScoring = true }
         }
         .alert("没有记上", isPresented: Binding(get: { recordError != nil }, set: { if !$0 { recordError = nil } })) {
             Button("好") { recordError = nil }
         } message: {
             Text(recordError ?? "")
         }
+    }
+
+    /// 牌桌「更多」里的几项。打完的牌局不能再记和错、也不用再结束。
+    private func moreItems(_ game: Game) -> [MoreSheet<TableMore>.Item] {
+        var items: [MoreSheet<TableMore>.Item] = []
+        if !game.isFinished {
+            items.append(.init(target: .falseWin, title: "有人和错了",
+                               detail: "推倒了凑不成和牌，赔三家各 \(game.rules.falseWinPenalty) 分"))
+        }
+        items.append(.init(target: .manualScore, title: "直接改分", detail: "家规不一样或者算错了，直接填这一局的得失"))
+        items.append(.init(target: .rules, title: "这场的规则",
+                           detail: game.rules.shortSummary))
+        items.append(.init(target: .guide, title: "番怎么算", detail: "国标的番种和收付，都是白话"))
+        if !game.isFinished {
+            items.append(.init(target: .end, title: "结束牌局", detail: "不打了，算出谁该给谁转多少"))
+        }
+        return items
+    }
+
+    private func openMoreTarget() {
+        switch moreTarget {
+        case .falseWin: pickingFalseWin = true
+        case .manualScore: manualScoring = true
+        case .rules: editingRules = true
+        case .guide: showGuide = true
+        case .end: confirmEnd = true
+        case nil: break
+        }
+        moreTarget = nil
     }
 
     /// 截图用：打开「这场的规则」时预先把底分改成 5，好看到重算预览。
@@ -290,6 +314,10 @@ struct TableView: View {
         model.update(updated)
         model.path = [.settle(game.id)]
     }
+}
+
+private enum TableMore {
+    case falseWin, manualScore, rules, guide, end
 }
 
 private struct EditTarget: Identifiable {

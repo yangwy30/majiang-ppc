@@ -2,6 +2,7 @@ import { DurableObject } from "cloudflare:workers";
 import { isAllowedModel } from "./models.js";
 import { PRIVACY_HTML } from "./privacy.js";
 import { SUPPORT_HTML } from "./support.js";
+import { HOME_HTML } from "./home.js";
 import { ADMIN_HTML } from "./admin.js";
 import { normalizeCode, newCode, sameSecret } from "./invites.js";
 
@@ -35,6 +36,10 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/health" && request.method === "GET") return new Response("ok");
+    // 在浏览器里直接打开域名的人看到一页介绍，不是一行 404 JSON
+    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD")) {
+      return new Response(request.method === "HEAD" ? null : HOME_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
     if (url.pathname === "/privacy" && request.method === "GET") {
       return new Response(PRIVACY_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
@@ -254,7 +259,7 @@ export class Relay extends DurableObject {
       invite = this.useInvite(inviteInput, device, ip, day);
       if (invite.error) return fail(invite.status, invite.error, invite.invite ? { invite: true } : {});
     } else if (this.inviteRequired()) {
-      return fail(403, "AI 认牌现在要邀请码，请更新 App 后在拍照页输入。没有码也可以先手动选牌", { invite: true });
+      return fail(403, "AI 认牌现在要邀请码：更新到最新版，在首页右上角「更多」里填。没有码也可以先手动选牌", { invite: true });
     }
 
     // 从窄到宽检查；SQL 是同步的，查和加之间不会插进别的请求
