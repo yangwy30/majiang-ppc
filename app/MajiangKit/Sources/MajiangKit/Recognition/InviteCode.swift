@@ -32,13 +32,14 @@ public enum InviteCode {
     public static func redeem(_ input: String, proxy: URL, deviceID: String,
                               http: HTTPClient = URLSessionHTTPClient()) async throws -> Redemption {
         guard let code = normalize(input) else {
-            throw RecognitionError.inviteRejected("邀请码是 6 位字母和数字，核对一下再输")
+            throw RecognitionError.inviteRejected(L("邀请码是 6 位字母和数字，核对一下再输"))
         }
         var request = URLRequest(url: redeemURL(forProxy: proxy))
         request.httpMethod = "POST"
         request.timeoutInterval = 15
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(deviceID, forHTTPHeaderField: "X-Majiang-Device")
+        request.setAppLanguage()
         request.httpBody = try JSONSerialization.data(withJSONObject: ["code": code])
 
         let data: Data
@@ -55,7 +56,7 @@ public enum InviteCode {
             throw RecognitionError.network("HTTP \(status)")
         }
         guard let redemption = try? JSONDecoder().decode(Redemption.self, from: data) else {
-            throw RecognitionError.badResponse("填码的回答看不懂")
+            throw RecognitionError.badResponse(L("填码的回答看不懂"))
         }
         return redemption
     }

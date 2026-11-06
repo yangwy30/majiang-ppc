@@ -18,7 +18,8 @@ struct BackupView: View {
 
                     Hairline()
                         .padding(.top, 28)
-                    MenuRow(title: "iCloud 同步", detail: statusLine ?? "存在你自己的 iCloud 里，别人看不到", detailLines: nil) {
+                    MenuRow(title: "iCloud 同步", detail: statusLine.map { (line: String) -> LocalizedStringKey in "\(line)" } ?? "存在你自己的 iCloud 里，别人看不到",
+                            detailLines: nil) {
                         Toggle("iCloud 同步", isOn: $cloud.enabled)
                             .labelsHidden()
                             .tint(Theme.ink)
@@ -54,7 +55,7 @@ struct BackupView: View {
             .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
                 switch result {
                 case .success(let url): importFile(url)
-                case .failure(let error): message = "没有导入：\(error.localizedDescription)"
+                case .failure(let error): message = String(localized: "没有导入：\(error.localizedDescription)")
                 }
             }
             .alert(message ?? "", isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
@@ -69,7 +70,7 @@ struct BackupView: View {
             .foregroundStyle(Theme.faint)
     }
 
-    private func note(_ text: String) -> some View {
+    private func note(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.system(size: 14))
             .foregroundStyle(Theme.gray)
@@ -81,8 +82,8 @@ struct BackupView: View {
         switch model.cloud.status {
         case .off: nil
         case .unavailable(let reason), .failed(let reason): reason
-        case .syncing: "正在同步…"
-        case .synced(let date): "已同步 · \(date.formatted(date: .omitted, time: .shortened))"
+        case .syncing: String(localized: "正在同步…")
+        case .synced(let date): String(localized: "已同步 · \(date.formatted(date: .omitted, time: .shortened))")
         }
     }
 
@@ -90,19 +91,19 @@ struct BackupView: View {
         do {
             ShareSheet.present([try model.exportFile()])
         } catch {
-            message = "导出失败：\(error.localizedDescription)"
+            message = String(localized: "导出失败：\(error.localizedDescription)")
         }
     }
 
     private func importFile(_ url: URL) {
         do {
             let summary = try model.importFile(url)
-            message = summary.isEmpty ? "文件里的牌局这台手机上都有了。"
-                : [summary.added > 0 ? "加了 \(summary.added) 场牌局" : nil,
-                   summary.updated > 0 ? "更新了 \(summary.updated) 场" : nil]
-                    .compactMap { $0 }.joined(separator: "，") + "。"
+            let parts = [summary.added > 0 ? String(localized: "加了 \(summary.added) 场牌局") : nil,
+                         summary.updated > 0 ? String(localized: "更新了 \(summary.updated) 场") : nil]
+            message = summary.isEmpty ? String(localized: "文件里的牌局这台手机上都有了。")
+                : String(localized: "\(parts.compactMap { $0 }.joined(separator: Money.clauseSeparator))。")
         } catch {
-            message = "这个文件读不出来，确认是「导出全部牌局」导出的文件。"
+            message = String(localized: "这个文件读不出来，确认是「导出全部牌局」导出的文件。")
         }
     }
 }

@@ -12,7 +12,7 @@ struct FanList: View {
                        plain: entry.fan.explanation, points: entry.points)
             }
             if win.flowerFan > 0 {
-                FanRow(name: "花牌 ×\(win.flowerFan)", plain: "每张 1 番，不算进起和", points: win.flowerFan)
+                FanRow(name: String(localized: "花牌 ×\(win.flowerFan)"), plain: String(localized: "每张 1 番，不算进起和"), points: win.flowerFan)
             }
         }
     }
@@ -90,7 +90,7 @@ struct HandTiles: View {
         var standing = hand.concealed
         if let i = standing.lastIndex(of: hand.winningTile) { standing.remove(at: i) }
         if !standing.isEmpty { result.append(TileGroup(id: 100, tiles: standing)) }
-        result.append(TileGroup(id: 200, tiles: [hand.winningTile], mark: "和", isWinning: true))
+        result.append(TileGroup(id: 200, tiles: [hand.winningTile], mark: String(localized: "tile.winMark", defaultValue: "和", comment: "和的那张牌下面的小字（英文 Win）"), isWinning: true))
         return result
     }
 
@@ -135,7 +135,7 @@ struct HandTiles: View {
         var standing = hand.concealed
         if let i = standing.lastIndex(of: hand.winningTile) { standing.remove(at: i) }
         parts.append(standing.map(\.displayName).joined(separator: " "))
-        parts.append("和 \(hand.winningTile.displayName)")
-        return parts.joined(separator: "，")
+        parts.append(String(localized: "和 \(hand.winningTile.displayName)"))
+        return parts.joined(separator: Money.clauseSeparator)
     }
 }

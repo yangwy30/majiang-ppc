@@ -49,7 +49,7 @@ struct TileFace: View {
             }
         }
         .accessibilityElement()
-        .accessibilityLabel(tile.displayName + (state == .doubt ? "，拿不准" : ""))
+        .accessibilityLabel(state == .doubt ? String(localized: "\(tile.displayName)，拿不准") : tile.displayName)
     }
 
     @ViewBuilder
@@ -214,7 +214,7 @@ private struct CharacterFace: View {
             Text(Tile(suit: .characters, rank: rank)!.faceCharacter)
                 .font(.system(size: width * 0.42, weight: .bold))
                 .foregroundStyle(Theme.ink)
-            Text("萬")
+            Text(verbatim: "萬")
                 .font(.system(size: width * 0.44, weight: .bold))
                 .foregroundStyle(Theme.tileRed)
         }

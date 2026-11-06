@@ -66,7 +66,7 @@ struct HouseRulesForm: View {
 
     private var moreLabel: String {
         let changed = RuleItem.more.filter { !$0.isStandard(rules) }.count
-        return changed > 0 ? "更多规矩 · 改过 \(changed) 项" : "更多规矩"
+        return changed > 0 ? String(localized: "更多规矩 · 改过 \(changed) 项") : String(localized: "更多规矩")
     }
 
     /// 「比如自摸 24 番：三家各付 32 分，一共赢 192 元。」随改随算。
@@ -74,7 +74,7 @@ struct HouseRulesForm: View {
         let fan = rules.cappedFan(24)
         let each = rules.basePoints + fan
         let money = (Double(each * 3) * rules.yuanPerPoint).formatted(.number.precision(.fractionLength(0...2)))
-        return "比如自摸 24 番：三家各付 \(each) 分，一共赢 \(money) 元。"
+        return String(localized: "比如自摸 24 番：三家各付 \(each) 分，一共赢 \(Money.amount(money))。")
     }
 }
 
@@ -101,7 +101,7 @@ private struct PresetTabs: View {
         .animation(.easeOut(duration: 0.15), value: current)
     }
 
-    private func tab(_ label: String, index: Int, preset: GameRules?) -> some View {
+    private func tab(_ label: LocalizedStringKey, index: Int, preset: GameRules?) -> some View {
         let on = current == index
         return Button {
             guard var preset else { return }
@@ -227,7 +227,7 @@ private struct RulePicker: View {
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 100)
-                    Text("元").foregroundStyle(Theme.gray)
+                    Text(verbatim: Money.isChinese ? String(localized: "元") : Money.symbol).foregroundStyle(Theme.gray)
                 }
                 .frame(height: 52)
             }
@@ -263,7 +263,7 @@ enum RuleItem: String, Identifiable, CaseIterable {
     static let main: [RuleItem] = [.rate, .base, .minimum, .cap, .flowers]
     static let more: [RuleItem] = [.discarder, .penalty, .rounds, .swap]
 
-    var title: String {
+    var title: LocalizedStringKey {
         switch self {
         case .rate: "1 分算"
         case .base: "底分"
@@ -278,7 +278,7 @@ enum RuleItem: String, Identifiable, CaseIterable {
     }
 
     /// 行里名字下面那句。
-    var hint: String {
+    var hint: LocalizedStringKey {
         switch self {
         case .rate: "「打一块的」就是 1 元"
         case .base: "有人和了，三家先各付"
@@ -290,7 +290,7 @@ enum RuleItem: String, Identifiable, CaseIterable {
     }
 
     /// 选项页上的说明。
-    var note: String {
+    var note: LocalizedStringKey {
         switch self {
         case .rate: "每桌自己定，换预设不会动这一项。"
         case .base: "有人和了，另外三家先各付这么多，再按番数付。"
@@ -322,15 +322,16 @@ enum RuleItem: String, Identifiable, CaseIterable {
     /// 行右边的值：数字加单位，或者一个词。
     func value(_ rules: GameRules) -> (text: String, unit: String, isNumber: Bool) {
         switch self {
-        case .rate: (rules.yuanPerPoint.yuanText, "元", true)
-        case .base: ("\(rules.basePoints)", "分", true)
-        case .minimum: ("\(rules.minimumFan)", "番", true)
-        case .cap: rules.fanCap > 0 ? ("\(rules.fanCap)", "番", true) : ("不封顶", "", false)
-        case .flowers: (rules.includeFlowers ? "带花" : "不带", "", false)
-        case .discarder: (rules.onlyDiscarderPays ? "只有点炮的人" : "三家都付底分", "", false)
-        case .penalty: ("\(rules.falseWinPenalty) 分", "", false)
-        case .rounds: ("\(rules.totalHands / 4) 圈", "", false)
-        case .swap: (rules.swapSeatsEachRound ? "换" : "不换", "", false)
+        case .rate: Money.isChinese ? (rules.yuanPerPoint.yuanText, String(localized: "元"), true)
+            : ("\(Money.symbol)\(rules.yuanPerPoint.yuanText)", "", true)
+        case .base: ("\(rules.basePoints)", String(localized: "分"), true)
+        case .minimum: ("\(rules.minimumFan)", String(localized: "番"), true)
+        case .cap: rules.fanCap > 0 ? ("\(rules.fanCap)", String(localized: "番"), true) : (String(localized: "不封顶"), "", false)
+        case .flowers: (rules.includeFlowers ? String(localized: "带花") : String(localized: "不带"), "", false)
+        case .discarder: (rules.onlyDiscarderPays ? String(localized: "只有点炮的人") : String(localized: "三家都付底分"), "", false)
+        case .penalty: (String(localized: "\(rules.falseWinPenalty) 分"), "", false)
+        case .rounds: (String(localized: "\(rules.totalHands / 4) 圈"), "", false)
+        case .swap: (rules.swapSeatsEachRound ? String(localized: "换") : String(localized: "不换"), "", false)
         }
     }
 
@@ -339,32 +340,32 @@ enum RuleItem: String, Identifiable, CaseIterable {
         case .rate:
             var values = [0.5, 1, 2, 5, 10]
             if !values.contains(current.yuanPerPoint) { values.append(current.yuanPerPoint); values.sort() }
-            return values.map { RuleOption.choice(\.yuanPerPoint, $0, "\($0.yuanText) 元", marksStandard: false) }
+            return values.map { RuleOption.choice(\.yuanPerPoint, $0, Money.amount($0.yuanText), marksStandard: false) }
         case .base:
             var values = [0, 5, 8, 10]
             if !values.contains(current.basePoints) { values.append(current.basePoints); values.sort() }
-            return values.map { RuleOption.choice(\.basePoints, $0, "\($0) 分", tag: $0 == 0 ? "不要底分" : nil) }
+            return values.map { RuleOption.choice(\.basePoints, $0, String(localized: "\($0) 分"), tag: $0 == 0 ? String(localized: "不要底分") : nil) }
         case .minimum:
-            return [8, 6, 4, 1].map { RuleOption.choice(\.minimumFan, $0, "\($0) 番", tag: $0 == 1 ? "和了就算" : nil) }
+            return [8, 6, 4, 1].map { RuleOption.choice(\.minimumFan, $0, String(localized: "\($0) 番"), tag: $0 == 1 ? String(localized: "和了就算") : nil) }
         case .cap:
-            return [0, 88, 64, 32].map { RuleOption.choice(\.fanCap, $0, $0 == 0 ? "不封顶" : "\($0) 番") }
+            return [0, 88, 64, 32].map { RuleOption.choice(\.fanCap, $0, $0 == 0 ? String(localized: "不封顶") : String(localized: "\($0) 番")) }
         case .flowers:
-            return [true, false].map { RuleOption.choice(\.includeFlowers, $0, $0 ? "带花" : "不带花") }
+            return [true, false].map { RuleOption.choice(\.includeFlowers, $0, $0 ? String(localized: "带花") : String(localized: "不带花")) }
         case .discarder:
-            return [false, true].map { RuleOption.choice(\.onlyDiscarderPays, $0, $0 ? "只有点炮的人付" : "三家都付底分") }
+            return [false, true].map { RuleOption.choice(\.onlyDiscarderPays, $0, $0 ? String(localized: "只有点炮的人付") : String(localized: "三家都付底分")) }
         case .penalty:
             var values = [10, 5, 20]
             if !values.contains(current.falseWinPenalty) { values.append(current.falseWinPenalty) }
-            return values.map { RuleOption.choice(\.falseWinPenalty, $0, "\($0) 分") }
+            return values.map { RuleOption.choice(\.falseWinPenalty, $0, String(localized: "\($0) 分")) }
         case .rounds:
             // 已经打了的局数之内的圈数不能选
             return [16, 8, 4].map { hands in
-                var option = RuleOption.choice(\.totalHands, hands, "\(hands / 4) 圈")
+                var option = RuleOption.choice(\.totalHands, hands, String(localized: "\(hands / 4) 圈"))
                 option.enabled = hands >= playedHands
                 return option
             }
         case .swap:
-            return [false, true].map { RuleOption.choice(\.swapSeatsEachRound, $0, $0 ? "换座" : "不换") }
+            return [false, true].map { RuleOption.choice(\.swapSeatsEachRound, $0, $0 ? String(localized: "换座") : String(localized: "不换")) }
         }
     }
 }
@@ -382,7 +383,7 @@ struct RuleOption: Identifiable {
     static func choice<T: Equatable>(_ keyPath: WritableKeyPath<GameRules, T>, _ value: T, _ label: String,
                                      tag: String? = nil, marksStandard: Bool = true) -> RuleOption {
         let isStandard = marksStandard && GameRules.standard[keyPath: keyPath] == value
-        return RuleOption(label: label, tag: isStandard ? "国标" : tag,
+        return RuleOption(label: label, tag: isStandard ? String(localized: "国标") : tag,
                           isSelected: { $0[keyPath: keyPath] == value },
                           apply: { $0[keyPath: keyPath] = value })
     }

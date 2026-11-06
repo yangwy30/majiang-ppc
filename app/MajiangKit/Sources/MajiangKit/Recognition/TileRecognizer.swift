@@ -82,10 +82,10 @@ public enum RecognitionError: Error, Hashable, Sendable {
     public var message: String {
         switch self {
         case .unavailable(let why): why
-        case .nothingFound: "照片里没找到牌，靠近一点、亮一点再拍"
-        case .notConfigured: "还没有设置识别服务（在设置里填 Gemini API Key 或代理地址）"
-        case .network(let why): "网络出错：\(why)"
-        case .badResponse(let why): "识别结果看不懂：\(why)"
+        case .nothingFound: L("照片里没找到牌，靠近一点、亮一点再拍")
+        case .notConfigured: L("还没有设置识别服务（在设置里填 Gemini API Key 或代理地址）")
+        case .network(let why): L("网络出错：\(why)")
+        case .badResponse(let why): L("识别结果看不懂：\(why)")
         case .inviteRejected(let why): why
         }
     }
@@ -119,7 +119,7 @@ public struct OnDeviceRecognizer: TileRecognizer {
     }
 
     public func recognize(_ request: RecognitionRequest) async throws -> Recognition {
-        guard let detector else { throw RecognitionError.unavailable("端侧模型没装（见 app/README.md）") }
+        guard let detector else { throw RecognitionError.unavailable(L("端侧模型没装（见 app/README.md）")) }
         let recognition = TileLayout.recognition(from: try await detector.detect(in: request.image))
         guard !recognition.concealed.isEmpty else { throw RecognitionError.nothingFound }
         return recognition
@@ -143,7 +143,7 @@ public struct MockRecognizer: TileRecognizer {
 
     public func recognize(_ request: RecognitionRequest) async throws -> Recognition {
         try await Task.sleep(for: delay)
-        guard !samples.isEmpty else { throw RecognitionError.unavailable("没有演示数据") }
+        guard !samples.isEmpty else { throw RecognitionError.unavailable(L("没有演示数据")) }
         return samples[counter.next() % samples.count]
     }
 

@@ -101,6 +101,7 @@ public struct GeminiRecognizer: TileRecognizer {
             urlRequest = URLRequest(url: url)
             urlRequest.setValue(configuration.model, forHTTPHeaderField: "X-Majiang-Model")
             if let deviceID { urlRequest.setValue(deviceID, forHTTPHeaderField: "X-Majiang-Device") }
+            urlRequest.setAppLanguage()
             if let inviteCode { urlRequest.setValue(inviteCode, forHTTPHeaderField: "X-Majiang-Invite") }
             if let token { urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         }
@@ -226,17 +227,17 @@ public struct GeminiRecognizer: TileRecognizer {
         do {
             envelope = try JSONDecoder().decode(Envelope.self, from: data)
         } catch {
-            throw RecognitionError.badResponse("识别服务的回答格式不对")
+            throw RecognitionError.badResponse(L("识别服务的回答格式不对"))
         }
         if let reason = envelope.promptFeedback?.blockReason {
-            throw RecognitionError.badResponse("这张照片没法识别（\(reason)），换一张试试")
+            throw RecognitionError.badResponse(L("这张照片没法识别（\(reason)），换一张试试"))
         }
         guard let candidate = envelope.candidates?.first else {
-            throw RecognitionError.badResponse("没有候选回答")
+            throw RecognitionError.badResponse(L("没有候选回答"))
         }
         let text = (candidate.content?.parts ?? []).filter { $0.thought != true }.compactMap(\.text).joined()
         guard !text.isEmpty else {
-            throw RecognitionError.badResponse("回答是空的（\(candidate.finishReason ?? "原因不明")），再拍一次试试")
+            throw RecognitionError.badResponse(L("回答是空的（\(candidate.finishReason ?? "?")），再拍一次试试"))
         }
         return try parseAnswer(Data(text.utf8))
     }
@@ -250,7 +251,7 @@ public struct GeminiRecognizer: TileRecognizer {
         do {
             answer = try JSONDecoder().decode(Answer.self, from: data)
         } catch {
-            throw RecognitionError.badResponse("JSON 格式不对")
+            throw RecognitionError.badResponse(L("JSON 格式不对"))
         }
 
         var flowers = max(0, answer.flowers ?? 0)
@@ -261,7 +262,7 @@ public struct GeminiRecognizer: TileRecognizer {
                 if let first = token.first, flowerNames.contains(first) {
                     flowers += 1
                 } else {
-                    notes.append("有一张牌没认出来（\(token)）")
+                    notes.append(L("有一张牌没认出来（\(token)）"))
                 }
                 return nil
             }
@@ -278,7 +279,7 @@ public struct GeminiRecognizer: TileRecognizer {
             } else if let meld = Meld.from(tiles: tiles, concealedKong: m.kind == "concealed_kong") {
                 melds.append(meld)
             } else {
-                notes.append("有一组吃碰杠拼不成（\(m.tiles.joined(separator: " "))），放回手牌里请确认")
+                notes.append(L("有一组吃碰杠拼不成（\(m.tiles.joined(separator: " "))），放回手牌里请确认"))
                 concealed.insert(contentsOf: tiles.map { RecognizedTile(tile: $0, uncertain: true) }, at: 0)
             }
         }

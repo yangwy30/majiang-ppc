@@ -160,13 +160,13 @@ public enum GameError: Error, Hashable, Sendable {
 
     public var message: String {
         switch self {
-        case .finished: "这场牌局已经打完了"
-        case .invalidPlayer: "玩家不对"
-        case .discarderIsWinner: "点炮的人不能是和牌的人"
-        case .belowMinimumFan(let fan): "只有 \(fan) 番，不够起和"
-        case .deltasMustSumToZero: "四个人的得失分加起来要等于 0"
-        case .recordNotFound: "找不到这一局"
-        case .tooManyHands(let total): "这样改就超过 \(total) 局了"
+        case .finished: L("这场牌局已经打完了")
+        case .invalidPlayer: L("玩家不对")
+        case .discarderIsWinner: L("点炮的人不能是和牌的人")
+        case .belowMinimumFan(let fan): L("只有 \(fan) 番，不够起和")
+        case .deltasMustSumToZero: L("四个人的得失分加起来要等于 0")
+        case .recordNotFound: L("找不到这一局")
+        case .tooManyHands(let total): L("这样改就超过 \(total) 局了")
         }
     }
 }

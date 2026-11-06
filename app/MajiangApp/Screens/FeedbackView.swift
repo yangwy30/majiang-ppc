@@ -58,7 +58,7 @@ struct FeedbackView: View {
             .onAppear {
                 #if DEBUG
                 if model.demoScreen == .feedback || model.demoScreen == .feedbackSent {
-                    text = "杠上开花没算出来：最后一张是杠完补的牌，结果只给了自摸。"
+                    text = String(localized: "杠上开花没算出来：最后一张是杠完补的牌，结果只给了自摸。")
                     contact = "yang_mj"
                 }
                 if model.demoScreen == .feedbackSent { sent = true }
@@ -128,7 +128,7 @@ struct FeedbackView: View {
                 .accessibilityLabel("联系方式，可以不填")
                 .padding(.top, 12)
 
-            Text(error ?? "只带 App 版本和手机型号，不带照片和牌局。")
+            Text(error ?? String(localized: "只带 App 版本和手机型号，不带照片和牌局。"))
                 .font(.system(size: 13))
                 .foregroundStyle(error == nil ? Theme.gray : Theme.ink)
                 .lineSpacing(2)

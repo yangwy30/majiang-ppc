@@ -30,7 +30,7 @@ public struct DualReadRecognizer: ProgressiveTileRecognizer {
             return Self.merge(b, with: a)
         case (.success(var a), .failure(let error)):
             // 说明会显示给用户：不提 Gemini、端侧，只说第一遍、第二遍
-            a.notes.append("第二遍没复核上（\(Self.describe(error))），只有第一遍的读法，对照照片看一眼")
+            a.notes.append(L("第二遍没复核上（\(Self.describe(error))），只有第一遍的读法，对照照片看一眼"))
             return a
         case (.failure, .success(let b)):
             return b
@@ -75,7 +75,7 @@ public struct DualReadRecognizer: ProgressiveTileRecognizer {
             guard let m = unmatchedMelds.firstIndex(where: { meld in
                 meld.tiles.contains { $0.suit == tile.suit && ($0.isHonor || abs($0.rank - tile.rank) <= 3) && meldPool.contains($0) }
             }) else { continue }
-            merged.notes.append("亮在桌上的「\(unmatchedMelds[m].displayText)」，另一遍读到的是 \(tile.displayName)，看一眼对不对")
+            merged.notes.append(L("亮在桌上的「\(unmatchedMelds[m].displayText)」，另一遍读到的是 \(tile.displayName)，看一眼对不对"))
             unmatchedMelds.remove(at: m)
             extras[k] = nil
         }
@@ -99,7 +99,7 @@ public struct DualReadRecognizer: ProgressiveTileRecognizer {
 
         if base.flowerCount != other.flowerCount {
             merged.flowerCount = max(base.flowerCount, other.flowerCount)
-            merged.notes.append("花牌两遍数得不一样（一遍 \(base.flowerCount) 张，一遍 \(other.flowerCount) 张），在下面改")
+            merged.notes.append(L("花牌两遍数得不一样（一遍 \(base.flowerCount) 张，一遍 \(other.flowerCount) 张），在下面改"))
         }
         return merged
     }

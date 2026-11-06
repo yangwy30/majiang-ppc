@@ -96,8 +96,8 @@ final class AppModel {
         let (loaded, backup, failure) = GameArchive.loadOrRecover(from: url)
         var error: String?
         if let failure {
-            error = "读取牌局记录失败：\(failure.localizedDescription)"
-            if let backup { error! += "。原文件已备份为 \(backup.lastPathComponent)" }
+            error = String(localized: "读取牌局记录失败：\(failure.localizedDescription)")
+            if let backup { error! += String(localized: "。原文件已备份为 \(backup.lastPathComponent)") }
         }
         self.archiveURL = url
         self.cloud = CloudSync(stateURL: url.deletingLastPathComponent().appendingPathComponent("cloud-state.json"))
@@ -181,7 +181,7 @@ final class AppModel {
         do {
             try archive.save(to: archiveURL)
         } catch {
-            loadError = "保存失败：\(error.localizedDescription)"
+            loadError = String(localized: "保存失败：\(error.localizedDescription)")
         }
     }
 
@@ -243,7 +243,7 @@ final class AppModel {
             try? await Task.sleep(for: .seconds(0.8))
             return nil
         }
-        guard let proxy = feedbackProxy else { return "还没连上我们的服务器" }
+        guard let proxy = feedbackProxy else { return String(localized: "还没连上我们的服务器") }
         let message = FeedbackClient.Message(text: text, contact: contact, app: AppInfo.version, device: AppInfo.deviceModel)
         do {
             try await FeedbackClient.send(message, proxy: proxy, deviceID: DeviceID.current)
@@ -290,7 +290,7 @@ final class AppModel {
 
     /// 问中转站码对不对，对了就存下。失败时返回给用户看的一句话。
     func redeemInvite(_ input: String) async -> String? {
-        guard let proxy = URL(string: proxyURL), usesProxy else { return "还没连上我们的服务器" }
+        guard let proxy = URL(string: proxyURL), usesProxy else { return String(localized: "还没连上我们的服务器") }
         do {
             let redemption = try await InviteCode.redeem(input, proxy: proxy, deviceID: DeviceID.current)
             InviteKeychain.save(redemption.code)
@@ -354,7 +354,7 @@ final class AppModel {
     private func checkedGemini() -> TileRecognizer {
         InviteCheckedRecognizer(base: RuleCheckedRecognizer(base: gemini())) { [weak self] in
             await MainActor.run {
-                self?.removeInvite(notice: "上次的邀请码不能用了：中转站说它停用了或者不对，找给你码的人再要一个")
+                self?.removeInvite(notice: String(localized: "上次的邀请码不能用了：中转站说它停用了或者不对，找给你码的人再要一个"))
             }
         }
     }

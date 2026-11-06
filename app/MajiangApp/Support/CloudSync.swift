@@ -84,13 +84,13 @@ final class CloudSync {
             switch try await container.accountStatus() {
             case .available: break
             case .noAccount:
-                status = .unavailable("这台手机没登录 iCloud，登录后会自动同步。")
+                status = .unavailable(String(localized: "这台手机没登录 iCloud，登录后会自动同步。"))
                 return
             case .restricted:
-                status = .unavailable("这台手机的 iCloud 被限制了（比如家长控制）。")
+                status = .unavailable(String(localized: "这台手机的 iCloud 被限制了（比如家长控制）。"))
                 return
             default:
-                status = .unavailable("现在连不上 iCloud，稍后会再试。")
+                status = .unavailable(String(localized: "现在连不上 iCloud，稍后会再试。"))
                 return
             }
             status = .syncing
@@ -104,15 +104,15 @@ final class CloudSync {
             persist()
             again = true
         } catch let error as CKError where error.code == .notAuthenticated {
-            status = .unavailable("这台手机没登录 iCloud，登录后会自动同步。")
+            status = .unavailable(String(localized: "这台手机没登录 iCloud，登录后会自动同步。"))
         } catch let error as CKError where error.code == .quotaExceeded {
-            status = .failed("iCloud 空间满了，牌局只存在这台手机上。")
+            status = .failed(String(localized: "iCloud 空间满了，牌局只存在这台手机上。"))
         } catch let error as CKError where [.networkUnavailable, .networkFailure, .serviceUnavailable, .requestRateLimited].contains(error.code) {
-            status = .failed("没有网络，联网后会自动同步。")
+            status = .failed(String(localized: "没有网络，联网后会自动同步。"))
         } catch {
             // 原始错误只记日志，界面上不出现英文报错
             Self.log.error("iCloud 同步失败：\(String(describing: error), privacy: .public)")
-            status = .failed("iCloud 同步暂时没成功，牌局都存在这台手机上，不会丢。稍后会自动再试。")
+            status = .failed(String(localized: "iCloud 同步暂时没成功，牌局都存在这台手机上，不会丢。稍后会自动再试。"))
         }
     }
 
