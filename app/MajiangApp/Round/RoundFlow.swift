@@ -44,6 +44,8 @@ final class RoundFlow {
     var wayChosen = false
     /// 这手牌用户动手改过几次（换、加、删、确认拿不准的）。离线认牌改得多时，核对页提一句邀请码。
     var corrections = 0
+    /// 刚认出来时的牌（手动输入的没有）。跟改完的比，看 AI 认错了几张，用户愿意的话连照片发给我们。
+    var recognizedHand: FeedbackClient.HandTiles?
     var specials: Set<SpecialWin> = []
     var flowerCount = 0
     var showResult = false
@@ -231,6 +233,7 @@ final class RoundFlow {
         winningIndex = tiles.indices.last
         previewFlowerCount = nil
         corrections = 0
+        recognizedHand = FeedbackClient.HandTiles(concealed: tiles.map(\.tile), melds: melds)
         reviewAtLoad = recognition.reviewCount
         let resolution = RecognitionResolver.resolve(recognition, context: context, minimumFan: game.rules.minimumFan)
         recommended = resolution.recommended
@@ -240,6 +243,7 @@ final class RoundFlow {
     /// 跳过拍照：从空手牌开始手动输入。
     func startManualEntry() {
         load(Recognition(concealed: [RecognizedTile](), source: "手动输入"))
+        recognizedHand = nil
         steps = [.check]
     }
 
@@ -298,6 +302,18 @@ final class RoundFlow {
         } else {
             append(suggestion.to)
         }
+    }
+
+    // MARK: 认错了
+
+    var correctedHand: FeedbackClient.HandTiles {
+        FeedbackClient.HandTiles(concealed: tiles.map(\.tile), melds: melds)
+    }
+
+    /// AI 认错了几张（多认、漏认、认错都算）。手动输入、没拍照的是 0。
+    var misreadCount: Int {
+        guard photo != nil, let recognizedHand else { return 0 }
+        return FeedbackClient.changedCount(recognized: recognizedHand, corrected: correctedHand)
     }
 
     // MARK: 记账

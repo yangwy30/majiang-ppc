@@ -9,6 +9,7 @@ struct HomeView: View {
     @State private var showBackup = false
     @State private var showInvite = false
     @State private var showMore = false
+    @State private var showFeedback = false
     /// 「更多」页里点了哪一项：等「更多」收下去再打开那一页，两层弹出不叠在一起。
     @State private var moreTarget: MoreTarget?
 
@@ -28,6 +29,7 @@ struct HomeView: View {
         .sheet(isPresented: $showGuide) { RulesGuideView().presentationCornerRadius(30) }
         .sheet(isPresented: $showBackup) { BackupView().presentationCornerRadius(30) }
         .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
+        .sheet(isPresented: $showFeedback) { FeedbackView().presentationCornerRadius(30) }
         .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
             MoreSheet(items: moreItems) { target in
                 moreTarget = target
@@ -38,6 +40,15 @@ struct HomeView: View {
             if model.demoScreen == .backup { showBackup = true }
             if model.demoScreen == .invite { showInvite = true }
             if model.demoScreen == .more { showMore = true }
+            if model.demoScreen == .feedback || model.demoScreen == .feedbackSent { showFeedback = true }
+        }
+        // 打完一场从结算页回来：等首页落定、返回的动画走完，再弹苹果的评分框
+        .task(id: model.reviewPromptPending) {
+            guard model.reviewPromptPending else { return }
+            try? await Task.sleep(for: .seconds(model.demoScreen == .rate ? 1.2 : 0.8))
+            guard !Task.isCancelled, model.reviewPromptPending else { return }
+            ReviewPrompt.request()
+            model.didAskForReview()
         }
         #if DEBUG
         .sheet(isPresented: $showSettings) { SettingsView().presentationCornerRadius(30) }
@@ -140,6 +151,7 @@ struct HomeView: View {
             items.append(.init(target: .invite, title: on ? "AI 认牌 · 已开启" : "AI 认牌",
                                detail: on ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准"))
         }
+        items.append(.init(target: .feedback, title: "提意见", detail: "哪里不好用、番算错了，直接告诉我们"))
         return items
     }
 
@@ -148,6 +160,7 @@ struct HomeView: View {
         case .guide: showGuide = true
         case .backup: showBackup = true
         case .invite: showInvite = true
+        case .feedback: showFeedback = true
         case nil: break
         }
         moreTarget = nil
@@ -155,7 +168,7 @@ struct HomeView: View {
 }
 
 private enum MoreTarget {
-    case guide, backup, invite
+    case guide, backup, invite, feedback
 }
 
 private struct ActiveGameCard: View {

@@ -21,6 +21,9 @@ enum DemoScreen: String {
     /// 「这一局」：自摸、拍过照的第 1 局；打开那张照片；点炮、有一组碰、没留照片的第 2 局。
     /// 照片默认用演示牌画一张，`-demo-photo <路径>` 可以换成真照片（模拟器能直接读 Mac 上的文件）。
     case handDetail = "hand-detail", handPhoto = "hand-photo", handDiscard = "hand-discard"
+    /// 评分和意见：首页弹出苹果的评分框；「提意见」页（写好了一段）、发完的「收到了」；
+    /// AI 认错了 2 张的结果页，底部问要不要发照片（没勾 / 勾上）。
+    case rate, feedback, feedbackSent = "feedback-sent", resultReport = "result-report", resultReportOn = "result-report-on"
 
     /// 这几页的牌局带家规：封顶 64（结果页用 16，好让示例那手封顶）、1 分 2 元。
     var usesHouseRules: Bool { [.gameRules, .tableHouse, .resultCapped, .shareHouse].contains(self) }
@@ -36,7 +39,9 @@ enum DemoScreen: String {
     }
 
     /// 在牌桌上自动打开记一局。
-    var opensRound: Bool { [.capture, .check, .notWin, .result, .resultCapped, .reviewing, .dualRead].contains(self) }
+    var opensRound: Bool {
+        [.capture, .check, .notWin, .result, .resultCapped, .reviewing, .dualRead, .resultReport, .resultReportOn].contains(self)
+    }
 }
 
 #if DEBUG
@@ -155,6 +160,20 @@ enum DemoData {
             flow.load(samples[0])
             flow.choose(Tile(suit: .dots, rank: 5)!, at: 9)
             flow.pickSelfDrawn()
+            flow.steps = [.check]
+            flow.showResult = true
+        case .resultReport, .resultReportOn:
+            flow.load(samples[0])
+            flow.pickSelfDrawn()
+            // 当作 AI 把一张 5饼 读成 4饼、把一张 6饼 读成 9条，用户都改对了
+            var recognized = flow.correctedHand
+            recognized.concealed[9] = Tile(suit: .dots, rank: 4)!
+            recognized.concealed[12] = Tile(suit: .bamboo, rank: 9)!
+            flow.recognizedHand = recognized
+            flow.photo = UIGraphicsImageRenderer(size: CGSize(width: 8, height: 6)).image { context in
+                UIColor(red: 0.79, green: 0.47, blue: 0.42, alpha: 1).setFill()
+                context.fill(CGRect(x: 0, y: 0, width: 8, height: 6))
+            }
             flow.steps = [.check]
             flow.showResult = true
         default:
