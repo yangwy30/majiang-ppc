@@ -216,10 +216,10 @@ final class AppModel {
     var reviewPromptPending = false
 
     /// 打完一场、从结算页回首页：够格就让首页弹评分框。
-    /// 够格 = 这场刚打完（两小时内）、打了至少 4 局、算上这场一共打完过至少 2 场、这个版本还没弹过。
-    /// 第一次打开、打牌中间都不会弹；苹果自己还会限制一年最多 3 次。
+    /// 够格 = 这场刚打完（两小时内）、打了至少 4 局、这个版本还没弹过。第一场打完就可以弹。
+    /// 打牌中间不会弹；苹果自己还会限制一年最多 3 次，打过分的人也不会再看到。
     func leaveSettle(_ game: Game) {
-        if ReviewPrompt.shouldAsk(game: game, finishedCount: archive.finishedGames.count, now: Date()) || demoScreen == .rate {
+        if ReviewPrompt.shouldAsk(game: game, now: Date()) || demoScreen == .rate {
             reviewPromptPending = true
         }
         path = []
