@@ -46,7 +46,7 @@ export const SUPPORT_HTML = `<!doctype html>
 <p>不用注册、没有广告。详见<a href="/privacy">隐私说明</a>。</p>
 
 <h2>联系</h2>
-<p>有问题或建议，可以在 <a href="https://github.com/yangwy30/majiang-ppc/issues">GitHub</a> 上留言。</p>
+<p>有问题或建议，在 App 首页右上角「更多」里点「提意见」，写几句就能发给我们，想要回复的话留个微信号或邮箱。也可以在 <a href="https://github.com/yangwy30/majiang-ppc/issues">GitHub</a> 上留言。</p>
 <hr>
 </main>
 </body>
