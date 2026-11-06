@@ -237,7 +237,7 @@ App 里只保留 4 个术语，打麻将的人都懂：**庄、自摸、点炮�
 
 ## 截图怎么更新
 
-截图是开发版 App 在模拟器里截的。开发版支持启动参数 `-demo-screen <页面>`：用一份临时的假数据（不碰真的牌局记录）直接停在某个页面。页面名：`empty-home`、`home`、`invite`（首页上弹出填邀请码的页）、`more`（首页右上「更多」升起的那一页）、`new-game`、`table`、`edit-hand`、`hand-detail`、`hand-photo`、`hand-discard`（这三页可以加 `-demo-photo <照片路径>` 换成真照片）、`capture`、`check`、`not-win`、`result`、`settle`。
+截图是开发版 App 在模拟器里截的。开发版支持启动参数 `-demo-screen <页面>`：用一份临时的假数据（不碰真的牌局记录）直接停在某个页面。页面名：`empty-home`、`home`、`invite`（首页上弹出填邀请码的页）、`more`（首页右上「更多」升起的那一页）、`new-game`、`table`、`edit-hand`、`hand-detail`、`hand-photo`、`hand-discard`（这三页可以加 `-demo-photo <照片路径>` 换成真照片）、`capture`（加 `-demo-photo` 时取景框里是这张照片，商店截图用竖版的 `tools/app-store/capture-photo.jpg`）、`check`、`not-win`、`result`、`settle`。
 
 ```bash
 # 在 Mac 上，先用 Xcode 或 xcodebuild 把 App 装到已启动的模拟器

@@ -93,6 +93,14 @@ struct CaptureView: View {
         }
     }
 
+    /// 截图用：模拟器没有相机，`-demo-screen capture -demo-photo <路径>` 让取景框里是一张真照片，不画示意牌。
+    private var demoBackdrop: UIImage? {
+        #if DEBUG
+        if model.demoScreen == .capture, flow.photo == nil { return DemoData.photo }
+        #endif
+        return nil
+    }
+
     private var status: String? {
         if flow.isRecognizing { return slow ? "正在认牌…" : nil }
         return flow.recognitionError
@@ -128,6 +136,12 @@ struct CaptureView: View {
                 // 照片铺满取景框；放在 overlay 里，宽照片不会把整页撑宽（上面那排名字会被挤歪）
                 Color.clear.overlay {
                     Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFill()
+                }
+            } else if let backdrop = demoBackdrop {
+                Color.clear.overlay {
+                    Image(uiImage: backdrop)
                         .resizable()
                         .scaledToFill()
                 }
