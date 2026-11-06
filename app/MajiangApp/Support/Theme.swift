@@ -98,23 +98,52 @@ extension View {
             .background(Theme.white, in: RoundedRectangle(cornerRadius: radius, style: .continuous))
     }
 
-    /// 页面底部固定的按钮区，底下垫一层纸色，免得滚动内容透出来。
+    /// 页面底部固定的按钮区，底下垫一层纸色，免得滚动内容透出来。用在 ScrollView 上。
     func bottomBar<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
-        safeAreaInset(edge: .bottom) {
-            VStack(spacing: 4, content: content)
-                .frame(maxWidth: Theme.columnWidth - 48)
-                .padding(.horizontal, 24)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 12)
-                .padding(.bottom, 8)
-                .background(Theme.paper)
-                // 上沿淡出一小段：滚到按钮底下的字是慢慢隐去，不是被横着切成半个字（矮屏上最明显）
-                .background(alignment: .top) {
-                    LinearGradient(colors: [Theme.paper.opacity(0), Theme.paper], startPoint: .top, endPoint: .bottom)
-                        .frame(height: 24)
-                        .offset(y: -24)
-                        .allowsHitTesting(false)
-                }
+        modifier(BottomBar(bar: VStack(spacing: 4, content: content)))
+    }
+}
+
+/// 底部按钮区。下面还有内容被按钮挡住时，按钮区上沿淡出一小段：被挡住的字是慢慢隐去，
+/// 不是被横着切成半个字（Duo 外屏这种矮屏上最明显）。内容到底了就不淡，免得最后一句说明被盖淡。
+private struct BottomBar<Bar: View>: ViewModifier {
+    var bar: Bar
+    @State private var moreBelow = false
+
+    func body(content: Content) -> some View {
+        content
+            .modifier(TrackMoreBelow(moreBelow: $moreBelow))
+            .safeAreaInset(edge: .bottom) {
+                bar
+                    .frame(maxWidth: Theme.columnWidth - 48)
+                    .padding(.horizontal, 24)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                    .background(Theme.paper)
+                    .background(alignment: .top) {
+                        LinearGradient(colors: [Theme.paper.opacity(0), Theme.paper], startPoint: .top, endPoint: .bottom)
+                            .frame(height: 24)
+                            .offset(y: -24)
+                            .opacity(moreBelow ? 1 : 0)
+                            .allowsHitTesting(false)
+                    }
+            }
+    }
+}
+
+/// 下面还有没有被挡住的内容（iOS 18 起才量得到；更早的系统不淡出，跟以前一样）。
+private struct TrackMoreBelow: ViewModifier {
+    @Binding var moreBelow: Bool
+
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content.onScrollGeometryChange(for: Bool.self) { geo in
+                let visibleBottom = geo.contentOffset.y + geo.containerSize.height - geo.contentInsets.bottom
+                return geo.contentSize.height - visibleBottom > 4
+            } action: { _, new in moreBelow = new }
+        } else {
+            content
         }
     }
 }

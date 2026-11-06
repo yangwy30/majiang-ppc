@@ -46,7 +46,7 @@ struct CheckView: View {
     @State private var pageWidth: CGFloat = 0
     /// 问题卡已经滚出来过一次：第一次要等牌落完再滚。
     @State private var askedOnce = false
-    private static let questionID = "question"
+    static let questionID = "question"
 
     /// 每行 7 张，按页面宽度算牌的大小，最大 44。宽屏上内容收在中间一栏，按那一栏算。
     private var tileWidth: CGFloat {
@@ -85,7 +85,6 @@ struct CheckView: View {
                 } else if let index = flow.firstPending {
                     QuestionCard(flow: flow, index: index) { editing = .replace(index) }
                         .padding(.top, 18)
-                        .id(Self.questionID)
                 } else if !flow.tiles.isEmpty && !flow.isValidWin {
                     problemCard.padding(.top, 18)
                 } else if flow.tiles.isEmpty {
@@ -136,7 +135,7 @@ struct CheckView: View {
             try? await Task.sleep(for: .seconds(0.3))
             landed = true
         }
-        // 拿不准的牌要先选：矮屏（Duo 外屏、牌多排成三行时）问题卡会掉到底下按钮后面，滚上来让人看得到
+        // 拿不准的牌要先选：矮屏（Duo 外屏、牌多排成三行时）候选会掉到底下按钮后面，滚到刚好露出来；已经看得到就不动
         .task(id: flow.firstPending) {
             guard flow.firstPending != nil else { return }
             try? await Task.sleep(for: .seconds(askedOnce ? 0.3 : 1.6))
@@ -681,6 +680,8 @@ private struct QuestionCard: View {
                 }
             }
             .padding(.top, 14)
+            // 矮屏上滚到刚好露出这几个选项为止，标题和牌尽量留在上面
+            .id(CheckView.questionID)
             Button("都不是，自己选 ›", action: other)
                 .buttonStyle(.text(size: 14))
                 .padding(.top, 4)
