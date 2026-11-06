@@ -44,6 +44,9 @@ struct CheckView: View {
 
     /// 这一页有多宽（不用屏幕宽度：Duo 分屏时窗口比屏幕窄）。
     @State private var pageWidth: CGFloat = 0
+    /// 问题卡已经滚出来过一次：第一次要等牌落完再滚。
+    @State private var askedOnce = false
+    static let questionID = "question"
 
     /// 每行 7 张，按页面宽度算牌的大小，最大 44。宽屏上内容收在中间一栏，按那一栏算。
     private var tileWidth: CGFloat {
@@ -52,6 +55,12 @@ struct CheckView: View {
     }
 
     var body: some View {
+        ScrollViewReader { proxy in
+            page(proxy)
+        }
+    }
+
+    private func page(_ proxy: ScrollViewProxy) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top, spacing: 16) {
@@ -117,7 +126,7 @@ struct CheckView: View {
         .toolbar {
             NavBack("重拍") { flow.steps.removeAll() }
         }
-        .sheet(item: $editing) { target in sheet(for: target) }
+        .sheet(item: $editing) { target in sheet(for: target).presentationCornerRadius(30) }
         // 牌落进格子时很轻地震一下
         .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.6), trigger: landed) { _, new in new }
         .task {
@@ -125,6 +134,14 @@ struct CheckView: View {
             flipStart = Date().addingTimeInterval(reduceMotion ? 0 : 1.3)
             try? await Task.sleep(for: .seconds(0.3))
             landed = true
+        }
+        // 拿不准的牌要先选：矮屏（Duo 外屏、牌多排成三行时）候选会掉到底下按钮后面，滚到刚好露出来；已经看得到就不动
+        .task(id: flow.firstPending) {
+            guard flow.firstPending != nil else { return }
+            try? await Task.sleep(for: .seconds(askedOnce ? 0.3 : 1.6))
+            askedOnce = true
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.35)) { proxy.scrollTo(Self.questionID, anchor: .bottom) }
         }
         .task(id: flow.isReviewing) {
             canSkip = false
@@ -138,7 +155,7 @@ struct CheckView: View {
                 PhotoViewer(photo: photo) { showPhoto = false }
             }
         }
-        .sheet(isPresented: $showInvite) { InviteView() }
+        .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
         .sheet(isPresented: $flow.showResult) {
             ResultSheet(flow: flow, finish: finish)
         }
@@ -663,6 +680,8 @@ private struct QuestionCard: View {
                 }
             }
             .padding(.top, 14)
+            // 矮屏上滚到刚好露出这几个选项为止，标题和牌尽量留在上面
+            .id(CheckView.questionID)
             Button("都不是，自己选 ›", action: other)
                 .buttonStyle(.text(size: 14))
                 .padding(.top, 4)
@@ -675,19 +694,24 @@ private struct QuestionCard: View {
     private func option(title: String, wins: Bool?, @ViewBuilder face: () -> some View,
                         action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 face()
+                // iPhone Duo 外屏这一格只有 140 宽：字缩一点也不折成两行（「选这个能 / 和」很难看）
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title).font(.system(size: 16, weight: .medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                     if let wins {
                         Text(wins ? "选这个能和" : "选这个和不了")
                             .font(.system(size: 13))
                             .foregroundStyle(wins ? Theme.vermilion : Theme.gray)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
                 Spacer(minLength: 0)
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 12)
             .frame(height: 64)
             .background(Color(hex: 0xFBFAF7), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(Theme.line))

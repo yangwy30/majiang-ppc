@@ -18,31 +18,44 @@ struct CaptureView: View {
     /// 按一次快门加一，触发一下轻震。
     @State private var shots = 0
 
+    /// iPhone Duo 内屏是宽的（跟 iPad 一样）：两只手端着拍时够不到屏幕正中间底下，快门放到右边。
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
     var body: some View {
-        VStack(spacing: 0) {
-            winnerPicker
-                .padding(.top, 10)
+        Group {
+            if sizeClass == .regular {
+                HStack(spacing: 20) {
+                    VStack(spacing: 0) {
+                        winnerPicker
+                            .frame(maxWidth: 520)
+                            .padding(.top, 10)
+                        viewfinder
+                            .padding(.top, 20)
+                        statusLine
+                            .padding(.top, 10)
+                            .padding(.bottom, 8)
+                    }
+                    sideControls
+                }
+                .padding(.horizontal, 24)
+            } else {
+                VStack(spacing: 0) {
+                    winnerPicker
+                        .padding(.top, 10)
 
-            viewfinder
-                .padding(.top, 20)
+                    viewfinder
+                        .padding(.top, 20)
 
-            // 邀请码不在这里提：拍照时只管拍。离线认牌这手要改牌时，核对页再说一句
-            Text(status ?? " ")
-                .foregroundStyle(flow.recognitionError == nil ? Color.white.opacity(0.72) : Color.white)
-                .font(.system(size: 14))
-                .multilineTextAlignment(.center)
-                .lineLimit(3)
-                .frame(minHeight: 34)
-                .padding(.top, 10)
+                    statusLine
+                        .padding(.top, 10)
 
-            controls
-                .padding(.top, 8)
-                .padding(.bottom, 8)
+                    controls
+                        .padding(.top, 8)
+                        .padding(.bottom, 8)
+                }
+                .padding(.horizontal, 24)
+            }
         }
-        .padding(.horizontal, 24)
-        // iPhone Duo 内屏、横过来时不铺满：快门和相册按钮不至于隔得太远，四个名字也不拉成长条
-        .frame(maxWidth: 640)
-        .frame(maxWidth: .infinity)
         .background(Theme.darkroom.ignoresSafeArea())
         .foregroundStyle(.white)
         .navigationTitle("谁和了？")
@@ -91,6 +104,16 @@ struct CaptureView: View {
             try? await Task.sleep(for: .seconds(0.6))
             if !Task.isCancelled { withAnimation(.easeIn(duration: 0.2)) { slow = true } }
         }
+    }
+
+    // 邀请码不在这里提：拍照时只管拍。离线认牌这手要改牌时，核对页再说一句
+    private var statusLine: some View {
+        Text(status ?? " ")
+            .foregroundStyle(flow.recognitionError == nil ? Color.white.opacity(0.72) : Color.white)
+            .font(.system(size: 14))
+            .multilineTextAlignment(.center)
+            .lineLimit(3)
+            .frame(minHeight: 34)
     }
 
     /// 截图用：模拟器没有相机，`-demo-screen capture -demo-photo <路径>` 让取景框里是一张真照片，不画示意牌。
@@ -170,7 +193,7 @@ struct CaptureView: View {
                 VStack {
                     Spacer()
                     Text(cameraOn || model.effectiveRecognitionMode == .demo || model.demoScreen != nil ? "手牌推倒排成一排，和的那张放最右"
-                         : "这台设备没有相机，从左下角的相册选一张")
+                         : "这台设备没有相机，从\(sizeClass == .regular ? "右边" : "左下角")的相册选一张")
                         .font(.system(size: 14))
                         .foregroundStyle(.white.opacity(0.85))
                         .multilineTextAlignment(.center)
@@ -202,34 +225,61 @@ struct CaptureView: View {
     private var controls: some View {
         ZStack {
             HStack {
-                Button {
-                    choosingPhoto = true
-                } label: {
-                    Image(systemName: "photo")
-                        .font(.system(size: 20))
-                        .frame(width: 48, height: 48)
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(.white.opacity(0.3)))
-                        .contentShape(Rectangle())
-                }
-                .accessibilityLabel("从相册选")
+                photoButton
                 Spacer()
-                Button("手动输入") { flow.startManualEntry() }
-                    .buttonStyle(.text(.white.opacity(0.85)))
+                manualButton
             }
-            Button(action: shoot) {
-                Circle()
-                    .fill(.white)
-                    .padding(7)
-                    .overlay(Circle().strokeBorder(.white, lineWidth: 3))
-                    .frame(width: 76, height: 76)
-                    .contentShape(Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("拍照")
+            shutter
         }
         .buttonStyle(.plain)
         .disabled(flow.isRecognizing)
         .opacity(flow.isRecognizing ? 0.4 : 1)
+    }
+
+    /// 宽屏：快门竖着放在取景框右边、上下居中（跟 iPad 相机一样），右手拇指就够得到。
+    private var sideControls: some View {
+        VStack(spacing: 36) {
+            photoButton
+            shutter
+            manualButton
+        }
+        .frame(width: 84)
+        .frame(maxHeight: .infinity)
+        .buttonStyle(.plain)
+        .disabled(flow.isRecognizing)
+        .opacity(flow.isRecognizing ? 0.4 : 1)
+    }
+
+    private var photoButton: some View {
+        Button {
+            choosingPhoto = true
+        } label: {
+            Image(systemName: "photo")
+                .font(.system(size: 20))
+                .frame(width: 48, height: 48)
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(.white.opacity(0.3)))
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("从相册选")
+    }
+
+    private var manualButton: some View {
+        Button("手动输入") { flow.startManualEntry() }
+            .buttonStyle(.text(.white.opacity(0.85)))
+    }
+
+    private var shutter: some View {
+        Button(action: shoot) {
+            Circle()
+                .fill(.white)
+                .padding(7)
+                .overlay(Circle().strokeBorder(.white, lineWidth: 3))
+                .frame(width: 76, height: 76)
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("拍照")
     }
 
     private func shoot() {

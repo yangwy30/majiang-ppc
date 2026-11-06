@@ -21,8 +21,8 @@ struct TableView: View {
     /// 刚记下的一局，底部显示 8 秒「撤销」（牌桌上大家还在说话，5 秒常常反应不过来）。
     @State private var justRecorded: HandRecord?
     @State private var undoTimer: Task<Void, Never>?
-    /// 这一页有多高：矮屏方桌画小一点。
-    @State private var pageHeight: CGFloat = 0
+    /// 这一页多大（不含导航栏）：矮屏方桌画小一点，够宽就分左右两栏。
+    @State private var pageSize: CGSize = .zero
     /// 点了撤销就加一，触发一下轻震。
     @State private var undoCount = 0
 
@@ -40,86 +40,50 @@ struct TableView: View {
         return "首页"
     }
 
+    /// 矮屏（iPhone Duo 外屏、SE、mini）方桌小一圈，账本多露出几行。
+    private var short: Bool { pageSize.height > 0 && pageSize.height < Theme.shortPage }
+    /// 够宽（iPhone Duo 内屏横过来）就左边牌桌、右边账本，账本单独滚。竖着的内屏只有 669 宽，还是一栏。
+    private var wide: Bool { pageSize.width >= 820 }
+
     private func content(_ game: Game) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                // 家规跟国标不一样时才露一行，点开能改
-                if let badge = game.rules.houseRuleBadge {
-                    Button { editingRules = true } label: {
-                        Text(badge + " ›")
-                            .font(.system(size: 14))
-                            .foregroundStyle(Theme.gray)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(Theme.lineSoft, in: Capsule())
-                            .contentShape(Capsule())
+        Group {
+            if wide {
+                HStack(alignment: .top, spacing: 48) {
+                    VStack(spacing: 0) {
+                        houseBadge(game)
+                        TableDiagram(game: game, compact: short)
+                            .padding(.top, 10)
+                        Spacer(minLength: 24)
+                        VStack(spacing: 4) { actions(game) }
+                            .padding(.bottom, 8)
                     }
-                    .buttonStyle(.plain)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 2)
-                }
-                // 矮屏（iPhone Duo 外屏、SE、mini）方桌小一圈，账本多露出一行
-                TableDiagram(game: game, compact: pageHeight > 0 && pageHeight < 700)
-                    .padding(.top, 10)
-
-                HStack(alignment: .firstTextBaseline) {
-                    Text("账本").font(.system(size: 14, weight: .medium))
-                    Spacer()
-                    Text(game.isFinished ? "打了 \(game.currentHandIndex) 局"
-                         : "打了 \(game.currentHandIndex) 局 · 还剩 \(game.remainingHands) 局")
-                        .font(.system(size: 14))
-                }
-                .foregroundStyle(Theme.gray)
-                .padding(.top, 26)
-                .padding(.bottom, 6)
-                Hairline()
-
-                if game.records.isEmpty {
-                    Text("还没有记录。有人和了就点下面的按钮。")
-                        .font(.system(size: 14))
-                        .foregroundStyle(Theme.gray)
-                        .padding(.vertical, 14)
-                }
-                ForEach(Array(game.records.enumerated().reversed()), id: \.element.id) { index, record in
-                    // 和牌的局点进去看怎么和的（在里面也能改）；别的局直接改或删。打完的牌局也一样
-                    Button {
-                        open(record, number: index + 1)
-                    } label: {
-                        RecordRow(number: index + 1, record: record, game: game)
+                    .frame(width: 360)
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) { ledger(game, topPadding: 10) }
+                            .padding(.bottom, 24)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityHint(record.isWin ? "点一下看这一局怎么和的" : "点一下可以改或删掉这一局")
+                    // 外面整页收中间一栏的留白不要套到这一栏上
+                    .contentMargins(.horizontal, 0, for: .scrollContent)
+                    .scrollIndicators(.hidden)
+                    .frame(maxWidth: 480)
                 }
-                if !game.records.isEmpty && !model.isSeasoned {
-                    Text("点一局，看那把怎么和的；记错了也在里面改。")
-                        .font(.system(size: 14))
-                        .foregroundStyle(Theme.gray)
-                        .padding(.top, 14)
-                        .padding(.bottom, 8)
-                }
-            }
-            .padding(.horizontal, 24)
-        }
-        .bottomBar {
-            if let record = justRecorded {
-                UndoBar(text: "已记下第 \(record.handIndex + 1) 局") { undo(record) }
-                    .padding(.bottom, 12)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-            if game.isFinished {
-                Button("看结算") { settle(game) }
-                    .buttonStyle(.primary)
+                .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity)
             } else {
-                Button("有人和了") { recording = true }
-                    .buttonStyle(.primary)
-                Button("这局没人和") { record { try $0.recordDraw() } }
-                    .buttonStyle(.text)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        houseBadge(game)
+                        TableDiagram(game: game, compact: short)
+                            .padding(.top, 10)
+                        ledger(game, topPadding: short ? 16 : 26)
+                    }
+                    .padding(.horizontal, 24)
+                }
+                .bottomBar { actions(game) }
             }
         }
         // 量在底部按钮区外面，量到的是整页（不含导航栏），不随撤销条出没变
-        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { pageSize = $0 }
         .page()
         // 记下一局轻轻「成功」一下；撤销轻震一下
         .sensoryFeedback(.success, trigger: justRecorded?.id) { _, new in new != nil }
@@ -159,6 +123,7 @@ struct TableView: View {
                 edit { $0.remove(target.record.id) }
                 HandPhotos.delete(target.record.id)
             }
+            .presentationCornerRadius(30)
         }
         .alert("结束这场牌局？", isPresented: $confirmEnd) {
             Button("结束", role: .destructive) { settle(game) }
@@ -181,12 +146,14 @@ struct TableView: View {
             ManualScoreView(game: game) { deltas, note in
                 record { try $0.recordManual(deltas: deltas, note: note) }
             }
+            .presentationCornerRadius(30)
         }
-        .sheet(isPresented: $showGuide) { RulesGuideView() }
+        .sheet(isPresented: $showGuide) { RulesGuideView().presentationCornerRadius(30) }
         .sheet(isPresented: $editingRules) {
             GameRulesSheet(game: game, draft: demoRulesDraft(game)) { rules in
                 edit { try $0.changeRules(rules) }
             }
+            .presentationCornerRadius(30)
         }
         .onAppear {
             if model.demoScreen == .table { justRecorded = game.records.last }
@@ -232,6 +199,94 @@ struct TableView: View {
         case nil: break
         }
         moreTarget = nil
+    }
+
+    /// 家规跟国标不一样时才露一行，点开能改。
+    @ViewBuilder
+    private func houseBadge(_ game: Game) -> some View {
+        if let badge = game.rules.houseRuleBadge {
+            Button { editingRules = true } label: {
+                Text(badge + " ›")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Theme.gray)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Theme.lineSoft, in: Capsule())
+                    .contentShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 2)
+        }
+    }
+
+    /// 账本：标题行和每一局，最新的在上面。
+    @ViewBuilder
+    private func ledger(_ game: Game, topPadding: CGFloat) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("账本").font(.system(size: 14, weight: .medium))
+            Spacer()
+            Text(game.isFinished ? "打了 \(game.currentHandIndex) 局"
+                 : "打了 \(game.currentHandIndex) 局 · 还剩 \(game.remainingHands) 局")
+                .font(.system(size: 14))
+        }
+        .foregroundStyle(Theme.gray)
+        .padding(.top, topPadding)
+        .padding(.bottom, 6)
+        Hairline()
+
+        if game.records.isEmpty {
+            Text("还没有记录。有人和了就点下面的按钮。")
+                .font(.system(size: 14))
+                .foregroundStyle(Theme.gray)
+                .padding(.vertical, 14)
+        }
+        ForEach(Array(game.records.enumerated().reversed()), id: \.element.id) { index, record in
+            // 和牌的局点进去看怎么和的（在里面也能改）；别的局直接改或删。打完的牌局也一样
+            Button {
+                open(record, number: index + 1)
+            } label: {
+                RecordRow(number: index + 1, record: record, game: game)
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(record.isWin ? "点一下看这一局怎么和的" : "点一下可以改或删掉这一局")
+        }
+        if !game.records.isEmpty && !model.isSeasoned {
+            Text("点一局，看那把怎么和的；记错了也在里面改。")
+                .font(.system(size: 14))
+                .foregroundStyle(Theme.gray)
+                .padding(.top, 14)
+                .padding(.bottom, 8)
+        }
+    }
+
+    /// 底部的按钮：刚记下时的「撤销」条、有人和了、这局没人和（打完了是看结算）。
+    /// 矮屏上撤销条不另占一行，那 8 秒顶替「这局没人和」（刚记完一局不会马上又流局），账本不被挤成一行。
+    @ViewBuilder
+    private func actions(_ game: Game) -> some View {
+        let inline = short && !wide && !game.isFinished
+        if let record = justRecorded, !inline {
+            UndoBar(text: "已记下第 \(record.handIndex + 1) 局") { undo(record) }
+                .padding(.bottom, 12)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+        }
+        if game.isFinished {
+            Button("看结算") { settle(game) }
+                .buttonStyle(.primary)
+        } else {
+            Button("有人和了") { recording = true }
+                .buttonStyle(.primary)
+            if let record = justRecorded, inline {
+                UndoBar(text: "已记下第 \(record.handIndex + 1) 局") { undo(record) }
+                    .frame(minHeight: 44)
+                    .transition(.opacity)
+            } else {
+                Button("这局没人和") { record { try $0.recordDraw() } }
+                    .buttonStyle(.text)
+            }
+        }
     }
 
     /// 截图用：打开「这场的规则」时预先把底分改成 5，好看到重算预览。
@@ -339,12 +394,12 @@ private struct TableDiagram: View {
         ZStack {
             VStack(spacing: 6) {
                 Text(game.prevalentWind(ofHand: hand).name)
-                    .font(Theme.serif(compact ? 48 : 56))
+                    .font(Theme.serif(compact ? 44 : 56))
                 Text(game.isFinished ? "打完了" : "风圈 · 第 \(hand % 4 + 1) 局")
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
             }
-            .frame(width: compact ? 140 : 168, height: compact ? 140 : 168)
+            .frame(width: compact ? 128 : 168, height: compact ? 128 : 168)
             .background {
                 RoundedRectangle(cornerRadius: compact ? 22 : 26, style: .continuous)
                     .fill(Theme.white)
@@ -361,7 +416,7 @@ private struct TableDiagram: View {
             SeatLabel(game: game, player: at(1), hand: hand, alignment: .trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .frame(height: compact ? 256 : 304)
+        .frame(height: compact ? 240 : 304)
     }
 }
 

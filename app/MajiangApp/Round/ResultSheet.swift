@@ -5,6 +5,9 @@ import MajiangKit
 struct ResultSheet: View {
     var flow: RoundFlow
     var finish: (HandOutcome) -> Void
+    /// 这一层有多高：矮屏（Duo 外屏、SE）大番数小一号，最后一句「谁付多少」不被底下的按钮切掉一半。
+    @State private var pageHeight: CGFloat = 0
+    private var short: Bool { pageHeight > 0 && pageHeight < Theme.shortPage }
 
     var body: some View {
         Group {
@@ -40,10 +43,10 @@ struct ResultSheet: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint("回到核对页改谁和了、怎么和的")
-                .padding(.top, 20)
+                .padding(.top, short ? 8 : 20)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text("\(record.totalFan)")
-                        .font(.system(size: 88, weight: .ultraLight).monospacedDigit())
+                        .font(.system(size: short ? 68 : 88, weight: .ultraLight).monospacedDigit())
                         .tracking(-2)
                     Text("番").font(Theme.serif(22))
                 }
@@ -59,10 +62,10 @@ struct ResultSheet: View {
                 }
 
                 FanList(win: record)
-                    .padding(.top, 14)
+                    .padding(.top, short ? 6 : 14)
 
                 SectionLabel("这局谁付多少")
-                    .padding(.top, 22)
+                    .padding(.top, short ? 16 : 22)
                     .padding(.bottom, 6)
                 DeltaGrid(game: game, deltas: deltas)
                 Text(game.paymentExplanation(record, deltas: deltas))
@@ -71,6 +74,7 @@ struct ResultSheet: View {
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.top, 10)
+                    .padding(.bottom, 8)
             }
             .padding(.horizontal, 24)
         }
@@ -78,5 +82,6 @@ struct ResultSheet: View {
             Button("记下") { finish(.win(record)) }
                 .buttonStyle(.primary)
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
     }
 }

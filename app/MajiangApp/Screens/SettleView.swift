@@ -6,6 +6,9 @@ struct SettleView: View {
     @Environment(AppModel.self) private var model
     let gameID: UUID
     @State private var copied = false
+    /// 矮屏（Duo 外屏、SE）名次排紧一点，下面「这样转账最省事」不用滚就看得到。
+    @State private var pageHeight: CGFloat = 0
+    private var short: Bool { pageHeight > 0 && pageHeight < Theme.shortPage }
 
     var body: some View {
         if let game = model.game(gameID) {
@@ -46,14 +49,14 @@ struct SettleView: View {
                                 .font(Theme.score(26))
                                 .foregroundStyle(Theme.scoreColor(scores[player]))
                         }
-                        .frame(height: 60)
+                        .frame(height: short ? 42 : 60)
                         Hairline()
                     }
                 }
-                .padding(.top, 26)
+                .padding(.top, short ? 10 : 26)
 
                 SectionLabel("这样转账最省事")
-                    .padding(.top, 32)
+                    .padding(.top, short ? 16 : 32)
                     .padding(.bottom, 10)
                 VStack(spacing: 0) {
                     if transfers.isEmpty {
@@ -77,7 +80,7 @@ struct SettleView: View {
                             Text(game.moneyText(t.points))
                                 .font(.system(size: 17, weight: .semibold).monospacedDigit())
                         }
-                        .frame(height: 54)
+                        .frame(height: short ? 44 : 54)
                         if index < transfers.count - 1 { Hairline(color: Theme.lineSoft) }
                     }
                 }
@@ -113,6 +116,7 @@ struct SettleView: View {
             }
             .buttonStyle(.text(size: 14))
         }
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { pageHeight = $0 }
         .page()
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
