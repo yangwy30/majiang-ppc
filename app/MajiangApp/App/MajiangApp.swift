@@ -24,6 +24,8 @@ struct RootView: View {
             ScrollView { ShareCard(game: game).padding(.vertical, 40) }
                 .frame(maxWidth: .infinity)
                 .background(Theme.line.ignoresSafeArea())
+                // 文字版也打到控制台，方便对着看（simctl launch --console）
+                .onAppear { print(game.shareText) }
         } else {
             stack
         }

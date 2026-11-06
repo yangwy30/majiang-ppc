@@ -81,9 +81,12 @@ struct ShareCard: View {
                         .font(.system(size: 17, weight: .medium))
                         .lineLimit(1)
                     Spacer(minLength: 8)
-                    Text(game.moneyText(scores[player]))
-                        .font(.system(size: 13).monospacedDigit())
-                        .foregroundStyle(Theme.gray)
+                    // 1 分 1 元时钱和分是同一个数，不再写一遍
+                    if game.rules.yuanPerPoint != 1 {
+                        Text(game.moneyText(scores[player]))
+                            .font(.system(size: 13).monospacedDigit())
+                            .foregroundStyle(Theme.gray)
+                    }
                     Text(Theme.signed(scores[player]))
                         .font(Theme.score(26))
                         .foregroundStyle(Theme.scoreColor(scores[player]))
@@ -156,35 +159,52 @@ struct ShareCard: View {
 }
 
 extension Game {
-    /// 「最大的一手：杨，清一色 32 番」。
+    /// 「最大一手：杨 清一色 32 番」。分享图、结算页、文字版都用这一句。
     var biggestWinLine: String? {
         guard let biggest = biggestWin else { return nil }
-        return "最大的一手：\(players[biggest.win.winner].name)，"
+        return "最大一手：\(players[biggest.win.winner].name) "
             + (biggest.win.fans.first.map { "\($0.fan.name) " } ?? "") + "\(biggest.win.totalFan) 番"
     }
 
-    /// 文字版，复制到微信里直接能看。
+    /// 文字版，复制到微信里直接能看。三段用空行隔开，分数只写一遍：
+    ///
+    ///     10月25日 国标 · 2 局打完
+    ///
+    ///     杨　+112
+    ///     阿强　−69
+    ///
+    ///     转账
+    ///     阿强 → 杨　¥69
+    ///
+    ///     最大一手：杨 清一色 32 番
+    ///
+    /// 不是 1 分 1 元时，标题写上汇率，每人后面再跟钱：「杨　+112　¥224」。
     var shareText: String {
         let scores = self.scores
-        var lines = [isFinished
-                     ? "国标麻将 \(startedAt.dayLabel) · 打完了，一共 \(currentHandIndex) 局"
-                     : "国标麻将 \(startedAt.dayLabel) · 打到\(handLabel)（打了 \(currentHandIndex) 局）"]
-        for player in Settlement.ranking(scores: scores) {
-            lines.append("\(players[player].name) \(Theme.signed(scores[player])) 分（\(moneyText(scores[player]))）")
-        }
+        let showMoney = rules.yuanPerPoint != 1
+        let gap = "\u{3000}"  // 全角空格，比半角松一点
+        var title = ["\(startedAt.monthDayLabel) 国标"]
+        if showMoney { title.append("1 分 \(rules.yuanPerPoint.yuanText) 元") }
+        title.append(isFinished ? "\(currentHandIndex) 局打完" : "打到\(handLabel.replacingOccurrences(of: " · ", with: ""))")
+
+        var sections = [[title.joined(separator: " · ")]]
+        sections.append(Settlement.ranking(scores: scores).map { player in
+            var line = players[player].name + gap + Theme.signed(scores[player])
+            if showMoney { line += gap + moneyText(scores[player]) }
+            return line
+        })
         if isFinished {
             let transfers = Settlement.minimalTransfers(scores: scores)
             if !transfers.isEmpty {
-                lines.append("这样转账最省事：")
-                for t in transfers {
-                    lines.append("\(players[t.from].name) → \(players[t.to].name) \(moneyText(t.points))")
-                }
+                sections.append(["转账"] + transfers.map {
+                    "\(players[$0.from].name) → \(players[$0.to].name)\(gap)\(moneyText($0.points))"
+                })
             }
-            if let line = biggestWinLine { lines.append(line) }
+            if let line = biggestWinLine { sections.append([line]) }
         } else if let last = records.last {
-            lines.append("上一局：\(last.title(in: self))")
+            sections.append(["上一局：" + last.title(in: self).replacingOccurrences(of: " · ", with: " ")])
         }
-        return lines.joined(separator: "\n")
+        return sections.map { $0.joined(separator: "\n") }.joined(separator: "\n\n")
     }
 
     /// 账本图。

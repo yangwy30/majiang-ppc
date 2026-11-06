@@ -152,7 +152,13 @@ extension Date {
     var dayLabel: String {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "zh_CN")
-        let c = calendar.dateComponents([.month, .day, .weekday], from: self)
-        return "\(c.month!)月\(c.day!)日 \(calendar.shortWeekdaySymbols[c.weekday! - 1])"
+        let c = calendar.dateComponents([.weekday], from: self)
+        return "\(monthDayLabel) \(calendar.shortWeekdaySymbols[c.weekday! - 1])"
+    }
+
+    /// 「10月25日」。
+    var monthDayLabel: String {
+        let c = Calendar(identifier: .gregorian).dateComponents([.month, .day], from: self)
+        return "\(c.month!)月\(c.day!)日"
     }
 }
