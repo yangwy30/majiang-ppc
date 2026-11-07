@@ -10,6 +10,7 @@ struct HomeView: View {
     @State private var showInvite = false
     @State private var showMore = false
     @State private var showFeedback = false
+    @State private var showLanguage = false
     /// 「更多」页里点了哪一项：等「更多」收下去再打开那一页，两层弹出不叠在一起。
     @State private var moreTarget: MoreTarget?
 
@@ -30,6 +31,7 @@ struct HomeView: View {
         .sheet(isPresented: $showBackup) { BackupView().presentationCornerRadius(30) }
         .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
         .sheet(isPresented: $showFeedback) { FeedbackView().presentationCornerRadius(30) }
+        .sheet(isPresented: $showLanguage) { LanguageSheet() }
         .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
             MoreSheet(items: moreItems) { target in
                 moreTarget = target
@@ -151,6 +153,8 @@ struct HomeView: View {
             items.append(.init(target: .invite, title: on ? "AI 认牌 · 已开启" : "AI 认牌",
                                detail: on ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准"))
         }
+        // 说明一栏是界面现在用的语言，各自的写法
+        items.append(.init(target: .language, title: "语言", detail: "简体中文"))
         items.append(.init(target: .feedback, title: "提意见", detail: "哪里不好用、番算错了，直接告诉我们"))
         return items
     }
@@ -161,6 +165,7 @@ struct HomeView: View {
         case .backup: showBackup = true
         case .invite: showInvite = true
         case .feedback: showFeedback = true
+        case .language: showLanguage = true
         case nil: break
         }
         moreTarget = nil
@@ -168,7 +173,7 @@ struct HomeView: View {
 }
 
 private enum MoreTarget {
-    case guide, backup, invite, feedback
+    case guide, backup, invite, language, feedback
 }
 
 private struct ActiveGameCard: View {
