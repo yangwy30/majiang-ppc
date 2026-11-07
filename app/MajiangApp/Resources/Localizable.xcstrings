@@ -1780,6 +1780,66 @@
         }
       }
     },
+    "language.relaunch" : {
+      "comment" : "语言页：选了别的语言以后的提示",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从后台划掉 App 再打开，就换好了"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從背景滑掉 App 再打開，就換好了"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close the app and open it again to switch."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリを終了してもう一度開くと切り替わります。"
+          }
+        }
+      }
+    },
+    "language.system" : {
+      "comment" : "语言页：跟手机的语言走",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟随手机"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟隨手機"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Same as iPhone"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneと同じ"
+          }
+        }
+      }
+    },
     "list.clause" : {
       "comment" : "两句之间的逗号",
       "extractionState" : "extracted_with_value",
@@ -17282,6 +17342,34 @@
       },
       "extractionState" : "manual",
       "comment" : "来自 MajiangKit（L()），手动加的"
+    },
+    "语言" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "語言"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "言語"
+          }
+        }
+      }
     },
     "读取牌局记录失败：%@" : {
       "localizations" : {

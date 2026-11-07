@@ -10,8 +10,8 @@ enum DemoScreen: String {
     case reviewing = "check-reviewing", dualRead = "check-dual"
     /// 分享出去的账本图：打完的结算 / 没打完的牌局；备份与换手机页。
     case shareSettle = "share-settle", shareLive = "share-live", backup
-    /// 首页上打开填邀请码的页；首页右上「更多」升起的那一页。
-    case invite, more
+    /// 首页上打开填邀请码的页；首页右上「更多」升起的那一页；「更多 › 语言」。
+    case invite, more, language
     /// 牌桌右上「更多」升起的那一页；牌桌上打开「直接改分」。
     case tableMore = "table-more", manualScore = "manual-score"
     /// 家规：开局页的规则表单、点开一项的选项；牌桌上打到一半改这场的规则（预览底分改成 5）、
