@@ -23,6 +23,12 @@
             "state" : "translated",
             "value" : " · %lld 張兩遍不一樣"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " · %lld 张两遍不一样"
+          }
         }
       }
     },
@@ -45,6 +51,12 @@
             "state" : "translated",
             "value" : " · %lld 番"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " · %lld 番"
+          }
         }
       }
     },
@@ -66,6 +78,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : " · 兩遍讀得一樣"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " · 两遍读得一样"
           }
         }
       }
@@ -176,6 +194,12 @@
             "state" : "translated",
             "value" : "%@ · 只存在這台手機上"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 只存在这台手机上"
+          }
         }
       }
     },
@@ -226,6 +250,12 @@
             "state" : "translated",
             "value" : "%@ · 自摸"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 自摸"
+          }
         }
       }
     },
@@ -244,6 +274,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 元"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 元"
@@ -270,6 +306,12 @@
             "state" : "translated",
             "value" : "%@ 分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 分"
+          }
         }
       }
     },
@@ -292,6 +334,12 @@
             "state" : "translated",
             "value" : "%@ 國標"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 国标"
+          }
         }
       }
     },
@@ -313,6 +361,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 超過了 4 張，一定有牌認錯了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 超过了 4 张，一定有牌认错了"
           }
         }
       },
@@ -338,6 +392,12 @@
             "state" : "translated",
             "value" : "%@ 超過了 4 張，一定有牌認錯了。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 超过了 4 张，一定有牌认错了。"
+          }
         }
       }
     },
@@ -356,6 +416,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@。"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@。"
@@ -381,6 +447,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@萬"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@万"
           }
         }
       },
@@ -430,6 +502,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@和"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@和"
@@ -484,6 +562,12 @@
             "state" : "translated",
             "value" : "%@和了 · "
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@和了 · "
+          }
         }
       }
     },
@@ -506,6 +590,12 @@
             "state" : "translated",
             "value" : "%@和錯了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@和错了"
+          }
         }
       }
     },
@@ -527,6 +617,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@和錯了？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@和错了？"
           }
         }
       }
@@ -606,6 +702,12 @@
             "state" : "translated",
             "value" : "%@條"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@条"
+          }
         }
       },
       "extractionState" : "manual",
@@ -630,6 +732,12 @@
             "state" : "translated",
             "value" : "%@點炮"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@点炮"
+          }
         }
       }
     },
@@ -651,6 +759,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@點的炮。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@点的炮。"
           }
         }
       }
@@ -674,6 +788,12 @@
             "state" : "translated",
             "value" : "%@的番數不夠新的起和，先照樣算著；要刪可以在帳本裡點那一局。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的番数不够新的起和，先照样算着；要删可以在账本里点那一局。"
+          }
         }
       }
     },
@@ -692,6 +812,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@自摸"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@自摸"
@@ -746,6 +872,12 @@
             "state" : "translated",
             "value" : "%@贏的分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@赢的分"
+          }
         }
       }
     },
@@ -768,6 +900,12 @@
             "state" : "translated",
             "value" : "%@輸的分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@输的分"
+          }
         }
       }
     },
@@ -789,6 +927,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@餅"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@饼"
           }
         }
       },
@@ -813,6 +957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@，拿不準"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@，拿不准"
           }
         }
       }
@@ -839,6 +989,12 @@
             "state" : "translated",
             "value" : "%lld 分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 分"
+          }
         }
       }
     },
@@ -860,6 +1016,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 分是底分，不管幾番都要先付。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 分是底分，不管几番都要先付。"
           }
         }
       }
@@ -891,6 +1053,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 圈"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 圈"
@@ -929,6 +1097,12 @@
             "state" : "translated",
             "value" : "%lld 局打完"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 局打完"
+          }
         }
       }
     },
@@ -950,6 +1124,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 番"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 番"
           }
         }
       }
@@ -1001,6 +1181,12 @@
             "state" : "translated",
             "value" : "%lld 番起和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 番起和"
+          }
         }
       }
     },
@@ -1026,6 +1212,12 @@
             "state" : "translated",
             "value" : "1 分 %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 分 %@"
+          }
         }
       }
     },
@@ -1034,7 +1226,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 pt = %@"
+            "value" : "1 pt = %@"
           }
         },
         "ja" : {
@@ -1044,6 +1236,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 分 = %@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 分 = %@"
@@ -1070,6 +1268,12 @@
             "state" : "translated",
             "value" : "1 分算"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 分算"
+          }
         }
       }
     },
@@ -1091,6 +1295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "147、258、369 三種花色和字牌中互不相靠的 14 張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "147、258、369 三种花色和字牌中互不相靠的 14 张"
           }
         }
       },
@@ -1115,6 +1325,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1、9 或不算番的風牌的刻子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1、9 或不算番的风牌的刻子"
           }
         }
       },
@@ -1143,6 +1359,12 @@
             "state" : "translated",
             "value" : "AI 認牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 认牌"
+          }
         }
       }
     },
@@ -1164,6 +1386,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AI 認牌 · 已開啟"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 认牌 · 已开启"
           }
         }
       }
@@ -1187,6 +1415,12 @@
             "state" : "translated",
             "value" : "AI 認牌已開啟"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 认牌已开启"
+          }
         }
       }
     },
@@ -1208,6 +1442,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AI 認錯了 %lld 張，照片只用來改進認牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 认错了 %lld 张，照片只用来改进认牌"
           }
         }
       }
@@ -1233,6 +1473,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "JSON 格式不對"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON 格式不对"
           }
         }
       },
@@ -1441,6 +1687,12 @@
             "state" : "translated",
             "value" : "iCloud 同步"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 同步"
+          }
         }
       }
     },
@@ -1462,6 +1714,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 同步已開啟"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 同步已打开"
           }
         }
       }
@@ -1485,6 +1743,12 @@
             "state" : "translated",
             "value" : "iCloud 同步暫時沒成功，牌局都存在這台手機上，不會丟。稍後會自動再試。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 同步暂时没成功，牌局都存在这台手机上，不会丢。稍后会自动再试。"
+          }
         }
       }
     },
@@ -1506,6 +1770,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 空間滿了，牌局只存在這台手機上。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 空间满了，牌局只存在这台手机上。"
           }
         }
       }
@@ -1868,6 +2138,12 @@
             "state" : "translated",
             "value" : "、"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "、"
+          }
         }
       },
       "extractionState" : "manual",
@@ -1892,6 +2168,12 @@
             "state" : "translated",
             "value" : "。原檔案已備份為 %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "。原文件已备份为 %@"
+          }
         }
       }
     },
@@ -1914,6 +2196,12 @@
             "state" : "translated",
             "value" : "「打一塊的」就是 1 元"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「打一块的」就是 1 元"
+          }
         }
       }
     },
@@ -1932,6 +2220,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "一"
@@ -1970,6 +2264,12 @@
             "state" : "translated",
             "value" : "一共 %lld 局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一共 %lld 局"
+          }
         }
       }
     },
@@ -1991,6 +2291,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一圈 4 局。沒打完也可以隨時結束。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一圈 4 局。没打完也可以随时结束。"
           }
         }
       }
@@ -2014,6 +2320,12 @@
             "state" : "translated",
             "value" : "一場只用一套規則，改了以後前面的局一起重算。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一场只用一套规则，改了以后前面的局一起重算。"
+          }
         }
       }
     },
@@ -2035,6 +2347,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一把最多算幾番"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一把最多算几番"
           }
         }
       }
@@ -2058,6 +2376,12 @@
             "state" : "translated",
             "value" : "一炮只能一個人和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一炮只能一个人和"
+          }
         }
       }
     },
@@ -2079,6 +2403,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一種花色的數牌加字牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一种花色的数牌加字牌"
           }
         }
       },
@@ -2104,6 +2434,12 @@
             "state" : "translated",
             "value" : "一組明槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一组明杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2127,6 +2463,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一組明槓加一組暗槓"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一组明杠加一组暗杠"
           }
         }
       },
@@ -2152,6 +2494,12 @@
             "state" : "translated",
             "value" : "一組暗槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一组暗杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2172,6 +2520,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一般高"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "一般高"
@@ -2200,6 +2554,12 @@
             "state" : "translated",
             "value" : "一色三同順"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色三同顺"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2220,6 +2580,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色三步高"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "一色三步高"
@@ -2248,6 +2614,12 @@
             "state" : "translated",
             "value" : "一色三節高"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色三节高"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2271,6 +2643,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一色雙龍會"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色双龙会"
           }
         }
       },
@@ -2296,6 +2674,12 @@
             "state" : "translated",
             "value" : "一色四同順"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色四同顺"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2316,6 +2700,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色四步高"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "一色四步高"
@@ -2344,6 +2734,12 @@
             "state" : "translated",
             "value" : "一色四節高"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一色四节高"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2367,6 +2763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "七個對子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "七个对子"
           }
         }
       },
@@ -2392,6 +2794,12 @@
             "state" : "translated",
             "value" : "七對"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "七对"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2412,6 +2820,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "七星不靠"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "七星不靠"
@@ -2440,6 +2854,12 @@
             "state" : "translated",
             "value" : "七種字牌各一張，加上 147、258、369 三種花色裡互不相靠的七張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "七种字牌各一张，加上 147、258、369 三种花色里互不相靠的七张"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2463,6 +2883,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "萬、條、餅、風、箭五種都有"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "万、条、饼、风、箭五种都有"
           }
         }
       },
@@ -2488,6 +2914,12 @@
             "state" : "translated",
             "value" : "三"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三"
+          }
         }
       }
     },
@@ -2506,6 +2938,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三同刻"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "三同刻"
@@ -2534,6 +2972,12 @@
             "state" : "translated",
             "value" : "三家都付底分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三家都付底分"
+          }
         }
       }
     },
@@ -2552,6 +2996,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三暗刻"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "三暗刻"
@@ -2580,6 +3030,12 @@
             "state" : "translated",
             "value" : "三槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2603,6 +3059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "三種數牌的 1、9 和七種字牌各一張，其中一張成對"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种数牌的 1、9 和七种字牌各一张，其中一张成对"
           }
         }
       },
@@ -2628,6 +3090,12 @@
             "state" : "translated",
             "value" : "三種花色依次錯開 1 位的順子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种花色依次错开 1 位的顺子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2651,6 +3119,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "三種花色分別取 147、258、369，拼成 1 到 9"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种花色分别取 147、258、369，拼成 1 到 9"
           }
         }
       },
@@ -2676,6 +3150,12 @@
             "state" : "translated",
             "value" : "三種花色分別組成 123、456、789"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种花色分别组成 123、456、789"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2699,6 +3179,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "三種花色同一點數的刻子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种花色同一点数的刻子"
           }
         }
       },
@@ -2724,6 +3210,12 @@
             "state" : "translated",
             "value" : "三種花色同一點數的順子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种花色同一点数的顺子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2747,6 +3239,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "三種花色點數依次加 1 的刻子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种花色点数依次加 1 的刻子"
           }
         }
       },
@@ -2772,6 +3270,12 @@
             "state" : "translated",
             "value" : "三種風牌的刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种风牌的刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2795,6 +3299,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "三種風牌的刻子，第四種風牌做將"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三种风牌的刻子，第四种风牌做将"
           }
         }
       },
@@ -2820,6 +3330,12 @@
             "state" : "translated",
             "value" : "三組暗刻"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三组暗刻"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2844,6 +3360,12 @@
             "state" : "translated",
             "value" : "三色三同順"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三色三同顺"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2864,6 +3386,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三色三步高"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "三色三步高"
@@ -2892,6 +3420,12 @@
             "state" : "translated",
             "value" : "三色三節高"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三色三节高"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2915,6 +3449,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "三色雙龍會"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三色双龙会"
           }
         }
       },
@@ -2940,6 +3480,12 @@
             "state" : "translated",
             "value" : "三風刻"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "三风刻"
+          }
         }
       },
       "extractionState" : "manual",
@@ -2960,6 +3506,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一局：%@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "上一局：%@"
@@ -2986,6 +3538,12 @@
             "state" : "translated",
             "value" : "上家"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上家"
+          }
         }
       }
     },
@@ -3007,6 +3565,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "上次的邀請碼不能用了：中轉站說它停用了或者不對，找給你碼的人再要一個"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次的邀请码不能用了：中转站说它停用了或者不对，找给你码的人再要一个"
           }
         }
       }
@@ -3030,6 +3594,12 @@
             "state" : "translated",
             "value" : "上次跟這 4 位就這麼打的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次跟这 4 位就这么打的"
+          }
         }
       }
     },
@@ -3048,6 +3618,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下家"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "下家"
@@ -3074,6 +3650,12 @@
             "state" : "translated",
             "value" : "不夠 %lld 番，和不了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不够 %lld 番，和不了"
+          }
         }
       }
     },
@@ -3095,6 +3677,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不封頂"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不封顶"
           }
         }
       }
@@ -3118,6 +3706,12 @@
             "state" : "translated",
             "value" : "不帶"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不带"
+          }
         }
       }
     },
@@ -3139,6 +3733,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不帶花"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不带花"
           }
         }
       }
@@ -3162,6 +3762,12 @@
             "state" : "translated",
             "value" : "不打了，算出誰該給誰轉多少"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不打了，算出谁该给谁转多少"
+          }
         }
       }
     },
@@ -3184,6 +3790,12 @@
             "state" : "translated",
             "value" : "不換"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不换"
+          }
         }
       }
     },
@@ -3202,6 +3814,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不求人"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "不求人"
@@ -3230,6 +3848,12 @@
             "state" : "translated",
             "value" : "不用 iCloud"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用 iCloud"
+          }
         }
       }
     },
@@ -3251,6 +3875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不用轉帳，正好打平。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用转账，正好打平。"
           }
         }
       }
@@ -3274,6 +3904,12 @@
             "state" : "translated",
             "value" : "不等了，就用現在這些牌 ›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不等了，就用现在这些牌 ›"
+          }
         }
       }
     },
@@ -3292,6 +3928,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不要底分"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "不要底分"
@@ -3318,6 +3960,12 @@
             "state" : "translated",
             "value" : "不計分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不计分"
+          }
         }
       }
     },
@@ -3340,6 +3988,12 @@
             "state" : "translated",
             "value" : "不連莊，每局莊家往下輪一位。東南西北 4 圈、16 局打完一場。App 會自己輪，不用記。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不连庄，每局庄家往下轮一位。东南西北 4 圈、16 局打完一场。App 会自己轮，不用记。"
+          }
         }
       }
     },
@@ -3361,6 +4015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "與圈風相同的風牌刻子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与圈风相同的风牌刻子"
           }
         }
       },
@@ -3386,6 +4046,12 @@
             "state" : "translated",
             "value" : "與自己門風相同的風牌刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与自己门风相同的风牌刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3409,6 +4075,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "東"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "东"
           }
         }
       },
@@ -3434,6 +4106,12 @@
             "state" : "translated",
             "value" : "東南西北四組刻子（或槓）"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "东南西北四组刻子（或杠）"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3457,6 +4135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "東風圈"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "东风圈"
           }
         }
       },
@@ -3482,6 +4166,12 @@
             "state" : "translated",
             "value" : "兩種箭牌的刻子，第三種箭牌做將"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两种箭牌的刻子，第三种箭牌做将"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3505,6 +4195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "兩種花色各有 123 和 789，第三種花色的 5 做將"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两种花色各有 123 和 789，第三种花色的 5 做将"
           }
         }
       },
@@ -3530,6 +4226,12 @@
             "state" : "translated",
             "value" : "兩種花色同一點數的刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两种花色同一点数的刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3553,6 +4255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "兩種花色同一點數的順子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两种花色同一点数的顺子"
           }
         }
       },
@@ -3578,6 +4286,12 @@
             "state" : "translated",
             "value" : "兩組明槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两组明杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3601,6 +4315,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "兩組暗刻"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两组暗刻"
           }
         }
       },
@@ -3626,6 +4346,12 @@
             "state" : "translated",
             "value" : "兩組暗槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两组暗杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3650,6 +4376,12 @@
             "state" : "translated",
             "value" : "兩組箭牌刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两组箭牌刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3670,6 +4402,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "中"
@@ -3698,6 +4436,12 @@
             "state" : "translated",
             "value" : "中、發、白三組刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中、发、白三组刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3721,6 +4465,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "中、發或白的刻子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中、发或白的刻子"
           }
         }
       },
@@ -3746,6 +4496,12 @@
             "state" : "translated",
             "value" : "九蓮寶燈"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "九莲宝灯"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3766,6 +4522,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "二"
@@ -3792,6 +4554,12 @@
             "state" : "translated",
             "value" : "五門齊"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "五门齐"
+          }
         }
       },
       "extractionState" : "manual",
@@ -3812,6 +4580,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "亮在桌上的"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "亮在桌上的"
@@ -3868,6 +4642,12 @@
             "state" : "translated",
             "value" : "從檔案匯入"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从文件导入"
+          }
         }
       }
     },
@@ -3890,6 +4670,12 @@
             "state" : "translated",
             "value" : "從相簿選"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从相册选"
+          }
         }
       }
     },
@@ -3908,6 +4694,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以前的"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "以前的"
@@ -3934,6 +4726,12 @@
             "state" : "translated",
             "value" : "你"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你"
+          }
         }
       }
     },
@@ -3952,6 +4750,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的名字"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "你的名字"
@@ -3978,6 +4782,12 @@
             "state" : "translated",
             "value" : "儲存"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存"
+          }
         }
       }
     },
@@ -4003,6 +4813,12 @@
             "state" : "translated",
             "value" : "儲存失敗：%@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存失败：%@"
+          }
         }
       }
     },
@@ -4021,6 +4837,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "元"
@@ -4047,6 +4869,12 @@
             "state" : "translated",
             "value" : "先把牌加上"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先把牌加上"
+          }
         }
       }
     },
@@ -4068,6 +4896,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "先把牌改對"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先把牌改对"
           }
         }
       }
@@ -4091,6 +4925,12 @@
             "state" : "translated",
             "value" : "先選上面誰和了。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先选上面谁和了。"
+          }
         }
       }
     },
@@ -4109,6 +4949,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全不靠"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全不靠"
@@ -4137,6 +4983,12 @@
             "state" : "translated",
             "value" : "全中"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全中"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4161,6 +5013,12 @@
             "state" : "translated",
             "value" : "全雙刻"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全双刻"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4181,6 +5039,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全大"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全大"
@@ -4209,6 +5073,12 @@
             "state" : "translated",
             "value" : "全小"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全小"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4232,6 +5102,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全帶五"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全带五"
           }
         }
       },
@@ -4257,6 +5133,12 @@
             "state" : "translated",
             "value" : "全帶幺"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全带幺"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4277,6 +5159,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全求人"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全求人"
@@ -4305,6 +5193,12 @@
             "state" : "translated",
             "value" : "全部是 1 到 4 的數牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是 1 到 4 的数牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4325,6 +5219,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是 1、2、3"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部是 1、2、3"
@@ -4353,6 +5253,12 @@
             "state" : "translated",
             "value" : "全部是 2、4、6、8 的刻子和將"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是 2、4、6、8 的刻子和将"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4373,6 +5279,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是 4、5、6"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部是 4、5、6"
@@ -4401,6 +5313,12 @@
             "state" : "translated",
             "value" : "全部是 6 到 9 的數牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是 6 到 9 的数牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4421,6 +5339,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是 7、8、9"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部是 7、8、9"
@@ -4449,6 +5373,12 @@
             "state" : "translated",
             "value" : "全部是上下顛倒樣子不變的牌：1234589 餅、245689 條、白"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是上下颠倒样子不变的牌：1234589 饼、245689 条、白"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4473,6 +5403,12 @@
             "state" : "translated",
             "value" : "全部是同一種花色的數牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是同一种花色的数牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4493,6 +5429,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是字牌"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部是字牌"
@@ -4521,6 +5463,12 @@
             "state" : "translated",
             "value" : "全部是幺九牌和字牌的刻子和將"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是幺九牌和字牌的刻子和将"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4544,6 +5492,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部是數牌 1、9 的刻子和將"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部是数牌 1、9 的刻子和将"
           }
         }
       },
@@ -4569,6 +5523,12 @@
             "state" : "translated",
             "value" : "全靠吃碰明槓，最後單釣別人打的牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全靠吃碰明杠，最后单钓别人打的牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -4593,6 +5553,12 @@
             "state" : "translated",
             "value" : "關閉"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
         }
       }
     },
@@ -4611,6 +5577,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "其他"
@@ -4637,6 +5609,12 @@
             "state" : "translated",
             "value" : "其實是和錯了？記下來（賠三家各 %lld 分）›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其实是和错了？记下来（赔三家各 %lld 分）›"
+          }
         }
       }
     },
@@ -4658,6 +5636,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "再打會兒"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再打会儿"
           }
         }
       }
@@ -4681,6 +5665,12 @@
             "state" : "translated",
             "value" : "寫幾個字再發"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "写几个字再发"
+          }
         }
       }
     },
@@ -4702,6 +5692,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "湊不成和牌：不是 4 組面子加 1 對將，也不是七對、十三幺、全不靠、組合龍"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "凑不成和牌：不是 4 组面子加 1 对将，也不是七对、十三幺、全不靠、组合龙"
           }
         }
       },
@@ -4727,6 +5723,12 @@
             "state" : "translated",
             "value" : "湊夠幾番才能和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "凑够几番才能和"
+          }
         }
       }
     },
@@ -4749,6 +5751,12 @@
             "state" : "translated",
             "value" : "幾個人同時能和同一張牌時，按點炮那家的下家、對家、上家的順序，只算第一個。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "几个人同时能和同一张牌时，按点炮那家的下家、对家、上家的顺序，只算第一个。"
+          }
         }
       }
     },
@@ -4767,6 +5775,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "分"
@@ -4793,6 +5807,12 @@
             "state" : "translated",
             "value" : "分享"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享"
+          }
         }
       }
     },
@@ -4814,6 +5834,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分享帳本圖"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享账本图"
           }
         }
       }
@@ -4837,6 +5863,12 @@
             "state" : "translated",
             "value" : "刪掉"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉"
+          }
         }
       }
     },
@@ -4858,6 +5890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "刪掉第 %lld 局？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉第 %lld 局？"
           }
         }
       }
@@ -4881,6 +5919,12 @@
             "state" : "translated",
             "value" : "刪掉這一局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉这一局"
+          }
         }
       }
     },
@@ -4902,6 +5946,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "刪掉這張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉这张"
           }
         }
       }
@@ -4925,6 +5975,12 @@
             "state" : "translated",
             "value" : "刪掉這張照片"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉这张照片"
+          }
         }
       }
     },
@@ -4947,6 +6003,12 @@
             "state" : "translated",
             "value" : "刪掉這張照片？"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉这张照片？"
+          }
         }
       }
     },
@@ -4968,6 +6030,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "刪掉這組？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删掉这组？"
           }
         }
       }
@@ -4994,6 +6062,12 @@
             "state" : "translated",
             "value" : "別人加槓時，正好和他加的那張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "别人加杠时，正好和他加的那张"
+          }
         }
       }
     },
@@ -5015,6 +6089,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "別人加槓的牌只剩這一張，手裡不能再有"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "别人加杠的牌只剩这一张，手里不能再有"
           }
         }
       },
@@ -5040,6 +6120,12 @@
             "state" : "translated",
             "value" : "前面的分數都不受影響"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前面的分数都不受影响"
+          }
         }
       }
     },
@@ -5061,6 +6147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加一張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加一张"
           }
         }
       }
@@ -5084,6 +6176,12 @@
             "state" : "translated",
             "value" : "加一組 ›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加一组 ›"
+          }
         }
       }
     },
@@ -5105,6 +6203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加一組亮在桌上的牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加一组亮在桌上的牌"
           }
         }
       }
@@ -5140,6 +6244,12 @@
             "state" : "translated",
             "value" : "加了 %lld 場牌局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加了 %lld 场牌局"
+          }
         }
       }
     },
@@ -5161,6 +6271,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加起來正好是 0。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加起来正好是 0。"
           }
         }
       }
@@ -5184,6 +6300,12 @@
             "state" : "translated",
             "value" : "加起來要等於 0"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加起来要等于 0"
+          }
         }
       }
     },
@@ -5202,6 +6324,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "北"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "北"
@@ -5230,6 +6358,12 @@
             "state" : "translated",
             "value" : "北風圈"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "北风圈"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5250,6 +6384,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "十三幺"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "十三幺"
@@ -5278,6 +6418,12 @@
             "state" : "translated",
             "value" : "單釣將"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "单钓将"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5298,6 +6444,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "南"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "南"
@@ -5326,6 +6478,12 @@
             "state" : "translated",
             "value" : "南風圈"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "南风圈"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5350,6 +6508,12 @@
             "state" : "translated",
             "value" : "原來 %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "原来 %@"
+          }
         }
       }
     },
@@ -5371,6 +6535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "雙同刻"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双同刻"
           }
         }
       },
@@ -5396,6 +6566,12 @@
             "state" : "translated",
             "value" : "雙明槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双明杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5419,6 +6595,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "雙暗刻"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双暗刻"
           }
         }
       },
@@ -5444,6 +6626,12 @@
             "state" : "translated",
             "value" : "雙暗槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双暗杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5467,6 +6655,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "雙箭刻"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双箭刻"
           }
         }
       },
@@ -5492,6 +6686,12 @@
             "state" : "translated",
             "value" : "發"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5516,6 +6716,12 @@
             "state" : "translated",
             "value" : "傳送"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送"
+          }
         }
       }
     },
@@ -5534,6 +6740,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "取消"
@@ -5563,6 +6775,12 @@
             "state" : "translated",
             "value" : "只帶 App 版本和手機型號，不帶照片和牌局。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只带 App 版本和手机型号，不带照片和牌局。"
+          }
         }
       }
     },
@@ -5584,6 +6802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "只有 %lld 番，不夠起和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有 %lld 番，不够起和"
           }
         }
       },
@@ -5637,6 +6861,12 @@
             "state" : "translated",
             "value" : "只有點炮才可能"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有点炮才可能"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5661,6 +6891,12 @@
             "state" : "translated",
             "value" : "只有點炮的人"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有点炮的人"
+          }
         }
       }
     },
@@ -5683,6 +6919,12 @@
             "state" : "translated",
             "value" : "只有點炮的人付"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有点炮的人付"
+          }
         }
       }
     },
@@ -5701,6 +6943,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只有自摸才可能"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "只有自摸才可能"
@@ -5729,6 +6977,12 @@
             "state" : "translated",
             "value" : "只用 2、3、4、6、8 條和發財"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只用 2、3、4、6、8 条和发财"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5752,6 +7006,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "只能和 12 後面的 3，或 89 前面的 7"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只能和 12 后面的 3，或 89 前面的 7"
           }
         }
       },
@@ -5777,6 +7037,12 @@
             "state" : "translated",
             "value" : "只能和做將的那一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只能和做将的那一张"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5800,6 +7066,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "只能和順子中間那張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只能和顺子中间那张"
           }
         }
       },
@@ -5825,6 +7097,12 @@
             "state" : "translated",
             "value" : "可不填，比如「槓上開花按家規多給」"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可不填，比如「杠上开花按家规多给」"
+          }
         }
       }
     },
@@ -5843,6 +7121,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "吃"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "吃"
@@ -5871,6 +7155,12 @@
             "state" : "translated",
             "value" : "同一種牌超過了 4 張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一种牌超过了 4 张"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5894,6 +7184,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "同一花色三組依次錯開 1 位或 2 位的順子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色三组依次错开 1 位或 2 位的顺子"
           }
         }
       },
@@ -5919,6 +7215,12 @@
             "state" : "translated",
             "value" : "同一花色三組點數依次加 1 的刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色三组点数依次加 1 的刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5942,6 +7244,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "同一花色三組相同的順子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色三组相同的顺子"
           }
         }
       },
@@ -5967,6 +7275,12 @@
             "state" : "translated",
             "value" : "同一花色兩組 123、兩組 789，5 做將"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色两组 123、两组 789，5 做将"
+          }
         }
       },
       "extractionState" : "manual",
@@ -5990,6 +7304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "同一花色兩組相同的順子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色两组相同的顺子"
           }
         }
       },
@@ -6015,6 +7335,12 @@
             "state" : "translated",
             "value" : "同一花色六張相連的兩組順子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色六张相连的两组顺子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6038,6 +7364,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "同一花色四組依次錯開 1 位或 2 位的順子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色四组依次错开 1 位或 2 位的顺子"
           }
         }
       },
@@ -6063,6 +7395,12 @@
             "state" : "translated",
             "value" : "同一花色四組點數依次加 1 的刻子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色四组点数依次加 1 的刻子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6086,6 +7424,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "同一花色四組相同的順子"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色四组相同的顺子"
           }
         }
       },
@@ -6111,6 +7455,12 @@
             "state" : "translated",
             "value" : "同一花色序數相連的七個對子"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色序数相连的七个对子"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6131,6 +7481,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色的 123 和 789"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "同一花色的 123 和 789"
@@ -6159,6 +7515,12 @@
             "state" : "translated",
             "value" : "同一花色的 123、456、789"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色的 123、456、789"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6183,6 +7545,12 @@
             "state" : "translated",
             "value" : "同一花色門清 1112345678999，再和其中任意一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同一花色门清 1112345678999，再和其中任意一张"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6206,6 +7574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "名字不能重複"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名字不能重复"
           }
         }
       }
@@ -6232,6 +7606,12 @@
             "state" : "translated",
             "value" : "含花牌 %lld 番。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "含花牌 %lld 番。"
+          }
         }
       }
     },
@@ -6250,6 +7630,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和 %@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "和 %@"
@@ -6276,6 +7662,12 @@
             "state" : "translated",
             "value" : "和了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和了"
+          }
         }
       }
     },
@@ -6294,6 +7686,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和了就算"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "和了就算"
@@ -6320,6 +7718,12 @@
             "state" : "translated",
             "value" : "和了，但數不出任何番（花牌不算）"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和了，但数不出任何番（花牌不算）"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6343,6 +7747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "和別人加槓的那張牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和别人加杠的那张牌"
           }
         }
       },
@@ -6368,6 +7778,12 @@
             "state" : "translated",
             "value" : "和別人打出的最後一張牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和别人打出的最后一张牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6392,6 +7808,12 @@
             "state" : "translated",
             "value" : "和牌一共 14 張（每個槓多 1 張），現在是 %lld 張。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和牌一共 14 张（每个杠多 1 张），现在是 %lld 张。"
+          }
         }
       }
     },
@@ -6413,6 +7835,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "和牌的人先從每家收 8 分底分，再收番數。自摸：三家都付 8 + 番數；點炮：點炮的人付 8 + 番數，另外兩家只付 8。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和牌的人先从每家收 8 分底分，再收番数。自摸：三家都付 8 + 番数；点炮：点炮的人付 8 + 番数，另外两家只付 8。"
           }
         }
       }
@@ -6436,6 +7864,12 @@
             "state" : "translated",
             "value" : "和牌的人把牌推倒，拍一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和牌的人把牌推倒，拍一张"
+          }
         }
       }
     },
@@ -6458,6 +7892,12 @@
             "state" : "translated",
             "value" : "和牌要 4 組加 1 對，這 %lld 張湊不出來。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和牌要 4 组加 1 对，这 %lld 张凑不出来。"
+          }
         }
       }
     },
@@ -6476,6 +7916,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和的是%@打出的牌。"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "和的是%@打出的牌。"
@@ -6502,6 +7948,12 @@
             "state" : "translated",
             "value" : "和的是別人打出的最後一張牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和的是别人打出的最后一张牌"
+          }
         }
       }
     },
@@ -6523,6 +7975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "和的是別人打出的牌。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和的是别人打出的牌。"
           }
         }
       }
@@ -6546,6 +8004,12 @@
             "state" : "translated",
             "value" : "和的這張，桌上已經亮出了 3 張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和的这张，桌上已经亮出了 3 张"
+          }
         }
       }
     },
@@ -6568,6 +8032,12 @@
             "state" : "translated",
             "value" : "和的那張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和的那张"
+          }
         }
       }
     },
@@ -6589,6 +8059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "和的那張牌桌上已經亮出三張，是最後一張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和的那张牌桌上已经亮出三张，是最后一张"
           }
         }
       },
@@ -6614,6 +8090,12 @@
             "state" : "translated",
             "value" : "和絕張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和绝张"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6638,6 +8120,12 @@
             "state" : "translated",
             "value" : "和錯了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和错了"
+          }
         }
       }
     },
@@ -6659,6 +8147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "哪裡不好用、想要什麼，都可以說。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "哪里不好用、想要什么，都可以说。"
           }
         }
       }
@@ -6682,6 +8176,12 @@
             "state" : "translated",
             "value" : "哪裡不好用、番算錯了，直接告訴我們"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "哪里不好用、番算错了，直接告诉我们"
+          }
         }
       }
     },
@@ -6700,6 +8200,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喜相逢"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "喜相逢"
@@ -6728,6 +8234,12 @@
             "state" : "translated",
             "value" : "四個人加起來要等於 0。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四个人加起来要等于 0。"
+          }
         }
       }
     },
@@ -6749,6 +8261,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "四個人的得失分加起來要等於 0"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四个人的得失分加起来要等于 0"
           }
         }
       },
@@ -6774,6 +8292,12 @@
             "state" : "translated",
             "value" : "四歸一"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四归一"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6794,6 +8318,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四暗刻"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "四暗刻"
@@ -6822,6 +8352,12 @@
             "state" : "translated",
             "value" : "四槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6845,6 +8381,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "四組刻子（或槓）加一對將"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四组刻子（或杠）加一对将"
           }
         }
       },
@@ -6870,6 +8412,12 @@
             "state" : "translated",
             "value" : "四組暗刻（暗槓也算）"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四组暗刻（暗杠也算）"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6894,6 +8442,12 @@
             "state" : "translated",
             "value" : "四組順子，數牌做將"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四组顺子，数牌做将"
+          }
         }
       },
       "extractionState" : "manual",
@@ -6914,6 +8468,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回到"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "回到"
@@ -6940,6 +8500,12 @@
             "state" : "translated",
             "value" : "回到核對頁改誰和了、怎麼和的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回到核对页改谁和了、怎么和的"
+          }
         }
       }
     },
@@ -6961,6 +8527,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "回答是空的（%@），再拍一次試試"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回答是空的（%@），再拍一次试试"
           }
         }
       },
@@ -6986,6 +8558,12 @@
             "state" : "translated",
             "value" : "國標"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "国标"
+          }
         }
       }
     },
@@ -7007,6 +8585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "國標的番種和收付，都是白話"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "国标的番种和收付，都是白话"
           }
         }
       }
@@ -7030,6 +8614,12 @@
             "state" : "translated",
             "value" : "國標要湊夠 8 番才能和。剛學的湊不夠，可以降下來；1 番就是和了就算。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "国标要凑够 8 番才能和。刚学的凑不够，可以降下来；1 番就是和了就算。"
+          }
         }
       }
     },
@@ -7052,6 +8642,12 @@
             "state" : "translated",
             "value" : "國標：點炮的人付底分加番數，另外兩家也各付底分。有的桌只讓點炮的人付。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "国标：点炮的人付底分加番数，另外两家也各付底分。有的桌只让点炮的人付。"
+          }
         }
       }
     },
@@ -7073,6 +8669,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "圈風刻"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圈风刻"
           }
         }
       },
@@ -7098,6 +8700,12 @@
             "state" : "translated",
             "value" : "在後面加一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在后面加一张"
+          }
         }
       }
     },
@@ -7119,6 +8727,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在新手機上選匯出的那個檔案"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在新手机上选导出的那个文件"
           }
         }
       }
@@ -7142,6 +8756,12 @@
             "state" : "translated",
             "value" : "在第 %lld 張後面加"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在第 %lld 张后面加"
+          }
         }
       }
     },
@@ -7164,6 +8784,12 @@
             "state" : "translated",
             "value" : "填一個數"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填一个数"
+          }
         }
       }
     },
@@ -7185,6 +8811,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "填上這一局的得失分"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填上这一局的得失分"
           }
         }
       }
@@ -7211,6 +8843,12 @@
             "state" : "translated",
             "value" : "填好 4 個名字"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填好 4 个名字"
+          }
         }
       }
     },
@@ -7233,6 +8871,12 @@
             "state" : "translated",
             "value" : "填好 6 位邀請碼"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填好 6 位邀请码"
+          }
         }
       }
     },
@@ -7254,6 +8898,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "填碼的回答看不懂"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填码的回答看不懂"
           }
         }
       },
@@ -7279,6 +8929,12 @@
             "state" : "translated",
             "value" : "填邀請碼"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填邀请码"
+          }
         }
       }
     },
@@ -7300,6 +8956,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "備份與換手機"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备份与换手机"
           }
         }
       }
@@ -7323,6 +8985,12 @@
             "state" : "translated",
             "value" : "備註"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备注"
+          }
         }
       }
     },
@@ -7344,6 +9012,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "複製文字版"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制文字版"
           }
         }
       }
@@ -7367,6 +9041,12 @@
             "state" : "translated",
             "value" : "多一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多一张"
+          }
         }
       }
     },
@@ -7389,6 +9069,12 @@
             "state" : "translated",
             "value" : "多一番"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多一番"
+          }
         }
       }
     },
@@ -7407,6 +9093,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大三元"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "大三元"
@@ -7435,6 +9127,12 @@
             "state" : "translated",
             "value" : "大於五"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大于五"
+          }
         }
       },
       "extractionState" : "manual",
@@ -7455,6 +9153,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大四喜"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "大四喜"
@@ -7483,6 +9187,12 @@
             "state" : "translated",
             "value" : "好"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
+          }
         }
       }
     },
@@ -7505,6 +9215,12 @@
             "state" : "translated",
             "value" : "好像少認了一張：補一張 %@ 就能和。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好像少认了一张：补一张 %@ 就能和。"
+          }
         }
       }
     },
@@ -7523,6 +9239,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "妙手回春"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "妙手回春"
@@ -7551,6 +9273,12 @@
             "state" : "translated",
             "value" : "字一色"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "字一色"
+          }
         }
       },
       "extractionState" : "manual",
@@ -7575,6 +9303,12 @@
             "state" : "translated",
             "value" : "存在你自己的 iCloud 裡，別人看不到"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "存在你自己的 iCloud 里，别人看不到"
+          }
         }
       }
     },
@@ -7596,6 +9330,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "存成一個檔案，放到「檔案」裡或者 AirDrop"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "存成一个文件，放到「文件」里或者隔空投送"
           }
         }
       }
@@ -7619,6 +9359,12 @@
             "state" : "translated",
             "value" : "家規"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家规"
+          }
         }
       }
     },
@@ -7641,6 +9387,12 @@
             "state" : "translated",
             "value" : "家規不一樣或者算錯了時用：直接填四個人這一局贏了多少、輸了多少。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家规不一样或者算错了时用：直接填四个人这一局赢了多少、输了多少。"
+          }
         }
       }
     },
@@ -7649,7 +9401,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "House rules differ or a miscount? Type in the scores"
+            "value" : "Type in this hand's scores"
           }
         },
         "ja" : {
@@ -7662,6 +9414,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "家規不一樣或者算錯了，直接填這一局的得失"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家规不一样或者算错了，直接填这一局的得失"
           }
         }
       }
@@ -7713,6 +9471,12 @@
             "state" : "translated",
             "value" : "對家"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对家"
+          }
         }
       }
     },
@@ -7734,6 +9498,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "匯入只會新增和更新，不會刪掉這台手機上已有的牌局。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入只会添加和更新，不会删掉这台手机上已有的牌局。"
           }
         }
       }
@@ -7757,6 +9527,12 @@
             "state" : "translated",
             "value" : "匯出、匯入牌局，或者開啟 iCloud 同步"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出、导入牌局，或者打开 iCloud 同步"
+          }
         }
       }
     },
@@ -7778,6 +9554,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "匯出全部牌局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出全部牌局"
           }
         }
       }
@@ -7801,6 +9583,12 @@
             "state" : "translated",
             "value" : "匯出失敗：%@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出失败：%@"
+          }
         }
       }
     },
@@ -7822,6 +9610,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "封頂"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "封顶"
           }
         }
       }
@@ -7845,6 +9639,12 @@
             "state" : "translated",
             "value" : "封頂 %lld 番"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "封顶 %lld 番"
+          }
         }
       }
     },
@@ -7863,6 +9663,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小三元"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "小三元"
@@ -7891,6 +9697,12 @@
             "state" : "translated",
             "value" : "小於五"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小于五"
+          }
         }
       },
       "extractionState" : "manual",
@@ -7911,6 +9723,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小四喜"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "小四喜"
@@ -7939,6 +9757,12 @@
             "state" : "translated",
             "value" : "少一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "少一张"
+          }
         }
       }
     },
@@ -7957,6 +9781,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "少一番"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "少一番"
@@ -7983,6 +9813,12 @@
             "state" : "translated",
             "value" : "少見情況"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "少见情况"
+          }
         }
       }
     },
@@ -8004,6 +9840,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "嵌張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "嵌张"
           }
         }
       },
@@ -8032,6 +9874,12 @@
             "state" : "translated",
             "value" : "已勾選"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已勾选"
+          }
         }
       }
     },
@@ -8050,6 +9898,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已同步 · %@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "已同步 · %@"
@@ -8076,6 +9930,12 @@
             "state" : "translated",
             "value" : "已複製，去微信貼上"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已复制，去微信粘贴"
+          }
         }
       }
     },
@@ -8097,6 +9957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已記下第 %lld 局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已记下第 %lld 局"
           }
         }
       }
@@ -8120,6 +9986,12 @@
             "state" : "translated",
             "value" : "帶花"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "带花"
+          }
         }
       }
     },
@@ -8141,6 +10013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "帶花時，和牌前摸到的每張花算 1 番，不算進起和。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "带花时，和牌前摸到的每张花算 1 番，不算进起和。"
           }
         }
       }
@@ -8164,6 +10042,12 @@
             "state" : "translated",
             "value" : "常一起打的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "常一起打的"
+          }
         }
       }
     },
@@ -8182,6 +10066,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平和"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "平和"
@@ -8210,6 +10100,12 @@
             "state" : "translated",
             "value" : "幺九刻"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "幺九刻"
+          }
         }
       },
       "extractionState" : "manual",
@@ -8234,6 +10130,12 @@
             "state" : "translated",
             "value" : "莊家"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "庄家"
+          }
         }
       }
     },
@@ -8256,6 +10158,12 @@
             "state" : "translated",
             "value" : "莊怎麼輪"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "庄怎么轮"
+          }
         }
       }
     },
@@ -8274,6 +10182,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底分"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "底分"
@@ -8300,6 +10214,12 @@
             "state" : "translated",
             "value" : "底分 %lld"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底分 %lld"
+          }
         }
       }
     },
@@ -8322,6 +10242,12 @@
             "state" : "translated",
             "value" : "開一局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开一局"
+          }
         }
       }
     },
@@ -8343,6 +10269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開了三組槓"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开了三组杠"
           }
         }
       },
@@ -8367,6 +10299,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開了四組槓"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开了四组杠"
           }
         }
       },
@@ -8395,6 +10333,12 @@
             "state" : "translated",
             "value" : "開啟"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开启"
+          }
         }
       }
     },
@@ -8416,6 +10360,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 AI 認牌，用雲端 AI 模型讀牌，更準。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开启 AI 认牌，用云端大模型读牌，更准。"
           }
         }
       }
@@ -8439,6 +10389,12 @@
             "state" : "translated",
             "value" : "開始"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始"
+          }
         }
       }
     },
@@ -8460,6 +10416,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開槓後補上來的那張自摸和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开杠后补上来的那张自摸和"
           }
         }
       },
@@ -8485,6 +10447,12 @@
             "state" : "translated",
             "value" : "開槓補摸到 %@，和了。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开杠补摸到 %@，和了。"
+          }
         }
       }
     },
@@ -8506,6 +10474,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "張數不對：立牌加副露應該是 14 張（每個槓多 1 張）"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "张数不对：立牌加副露应该是 14 张（每个杠多 1 张）"
           }
         }
       },
@@ -8531,6 +10505,12 @@
             "state" : "translated",
             "value" : "當時拍的照片"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当时拍的照片"
+          }
         }
       }
     },
@@ -8552,6 +10532,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "微信號或Email，想要回覆再填"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "微信号或邮箱，想要回复再填"
           }
         }
       }
@@ -8575,6 +10561,12 @@
             "state" : "translated",
             "value" : "怎麼和的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "怎么和的"
+          }
         }
       }
     },
@@ -8596,6 +10588,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "怎麼算錢"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "怎么算钱"
           }
         }
       }
@@ -8619,6 +10617,12 @@
             "state" : "translated",
             "value" : "怕一把輸太多就封頂：番數超過這個數，按這個數收錢。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "怕一把输太多就封顶：番数超过这个数，按这个数收钱。"
+          }
         }
       }
     },
@@ -8640,6 +10644,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "想說的話"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "想说的话"
           }
         }
       }
@@ -8663,6 +10673,12 @@
             "state" : "translated",
             "value" : "手動輸入"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手动输入"
+          }
         }
       }
     },
@@ -8685,6 +10701,12 @@
             "state" : "translated",
             "value" : "手牌推倒排成一排，和的那張放最右"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手牌推倒排成一排，和的那张放最右"
+          }
         }
       }
     },
@@ -8706,6 +10728,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "手裡已經有這張牌，和的不可能是最後一張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手里已经有这张牌，和的不可能是最后一张"
           }
         }
       },
@@ -8742,6 +10770,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打了 %lld 局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打了 %lld 局"
           }
         }
       }
@@ -8793,6 +10827,12 @@
             "state" : "translated",
             "value" : "打幾圈"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打几圈"
+          }
         }
       }
     },
@@ -8811,6 +10851,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打到%@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "打到%@"
@@ -8865,6 +10911,12 @@
             "state" : "translated",
             "value" : "打完一手，拍一下和牌的人的牌，App 幫你算番記帳。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打完一手，拍一下和牌的人的牌，App 帮你算番记账。"
+          }
         }
       }
     },
@@ -8883,6 +10935,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打完了"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "打完了"
@@ -8909,6 +10967,12 @@
             "state" : "translated",
             "value" : "找不到這一局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到这一局"
+          }
         }
       },
       "extractionState" : "manual",
@@ -8932,6 +10996,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "找不到這場牌局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到这场牌局"
           }
         }
       }
@@ -8985,6 +11055,12 @@
             "state" : "translated",
             "value" : "把照片發給我們，讓 AI 認得更準"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把照片发给我们，让 AI 认得更准"
+          }
         }
       }
     },
@@ -9007,6 +11083,12 @@
             "state" : "translated",
             "value" : "搶槓和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "抢杠和"
+          }
         }
       },
       "extractionState" : "manual",
@@ -9027,6 +11109,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "拍"
@@ -9053,6 +11141,12 @@
             "state" : "translated",
             "value" : "拍一下，"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍一下，"
+          }
         }
       }
     },
@@ -9071,6 +11165,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "拍照"
@@ -9097,6 +11197,12 @@
             "state" : "translated",
             "value" : "拍照後 AI 再認一遍，兩邊讀得不一樣的牌讓你選。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照后 AI 再认一遍，两边读得不一样的牌让你选。"
+          }
         }
       }
     },
@@ -9118,6 +11224,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拍照算番 · 拍一下，番和錢都算好"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照算番 · 拍一下，番和钱都算好"
           }
         }
       }
@@ -9169,6 +11281,12 @@
             "state" : "translated",
             "value" : "按拍下的牌自動算，換了誰和、自摸還是點炮會重算。要直接改就點加減。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。"
+          }
         }
       }
     },
@@ -9190,6 +11308,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "換"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换"
           }
         }
       }
@@ -9213,6 +11337,12 @@
             "state" : "translated",
             "value" : "換一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换一张"
+          }
         }
       }
     },
@@ -9234,6 +11364,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "換了手機？匯入以前的記錄"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换了手机？导入以前的记录"
           }
         }
       }
@@ -9257,6 +11393,12 @@
             "state" : "translated",
             "value" : "換了新手機，以前的牌局也跟著走。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换了新手机，以前的牌局也跟着走。"
+          }
         }
       }
     },
@@ -9278,6 +11420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "換座"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换座"
           }
         }
       }
@@ -9301,6 +11449,12 @@
             "state" : "translated",
             "value" : "換新手機時登入同一個 Apple ID，開啟 App 記錄就都回來了；iPad 上裝了也會同步。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "换新手机时登录同一个 Apple ID，打开 App 记录就都回来了；iPad 上装了也会同步。"
+          }
         }
       }
     },
@@ -9319,6 +11473,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推不倒"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "推不倒"
@@ -9347,6 +11507,12 @@
             "state" : "translated",
             "value" : "推倒了湊不成和牌，賠三家各 %lld 分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推倒了凑不成和牌，赔三家各 %lld 分"
+          }
         }
       }
     },
@@ -9368,6 +11534,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "推倒了卻湊不成和牌，賠另外三家各 10 分，這一局接著打。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推倒了却凑不成和牌，赔另外三家各 10 分，这一局接着打。"
           }
         }
       }
@@ -9391,6 +11563,12 @@
             "state" : "translated",
             "value" : "推倒了卻湊不成和牌，賠另外三家各這麼多，這一局接著打。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推倒了却凑不成和牌，赔另外三家各这么多，这一局接着打。"
+          }
         }
       }
     },
@@ -9412,6 +11590,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "推倒了卻湊不成和牌：賠另外三家各 %lld 分，這一局接著打。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推倒了却凑不成和牌：赔另外三家各 %lld 分，这一局接着打。"
           }
         }
       }
@@ -9435,6 +11619,12 @@
             "state" : "translated",
             "value" : "提意見"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提意见"
+          }
         }
       }
     },
@@ -9456,6 +11646,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "摸最後一張牌時自摸和了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "摸最后一张牌时自摸和了"
           }
         }
       }
@@ -9479,6 +11675,12 @@
             "state" : "translated",
             "value" : "復原"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撤销"
+          }
         }
       }
     },
@@ -9501,6 +11703,12 @@
             "state" : "translated",
             "value" : "收到了，謝謝"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收到了，谢谢"
+          }
         }
       }
     },
@@ -9519,6 +11727,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收起"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "收起"
@@ -9545,6 +11759,12 @@
             "state" : "translated",
             "value" : "改"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改"
+          }
         }
       }
     },
@@ -9563,6 +11783,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改 ›"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "改 ›"
@@ -9589,6 +11815,12 @@
             "state" : "translated",
             "value" : "改一張也湊不成，可能不止一張認錯了，對照桌上的牌再看看。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改一张也凑不成，可能不止一张认错了，对照桌上的牌再看看。"
+          }
         }
       }
     },
@@ -9611,6 +11843,12 @@
             "state" : "translated",
             "value" : "改一張也湊不成，可能不止一張認錯了，點右上角的照片對照著再看看。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改一张也凑不成，可能不止一张认错了，点右上角的照片对照着再看看。"
+          }
         }
       }
     },
@@ -9629,6 +11867,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改好了"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "改好了"
@@ -9655,6 +11899,12 @@
             "state" : "translated",
             "value" : "改成 %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改成 %@"
+          }
         }
       }
     },
@@ -9676,6 +11926,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "改第 %lld 局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改第 %lld 局"
           }
         }
       }
@@ -9711,6 +11967,12 @@
             "state" : "translated",
             "value" : "改，前面 %lld 局一起重算"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改，前面 %lld 局一起重算"
+          }
         }
       }
     },
@@ -9732,6 +11994,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "檔案裡的牌局這台手機上都有了。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件里的牌局这台手机上都有了。"
           }
         }
       }
@@ -9755,6 +12023,12 @@
             "state" : "translated",
             "value" : "斷幺"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "断幺"
+          }
         }
       },
       "extractionState" : "manual",
@@ -9775,6 +12049,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新手局"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "新手局"
@@ -9801,6 +12081,12 @@
             "state" : "translated",
             "value" : "無字"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无字"
+          }
         }
       },
       "extractionState" : "manual",
@@ -9824,6 +12110,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無番和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无番和"
           }
         }
       },
@@ -9849,6 +12141,12 @@
             "state" : "translated",
             "value" : "明暗槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明暗杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -9872,6 +12170,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "明槓"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明杠"
           }
         }
       },
@@ -9897,6 +12201,12 @@
             "state" : "translated",
             "value" : "是誰打的？"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是谁打的？"
+          }
         }
       }
     },
@@ -9919,6 +12229,12 @@
             "state" : "translated",
             "value" : "暗槓"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暗杠"
+          }
         }
       },
       "extractionState" : "manual",
@@ -9939,6 +12255,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "更多"
@@ -9965,6 +12287,12 @@
             "state" : "translated",
             "value" : "更多規矩"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多规矩"
+          }
         }
       }
     },
@@ -9986,6 +12314,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更多規矩 · 改過 %lld 項"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多规矩 · 改过 %lld 项"
           }
         }
       }
@@ -10021,6 +12355,12 @@
             "state" : "translated",
             "value" : "更新了 %lld 場"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新了 %lld 场"
+          }
         }
       }
     },
@@ -10039,6 +12379,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最可能是"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "最可能是"
@@ -10065,6 +12411,12 @@
             "state" : "translated",
             "value" : "最右邊那張算和的牌。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最右边那张算和的牌。"
+          }
         }
       }
     },
@@ -10086,6 +12438,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最右邊那張算和的牌。不對就點一下改。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最右边那张算和的牌。不对就点一下改。"
           }
         }
       }
@@ -10165,6 +12523,12 @@
             "state" : "translated",
             "value" : "最近幾局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近几局"
+          }
         }
       }
     },
@@ -10186,6 +12550,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有一張牌沒認出來（%@）"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有一张牌没认出来（%@）"
           }
         }
       },
@@ -10211,6 +12581,12 @@
             "state" : "translated",
             "value" : "有一組吃碰槓拼不成（%@），放回手牌裡請確認"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有一组吃碰杠拼不成（%@），放回手牌里请确认"
+          }
         }
       },
       "extractionState" : "manual",
@@ -10231,6 +12607,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有人和了"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "有人和了"
@@ -10257,6 +12639,12 @@
             "state" : "translated",
             "value" : "有人和了，三家先各付"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有人和了，三家先各付"
+          }
         }
       }
     },
@@ -10278,6 +12666,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有人和了，另外三家先各付這麼多，再按番數付。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有人和了，另外三家先各付这么多，再按番数付。"
           }
         }
       }
@@ -10301,6 +12695,12 @@
             "state" : "translated",
             "value" : "有人和錯了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有人和错了"
+          }
         }
       }
     },
@@ -10323,6 +12723,12 @@
             "state" : "translated",
             "value" : "有吃、碰、槓亮在桌上？加上 ›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有吃、碰、杠亮在桌上？加上 ›"
+          }
         }
       }
     },
@@ -10344,6 +12750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有四張相同的牌，但沒有開槓"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有四张相同的牌，但没有开杠"
           }
         }
       },
@@ -10369,6 +12781,12 @@
             "state" : "translated",
             "value" : "有這張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有这张"
+          }
         }
       }
     },
@@ -10391,6 +12809,12 @@
             "state" : "translated",
             "value" : "有邀請碼就能開啟，認牌更準"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有邀请码就能开启，认牌更准"
+          }
         }
       }
     },
@@ -10412,6 +12836,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "槓上開花"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "杠上开花"
           }
         }
       },
@@ -10437,6 +12867,12 @@
             "state" : "translated",
             "value" : "槓上開花沒算出來：最後一張是槓完補的牌，結果只給了自摸。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "杠上开花没算出来：最后一张是杠完补的牌，结果只给了自摸。"
+          }
         }
       }
     },
@@ -10458,6 +12894,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "槓完補牌，補到的正好和了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "杠完补牌，补到的正好和了"
           }
         }
       }
@@ -10481,6 +12923,12 @@
             "state" : "translated",
             "value" : "標準國標"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标准国标"
+          }
         }
       }
     },
@@ -10502,6 +12950,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "核對一下"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "核对一下"
           }
         }
       }
@@ -10525,6 +12979,12 @@
             "state" : "translated",
             "value" : "正在發…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在发…"
+          }
         }
       }
     },
@@ -10543,6 +13003,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在同步…"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在同步…"
@@ -10569,6 +13035,12 @@
             "state" : "translated",
             "value" : "正在確認…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在确认…"
+          }
         }
       }
     },
@@ -10590,6 +13062,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在認牌…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在认牌…"
           }
         }
       }
@@ -10613,6 +13091,12 @@
             "state" : "translated",
             "value" : "每一條都會看。改好了會聯絡你。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每一条都会看。改好了会联系你。"
+          }
         }
       }
     },
@@ -10634,6 +13118,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每一條都會看，改好了會寫在更新說明裡。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每一条都会看，改好了会写在更新说明里。"
           }
         }
       }
@@ -10657,6 +13147,12 @@
             "state" : "translated",
             "value" : "每圈換座"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每圈换座"
+          }
         }
       }
     },
@@ -10678,6 +13174,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每張 1 番，不算進起和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每张 1 番，不算进起和"
           }
         }
       }
@@ -10701,6 +13203,12 @@
             "state" : "translated",
             "value" : "每張翻過來再認一遍，幾秒就好。可以先選下面誰和的、怎麼和的。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每张翻过来再认一遍，几秒就好。可以先选下面谁和的、怎么和的。"
+          }
         }
       }
     },
@@ -10723,6 +13231,12 @@
             "state" : "translated",
             "value" : "每張花 1 番，不算進起和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每张花 1 番，不算进起和"
+          }
         }
       }
     },
@@ -10744,6 +13258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每張花牌 1 番，不計入 8 番起和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每张花牌 1 番，不计入 8 番起和"
           }
         }
       },
@@ -10769,6 +13289,12 @@
             "state" : "translated",
             "value" : "每桌自己定，換預設不會動這一項。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每桌自己定，换预设不会动这一项。"
+          }
         }
       }
     },
@@ -10790,6 +13316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每組面子和將都帶 5"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每组面子和将都带 5"
           }
         }
       },
@@ -10814,6 +13346,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每組面子和將都帶幺九牌或字牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每组面子和将都带幺九牌或字牌"
           }
         }
       },
@@ -10867,6 +13405,12 @@
             "state" : "translated",
             "value" : "比如：槓上開花沒算出來"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比如：杠上开花没算出来"
+          }
         }
       }
     },
@@ -10888,6 +13432,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "比賽每圈換一次座，朋友局一般不換。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比赛每圈换一次座，朋友局一般不换。"
           }
         }
       }
@@ -10911,6 +13461,12 @@
             "state" : "translated",
             "value" : "沒人和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没人和"
+          }
         }
       }
     },
@@ -10933,6 +13489,12 @@
             "state" : "translated",
             "value" : "沒勾選"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没勾选"
+          }
         }
       }
     },
@@ -10954,6 +13516,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒發出去（HTTP %lld），過一會兒再試"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没发出去（HTTP %lld），过一会儿再试"
           }
         }
       },
@@ -10979,6 +13547,12 @@
             "state" : "translated",
             "value" : "沒發出去，看看網路再試一次"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没发出去，看看网络再试一次"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11003,6 +13577,12 @@
             "state" : "translated",
             "value" : "沒打完"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没打完"
+          }
         }
       }
     },
@@ -11025,6 +13605,12 @@
             "state" : "translated",
             "value" : "沒有"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有"
+          }
         }
       }
     },
@@ -11046,6 +13632,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有候選回答"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有候选回答"
           }
         }
       },
@@ -11071,6 +13663,12 @@
             "state" : "translated",
             "value" : "沒有吃碰明槓，和別人打的牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有吃碰明杠，和别人打的牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11094,6 +13692,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有吃碰明槓，自摸和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有吃碰明杠，自摸和"
           }
         }
       },
@@ -11119,6 +13723,12 @@
             "state" : "translated",
             "value" : "沒有字牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有字牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11143,6 +13753,12 @@
             "state" : "translated",
             "value" : "沒有匯入：%@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有导入：%@"
+          }
         }
       }
     },
@@ -11164,6 +13780,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有幺九牌和字牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有幺九牌和字牌"
           }
         }
       },
@@ -11189,6 +13811,12 @@
             "state" : "translated",
             "value" : "沒有改上"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有改上"
+          }
         }
       }
     },
@@ -11210,6 +13838,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有槓"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有杠"
           }
         }
       },
@@ -11235,6 +13869,12 @@
             "state" : "translated",
             "value" : "沒有演示資料"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有演示数据"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11259,6 +13899,12 @@
             "state" : "translated",
             "value" : "沒有網路，聯網後會自動同步。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有网络，联网后会自动同步。"
+          }
         }
       }
     },
@@ -11280,6 +13926,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有記上"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有记上"
           }
         }
       }
@@ -11303,6 +13955,12 @@
             "state" : "translated",
             "value" : "沒有這張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有这张"
+          }
         }
       }
     },
@@ -11324,6 +13982,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有邀請碼？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有邀请码？"
           }
         }
       }
@@ -11347,6 +14011,12 @@
             "state" : "translated",
             "value" : "沒等第二遍認完，只有第一遍的讀法，對照照片看一眼"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没等第二遍认完，只有第一遍的读法，对照照片看一眼"
+          }
         }
       }
     },
@@ -11369,6 +14039,12 @@
             "state" : "translated",
             "value" : "海底撈月"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "海底捞月"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11389,6 +14065,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "混一色"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "混一色"
@@ -11417,6 +14099,12 @@
             "state" : "translated",
             "value" : "混幺九"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "混幺九"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11441,6 +14129,12 @@
             "state" : "translated",
             "value" : "清一色"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清一色"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11461,6 +14155,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清幺九"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "清幺九"
@@ -11492,6 +14192,12 @@
             "state" : "translated",
             "value" : "清龍"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清龙"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11516,6 +14222,12 @@
             "state" : "translated",
             "value" : "演示資料，沒看你的照片 · 長按首頁標題填 Key"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "演示数据，没看你的照片 · 长按首页标题填 Key"
+          }
         }
       }
     },
@@ -11537,6 +14249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "點一下可以改或刪掉這一局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点一下可以改或删掉这一局"
           }
         }
       }
@@ -11560,6 +14278,12 @@
             "state" : "translated",
             "value" : "點一下改"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点一下改"
+          }
         }
       }
     },
@@ -11581,6 +14305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "點一下看這一局怎麼和的"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点一下看这一局怎么和的"
           }
         }
       }
@@ -11604,6 +14334,12 @@
             "state" : "translated",
             "value" : "點一局，看那把怎麼和的；記錯了也在裡面改。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点一局，看那把怎么和的；记错了也在里面改。"
+          }
         }
       }
     },
@@ -11625,6 +14361,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "點炮"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点炮"
           }
         }
       }
@@ -11648,6 +14390,12 @@
             "state" : "translated",
             "value" : "點炮一家付"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点炮一家付"
+          }
         }
       }
     },
@@ -11669,6 +14417,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "點炮的人不能是和牌的人"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点炮的人不能是和牌的人"
           }
         }
       },
@@ -11694,6 +14448,12 @@
             "state" : "translated",
             "value" : "點炮誰付"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点炮谁付"
+          }
         }
       }
     },
@@ -11708,7 +14468,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On a discard: %1$@ pays %2$lld + %3$lld = %4$lld pts; the other two pay %5$lld each."
+            "value" : "On a discard: %1$@ pays %2$lld + %3$lld = %4$lld pts; the other two pay %5$lld each."
           }
         },
         "ja" : {
@@ -11736,7 +14496,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On a discard: %1$@ pays %2$lld + %3$lld = %4$lld pts; by house rule the other two pay nothing."
+            "value" : "On a discard: %1$@ pays %2$lld + %3$lld = %4$lld pts; by house rule the other two pay nothing."
           }
         },
         "ja" : {
@@ -11772,6 +14532,12 @@
             "state" : "translated",
             "value" : "照樣能用。拍照後用手機上的離線認牌，讀錯的牌點一下改，也可以手動選牌。算番、記帳都一樣。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照样能用。拍照后用手机上的离线认牌，读错的牌点一下改，也可以手动选牌。算番、记账都一样。"
+          }
         }
       }
     },
@@ -11793,6 +14559,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "照片處理失敗"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片处理失败"
           }
         }
       },
@@ -11818,6 +14590,12 @@
             "state" : "translated",
             "value" : "照片打不開"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片打不开"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11842,6 +14620,12 @@
             "state" : "translated",
             "value" : "照片裡沒找到牌，靠近一點、亮一點再拍"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片里没找到牌，靠近一点、亮一点再拍"
+          }
         }
       },
       "extractionState" : "manual",
@@ -11862,6 +14646,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "牌型成立"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "牌型成立"
@@ -11920,6 +14710,12 @@
             "state" : "translated",
             "value" : "牌型沒問題。看看下面的少見情況有沒有漏選；牌都對的話，這手就是不夠番。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "牌型没问题。看看下面的少见情况有没有漏选；牌都对的话，这手就是不够番。"
+          }
         }
       }
     },
@@ -11942,6 +14738,12 @@
             "state" : "translated",
             "value" : "牌沒認錯，是真的和錯了？記下來（賠三家各 %lld 分）›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "牌没认错，是真的和错了？记下来（赔三家各 %lld 分）›"
+          }
         }
       }
     },
@@ -11963,6 +14765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "玩家不對"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "玩家不对"
           }
         }
       },
@@ -11991,6 +14799,12 @@
             "state" : "translated",
             "value" : "現在連不上 iCloud，稍後會再試。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在连不上 iCloud，稍后会再试。"
+          }
         }
       }
     },
@@ -12016,6 +14830,12 @@
             "state" : "translated",
             "value" : "畫面裡還有 %lld 張別的牌，沒算進去"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面里还有 %lld 张别的牌，没算进去"
+          }
         }
       },
       "extractionState" : "manual",
@@ -12036,6 +14856,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "番"
@@ -12062,6 +14888,12 @@
             "state" : "translated",
             "value" : "番和錢都算好。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番和钱都算好。"
+          }
         }
       }
     },
@@ -12083,6 +14915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "番怎麼算"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番怎么算"
           }
         }
       }
@@ -12106,6 +14944,12 @@
             "state" : "translated",
             "value" : "番數"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番数"
+          }
         }
       }
     },
@@ -12127,6 +14971,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "番數不夠 8 番不能和。花牌每張 1 番，但不算進這 8 番。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番数不够 8 番不能和。花牌每张 1 番，但不算进这 8 番。"
           }
         }
       }
@@ -12150,6 +15000,12 @@
             "state" : "translated",
             "value" : "番數是手填的，沒有番種明細。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番数是手填的，没有番种明细。"
+          }
         }
       }
     },
@@ -12171,6 +15027,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "番數是手填的，帳本裡不再列番種。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番数是手填的，账本里不再列番种。"
           }
         }
       }
@@ -12194,6 +15056,12 @@
             "state" : "translated",
             "value" : "番是這麼算的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "番是这么算的"
+          }
         }
       }
     },
@@ -12212,6 +15080,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "白"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "白"
@@ -12240,6 +15114,12 @@
             "state" : "translated",
             "value" : "直接改分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直接改分"
+          }
         }
       }
     },
@@ -12258,6 +15138,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直接改分 · %@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "直接改分 · %@"
@@ -12284,6 +15170,12 @@
             "state" : "translated",
             "value" : "直接改的分不能在這裡改。要重填就刪掉這一局，再從右上角「直接改分」記一條。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直接改的分不能在这里改。要重填就删掉这一局，再从右上角「直接改分」记一条。"
+          }
         }
       }
     },
@@ -12306,6 +15198,12 @@
             "state" : "translated",
             "value" : "看當時拍的照片"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看当时拍的照片"
+          }
         }
       }
     },
@@ -12324,6 +15222,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看拍的照片"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "看拍的照片"
@@ -12350,6 +15254,12 @@
             "state" : "translated",
             "value" : "看每一局，改記錯的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看每一局，改记错的"
+          }
         }
       }
     },
@@ -12371,6 +15281,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "看結果"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看结果"
           }
         }
       }
@@ -12394,6 +15310,12 @@
             "state" : "translated",
             "value" : "看結算"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看结算"
+          }
         }
       }
     },
@@ -12416,6 +15338,12 @@
             "state" : "translated",
             "value" : "看邀請碼，或者移除"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看邀请码，或者移除"
+          }
         }
       }
     },
@@ -12434,6 +15362,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "碰"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "碰"
@@ -12462,6 +15396,12 @@
             "state" : "translated",
             "value" : "碰碰和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "碰碰和"
+          }
         }
       },
       "extractionState" : "manual",
@@ -12486,6 +15426,12 @@
             "state" : "translated",
             "value" : "移除邀請碼"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除邀请码"
+          }
         }
       }
     },
@@ -12507,6 +15453,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "稍等幾秒"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍等几秒"
           }
         }
       }
@@ -12533,6 +15485,12 @@
             "state" : "translated",
             "value" : "端側模型沒有輸出"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "端侧模型没有输出"
+          }
         }
       },
       "extractionState" : "manual",
@@ -12556,6 +15514,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "端側模型沒裝（見 app/README.md）"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "端侧模型没装（见 app/README.md）"
           }
         }
       },
@@ -12581,6 +15545,12 @@
             "state" : "translated",
             "value" : "端側模型的輸入輸出不是預期的格式"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "端侧模型的输入输出不是预期的格式"
+          }
         }
       },
       "extractionState" : "manual",
@@ -12604,6 +15574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "第 %lld 局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第 %lld 局"
           }
         }
       }
@@ -12683,6 +15659,12 @@
             "state" : "translated",
             "value" : "第 %lld 張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第 %lld 张"
+          }
         }
       }
     },
@@ -12733,6 +15715,12 @@
             "state" : "translated",
             "value" : "第 %lld 張可能是多認的，照片裡有這張嗎？"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第 %lld 张可能是多认的，照片里有这张吗？"
+          }
         }
       }
     },
@@ -12754,6 +15742,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "第 %lld 張是"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第 %lld 张是"
           }
         }
       }
@@ -12777,6 +15771,12 @@
             "state" : "translated",
             "value" : "第 %lld 張看不太清，是哪個？"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第 %lld 张看不太清，是哪个？"
+          }
         }
       }
     },
@@ -12798,6 +15798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "第一局誰坐莊"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第一局谁坐庄"
           }
         }
       }
@@ -12821,6 +15827,12 @@
             "state" : "translated",
             "value" : "第一次打國標？先看看番怎麼算"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第一次打国标？先看看番怎么算"
+          }
         }
       }
     },
@@ -12842,6 +15854,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "第一行是你，往下按出牌順序填。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第一行是你，往下按出牌顺序填。"
           }
         }
       }
@@ -12865,6 +15883,12 @@
             "state" : "translated",
             "value" : "第二遍沒複核上（%@），只有第一遍的讀法，對照照片看一眼"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第二遍没复核上（%@），只有第一遍的读法，对照照片看一眼"
+          }
         }
       },
       "extractionState" : "manual",
@@ -12885,6 +15909,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "算"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "算"
@@ -12911,6 +15941,12 @@
             "state" : "translated",
             "value" : "算作一局記進帳本，莊家照常往下輪。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "算作一局记进账本，庄家照常往下轮。"
+          }
         }
       }
     },
@@ -12929,6 +15965,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "箭刻"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "箭刻"
@@ -12960,6 +16002,12 @@
             "state" : "translated",
             "value" : "組合龍"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "组合龙"
+          }
         }
       },
       "extractionState" : "manual",
@@ -12984,6 +16032,12 @@
             "state" : "translated",
             "value" : "結束"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束"
+          }
         }
       }
     },
@@ -13005,6 +16059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "結束後就不能再記了，會算出誰該給誰轉多少。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束后就不能再记了，会算出谁该给谁转多少。"
           }
         }
       }
@@ -13028,6 +16088,12 @@
             "state" : "translated",
             "value" : "結束牌局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束牌局"
+          }
         }
       }
     },
@@ -13049,6 +16115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "結束這場牌局？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束这场牌局？"
           }
         }
       }
@@ -13072,6 +16144,12 @@
             "state" : "translated",
             "value" : "結算"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结算"
+          }
         }
       }
     },
@@ -13094,6 +16172,12 @@
             "state" : "translated",
             "value" : "繼續 ›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续 ›"
+          }
         }
       }
     },
@@ -13115,6 +16199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "綠一色"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "绿一色"
           }
         }
       },
@@ -13140,6 +16230,12 @@
             "state" : "translated",
             "value" : "缺一門"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺一门"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13163,6 +16259,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "缺少一種花色的數牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少一种花色的数牌"
           }
         }
       },
@@ -13188,6 +16290,12 @@
             "state" : "translated",
             "value" : "網路出錯：%@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络出错：%@"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13208,6 +16316,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "老少副"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "老少副"
@@ -13236,6 +16350,12 @@
             "state" : "translated",
             "value" : "聯絡方式，可以不填"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "联系方式，可以不填"
+          }
         }
       }
     },
@@ -13257,6 +16377,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "聯絡方式：%@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "联系方式：%@"
           }
         }
       }
@@ -13283,6 +16409,12 @@
             "state" : "translated",
             "value" : "自己定"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己定"
+          }
         }
       }
     },
@@ -13305,6 +16437,12 @@
             "state" : "translated",
             "value" : "自己摸到 %@，和了。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己摸到 %@，和了。"
+          }
         }
       }
     },
@@ -13323,6 +16461,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己摸到和牌"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "自己摸到和牌"
@@ -13351,6 +16495,12 @@
             "state" : "translated",
             "value" : "自己摸到和的那張，三家都要付。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己摸到和的那张，三家都要付。"
+          }
         }
       }
     },
@@ -13372,6 +16522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自己摸到的選「自摸」；和的是別人打出的牌，就選打那張的人。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。"
           }
         }
       }
@@ -13395,6 +16551,12 @@
             "state" : "translated",
             "value" : "自己改"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己改"
+          }
         }
       }
     },
@@ -13413,6 +16575,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自摸"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "自摸"
@@ -13441,6 +16609,12 @@
             "state" : "translated",
             "value" : "自摸。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自摸。"
+          }
         }
       }
     },
@@ -13463,6 +16637,12 @@
             "state" : "translated",
             "value" : "自摸牌牆的最後一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自摸牌墙的最后一张"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13479,7 +16659,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Self-drawn: each of the three pays %1$lld + %2$lld = %3$lld pts."
+            "value" : "Self-drawn: each of the three pays %1$lld + %2$lld = %3$lld pts."
           }
         },
         "ja" : {
@@ -13515,6 +16695,12 @@
             "state" : "translated",
             "value" : "花牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "花牌"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13535,6 +16721,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "花牌 ×%lld"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "花牌 ×%lld"
@@ -13591,6 +16783,12 @@
             "state" : "translated",
             "value" : "花龍"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "花龙"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13614,6 +16812,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "補一張 %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "补一张 %@"
           }
         }
       }
@@ -13667,6 +16871,12 @@
             "state" : "translated",
             "value" : "西"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "西"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13691,6 +16901,12 @@
             "state" : "translated",
             "value" : "西風圈"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "西风圈"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13711,6 +16927,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要 8 番才能和"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "要 8 番才能和"
@@ -13737,6 +16959,12 @@
             "state" : "translated",
             "value" : "要改番數就點加減。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要改番数就点加减。"
+          }
         }
       }
     },
@@ -13758,6 +16986,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "規則"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "规则"
           }
         }
       }
@@ -13781,6 +17015,12 @@
             "state" : "translated",
             "value" : "規則和番種"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "规则和番种"
+          }
         }
       }
     },
@@ -13802,6 +17042,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "覺得好用？去 App Store 打個分"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "觉得好用？去 App Store 打个分"
           }
         }
       }
@@ -13825,6 +17071,12 @@
             "state" : "translated",
             "value" : "認出 %lld 張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认出 %lld 张"
+          }
         }
       }
     },
@@ -13846,6 +17098,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "認出牌，按國標算番"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认出牌，按国标算番"
           }
         }
       }
@@ -13869,6 +17127,12 @@
             "state" : "translated",
             "value" : "認錯了：改成 %@ 就能和。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认错了：改成 %@ 就能和。"
+          }
         }
       }
     },
@@ -13890,6 +17154,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "記"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "记"
           }
         }
       }
@@ -13913,6 +17183,12 @@
             "state" : "translated",
             "value" : "記下"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "记下"
+          }
         }
       }
     },
@@ -13934,6 +17210,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "記下：賠三家各 %lld 分"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "记下：赔三家各 %lld 分"
           }
         }
       }
@@ -13960,6 +17242,12 @@
             "state" : "translated",
             "value" : "識別服務的回答格式不對"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "识别服务的回答格式不对"
+          }
         }
       },
       "extractionState" : "manual",
@@ -13983,6 +17271,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "識別結果看不懂：%@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "识别结果看不懂：%@"
           }
         }
       },
@@ -14008,6 +17302,12 @@
             "state" : "translated",
             "value" : "讀取牌局記錄失敗：%@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "读取牌局记录失败：%@"
+          }
         }
       }
     },
@@ -14029,6 +17329,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "誰和了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谁和了"
           }
         }
       }
@@ -14052,6 +17358,12 @@
             "state" : "translated",
             "value" : "誰和了？"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谁和了？"
+          }
         }
       }
     },
@@ -14073,6 +17385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "誰和錯了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谁和错了"
           }
         }
       }
@@ -14096,6 +17414,12 @@
             "state" : "translated",
             "value" : "誰和錯了？"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谁和错了？"
+          }
         }
       }
     },
@@ -14117,6 +17441,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "誰在打？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谁在打？"
           }
         }
       }
@@ -14140,6 +17470,12 @@
             "state" : "translated",
             "value" : "誰給誰多少，自動記帳"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谁给谁多少，自动记账"
+          }
         }
       }
     },
@@ -14161,6 +17497,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "帳本"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账本"
           }
         }
       }
@@ -14184,6 +17526,12 @@
             "state" : "translated",
             "value" : "賠另外三家各 %lld 分，不算一局。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赔另外三家各 %lld 分，不算一局。"
+          }
         }
       }
     },
@@ -14205,6 +17553,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "贏"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赢"
           }
         }
       }
@@ -14228,6 +17582,12 @@
             "state" : "translated",
             "value" : "贏的比輸的多 %lld 分，加起來要等於 0。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赢的比输的多 %lld 分，加起来要等于 0。"
+          }
         }
       }
     },
@@ -14246,6 +17606,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "起和"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "起和"
@@ -14272,6 +17638,12 @@
             "state" : "translated",
             "value" : "轉給"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转给"
+          }
         }
       }
     },
@@ -14293,6 +17665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "轉帳"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转账"
           }
         }
       }
@@ -14316,6 +17694,12 @@
             "state" : "translated",
             "value" : "輸"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输"
+          }
         }
       }
     },
@@ -14338,6 +17722,12 @@
             "state" : "translated",
             "value" : "輸的比贏的多 %lld 分，加起來要等於 0。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输的比赢的多 %lld 分，加起来要等于 0。"
+          }
         }
       }
     },
@@ -14359,6 +17749,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "邊張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "边张"
           }
         }
       },
@@ -14383,6 +17779,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "還湊不成和牌"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还凑不成和牌"
           }
         }
       }
@@ -14418,6 +17820,12 @@
             "state" : "translated",
             "value" : "還有 %lld 張沒確認"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还有 %lld 张没确认"
+          }
         }
       }
     },
@@ -14439,6 +17847,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "還沒填"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没填"
           }
         }
       }
@@ -14462,6 +17876,12 @@
             "state" : "translated",
             "value" : "還沒有記錄。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没有记录。"
+          }
         }
       }
     },
@@ -14484,6 +17904,12 @@
             "state" : "translated",
             "value" : "還沒有記錄。有人和了就點下面的按鈕。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没有记录。有人和了就点下面的按钮。"
+          }
         }
       }
     },
@@ -14505,6 +17931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "還沒有設定識別服務（在設定裡填 Gemini API Key 或代理地址）"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没有设置识别服务（在设置里填 Gemini API Key 或代理地址）"
           }
         }
       },
@@ -14530,6 +17962,12 @@
             "state" : "translated",
             "value" : "還沒連上我們的伺服器"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没连上我们的服务器"
+          }
         }
       }
     },
@@ -14551,6 +17989,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這一局"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一局"
           }
         }
       }
@@ -14574,6 +18018,12 @@
             "state" : "translated",
             "value" : "這一局不算打完，接著打。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一局不算打完，接着打。"
+          }
         }
       }
     },
@@ -14595,6 +18045,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這一局已經不在帳本裡了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一局已经不在账本里了"
           }
         }
       }
@@ -14618,6 +18074,12 @@
             "state" : "translated",
             "value" : "這一局的分數全部退回，後面的局往前挪。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一局的分数全部退回，后面的局往前挪。"
+          }
         }
       }
     },
@@ -14639,6 +18101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這一局的牌和分數都還在，只是不能再看照片。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这一局的牌和分数都还在，只是不能再看照片。"
           }
         }
       }
@@ -14662,6 +18130,12 @@
             "state" : "translated",
             "value" : "這個檔案讀不出來，確認是「匯出全部牌局」匯出的檔案。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这个文件读不出来，确认是「导出全部牌局」导出的文件。"
+          }
         }
       }
     },
@@ -14683,6 +18157,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這台手機沒登入 iCloud，登入後會自動同步。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台手机没登录 iCloud，登录后会自动同步。"
           }
         }
       }
@@ -14706,6 +18186,12 @@
             "state" : "translated",
             "value" : "這台手機的 iCloud 被限制了（比如家長控制）。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台手机的 iCloud 被限制了（比如家长控制）。"
+          }
         }
       }
     },
@@ -14727,6 +18213,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這台裝置沒有相機，從右邊的相簿選一張"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台设备没有相机，从右边的相册选一张"
           }
         }
       }
@@ -14750,6 +18242,12 @@
             "state" : "translated",
             "value" : "這台裝置沒有相機，從左下角的相簿選一張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台设备没有相机，从左下角的相册选一张"
+          }
         }
       }
     },
@@ -14771,6 +18269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這場牌局已經打完了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这场牌局已经打完了"
           }
         }
       },
@@ -14796,6 +18300,12 @@
             "state" : "translated",
             "value" : "這場的規則"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这场的规则"
+          }
         }
       }
     },
@@ -14817,6 +18327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這局沒人和"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这局没人和"
           }
         }
       }
@@ -14840,6 +18356,12 @@
             "state" : "translated",
             "value" : "這局沒人和，不計分。"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这局没人和，不计分。"
+          }
         }
       }
     },
@@ -14861,6 +18383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這局誰付多少"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这局谁付多少"
           }
         }
       }
@@ -14884,6 +18412,12 @@
             "state" : "translated",
             "value" : "這張是和的那張"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这张是和的那张"
+          }
         }
       }
     },
@@ -14905,6 +18439,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這張照片沒法識別（%@），換一張試試"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这张照片没法识别（%@），换一张试试"
           }
         }
       },
@@ -14930,6 +18470,12 @@
             "state" : "translated",
             "value" : "這手有 %lld 處要你動手改。有邀請碼可以開 AI 認牌，更準 ›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这手有 %lld 处要你动手改。有邀请码可以开 AI 认牌，更准 ›"
+          }
         }
       }
     },
@@ -14952,6 +18498,12 @@
             "state" : "translated",
             "value" : "這手牌還和不了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这手牌还和不了"
+          }
         }
       }
     },
@@ -14973,6 +18525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這樣改就超過 %lld 局了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这样改就超过 %lld 局了"
           }
         }
       },
@@ -14998,6 +18556,12 @@
             "state" : "translated",
             "value" : "這樣轉帳最省事"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这样转账最省事"
+          }
         }
       }
     },
@@ -15019,6 +18583,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "連七對"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连七对"
           }
         }
       },
@@ -15044,6 +18614,12 @@
             "state" : "translated",
             "value" : "連六"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连六"
+          }
         }
       },
       "extractionState" : "manual",
@@ -15068,6 +18644,12 @@
             "state" : "translated",
             "value" : "選一下怎麼和的"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选一下怎么和的"
+          }
         }
       }
     },
@@ -15089,6 +18671,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選一下是誰點的炮"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选一下是谁点的炮"
           }
         }
       }
@@ -15112,6 +18700,12 @@
             "state" : "translated",
             "value" : "選一下誰和了"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选一下谁和了"
+          }
         }
       }
     },
@@ -15133,6 +18727,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選一下誰點的炮"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选一下谁点的炮"
           }
         }
       }
@@ -15156,6 +18756,12 @@
             "state" : "translated",
             "value" : "選是哪張牌"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选是哪张牌"
+          }
         }
       }
     },
@@ -15177,6 +18783,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選這個和不了"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选这个和不了"
           }
         }
       }
@@ -15200,6 +18812,12 @@
             "state" : "translated",
             "value" : "選這個能和"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选这个能和"
+          }
         }
       }
     },
@@ -15221,6 +18839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選這組裡最小的那張（567 餅就選 5 餅）"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选这组里最小的那张（567 饼就选 5 饼）"
           }
         }
       }
@@ -15244,6 +18868,12 @@
             "state" : "translated",
             "value" : "邀請碼"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邀请码"
+          }
         }
       }
     },
@@ -15265,6 +18895,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "邀請碼是 6 位字母和數字，核對一下再輸"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邀请码是 6 位字母和数字，核对一下再输"
           }
         }
       },
@@ -15290,6 +18926,12 @@
             "state" : "translated",
             "value" : "都不是，自己選 ›"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "都不是，自己选 ›"
+          }
         }
       }
     },
@@ -15308,6 +18950,12 @@
           }
         },
         "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重拍"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "重拍"
@@ -15334,6 +18982,12 @@
             "state" : "translated",
             "value" : "重算以後"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重算以后"
+          }
         }
       }
     },
@@ -15355,6 +19009,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "錯和賠 %lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错和赔 %lld"
           }
         }
       }
@@ -15378,6 +19038,12 @@
             "state" : "translated",
             "value" : "錯和賠每家"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错和赔每家"
+          }
         }
       }
     },
@@ -15399,6 +19065,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "門前清"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "门前清"
           }
         }
       },
@@ -15424,6 +19096,12 @@
             "state" : "translated",
             "value" : "門風刻"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "门风刻"
+          }
         }
       },
       "extractionState" : "manual",
@@ -15448,6 +19126,12 @@
             "state" : "translated",
             "value" : "順手去 App Store 打個分"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顺手去 App Store 打个分"
+          }
         }
       }
     },
@@ -15470,6 +19154,12 @@
             "state" : "translated",
             "value" : "風圈 · 第 %lld 局"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "风圈 · 第 %lld 局"
+          }
         }
       }
     },
@@ -15491,6 +19181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "首頁"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首页"
           }
         }
       }
