@@ -21,7 +21,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " · %lld 張兩遍不一樣"
+            "value" : " · %lld 張兩遍不一樣"
           }
         }
       }
@@ -124,7 +124,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ · %2$lld 局"
+            "value" : "%1$@ · %2$lld 局"
           }
         }
       }
@@ -152,7 +152,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ · %2$lld 局 · %3$@"
+            "value" : "%1$@ · %2$lld 局 · %3$@"
           }
         }
       }
@@ -202,7 +202,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ · 第 %2$lld 局"
+            "value" : "%1$@ · 第 %2$lld 局"
           }
         }
       }
@@ -837,7 +837,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 分"
+            "value" : "%lld 分"
           }
         }
       }
@@ -859,7 +859,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 分是底分，不管幾番都要先付。"
+            "value" : "%lld 分是底分，不管幾番都要先付。"
           }
         }
       }
@@ -927,7 +927,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 局打完"
+            "value" : "%lld 局打完"
           }
         }
       }
@@ -977,7 +977,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld 番按 %2$lld 算"
+            "value" : "%1$lld 番按 %2$lld 算"
           }
         }
       }
@@ -987,7 +987,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld-fan minimum"
+            "value" : "%lld‑fan minimum"
           }
         },
         "ja" : {
@@ -999,7 +999,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 番起和"
+            "value" : "%lld 番起和"
           }
         }
       }
@@ -1207,7 +1207,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI 認錯了 %lld 張，照片只用來改進認牌"
+            "value" : "AI 認錯了 %lld 張，照片只用來改進認牌"
           }
         }
       }
@@ -1968,7 +1968,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "一共 %lld 局"
+            "value" : "一共 %lld 局"
           }
         }
       }
@@ -3072,7 +3072,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不夠 %lld 番，和不了"
+            "value" : "不夠 %lld 番，和不了"
           }
         }
       }
@@ -4635,7 +4635,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "其實是和錯了？記下來（賠三家各 %lld 分）›"
+            "value" : "其實是和錯了？記下來（賠三家各 %lld 分）›"
           }
         }
       }
@@ -4857,7 +4857,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "刪掉第 %lld 局？"
+            "value" : "刪掉第 %lld 局？"
           }
         }
       }
@@ -5583,7 +5583,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "只有 %lld 番，不夠起和"
+            "value" : "只有 %lld 番，不夠起和"
           }
         }
       },
@@ -5613,7 +5613,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "只有 %1$lld 番，國標要 %2$lld 番才能和"
+            "value" : "只有 %1$lld 番，國標要 %2$lld 番才能和"
           }
         }
       }
@@ -6230,7 +6230,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "含花牌 %lld 番。"
+            "value" : "含花牌 %lld 番。"
           }
         }
       }
@@ -6390,7 +6390,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "和牌一共 14 張（每個槓多 1 張），現在是 %lld 張。"
+            "value" : "和牌一共 14 張（每個槓多 1 張），現在是 %lld 張。"
           }
         }
       }
@@ -6422,7 +6422,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Winner lays the tiles down; snap them"
+            "value" : "Lay the hand down; snap it"
           }
         },
         "ja" : {
@@ -6456,7 +6456,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "和牌要 4 組加 1 對，這 %lld 張湊不出來。"
+            "value" : "和牌要 4 組加 1 對，這 %lld 張湊不出來。"
           }
         }
       }
@@ -7140,7 +7140,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在第 %lld 張後面加"
+            "value" : "在第 %lld 張後面加"
           }
         }
       }
@@ -7689,7 +7689,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "家規封頂 %1$lld 番：%2$lld 番按 %3$lld 算"
+            "value" : "家規封頂 %1$lld 番：%2$lld 番按 %3$lld 算"
           }
         }
       }
@@ -7831,7 +7831,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld-fan cap"
+            "value" : "%lld‑fan cap"
           }
         },
         "ja" : {
@@ -7843,7 +7843,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "封頂 %lld 番"
+            "value" : "封頂 %lld 番"
           }
         }
       }
@@ -8096,7 +8096,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已記下第 %lld 局"
+            "value" : "已記下第 %lld 局"
           }
         }
       }
@@ -8741,7 +8741,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打了 %lld 局"
+            "value" : "打了 %lld 局"
           }
         }
       }
@@ -8769,7 +8769,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打了 %1$lld 局 · 還剩 %2$lld 局"
+            "value" : "打了 %1$lld 局 · 還剩 %2$lld 局"
           }
         }
       }
@@ -8841,7 +8841,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打到%1$@第 %2$lld 局"
+            "value" : "打到%1$@第 %2$lld 局"
           }
         }
       }
@@ -8857,7 +8857,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "和了したらその手牌を撮るだけ。番数計算と記録はおまかせ。"
+            "value" : "和了したらその手牌を撮るだけ。番数計算と記録はお⁠ま⁠か⁠せ⁠。"
           }
         },
         "zh-Hant" : {
@@ -8959,7 +8959,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "把 %1$@ 改成 %2$@，就是 %3$lld 番"
+            "value" : "把 %1$@ 改成 %2$@，就是 %3$lld 番"
           }
         }
       },
@@ -9345,7 +9345,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "推倒了湊不成和牌，賠三家各 %lld 分"
+            "value" : "推倒了湊不成和牌，賠三家各 %lld 分"
           }
         }
       }
@@ -9411,7 +9411,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "推倒了卻湊不成和牌：賠另外三家各 %lld 分，這一局接著打。"
+            "value" : "推倒了卻湊不成和牌：賠另外三家各 %lld 分，這一局接著打。"
           }
         }
       }
@@ -9675,7 +9675,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "改第 %lld 局"
+            "value" : "改第 %lld 局"
           }
         }
       }
@@ -9709,7 +9709,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "改，前面 %lld 局一起重算"
+            "value" : "改，前面 %lld 局一起重算"
           }
         }
       }
@@ -10113,7 +10113,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大一手：%1$@ %2$@ %3$lld 番"
+            "value" : "最大一手：%1$@ %2$@ %3$lld 番"
           }
         }
       }
@@ -10141,7 +10141,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最大一手：%1$@ %2$lld 番"
+            "value" : "最大一手：%1$@ %2$lld 番"
           }
         }
       }
@@ -10731,7 +10731,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 fan per flower; doesn't count toward the 8-fan minimum"
+            "value" : "1 fan per flower; doesn't count toward the 8‑fan minimum"
           }
         },
         "ja" : {
@@ -10843,7 +10843,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "比如自摸 24 番：三家各付 %1$lld 分，一共贏 %2$@。"
+            "value" : "比如自摸 24 番：三家各付 %1$lld 分，一共贏 %2$@。"
           }
         }
       }
@@ -11720,7 +11720,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點炮：%1$@付 %2$lld + %3$lld = %4$lld 分，另外兩家各付 %5$lld 分。"
+            "value" : "點炮：%1$@付 %2$lld + %3$lld = %4$lld 分，另外兩家各付 %5$lld 分。"
           }
         }
       }
@@ -11748,7 +11748,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點炮：%1$@付 %2$lld + %3$lld = %4$lld 分，按家規另外兩家不用付。"
+            "value" : "點炮：%1$@付 %2$lld + %3$lld = %4$lld 分，按家規另外兩家不用付。"
           }
         }
       }
@@ -11882,7 +11882,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A valid hand, but only %1$lld fan, under the %2$lld-fan minimum (flowers don't count)"
+            "value" : "A valid hand, but only %1$lld fan, under the %2$lld‑fan minimum (flowers don't count)"
           }
         },
         "ja" : {
@@ -11894,7 +11894,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "牌型成立，但只有 %1$lld 番，不夠 %2$lld 番起和（花牌不算）"
+            "value" : "牌型成立，但只有 %1$lld 番，不夠 %2$lld 番起和（花牌不算）"
           }
         }
       },
@@ -11940,7 +11940,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "牌沒認錯，是真的和錯了？記下來（賠三家各 %lld 分）›"
+            "value" : "牌沒認錯，是真的和錯了？記下來（賠三家各 %lld 分）›"
           }
         }
       }
@@ -12014,7 +12014,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "畫面裡還有 %lld 張別的牌，沒算進去"
+            "value" : "畫面裡還有 %lld 張別的牌，沒算進去"
           }
         }
       },
@@ -12603,7 +12603,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %lld 局"
+            "value" : "第 %lld 局"
           }
         }
       }
@@ -12631,7 +12631,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %1$lld 局 · %2$@"
+            "value" : "第 %1$lld 局 · %2$@"
           }
         }
       }
@@ -12659,7 +12659,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %1$lld 局 · %2$@ · %3$@坐莊"
+            "value" : "第 %1$lld 局 · %2$@ · %3$@坐莊"
           }
         }
       }
@@ -12681,7 +12681,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %lld 張"
+            "value" : "第 %lld 張"
           }
         }
       }
@@ -12709,7 +12709,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %1$lld 張 · %2$@"
+            "value" : "第 %1$lld 張 · %2$@"
           }
         }
       }
@@ -12731,7 +12731,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %lld 張可能是多認的，照片裡有這張嗎？"
+            "value" : "第 %lld 張可能是多認的，照片裡有這張嗎？"
           }
         }
       }
@@ -12753,7 +12753,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %lld 張是"
+            "value" : "第 %lld 張是"
           }
         }
       }
@@ -12775,7 +12775,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 %lld 張看不太清，是哪個？"
+            "value" : "第 %lld 張看不太清，是哪個？"
           }
         }
       }
@@ -13491,7 +13491,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自摸：三家各付 %1$lld + %2$lld = %3$lld 分。"
+            "value" : "自摸：三家各付 %1$lld + %2$lld = %3$lld 分。"
           }
         }
       }
@@ -13565,7 +13565,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "花牌兩遍數得不一樣（一遍 %1$lld 張，一遍 %2$lld 張），在下面改"
+            "value" : "花牌兩遍數得不一樣（一遍 %1$lld 張，一遍 %2$lld 張），在下面改"
           }
         }
       },
@@ -13641,7 +13641,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "補一張 %1$@，就是 %2$lld 番"
+            "value" : "補一張 %1$@，就是 %2$lld 番"
           }
         }
       },
@@ -13823,7 +13823,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "認出 %lld 張"
+            "value" : "認出 %lld 張"
           }
         }
       }
@@ -13933,7 +13933,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "記下：賠三家各 %lld 分"
+            "value" : "記下：賠三家各 %lld 分"
           }
         }
       }
@@ -14182,7 +14182,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "賠另外三家各 %lld 分，不算一局。"
+            "value" : "賠另外三家各 %lld 分，不算一局。"
           }
         }
       }
@@ -14226,7 +14226,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "贏的比輸的多 %lld 分，加起來要等於 0。"
+            "value" : "贏的比輸的多 %lld 分，加起來要等於 0。"
           }
         }
       }
@@ -14336,7 +14336,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "輸的比贏的多 %lld 分，加起來要等於 0。"
+            "value" : "輸的比贏的多 %lld 分，加起來要等於 0。"
           }
         }
       }
@@ -14416,7 +14416,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "還有 %lld 張沒確認"
+            "value" : "還有 %lld 張沒確認"
           }
         }
       }
@@ -14972,7 +14972,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "這樣改就超過 %lld 局了"
+            "value" : "這樣改就超過 %lld 局了"
           }
         }
       },
@@ -15468,7 +15468,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "風圈 · 第 %lld 局"
+            "value" : "風圈 · 第 %lld 局"
           }
         }
       }

@@ -191,7 +191,7 @@ extension Game {
         title.append(isFinished ? String(localized: "\(currentHandIndex) 局打完")
                      : String(localized: "打到\(prevalentWind(ofHand: displayHand).roundName)第 \(displayHand % 4 + 1) 局"))
 
-        var sections = [[title.joined(separator: " · ")]]
+        var sections = [[title.joined(separator: .dotSeparator)]]
         sections.append(Settlement.ranking(scores: scores).map { player in
             var line = players[player].name + gap + Theme.signed(scores[player])
             if showMoney { line += gap + moneyText(scores[player]) }
@@ -206,7 +206,7 @@ extension Game {
             }
             if let line = biggestWinLine { sections.append([line]) }
         } else if let last = records.last {
-            sections.append([String(localized: "上一局：\(last.title(in: self).replacingOccurrences(of: " · ", with: " "))")])
+            sections.append([String(localized: "上一局：\(last.title(in: self).replacingOccurrences(of: String.dotSeparator, with: " "))")])
         }
         return sections.map { $0.joined(separator: "\n") }.joined(separator: "\n\n")
     }

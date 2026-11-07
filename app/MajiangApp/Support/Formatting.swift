@@ -18,10 +18,10 @@ extension HandRecord {
             var parts = [win.discarder.map { String(localized: "\(name(win.winner))和 · \(name($0))点炮") }
                          ?? String(localized: "\(name(win.winner))自摸")]
             // 大番种值得写出来（清一色、七对……），小番种不写
-            if let top = win.fans.first, top.fan.points >= 6, top.fan != .chickenHand { parts.append(top.fan.name) }
+            if let top = win.fans.first, top.fan.points >= 6, top.fan != .chickenHand { parts.append(top.fan.name.keptTogether) }
             let paid = game.rules.paidFan(win)
             parts.append(paid < win.totalFan ? String(localized: "\(win.totalFan) 番按 \(paid) 算") : String(localized: "\(win.totalFan) 番"))
-            return parts.joined(separator: " · ")
+            return parts.joined(separator: .dotSeparator)
         case .drawn:
             return String(localized: "这局没人和")
         case .falseWin(let offender):
@@ -132,13 +132,13 @@ extension GameRules {
     var summary: String {
         let house = houseRuleParts
         return ([String(localized: "国标")] + (house.isEmpty ? [String(localized: "带花")] : house) + [rateText])
-            .joined(separator: " · ")
+            .joined(separator: .dotSeparator)
     }
 
     /// 开局页那一行：「标准国标 · 1 分 1 元」「新手局 · 1 分 1 元」「封顶 64 番 · 1 分 2 元」。
     var shortSummary: String {
         let name = scoresLike(.standard) ? String(localized: "标准国标") : scoresLike(.beginner) ? String(localized: "新手局")
-            : houseRuleParts.joined(separator: " · ")
+            : houseRuleParts.joined(separator: .dotSeparator)
         return "\(name) · \(shortRateText)"
     }
 
@@ -146,7 +146,7 @@ extension GameRules {
     var houseRuleBadge: String? {
         let house = houseRuleParts
         guard !house.isEmpty else { return nil }
-        return ([String(localized: "家规")] + house + [shortRateText]).joined(separator: " · ")
+        return ([String(localized: "家规")] + house + [shortRateText]).joined(separator: .dotSeparator)
     }
 
     /// 「1 分 = 2 元」；英文「1 pt = £2」。
@@ -205,4 +205,15 @@ enum Money {
 
     /// 分句之间的逗号：中文「，」，英文「, 」。
     static var clauseSeparator: String { String(localized: "list.clause", defaultValue: "，", comment: "两句之间的逗号") }
+}
+
+extension String {
+    /// 「莉莉自摸 · 清一色 · 24 番」的分隔点。点前面是不断行空格：换行时点跟着前一段，不会单独落在行尾或行首。
+    static let dotSeparator = "\u{00A0}· "
+
+    /// 繁体、日文的番名（三色三步高）不在中间断行；英文番名有空格照常断，简体保持原样。
+    var keptTogether: String {
+        guard Money.language == "ja" || Money.language == "zh-Hant" else { return self }
+        return map(String.init).joined(separator: "\u{2060}")
+    }
 }
