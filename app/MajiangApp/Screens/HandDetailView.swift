@@ -236,7 +236,7 @@ struct HandPhotoView: View {
                     .font(.system(size: 16))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                Text("\(date.formatted(.dateTime.month().day().hour(.twoDigits(amPM: .omitted)).minute())) · 只存在这台手机上")
+                Text("\(date.formatted(.dateTime.month().day().hour(Money.isSimplifiedChinese ? .twoDigits(amPM: .omitted) : .defaultDigits(amPM: .abbreviated)).minute())) · 只存在这台手机上")
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.faint)
             }

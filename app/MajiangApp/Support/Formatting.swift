@@ -188,8 +188,11 @@ enum Money {
 
     /// 日期、数字跟界面同一种语言，地区还是手机的地区。
     static let locale: Locale = {
+        // 地区在 languageComponents 里（en_GB 的 GB），换语言时要留着，不然英国的手机日期会按美国的顺序排
         var components = Locale.Components(locale: .current)
-        components.languageComponents = Locale.Language.Components(identifier: language)
+        var lang = Locale.Language.Components(identifier: language)
+        lang.region = components.languageComponents.region ?? Locale.current.region
+        components.languageComponents = lang
         return Locale(components: components)
     }()
 

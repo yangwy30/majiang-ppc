@@ -31,19 +31,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " · %lld fan"
+            "value" : " · %lld fan"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " · %lld番"
+            "value" : " · %lld番"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " · %lld 番"
+            "value" : " · %lld 番"
           }
         }
       }
@@ -937,7 +937,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld fan"
+            "value" : "%lld fan"
           }
         },
         "ja" : {
@@ -949,7 +949,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 番"
+            "value" : "%lld 番"
           }
         }
       }
@@ -1630,6 +1630,66 @@
       "extractionState" : "manual",
       "comment" : "核对页副标题：牌是手动选的"
     },
+    "tile.face.east" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "东"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "東"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "東"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "東"
+          }
+        }
+      },
+      "comment" : "牌面上的「东」字，跟真牌一样用繁体"
+    },
+    "tile.face.green" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "發"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "發"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "發"
+          }
+        }
+      },
+      "comment" : "牌面上的「发」字，跟真牌一样用繁体"
+    },
     "tile.winMark" : {
       "comment" : "和的那张牌下面的小字（英文 Win）",
       "extractionState" : "extracted_with_value",
@@ -1840,7 +1900,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A \"1-a-point\" table is 1 here"
+            "value" : "A table playing for 1 a point enters 1"
           }
         },
         "ja" : {
@@ -5489,13 +5549,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Only the app version and phone model are sent, no photos or games."
+            "value" : "App version and phone model only. No photos or games."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "送るのはアプリのバージョンと機種だけ。写真や対局は送りません。"
+            "value" : "送信はバージョンと機種名だけ。写真・対局は含まず。"
           }
         },
         "zh-Hant" : {
@@ -6362,7 +6422,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The winner lays the tiles down; take a photo"
+            "value" : "Winner lays the tiles down; snap them"
           }
         },
         "ja" : {
@@ -7431,7 +7491,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Looks like a tile was missed: add %@ and it wins."
+            "value" : " Looks like a tile was missed: add %@ and it wins."
           }
         },
         "ja" : {
@@ -7535,7 +7595,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "存成一個檔案，放到「檔案」裡或者隔空投送"
+            "value" : "存成一個檔案，放到「檔案」裡或者 AirDrop"
           }
         }
       }
@@ -7589,7 +7649,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Different house rules or a mistake? Enter this hand's scores"
+            "value" : "House rules differ or a miscount? Type in the scores"
           }
         },
         "ja" : {
@@ -8046,7 +8106,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Flowers"
+            "value" : "With flowers"
           }
         },
         "ja" : {
@@ -8355,7 +8415,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開啟 AI 認牌，用雲端大模型讀牌，更準。"
+            "value" : "開啟 AI 認牌，用雲端 AI 模型讀牌，更準。"
           }
         }
       }
@@ -8797,7 +8857,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "和了したらその手牌を撮るだけ。番数計算と記録はアプリにおまかせ。"
+            "value" : "和了したらその手牌を撮るだけ。番数計算と記録はおまかせ。"
           }
         },
         "zh-Hant" : {
@@ -9515,7 +9575,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Changing one tile doesn't make a win; more than one may be misread. Compare with the table."
+            "value" : " Changing one tile doesn't make a win; more than one may be misread. Compare with the table."
           }
         },
         "ja" : {
@@ -9537,7 +9597,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Changing one tile doesn't make a win; more than one may be misread. Tap the photo, top right, to compare."
+            "value" : " Changing one tile doesn't make a win; more than one may be misread. Tap the photo, top right, to compare."
           }
         },
         "ja" : {
@@ -9969,7 +10029,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Most likely "
+            "value" : " Most likely "
           }
         },
         "ja" : {
@@ -10227,7 +10287,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Someone false won"
+            "value" : "False win"
           }
         },
         "ja" : {
@@ -10357,6 +10417,28 @@
       },
       "extractionState" : "manual",
       "comment" : "来自 MajiangKit（L()），手动加的"
+    },
+    "杠上开花没算出来：最后一张是杠完补的牌，结果只给了自摸。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Out with Replacement Tile wasn't scored: the last tile was drawn after a kong, but it only gave Self-Drawn."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "槓上開花が数えられていません。最後の牌は槓のあとの嶺上牌なのに、自摸しか付きませんでした。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "槓上開花沒算出來：最後一張是槓完補的牌，結果只給了自摸。"
+          }
+        }
+      }
     },
     "杠完补牌，补到的正好和了" : {
       "localizations" : {
@@ -13978,7 +14060,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Who false won"
+            "value" : "Who made the false win"
           }
         },
         "ja" : {

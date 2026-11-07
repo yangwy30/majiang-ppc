@@ -105,6 +105,9 @@ public struct Tile: Hashable, Comparable, Sendable {
     public var faceCharacter: String {
         switch suit {
         case .characters: Tile.chineseNumerals[rank - 1]
+        // 真牌上印的是繁体「東」「發」；简体界面照旧写「东」「发」，其他语言跟真牌一样
+        case .honors where rank == 1: L(key: "tile.face.east", "东")
+        case .honors where rank == 6: L(key: "tile.face.green", "发")
         case .honors: Tile.honorNames[rank - 1]
         default: "\(rank)"
         }
