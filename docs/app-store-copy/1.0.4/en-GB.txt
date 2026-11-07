@@ -15,12 +15,16 @@ Score Chinese Official mahjong (Guobiao / MCR) from a photo. When someone wins, 
 
 It also keeps the ledger for all four players, rotates dealer and winds, and at the end works out the fewest transfers to settle up.
 
-The interface is in Simplified Chinese. Free, no ads, no sign-up.
+Available in English, Japanese, and Traditional and Simplified Chinese. Free, no ads, no sign-up.
 
 [What's New]
-· Send us feedback from the More menu on the home screen
+· Now in English, Japanese, and Traditional Chinese, following your phone's language
+· Send feedback from More on the home screen
 · If the AI misreads a tile and you correct it, you can choose to send us the photo to help it improve
 · One Share button for the bill, and a cleaner text version
 
 [Support URL / Privacy URL / Marketing]
 Same as Simplified Chinese.
+
+[English (U.S.)]
+Add the same text as an English (U.S.) localization too: it is the default for the United States and is also indexed by the Japan storefront.
