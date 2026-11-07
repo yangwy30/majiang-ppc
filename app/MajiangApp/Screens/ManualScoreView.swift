@@ -30,16 +30,16 @@ struct ManualScoreView: View {
 
     /// 不能保存时按钮上直接写原因。
     private var saveTitle: String {
-        if allZero { return "填上这一局的得失分" }
-        if sum != 0 { return "加起来要等于 0" }
-        return "记下"
+        if allZero { return String(localized: "填上这一局的得失分") }
+        if sum != 0 { return String(localized: "加起来要等于 0") }
+        return String(localized: "记下")
     }
 
     private var status: String {
-        if allZero { return "四个人加起来要等于 0。" }
-        if sum > 0 { return "赢的比输的多 \(sum) 分，加起来要等于 0。" }
-        if sum < 0 { return "输的比赢的多 \(-sum) 分，加起来要等于 0。" }
-        return "加起来正好是 0。"
+        if allZero { return String(localized: "四个人加起来要等于 0。") }
+        if sum > 0 { return String(localized: "赢的比输的多 \(sum) 分，加起来要等于 0。") }
+        if sum < 0 { return String(localized: "输的比赢的多 \(-sum) 分，加起来要等于 0。") }
+        return String(localized: "加起来正好是 0。")
     }
 
     var body: some View {
@@ -143,7 +143,7 @@ struct ManualScoreView: View {
                         let cleaned = digits.isEmpty ? "" : String(Int(digits) ?? 0)
                         if cleaned != new { texts[i] = cleaned }
                     }
-                    .accessibilityLabel("\(game.players[i].name)\(signs[i] > 0 ? "赢" : "输")的分")
+                    .accessibilityLabel(signs[i] > 0 ? "\(game.players[i].name)赢的分" : "\(game.players[i].name)输的分")
             }
             .frame(minHeight: 64)
             .contentShape(Rectangle())

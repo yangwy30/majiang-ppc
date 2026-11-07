@@ -40,9 +40,9 @@ public struct Meld: Hashable, Codable, Sendable {
 
     public var kindName: String {
         switch kind {
-        case .chow: "吃"
-        case .pung: "碰"
-        case .kong: isConcealed ? "暗杠" : "明杠"
+        case .chow: L("吃")
+        case .pung: L("碰")
+        case .kong: isConcealed ? L("暗杠") : L("明杠")
         }
     }
 
@@ -77,7 +77,25 @@ public struct Meld: Hashable, Codable, Sendable {
 public enum Wind: Int, Codable, CaseIterable, Sendable {
     case east = 0, south, west, north
 
-    public var name: String { ["东", "南", "西", "北"][rawValue] }
+    /// 一个字的风位：「东」，英文「E」。牌桌中间、座位旁边用。
+    public var name: String {
+        switch self {
+        case .east: L(key: "wind.east", "东")
+        case .south: L(key: "wind.south", "南")
+        case .west: L(key: "wind.west", "西")
+        case .north: L(key: "wind.north", "北")
+        }
+    }
+
+    /// 「东风圈」，英文「East round」，日文「東場」。
+    public var roundName: String {
+        switch self {
+        case .east: L("东风圈")
+        case .south: L("南风圈")
+        case .west: L("西风圈")
+        case .north: L("北风圈")
+        }
+    }
     public var tile: Tile { Tile(.honors, rawValue + 1) }
 
     /// 逆时针下一个（东 → 南 → 西 → 北 → 东）。

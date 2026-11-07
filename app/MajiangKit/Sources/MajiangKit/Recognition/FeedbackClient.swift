@@ -91,6 +91,7 @@ public enum FeedbackClient {
         request.timeoutInterval = timeout
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(deviceID, forHTTPHeaderField: "X-Majiang-Device")
+        request.setAppLanguage()
         request.httpBody = try JSONEncoder().encode(body)
 
         let data: Data
@@ -98,13 +99,13 @@ public enum FeedbackClient {
         do {
             (data, status) = try await http.send(request)
         } catch {
-            throw RecognitionError.unavailable("没发出去，看看网络再试一次")
+            throw RecognitionError.unavailable(L("没发出去，看看网络再试一次"))
         }
         guard status == 200 else {
             if let refusal = GeminiRecognizer.proxyRefusal(data) {
                 throw RecognitionError.unavailable(refusal.message)
             }
-            throw RecognitionError.unavailable("没发出去（HTTP \(status)），过一会儿再试")
+            throw RecognitionError.unavailable(L("没发出去（HTTP \(status)），过一会儿再试"))
         }
     }
 }

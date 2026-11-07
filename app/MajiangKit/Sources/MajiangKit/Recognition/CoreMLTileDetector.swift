@@ -26,7 +26,7 @@ public final class CoreMLTileDetector: TileDetecting, @unchecked Sendable {
         let description = model.modelDescription
         guard let input = description.inputDescriptionsByName.values.first(where: { $0.type == .multiArray }),
               let output = description.outputDescriptionsByName.values.first(where: { $0.type == .multiArray }) else {
-            throw RecognitionError.unavailable("端侧模型的输入输出不是预期的格式")
+            throw RecognitionError.unavailable(L("端侧模型的输入输出不是预期的格式"))
         }
         inputName = input.name
         outputName = output.name
@@ -43,7 +43,7 @@ public final class CoreMLTileDetector: TileDetecting, @unchecked Sendable {
 
     public func detect(in data: Data) async throws -> [TileDetection] {
         guard let image = Self.uprightImage(from: data) else {
-            throw RecognitionError.badResponse("照片打不开")
+            throw RecognitionError.badResponse(L("照片打不开"))
         }
         return try detect(image)
     }
@@ -69,7 +69,7 @@ public final class CoreMLTileDetector: TileDetecting, @unchecked Sendable {
         let prediction = try model.prediction(from: features)
         guard let output = prediction.featureValue(for: outputName)?.multiArrayValue,
               let (values, anchors) = Self.floats(output) else {
-            throw RecognitionError.unavailable("端侧模型没有输出")
+            throw RecognitionError.unavailable(L("端侧模型没有输出"))
         }
         return YOLOv8Decoder.decode(values, anchors: anchors, labels: labels, letterbox: letterbox, threshold: threshold)
     }
@@ -106,7 +106,7 @@ public final class CoreMLTileDetector: TileDetecting, @unchecked Sendable {
                                            width: letterbox.scaledWidth, height: letterbox.scaledHeight))
             return true
         }
-        guard drawn else { throw RecognitionError.badResponse("照片处理失败") }
+        guard drawn else { throw RecognitionError.badResponse(L("照片处理失败")) }
 
         let array = try MLMultiArray(shape: [1, 3, NSNumber(value: size), NSNumber(value: size)], dataType: .float32)
         let plane = size * size

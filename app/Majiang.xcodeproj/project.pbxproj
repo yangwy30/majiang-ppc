@@ -96,6 +96,9 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				"zh-Hans",
+				"zh-Hant",
+				en,
+				ja,
 				Base,
 			);
 			mainGroup = A10000000000000000000601;
@@ -184,6 +187,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 93RUQ2A6KX;
+				DEVELOPMENT_LANGUAGE = en;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "拍照算番";
@@ -215,6 +219,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 93RUQ2A6KX;
+				DEVELOPMENT_LANGUAGE = en;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "拍照算番";

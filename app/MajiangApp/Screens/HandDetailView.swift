@@ -55,7 +55,7 @@ struct HandDetailView: View {
     private func content(_ game: Game, record: HandRecord, win: WinRecord, number: Int) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Text("第 \(number) 局 · \(game.prevalentWind(ofHand: record.handIndex).name)风圈 · \(game.players[game.dealer(ofHand: record.handIndex)].name)坐庄")
+                Text("第 \(number) 局 · \(game.prevalentWind(ofHand: record.handIndex).roundName) · \(game.players[game.dealer(ofHand: record.handIndex)].name)坐庄")
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.gray)
                     .padding(.top, 6)
@@ -98,7 +98,7 @@ struct HandDetailView: View {
                     }
                 } else {
                     // 没拍照、在账本里直接改成「和了」的局，只有番数
-                    Text(win.discarder.map { "\(game.players[$0].name)点的炮。" } ?? "自摸。")
+                    Text(win.discarder.map { String(localized: "\(game.players[$0].name)点的炮。") } ?? String(localized: "自摸。"))
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 14)
@@ -165,7 +165,7 @@ struct HandDetailView: View {
         }
         .fullScreenCover(isPresented: $showPhoto) {
             if let photo {
-                HandPhotoView(photo: photo, caption: "第 \(number) 局 · \(record.title(in: game))", date: record.date) {
+                HandPhotoView(photo: photo, caption: String(localized: "第 \(number) 局 · \(record.title(in: game))"), date: record.date) {
                     HandPhotos.delete(recordID)
                     self.photo = nil
                 }
@@ -236,7 +236,7 @@ struct HandPhotoView: View {
                     .font(.system(size: 16))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                Text("\(date.formatted(.dateTime.month().day().hour(.twoDigits(amPM: .omitted)).minute())) · 只存在这台手机上")
+                Text("\(date.formatted(.dateTime.month().day().hour(Money.isSimplifiedChinese ? .twoDigits(amPM: .omitted) : .defaultDigits(amPM: .abbreviated)).minute())) · 只存在这台手机上")
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.faint)
             }

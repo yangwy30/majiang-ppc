@@ -6,8 +6,8 @@ import SwiftUI
 struct MoreSheet<Target: Hashable>: View {
     struct Item {
         var target: Target
-        var title: String
-        var detail: String
+        var title: LocalizedStringKey
+        var detail: LocalizedStringKey
     }
 
     var items: [Item]
@@ -45,8 +45,8 @@ struct MoreSheet<Target: Hashable>: View {
 
 /// 细线列表的一行：名字，下面一句灰字，右边放开关或 ›。「更多」和「备份与换手机」用。
 struct MenuRow<Trailing: View>: View {
-    var title: String
-    var detail: String?
+    var title: LocalizedStringKey
+    var detail: LocalizedStringKey?
     var divider = true
     /// 「更多」页高度是按一行一句算的，说明只占一行；备份页的说明可以折行。
     var detailLines: Int? = 1

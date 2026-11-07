@@ -35,7 +35,7 @@ struct TableView: View {
     }
 
     /// 从结算页点「看每一局」进来的回结算，平时回首页。
-    private var backTitle: String {
+    private var backTitle: LocalizedStringKey {
         if model.path.count >= 2, case .settle = model.path[model.path.count - 2] { return "结算" }
         return "首页"
     }
@@ -181,7 +181,7 @@ struct TableView: View {
         }
         items.append(.init(target: .manualScore, title: "直接改分", detail: "家规不一样或者算错了，直接填这一局的得失"))
         items.append(.init(target: .rules, title: "这场的规则",
-                           detail: game.rules.shortSummary))
+                           detail: "\(game.rules.shortSummary)"))
         items.append(.init(target: .guide, title: "番怎么算", detail: "国标的番种和收付，都是白话"))
         if !game.isFinished {
             items.append(.init(target: .end, title: "结束牌局", detail: "不打了，算出谁该给谁转多少"))
@@ -489,7 +489,7 @@ private struct RecordRow: View {
 
 /// 记下后底部的黑色提示条。
 private struct UndoBar: View {
-    var text: String
+    var text: LocalizedStringKey
     var undo: () -> Void
 
     var body: some View {

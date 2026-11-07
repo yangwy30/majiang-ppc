@@ -36,7 +36,7 @@ struct TilePickerGrid: View {
 /// 选一张牌：换掉认错的牌，或者补一张漏掉的。
 struct TileEditSheet: View {
     @Environment(\.dismiss) private var dismiss
-    var title: String
+    var title: LocalizedStringKey
     var current: Tile?
     var onPick: (Tile) -> Void
 
@@ -67,8 +67,17 @@ struct MeldEditSheet: View {
     var onAdd: (Meld) -> Void
 
     enum Kind: String, CaseIterable, Identifiable {
-        case chow = "吃", pung = "碰", kong = "明杠", concealedKong = "暗杠"
-        var id: String { rawValue }
+        case chow, pung, kong, concealedKong
+        var id: Self { self }
+        /// 四段的切换很窄，英文用短词（Kong、Concealed），不跟番种名「明杠」「暗杠」共用一条翻译。
+        var label: LocalizedStringKey {
+            switch self {
+            case .chow: "吃"
+            case .pung: "碰"
+            case .kong: "\(String(localized: "meld.kong", defaultValue: "明杠"))"
+            case .concealedKong: "\(String(localized: "meld.concealedKong", defaultValue: "暗杠"))"
+            }
+        }
     }
 
     @State private var kind = Kind.pung
@@ -77,7 +86,7 @@ struct MeldEditSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    SegmentedSwitch(options: Kind.allCases.map { ($0, $0.rawValue) }, selection: $kind)
+                    SegmentedSwitch(options: Kind.allCases.map { ($0, $0.label) }, selection: $kind)
                     Text(kind == .chow ? "选这组里最小的那张（567 饼就选 5 饼）" : "选是哪张牌")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)

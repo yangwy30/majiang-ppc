@@ -125,7 +125,7 @@ struct CaptureView: View {
     }
 
     private var status: String? {
-        if flow.isRecognizing { return slow ? "正在认牌…" : nil }
+        if flow.isRecognizing { return slow ? String(localized: "正在认牌…") : nil }
         return flow.recognitionError
     }
 
@@ -193,7 +193,7 @@ struct CaptureView: View {
                 VStack {
                     Spacer()
                     Text(cameraOn || model.effectiveRecognitionMode == .demo || model.demoScreen != nil ? "手牌推倒排成一排，和的那张放最右"
-                         : "这台设备没有相机，从\(sizeClass == .regular ? "右边" : "左下角")的相册选一张")
+                         : sizeClass == .regular ? "这台设备没有相机，从右边的相册选一张" : "这台设备没有相机，从左下角的相册选一张")
                         .font(.system(size: 14))
                         .foregroundStyle(.white.opacity(0.85))
                         .multilineTextAlignment(.center)

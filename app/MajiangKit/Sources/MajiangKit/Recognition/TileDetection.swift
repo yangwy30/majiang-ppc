@@ -194,7 +194,7 @@ public enum TileLayout {
         var recognition = Recognition(concealed: hand.compactMap(\.tile), flowerCount: flowers, source: source)
         let dropped = tiles.count - hand.count
         if dropped > 0 {
-            recognition.notes.append("画面里还有 \(dropped) 张别的牌，没算进去")
+            recognition.notes.append(L("画面里还有 \(dropped) 张别的牌，没算进去"))
         }
         return recognition
     }

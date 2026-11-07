@@ -105,7 +105,7 @@ struct HomeView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text("拍照算番")
+                Text(verbatim: "拍照算番")
                     .font(.system(size: 34, weight: .semibold))
                     .tracking(-0.5)
                     #if DEBUG
@@ -212,7 +212,7 @@ private struct HistoryRow: View {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(game.startedAt.dayLabel).font(.system(size: 16, weight: .medium))
-                    Text(game.players.map(\.name).joined(separator: "、") + " · \(game.currentHandIndex) 局")
+                    Text("\(game.players.map(\.name).listText) · \(game.currentHandIndex) 局")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .lineLimit(1)
@@ -283,12 +283,12 @@ private struct EmptyHome<More: View>: View {
 private extension EmptyHome {
     var brand: some View {
         HStack(spacing: 12) {
-            Text("和")
+            Text(verbatim: "和")
                 .font(Theme.serif(17))
                 .foregroundStyle(.white)
                 .frame(width: 30, height: 30)
                 .background(Theme.vermilion, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
-            Text("拍照算番").font(.system(size: 17, weight: .semibold))
+            Text(verbatim: "拍照算番").font(.system(size: 17, weight: .semibold))
         }
         .accessibilityElement(children: .combine)
         #if DEBUG
@@ -316,14 +316,14 @@ private extension EmptyHome {
             }
             StepRow(number: "二", title: "算", detail: "认出牌，按国标算番", padding: rowPadding) {
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
-                    Text("32").font(Theme.score(30, weight: .ultraLight))
+                    Text(verbatim: "32").font(Theme.score(30, weight: .ultraLight))
                     Text("番").font(Theme.serif(13, semibold: true))
                 }
             }
             StepRow(number: "三", title: "记", detail: "谁给谁多少，自动记账", padding: rowPadding) {
                 VStack(alignment: .trailing, spacing: 0) {
-                    Text("+120").foregroundStyle(Theme.vermilion)
-                    Text("−40").foregroundStyle(Theme.ink)
+                    Text(verbatim: "+120").foregroundStyle(Theme.vermilion)
+                    Text(verbatim: "−40").foregroundStyle(Theme.ink)
                 }
                 .font(Theme.score(15))
             }
@@ -358,9 +358,9 @@ private struct FiveThreeLayout: Layout {
 
 /// 三步里的一行：朱红数字、标题和说明、右边一个小样。
 private struct StepRow<Sample: View>: View {
-    var number: String
-    var title: String
-    var detail: String
+    var number: LocalizedStringKey
+    var title: LocalizedStringKey
+    var detail: LocalizedStringKey
     /// 每行上下的留白，矮屏小一点。
     var padding: CGFloat = 24
     @ViewBuilder var sample: Sample

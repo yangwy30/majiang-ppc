@@ -10,11 +10,11 @@ public enum SpecialWin: String, CaseIterable, Codable, Sendable {
 
     public var name: String {
         switch self {
-        case .lastTileOfItsKind: "和绝张"
-        case .kongReplacement: "杠上开花"
-        case .lastTileDraw: "妙手回春"
-        case .lastTileClaim: "海底捞月"
-        case .robbingTheKong: "抢杠和"
+        case .lastTileOfItsKind: L("和绝张")
+        case .kongReplacement: L("杠上开花")
+        case .lastTileDraw: L("妙手回春")
+        case .lastTileClaim: L("海底捞月")
+        case .robbingTheKong: L("抢杠和")
         }
     }
 
@@ -23,18 +23,18 @@ public enum SpecialWin: String, CaseIterable, Codable, Sendable {
         switch self {
         case .lastTileOfItsKind:
             let held = hand.concealed.filter { $0 == hand.winningTile }.count
-            return held > 1 ? "手里已经有这张牌，和的不可能是最后一张" : nil
+            return held > 1 ? L("手里已经有这张牌，和的不可能是最后一张") : nil
         case .kongReplacement:
-            if !selfDrawn { return "只有自摸才可能" }
-            return hand.kongCount == 0 ? "没有杠" : nil
+            if !selfDrawn { return L("只有自摸才可能") }
+            return hand.kongCount == 0 ? L("没有杠") : nil
         case .lastTileDraw:
-            return selfDrawn ? nil : "只有自摸才可能"
+            return selfDrawn ? nil : L("只有自摸才可能")
         case .lastTileClaim:
-            return selfDrawn ? "只有点炮才可能" : nil
+            return selfDrawn ? L("只有点炮才可能") : nil
         case .robbingTheKong:
-            if selfDrawn { return "只有点炮才可能" }
+            if selfDrawn { return L("只有点炮才可能") }
             let held = hand.allTiles.filter { $0 == hand.winningTile }.count
-            return held > 1 ? "别人加杠的牌只剩这一张，手里不能再有" : nil
+            return held > 1 ? L("别人加杠的牌只剩这一张，手里不能再有") : nil
         }
     }
 
@@ -66,8 +66,8 @@ public struct FixSuggestion: Hashable, Sendable {
     public let result: ScoringResult
 
     public var text: String {
-        if let from { "把 \(from.displayName) 改成 \(to.displayName)，就是 \(result.fanWithoutFlowers) 番" }
-        else { "补一张 \(to.displayName)，就是 \(result.fanWithoutFlowers) 番" }
+        if let from { L("把 \(from.displayName) 改成 \(to.displayName)，就是 \(result.fanWithoutFlowers) 番") }
+        else { L("补一张 \(to.displayName)，就是 \(result.fanWithoutFlowers) 番") }
     }
 }
 
@@ -117,14 +117,14 @@ public enum WinAssistant {
         switch FanCalculator.score(hand, context: context) {
         case .failure(let error):
             if error == .tileMoreThanFour {
-                let names = hand.overusedTiles.map(\.displayName).joined(separator: "、")
-                return "\(names) 超过了 4 张，一定有牌认错了"
+                let names = hand.overusedTiles.map(\.displayName).listText
+                return L("\(names) 超过了 4 张，一定有牌认错了")
             }
             return error.message
         case .success(let result) where !result.meetsMinimum(minimumFan):
-            return "牌型成立，但只有 \(result.fanWithoutFlowers) 番，不够 \(minimumFan) 番起和（花牌不算）"
+            return L("牌型成立，但只有 \(result.fanWithoutFlowers) 番，不够 \(minimumFan) 番起和（花牌不算）")
         case .success:
-            return "牌型成立"
+            return L("牌型成立")
         }
     }
 }

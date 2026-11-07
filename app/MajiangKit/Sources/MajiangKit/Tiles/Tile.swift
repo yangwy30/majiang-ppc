@@ -25,6 +25,16 @@ public enum Suit: Int, Codable, CaseIterable, Sendable {
         case .honors: "字"
         }
     }
+
+    /// 给人看的「5饼」「567饼」（数字是一串时就是一组顺子）。
+    func displayName(ranks: String) -> String {
+        switch self {
+        case .characters: L("\(ranks)万")
+        case .bamboo: L("\(ranks)条")
+        case .dots: L("\(ranks)饼")
+        case .honors: ranks
+        }
+    }
 }
 
 /// 一张牌（不含花牌，花牌只计数量）。
@@ -77,6 +87,8 @@ public struct Tile: Hashable, Comparable, Sendable {
     // MARK: 文字
 
     static let honorNames = ["东", "南", "西", "北", "中", "发", "白"]
+    /// 给人看的字牌名，跟着手机语言（英文是 East、Red Dragon）。
+    static var honorDisplayNames: [String] { [L("东"), L("南"), L("西"), L("北"), L("中"), L("发"), L("白")] }
     static let chineseNumerals = ["一", "二", "三", "四", "五", "六", "七", "八", "九"]
 
     /// 机器记法，与测试脚本、Gemini 输出一致：`5p`、`3m`、`7s`，字牌直接写汉字。
@@ -84,15 +96,18 @@ public struct Tile: Hashable, Comparable, Sendable {
         isHonor ? Tile.honorNames[rank - 1] : "\(rank)\(suit.letter)"
     }
 
-    /// 给人看的名字：`5饼`、`3万`、`东`。
+    /// 给人看的名字：`5饼`、`3万`、`东`。跟着手机语言。
     public var displayName: String {
-        isHonor ? Tile.honorNames[rank - 1] : "\(rank)\(suit.chineseName)"
+        isHonor ? Tile.honorDisplayNames[rank - 1] : suit.displayName(ranks: "\(rank)")
     }
 
     /// 牌面上的大字：万子写「五」，字牌写「中」，饼条不用。
     public var faceCharacter: String {
         switch suit {
         case .characters: Tile.chineseNumerals[rank - 1]
+        // 真牌上印的是繁体「東」「發」；简体界面照旧写「东」「发」，其他语言跟真牌一样
+        case .honors where rank == 1: L(key: "tile.face.east", "东")
+        case .honors where rank == 6: L(key: "tile.face.green", "发")
         case .honors: Tile.honorNames[rank - 1]
         default: "\(rank)"
         }
@@ -217,7 +232,7 @@ extension Array where Element == Tile {
         var runSuit: Suit?
         func flush() {
             if let suit = runSuit, !run.isEmpty {
-                groups.append(run.map(String.init).joined() + suit.chineseName)
+                groups.append(suit.displayName(ranks: run.map(String.init).joined()))
             }
             run.removeAll()
         }

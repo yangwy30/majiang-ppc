@@ -212,10 +212,10 @@ extension ButtonStyle where Self == TextButtonStyle {
 /// 右上只放这一页的工具，用浅一档的字。确认不放顶上，一律用页面底部的黑色主按钮。
 /// 都是直接写在纸上的字：iOS 26 起系统会给导航栏按钮包一层玻璃泡，这里关掉。
 struct NavBack: ToolbarContent {
-    var title: String
+    var title: LocalizedStringKey
     var action: () -> Void
 
-    init(_ title: String, action: @escaping () -> Void) {
+    init(_ title: LocalizedStringKey, action: @escaping () -> Void) {
         self.title = title
         self.action = action
     }
@@ -230,7 +230,7 @@ struct NavBack: ToolbarContent {
                 }
             }
             .buttonStyle(NavButtonStyle())
-            .accessibilityLabel("回到\(title)")
+            .accessibilityLabel(Text("回到") + Text(title))
         }
         .withoutGlass()
     }
@@ -238,12 +238,12 @@ struct NavBack: ToolbarContent {
 
 /// 弹出层左上的「取消」「关闭」。
 struct NavClose: ToolbarContent {
-    var title: String
+    var title: LocalizedStringKey
     /// 拍照页是深色底，用白字。
     var color: Color
     var action: () -> Void
 
-    init(_ title: String = "取消", color: Color = Theme.ink, action: @escaping () -> Void) {
+    init(_ title: LocalizedStringKey = "取消", color: Color = Theme.ink, action: @escaping () -> Void) {
         self.title = title
         self.color = color
         self.action = action
@@ -303,7 +303,7 @@ struct DealerStamp: View {
     var size: CGFloat = 22
 
     var body: some View {
-        Seal(text: "庄", size: size)
+        Seal(text: String(localized: "seal.dealer", defaultValue: "庄", comment: "庄家的朱红小方印，只放一个字（英文 D）"), size: size)
             .accessibilityLabel("庄家")
     }
 }
@@ -324,9 +324,9 @@ struct Seal: View {
 
 /// 灰色小节标题，比如「账本」「常一起打的」。
 struct SectionLabel: View {
-    var text: String
+    var text: LocalizedStringKey
 
-    init(_ text: String) { self.text = text }
+    init(_ text: LocalizedStringKey) { self.text = text }
 
     var body: some View {
         Text(text)
@@ -338,16 +338,18 @@ struct SectionLabel: View {
 
 /// 页面大标题和一行灰色说明。
 struct PageTitle: View {
-    var title: String
-    var subtitle: String?
+    var title: LocalizedStringKey
+    /// 说明是算出来的一句话（已经是手机语言）时用 `subtitleText`。
+    var subtitle: LocalizedStringKey?
+    var subtitleText: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.system(size: 30, weight: .semibold))
                 .tracking(-0.4)
-            if let subtitle {
-                Text(subtitle)
+            if let line = subtitle.map({ Text($0) }) ?? subtitleText.map({ Text($0) }) {
+                line
                     .font(.system(size: 15))
                     .foregroundStyle(Theme.gray)
             }
@@ -358,7 +360,7 @@ struct PageTitle: View {
 
 /// 两段的切换：底色 #ECEAE3，选中的一段是白色。
 struct SegmentedSwitch<Value: Hashable>: View {
-    var options: [(Value, String)]
+    var options: [(Value, LocalizedStringKey)]
     @Binding var selection: Value
 
     var body: some View {

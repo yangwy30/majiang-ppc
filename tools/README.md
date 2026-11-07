@@ -1,6 +1,10 @@
 # 测试脚本
 
-都是调研阶段的一次性脚本，不是 App 代码。结果已经整理进 [research/](../research/)，原始输出在 [research/results/](../research/results/)。
+## check-strings.py：检查 App 的多语言文字
+
+改了 `app/MajiangApp/Resources/Localizable.xcstrings` 以后跑 `python3 tools/check-strings.py`。它检查每条文字都有简体、繁体、英文、日文，`%@`、`%lld` 和原文对得上。App 的开发语言是英文，一条文字缺了简体值，简体手机就会看到英文。
+
+下面的都是调研阶段的一次性脚本，不是 App 代码。结果已经整理进 [research/](../research/)，原始输出在 [research/results/](../research/results/)。
 
 ## gemini-test：Gemini 识牌和判胡测试
 

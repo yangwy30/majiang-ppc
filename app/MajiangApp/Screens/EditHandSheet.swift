@@ -60,8 +60,8 @@ struct EditHandSheet: View {
         return nil
     }
 
-    private var kinds: [(Kind, String)] {
-        var options: [(Kind, String)] = [(.win, "和了"), (.drawn, "没人和"), (.falseWin, "和错了")]
+    private var kinds: [(Kind, LocalizedStringKey)] {
+        var options: [(Kind, LocalizedStringKey)] = [(.win, "和了"), (.drawn, "没人和"), (.falseWin, "和错了")]
         if case .manual = record.outcome { options.append((.manual, "直接改分")) }
         return options
     }
@@ -119,7 +119,7 @@ struct EditHandSheet: View {
     private var minimumFan: Int { game.rules.minimumFan + flowerFan }
 
     private var blockedReason: String? {
-        if kind == .win && !selfDrawn && discarder == nil { return "选一下谁点的炮" }
+        if kind == .win && !selfDrawn && discarder == nil { return String(localized: "选一下谁点的炮") }
         if case .failure(let error) = preview { return error.message }
         return nil
     }
@@ -149,7 +149,7 @@ struct EditHandSheet: View {
                 .padding(.bottom, 16)
             }
             .bottomBar {
-                Button(blockedReason ?? "保存") {
+                Button(blockedReason ?? String(localized: "保存")) {
                     if let outcome { onSave(outcome) }
                     dismiss()
                 }
@@ -231,14 +231,14 @@ struct EditHandSheet: View {
     }
 
     private var fanNote: String {
-        let flowers = flowerFan > 0 ? "含花牌 \(flowerFan) 番。" : ""
+        let flowers = flowerFan > 0 ? String(localized: "含花牌 \(flowerFan) 番。") : ""
         if fanEdit != nil || originalWin?.fanOverride != nil || originalWin == nil {
-            return flowers + "番数是手填的，账本里不再列番种。"
+            return flowers + String(localized: "番数是手填的，账本里不再列番种。")
         }
         if originalWin?.hand != nil {
-            return flowers + "按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。"
+            return flowers + String(localized: "按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。")
         }
-        return flowers + "要改番数就点加减。"
+        return flowers + String(localized: "要改番数就点加减。")
     }
 
     // MARK: 和错了
@@ -262,7 +262,7 @@ struct EditHandSheet: View {
         }
     }
 
-    private func note(_ text: String) -> some View {
+    private func note(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.system(size: 14))
             .foregroundStyle(Theme.gray)
@@ -291,7 +291,7 @@ struct EditHandSheet: View {
         .block()
     }
 
-    private func stepButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
+    private func stepButton(_ symbol: String, label: LocalizedStringKey, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
                 .font(.system(size: 14, weight: .medium))

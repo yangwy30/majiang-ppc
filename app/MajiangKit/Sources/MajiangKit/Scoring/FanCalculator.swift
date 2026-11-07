@@ -81,9 +81,9 @@ public enum ScoringError: Error, Hashable, Sendable {
 
     public var message: String {
         switch self {
-        case .wrongTileCount: "张数不对：立牌加副露应该是 14 张（每个杠多 1 张）"
-        case .tileMoreThanFour: "同一种牌超过了 4 张"
-        case .notAWin: "凑不成和牌：不是 4 组面子加 1 对将，也不是七对、十三幺、全不靠、组合龙"
+        case .wrongTileCount: L("张数不对：立牌加副露应该是 14 张（每个杠多 1 张）")
+        case .tileMoreThanFour: L("同一种牌超过了 4 张")
+        case .notAWin: L("凑不成和牌：不是 4 组面子加 1 对将，也不是七对、十三幺、全不靠、组合龙")
         }
     }
 }
