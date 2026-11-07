@@ -118,7 +118,7 @@ final class AppModel {
         // 有没打完的牌局时，打开 App 直接进牌桌
         if let active = loaded.activeGame { path = [.table(active.id)] }
         switch demoScreen {
-        case .home, .emptyHome, .backup, .invite, .more, .feedback, .feedbackSent: path = []
+        case .home, .emptyHome, .backup, .invite, .more, .language, .feedback, .feedbackSent: path = []
         case .rate:
             path = []
             reviewPromptPending = true
