@@ -69,12 +69,13 @@ struct MeldEditSheet: View {
     enum Kind: String, CaseIterable, Identifiable {
         case chow, pung, kong, concealedKong
         var id: Self { self }
+        /// 四段的切换很窄，英文用短词（Kong、Concealed），不跟番种名「明杠」「暗杠」共用一条翻译。
         var label: LocalizedStringKey {
             switch self {
             case .chow: "吃"
             case .pung: "碰"
-            case .kong: "明杠"
-            case .concealedKong: "暗杠"
+            case .kong: "\(String(localized: "meld.kong", defaultValue: "明杠"))"
+            case .concealedKong: "\(String(localized: "meld.concealedKong", defaultValue: "暗杠"))"
             }
         }
     }

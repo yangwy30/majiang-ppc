@@ -10,6 +10,24 @@
             "state" : "new",
             "value" : "拍照算番"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照算番"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照算番"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍照算番"
+          }
         }
       }
     },
@@ -23,7 +41,8 @@
             "value" : "Majiang"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "NSCameraUsageDescription" : {
       "comment" : "Privacy - Camera Usage Description",
@@ -33,6 +52,24 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "拍下和牌那家的牌，用来识别牌面和算番。"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Used to photograph the winning hand so the tiles can be read and the fan counted."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和了した手牌を撮影し、牌を読み取って番を計算するために使います。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拍下和牌那家的牌，用來識別牌面和算番。"
           }
         }
       }
@@ -45,6 +82,24 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "从相册选一张和牌照片来识别。"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Used to pick a photo of a winning hand to read."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和了した手牌の写真を選んで読み取るために使います。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從相簿選一張和牌照片來識別。"
           }
         }
       }
