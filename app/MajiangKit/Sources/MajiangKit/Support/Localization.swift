@@ -35,6 +35,9 @@ extension Array where Element == String {
 extension URLRequest {
     /// 告诉中转站 App 现在显示的是哪种语言（zh-Hans、zh-Hant、en、ja），它回的提示语（邀请码不对、今天次数用完了）跟着换。
     mutating func setAppLanguage() {
-        setValue(Bundle.main.preferredLocalizations.first ?? "zh-Hans", forHTTPHeaderField: "Accept-Language")
+        let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+        setValue(language, forHTTPHeaderField: "Accept-Language")
+        // 中转站认的是这个头。旧版 App 只有简体却不带它，系统自己加的 Accept-Language 可能是英文，那时照旧回简体
+        setValue(language, forHTTPHeaderField: "X-Majiang-Lang")
     }
 }

@@ -4,7 +4,7 @@ import { PRIVACY_PAGES } from "./privacy.js";
 import { SUPPORT_PAGES } from "./support.js";
 import { HOME_PAGES } from "./home.js";
 import { htmlResponse } from "./page.js";
-import { pickLang, localizeError } from "./i18n.js";
+import { pickLang, apiLang, localizeError } from "./i18n.js";
 import { ADMIN_HTML } from "./admin.js";
 import { normalizeCode, newCode, sameSecret } from "./invites.js";
 
@@ -41,9 +41,9 @@ function limit(env, name, fallback) {
 export default {
   async fetch(request, env) {
     // 给用户看的话（出错、网页）按 App 或浏览器的语言给；管理接口是 Yang 自己用的，一直是简体
-    const lang = pickLang(request);
-    const response = await handle(request, env, lang);
-    return new URL(request.url).pathname.startsWith("/admin") ? response : localizeError(response, lang);
+    const path = new URL(request.url).pathname;
+    const response = await handle(request, env, pickLang(request));
+    return path.startsWith("/admin") ? response : localizeError(response, apiLang(request));
   },
 };
 

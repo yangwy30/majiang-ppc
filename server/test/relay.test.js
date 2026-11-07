@@ -128,14 +128,15 @@ test("直接打开域名看到介绍页，别的地址还是 404", async () => {
   assert.equal((await fetch(`${BASE}/nope`)).status, 404);
 });
 
-test("给用户看的话和网页按语言给：繁体、英文、日文，别的语言的浏览器看英文", async () => {
+test("给用户看的话按 App 的语言给，网页按浏览器的语言给，别的语言的浏览器看英文", async () => {
   // 用「缺少设备标识」试，不占输错邀请码的次数（同一个 IP 每天只能输错几次）
-  const bad = (lang) => fetch(`${BASE}/recognize`, { method: "POST", body: BODY, headers: { "Accept-Language": lang } })
-    .then((r) => r.json());
-  assert.match((await bad("zh-Hans")).error.message, /缺少设备标识/);
-  assert.match((await bad("zh-Hant")).error.message, /缺少裝置標識/);
-  assert.match((await bad("en-GB")).error.message, /Missing device ID/);
-  assert.match((await bad("ja")).error.message, /端末 ID がありません/);
+  const bad = (headers) => fetch(`${BASE}/recognize`, { method: "POST", body: BODY, headers }).then((r) => r.json());
+  assert.match((await bad({ "X-Majiang-Lang": "zh-Hans" })).error.message, /缺少设备标识/);
+  assert.match((await bad({ "X-Majiang-Lang": "zh-Hant" })).error.message, /缺少裝置標識/);
+  assert.match((await bad({ "X-Majiang-Lang": "en" })).error.message, /Missing device ID/);
+  assert.match((await bad({ "X-Majiang-Lang": "ja" })).error.message, /端末 ID がありません/);
+  // 旧版 App 不带 X-Majiang-Lang，系统的 Accept-Language 是英文也照旧回简体
+  assert.match((await bad({ "Accept-Language": "en-GB" })).error.message, /缺少设备标识/);
 
   const page = (path, lang) => fetch(`${BASE}${path}`, { headers: lang ? { "Accept-Language": lang } : {} }).then((r) => r.text());
   assert.match(await page("/support", "zh-TW,zh;q=0.9"), /lang="zh-Hant"[\s\S]*說明/);

@@ -1,10 +1,17 @@
 // 给用户看的话按 App 的语言换成繁体、英文或日文。
-// App 每个请求都带 Accept-Language（手机上 App 用的语言：zh-Hans / zh-Hant / en / ja），浏览器打开网页时也带。
+// App 每个请求都带 X-Majiang-Lang（App 用的语言：zh-Hans / zh-Hant / en / ja）；网页按浏览器的 Accept-Language。
 // 代码里还是写简体中文，出门前在 localizeError 里换掉；没有翻译的话照原样（简体）发出去。
 
 export const LANGS = ["zh-Hans", "zh-Hant", "en", "ja"];
 
-/// 从 ?lang= 或 Accept-Language 里挑一个我们有的语言，挑不出来就用简体。
+/// App 接口的语言：只认 App 自己带的 X-Majiang-Lang。
+/// 旧版 App 只有简体界面，不带这个头；它的 Accept-Language 是系统加的，可能是英文，所以不看。
+export function apiLang(request) {
+  const lang = request.headers.get("X-Majiang-Lang");
+  return LANGS.includes(lang) ? lang : "zh-Hans";
+}
+
+/// 网页的语言：从 ?lang= 或 Accept-Language 里挑一个我们有的语言，挑不出来就用简体。
 export function pickLang(request) {
   const url = new URL(request.url);
   const forced = url.searchParams.get("lang");
