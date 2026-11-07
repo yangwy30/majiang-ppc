@@ -1600,6 +1600,36 @@
         }
       }
     },
+    "source.manual" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entered by hand"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手入力"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手動輸入"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手动输入"
+          }
+        }
+      },
+      "extractionState" : "manual",
+      "comment" : "核对页副标题：牌是手动选的"
+    },
     "tile.winMark" : {
       "comment" : "和的那张牌下面的小字（英文 Win）",
       "extractionState" : "extracted_with_value",
@@ -8559,7 +8589,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entered by hand"
+            "value" : "Enter by hand"
           }
         },
         "ja" : {

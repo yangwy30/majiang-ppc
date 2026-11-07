@@ -128,6 +128,24 @@ test("直接打开域名看到介绍页，别的地址还是 404", async () => {
   assert.equal((await fetch(`${BASE}/nope`)).status, 404);
 });
 
+test("给用户看的话和网页按语言给：繁体、英文、日文，别的语言的浏览器看英文", async () => {
+  // 用「缺少设备标识」试，不占输错邀请码的次数（同一个 IP 每天只能输错几次）
+  const bad = (lang) => fetch(`${BASE}/recognize`, { method: "POST", body: BODY, headers: { "Accept-Language": lang } })
+    .then((r) => r.json());
+  assert.match((await bad("zh-Hans")).error.message, /缺少设备标识/);
+  assert.match((await bad("zh-Hant")).error.message, /缺少裝置標識/);
+  assert.match((await bad("en-GB")).error.message, /Missing device ID/);
+  assert.match((await bad("ja")).error.message, /端末 ID がありません/);
+
+  const page = (path, lang) => fetch(`${BASE}${path}`, { headers: lang ? { "Accept-Language": lang } : {} }).then((r) => r.text());
+  assert.match(await page("/support", "zh-TW,zh;q=0.9"), /lang="zh-Hant"[\s\S]*說明/);
+  assert.match(await page("/support", "en-GB,en;q=0.9"), /How to use it/);
+  assert.match(await page("/privacy", "ja-JP"), /lang="ja"/);
+  assert.match(await page("/privacy", "fr-FR,fr;q=0.9"), /lang="en"/);
+  assert.match(await page("/privacy"), /lang="zh-Hans"/);
+  assert.match(await page("/?lang=en", "zh-CN"), /Download on the App Store/);
+});
+
 test("管理接口要管理密码，网页本身能打开", async () => {
   assert.equal((await adminApi("codes", undefined, "")).status, 401);
   assert.equal((await adminApi("codes", undefined, "wrong")).status, 401);

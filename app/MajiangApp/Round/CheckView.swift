@@ -196,7 +196,7 @@ struct CheckView: View {
 
     private var subtitle: String {
         let who = flow.winnerChosen ? String(localized: "\(winnerName)和了 · ") : ""
-        if flow.source == "手动输入" { return who + String(localized: "手动输入") }
+        if flow.source == "手动输入" { return who + String(localized: "source.manual", defaultValue: "手动输入", comment: "核对页副标题：牌是手动选的") }
         // 演示数据不看照片，一定要说清楚，不然会以为是认错了（截图模式除外）
         if flow.source == "演示" && DemoScreen.current == nil { return String(localized: "演示数据，没看你的照片 · 长按首页标题填 Key") }
         let count = who + String(localized: "认出 \(flow.hand.allTiles.count) 张")

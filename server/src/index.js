@@ -1,8 +1,10 @@
 import { DurableObject } from "cloudflare:workers";
 import { isAllowedModel } from "./models.js";
-import { PRIVACY_HTML } from "./privacy.js";
-import { SUPPORT_HTML } from "./support.js";
-import { HOME_HTML } from "./home.js";
+import { PRIVACY_PAGES } from "./privacy.js";
+import { SUPPORT_PAGES } from "./support.js";
+import { HOME_PAGES } from "./home.js";
+import { htmlResponse } from "./page.js";
+import { pickLang, localizeError } from "./i18n.js";
 import { ADMIN_HTML } from "./admin.js";
 import { normalizeCode, newCode, sameSecret } from "./invites.js";
 
@@ -38,109 +40,113 @@ function limit(env, name, fallback) {
 
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url);
-    if (url.pathname === "/health" && request.method === "GET") return new Response("ok");
-    // 在浏览器里直接打开域名的人看到一页介绍，不是一行 404 JSON
-    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD")) {
-      return new Response(request.method === "HEAD" ? null : HOME_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
-    }
-    if (url.pathname === "/privacy" && request.method === "GET") {
-      return new Response(PRIVACY_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
-    }
-    if (url.pathname === "/support" && request.method === "GET") {
-      return new Response(SUPPORT_HTML, { headers: { "Content-Type": "text/html; charset=utf-8" } });
-    }
-    if (url.pathname === "/admin" && request.method === "GET") {
-      return new Response(ADMIN_HTML, { headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store",
-        "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src blob:; frame-ancestors 'none'",
-        "Referrer-Policy": "no-referrer",
-      } });
-    }
-    if (url.pathname.startsWith("/admin/api/")) return admin(request, env, url);
-    if (!["/recognize", "/invite", "/feedback", "/misread"].includes(url.pathname)) return fail(404, "地址不对");
-    if (request.method !== "POST") return fail(405, "只收 POST");
+    // 给用户看的话（出错、网页）按 App 或浏览器的语言给；管理接口是 Yang 自己用的，一直是简体
+    const lang = pickLang(request);
+    const response = await handle(request, env, lang);
+    return new URL(request.url).pathname.startsWith("/admin") ? response : localizeError(response, lang);
+  },
+};
 
-    const device = request.headers.get("X-Majiang-Device") ?? "";
-    if (!DEVICE_RE.test(device)) return fail(400, "缺少设备标识，请更新 App");
-    const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+async function handle(request, env, lang) {
+  const url = new URL(request.url);
+  if (url.pathname === "/health" && request.method === "GET") return new Response("ok");
+  // 在浏览器里直接打开域名的人看到一页介绍，不是一行 404 JSON
+  if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD")) {
+    const res = htmlResponse(HOME_PAGES[lang]);
+    return request.method === "HEAD" ? new Response(null, { headers: res.headers }) : res;
+  }
+  if (url.pathname === "/privacy" && request.method === "GET") return htmlResponse(PRIVACY_PAGES[lang]);
+  if (url.pathname === "/support" && request.method === "GET") return htmlResponse(SUPPORT_PAGES[lang]);
+  if (url.pathname === "/admin" && request.method === "GET") {
+    return new Response(ADMIN_HTML, { headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src blob:; frame-ancestors 'none'",
+      "Referrer-Policy": "no-referrer",
+    } });
+  }
+  if (url.pathname.startsWith("/admin/api/")) return admin(request, env, url);
+  if (!["/recognize", "/invite", "/feedback", "/misread"].includes(url.pathname)) return fail(404, "地址不对");
+  if (request.method !== "POST") return fail(405, "只收 POST");
 
-    // 填邀请码时先来这里查一下：码对就把这台手机绑上，App 存下码
-    if (url.pathname === "/invite") {
-      let code = "";
-      try {
-        code = String((await request.json())?.code ?? "");
-      } catch {
-        return fail(400, "请求不是 JSON");
-      }
-      return relay(env).fetch("https://relay/invite", {
-        method: "POST",
-        headers: { "X-Majiang-Device": device.toLowerCase(), "X-Majiang-IP": ip, "X-Majiang-Invite": code.slice(0, 32) },
-      });
-    }
+  const device = request.headers.get("X-Majiang-Device") ?? "";
+  if (!DEVICE_RE.test(device)) return fail(400, "缺少设备标识，请更新 App");
+  const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
 
-    // 「提意见」和「认错了」：检查一下大小和格式，存进 Durable Object
-    if (url.pathname === "/feedback" || url.pathname === "/misread") {
-      const max = url.pathname === "/feedback" ? 20_000 : MAX_MISREAD_BODY;
-      if (Number(request.headers.get("Content-Length") ?? 0) > max) return fail(413, "太大了");
-      const text = await request.text();
-      if (text.length > max) return fail(413, "太大了");
-      return relay(env).fetch(`https://relay${url.pathname}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Majiang-Device": device.toLowerCase(), "X-Majiang-IP": ip },
-        body: text,
-      });
-    }
-
-    // 模型由服务器决定（改 wrangler.toml 的 MODEL 再部署），App 发来的 X-Majiang-Model 只做参考
-    const model = env.MODEL;
-    if (!isAllowedModel(model)) return fail(500, "服务器配置的模型不对");
-
-    const maxBytes = limit(env, "MAX_BODY_BYTES", 8_000_000);
-    if (Number(request.headers.get("Content-Length") ?? 0) > maxBytes) return fail(413, "照片太大了");
-    const body = await request.arrayBuffer();
-    if (body.byteLength > maxBytes) return fail(413, "照片太大了");
-
-    // 只转发认牌用得到的请求：第一轮要有照片，不许带工具、系统提示词之类，防止被当成免费的通用 Gemini
-    let json;
+  // 填邀请码时先来这里查一下：码对就把这台手机绑上，App 存下码
+  if (url.pathname === "/invite") {
+    let code = "";
     try {
-      json = JSON.parse(new TextDecoder().decode(body));
+      code = String((await request.json())?.code ?? "");
     } catch {
       return fail(400, "请求不是 JSON");
     }
-    if (json === null || typeof json !== "object" || Array.isArray(json)
-        || !Object.keys(json).every((k) => BODY_KEYS.has(k))
-        || !Array.isArray(json.contents) || json.contents.length < 1 || json.contents.length > 3
-        || !json.contents[0]?.parts?.some?.((p) => p?.inline_data?.data || p?.inlineData?.data)) {
-      return fail(400, "请求格式不对");
-    }
-
-    // 思考深度也由服务器决定，覆盖 App 发来的。研究里 3.8 Flash 调成 low 快了约 3 倍，准确率只少一点。
-    // 设成空就用模型默认；换成 2.5 系列模型时要设成空（它们不认 thinkingLevel）。
-    let forward = body;
-    const thinking = env.THINKING_LEVEL ?? "";
-    if (thinking) {
-      if (!THINKING_LEVELS.has(thinking)) return fail(500, "服务器配置的思考深度不对");
-      json.generationConfig = { ...json.generationConfig, thinkingConfig: { thinkingLevel: thinking } };
-      forward = JSON.stringify(json);
-    }
-
-    // 计数和转发都在一个 Durable Object 里做：计数不会被并发请求挤乱，
-    // 而且它放在北美（LOCATION_HINT），从那里调 Google 不会碰上「所在地区不支持」。
-    return relay(env).fetch("https://relay/recognize", {
+    return relay(env).fetch("https://relay/invite", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Majiang-Device": device.toLowerCase(),
-        "X-Majiang-IP": ip,
-        "X-Majiang-Model": model,
-        "X-Majiang-Invite": (request.headers.get("X-Majiang-Invite") ?? "").slice(0, 32),
-      },
-      body: forward,
+      headers: { "X-Majiang-Device": device.toLowerCase(), "X-Majiang-IP": ip, "X-Majiang-Invite": code.slice(0, 32) },
     });
-  },
-};
+  }
+
+  // 「提意见」和「认错了」：检查一下大小和格式，存进 Durable Object
+  if (url.pathname === "/feedback" || url.pathname === "/misread") {
+    const max = url.pathname === "/feedback" ? 20_000 : MAX_MISREAD_BODY;
+    if (Number(request.headers.get("Content-Length") ?? 0) > max) return fail(413, "太大了");
+    const text = await request.text();
+    if (text.length > max) return fail(413, "太大了");
+    return relay(env).fetch(`https://relay${url.pathname}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Majiang-Device": device.toLowerCase(), "X-Majiang-IP": ip },
+      body: text,
+    });
+  }
+
+  // 模型由服务器决定（改 wrangler.toml 的 MODEL 再部署），App 发来的 X-Majiang-Model 只做参考
+  const model = env.MODEL;
+  if (!isAllowedModel(model)) return fail(500, "服务器配置的模型不对");
+
+  const maxBytes = limit(env, "MAX_BODY_BYTES", 8_000_000);
+  if (Number(request.headers.get("Content-Length") ?? 0) > maxBytes) return fail(413, "照片太大了");
+  const body = await request.arrayBuffer();
+  if (body.byteLength > maxBytes) return fail(413, "照片太大了");
+
+  // 只转发认牌用得到的请求：第一轮要有照片，不许带工具、系统提示词之类，防止被当成免费的通用 Gemini
+  let json;
+  try {
+    json = JSON.parse(new TextDecoder().decode(body));
+  } catch {
+    return fail(400, "请求不是 JSON");
+  }
+  if (json === null || typeof json !== "object" || Array.isArray(json)
+      || !Object.keys(json).every((k) => BODY_KEYS.has(k))
+      || !Array.isArray(json.contents) || json.contents.length < 1 || json.contents.length > 3
+      || !json.contents[0]?.parts?.some?.((p) => p?.inline_data?.data || p?.inlineData?.data)) {
+    return fail(400, "请求格式不对");
+  }
+
+  // 思考深度也由服务器决定，覆盖 App 发来的。研究里 3.8 Flash 调成 low 快了约 3 倍，准确率只少一点。
+  // 设成空就用模型默认；换成 2.5 系列模型时要设成空（它们不认 thinkingLevel）。
+  let forward = body;
+  const thinking = env.THINKING_LEVEL ?? "";
+  if (thinking) {
+    if (!THINKING_LEVELS.has(thinking)) return fail(500, "服务器配置的思考深度不对");
+    json.generationConfig = { ...json.generationConfig, thinkingConfig: { thinkingLevel: thinking } };
+    forward = JSON.stringify(json);
+  }
+
+  // 计数和转发都在一个 Durable Object 里做：计数不会被并发请求挤乱，
+  // 而且它放在北美（LOCATION_HINT），从那里调 Google 不会碰上「所在地区不支持」。
+  return relay(env).fetch("https://relay/recognize", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Majiang-Device": device.toLowerCase(),
+      "X-Majiang-IP": ip,
+      "X-Majiang-Model": model,
+      "X-Majiang-Invite": (request.headers.get("X-Majiang-Invite") ?? "").slice(0, 32),
+    },
+    body: forward,
+  });
+}
 
 /// 管理接口：先对管理密码，再交给 Durable Object。
 async function admin(request, env, url) {
