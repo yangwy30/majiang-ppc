@@ -10,6 +10,7 @@ struct HomeView: View {
     @State private var showInvite = false
     @State private var showMore = false
     @State private var showFeedback = false
+    @State private var showLanguage = false
     /// 「更多」页里点了哪一项：等「更多」收下去再打开那一页，两层弹出不叠在一起。
     @State private var moreTarget: MoreTarget?
 
@@ -30,6 +31,7 @@ struct HomeView: View {
         .sheet(isPresented: $showBackup) { BackupView().presentationCornerRadius(30) }
         .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
         .sheet(isPresented: $showFeedback) { FeedbackView().presentationCornerRadius(30) }
+        .sheet(isPresented: $showLanguage) { LanguageSheet() }
         .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
             MoreSheet(items: moreItems) { target in
                 moreTarget = target
@@ -40,6 +42,7 @@ struct HomeView: View {
             if model.demoScreen == .backup { showBackup = true }
             if model.demoScreen == .invite { showInvite = true }
             if model.demoScreen == .more { showMore = true }
+            if model.demoScreen == .language { showLanguage = true }
             if model.demoScreen == .feedback || model.demoScreen == .feedbackSent { showFeedback = true }
         }
         // 打完一场从结算页回来：等首页落定、返回的动画走完，再弹苹果的评分框
@@ -152,6 +155,8 @@ struct HomeView: View {
                                detail: on ? "看邀请码，或者移除" : "有邀请码就能开启，认牌更准"))
         }
         items.append(.init(target: .feedback, title: "提意见", detail: "哪里不好用、番算错了，直接告诉我们"))
+        // 说明写现在的选择，用那种语言自己的写法（「English」「日本語」）
+        items.append(.init(target: .language, title: "语言", detail: "\(AppLanguage.chosen.nativeName)"))
         return items
     }
 
@@ -161,6 +166,7 @@ struct HomeView: View {
         case .backup: showBackup = true
         case .invite: showInvite = true
         case .feedback: showFeedback = true
+        case .language: showLanguage = true
         case nil: break
         }
         moreTarget = nil
@@ -168,7 +174,7 @@ struct HomeView: View {
 }
 
 private enum MoreTarget {
-    case guide, backup, invite, feedback
+    case guide, backup, invite, feedback, language
 }
 
 private struct ActiveGameCard: View {
