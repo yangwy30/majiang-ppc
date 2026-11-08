@@ -16,6 +16,7 @@ struct MajiangApp: App {
 struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
+    @Bindable private var language = LiveLanguage.shared
 
     var body: some View {
         #if DEBUG
@@ -47,6 +48,11 @@ struct RootView: View {
                     }
                 }
         }
+        // 换了语言：整个界面按新语言重建一遍，已经画好的字全部换掉（停在哪一页由 model.path 记着，不会丢）
+        .id(language.localization)
+        // 「更多 › 语言」挂在重建范围外面：点了一种语言，底下的界面换过去，这一页留着、对勾跟着动
+        .sheet(isPresented: $language.showingSheet) { LanguageSheet() }
+        .environment(\.locale, language.locale)
         .tint(Theme.ink)
         .preferredColorScheme(.light)
         // 打开和回到前台时和 iCloud 同步一次（换了手机、另一台设备记过的局会出现）

@@ -47,8 +47,8 @@ enum DemoScreen: String {
 #if DEBUG
 enum DemoData {
     // 截图跟着模拟器语言换名字（英文版截图里不出现中文名）
-    static let names = [String(localized: "demo.name.yang", defaultValue: "杨"), String(localized: "demo.name.qiang", defaultValue: "阿强"),
-                        String(localized: "demo.name.lily", defaultValue: "莉莉"), String(localized: "demo.name.zhang", defaultValue: "小张")]
+    static var names: [String] { [String(localized: "demo.name.yang", defaultValue: "杨"), String(localized: "demo.name.qiang", defaultValue: "阿强"),
+                        String(localized: "demo.name.lily", defaultValue: "莉莉"), String(localized: "demo.name.zhang", defaultValue: "小张")] }
 
     static func archive() -> GameArchive {
         var archive = GameArchive()

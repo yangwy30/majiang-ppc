@@ -10,7 +10,6 @@ struct HomeView: View {
     @State private var showInvite = false
     @State private var showMore = false
     @State private var showFeedback = false
-    @State private var showLanguage = false
     /// 「更多」页里点了哪一项：等「更多」收下去再打开那一页，两层弹出不叠在一起。
     @State private var moreTarget: MoreTarget?
 
@@ -31,7 +30,6 @@ struct HomeView: View {
         .sheet(isPresented: $showBackup) { BackupView().presentationCornerRadius(30) }
         .sheet(isPresented: $showInvite) { InviteView().presentationCornerRadius(30) }
         .sheet(isPresented: $showFeedback) { FeedbackView().presentationCornerRadius(30) }
-        .sheet(isPresented: $showLanguage) { LanguageSheet() }
         .sheet(isPresented: $showMore, onDismiss: openMoreTarget) {
             MoreSheet(items: moreItems) { target in
                 moreTarget = target
@@ -42,7 +40,7 @@ struct HomeView: View {
             if model.demoScreen == .backup { showBackup = true }
             if model.demoScreen == .invite { showInvite = true }
             if model.demoScreen == .more { showMore = true }
-            if model.demoScreen == .language { showLanguage = true }
+            if model.demoScreen == .language { LiveLanguage.shared.showingSheet = true }
             if model.demoScreen == .feedback || model.demoScreen == .feedbackSent { showFeedback = true }
         }
         // 打完一场从结算页回来：等首页落定、返回的动画走完，再弹苹果的评分框
@@ -166,7 +164,7 @@ struct HomeView: View {
         case .backup: showBackup = true
         case .invite: showInvite = true
         case .feedback: showFeedback = true
-        case .language: showLanguage = true
+        case .language: LiveLanguage.shared.showingSheet = true
         case nil: break
         }
         moreTarget = nil

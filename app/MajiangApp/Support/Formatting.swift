@@ -181,22 +181,15 @@ extension Date {
 /// 钱怎么写、界面是哪种语言。简体一律「¥」和「元」，跟以前一样；繁体还写「元」，符号跟手机地区（台湾、香港是 $、HK$）；
 /// 英文、日文用手机地区的货币符号：「£2」「￥2」。
 enum Money {
-    /// App 现在显示的语言：zh-Hans、zh-Hant、en、ja。
-    static let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+    /// App 现在显示的语言：zh-Hans、zh-Hant、en、ja。在「更多 › 语言」里换了会跟着变，所以每次现取。
+    static var language: String { LiveLanguage.shared.localization }
     static var isSimplifiedChinese: Bool { language == "zh-Hans" }
     static var isChinese: Bool { language.hasPrefix("zh") }
 
     /// 日期、数字跟界面同一种语言，地区还是手机的地区。
-    static let locale: Locale = {
-        // 地区在 languageComponents 里（en_GB 的 GB），换语言时要留着，不然英国的手机日期会按美国的顺序排
-        var components = Locale.Components(locale: .current)
-        var lang = Locale.Language.Components(identifier: language)
-        lang.region = components.languageComponents.region ?? Locale.current.region
-        components.languageComponents = lang
-        return Locale(components: components)
-    }()
+    static var locale: Locale { LiveLanguage.shared.locale }
 
-    static let symbol: String = isSimplifiedChinese ? "¥" : (Locale.current.currencySymbol ?? "¥")
+    static var symbol: String { isSimplifiedChinese ? "¥" : (Locale.current.currencySymbol ?? "¥") }
 
     /// 「2 元」；英文、日文「£2」「￥2」。
     static func amount(_ number: String) -> String {
