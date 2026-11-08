@@ -47,15 +47,15 @@ enum DemoScreen: String {
 #if DEBUG
 enum DemoData {
     // 截图跟着模拟器语言换名字（英文版截图里不出现中文名）
-    static let names = [String(localized: "demo.name.yang", defaultValue: "杨"), String(localized: "demo.name.qiang", defaultValue: "阿强"),
-                        String(localized: "demo.name.lily", defaultValue: "莉莉"), String(localized: "demo.name.zhang", defaultValue: "小张")]
+    static var names: [String] { [String(localized: "demo.name.yang", defaultValue: "杨", bundle: .ui), String(localized: "demo.name.qiang", defaultValue: "阿强", bundle: .ui),
+                        String(localized: "demo.name.lily", defaultValue: "莉莉", bundle: .ui), String(localized: "demo.name.zhang", defaultValue: "小张", bundle: .ui)] }
 
     static func archive() -> GameArchive {
         var archive = GameArchive()
         let players = names.map { Player(name: $0) }
         let day: TimeInterval = 86_400
 
-        var older = Game(players: [players[0], players[1], Player(name: String(localized: "demo.name.wang", defaultValue: "老王")), players[3]], startedAt: Date().addingTimeInterval(-8 * day))
+        var older = Game(players: [players[0], players[1], Player(name: String(localized: "demo.name.wang", defaultValue: "老王", bundle: .ui)), players[3]], startedAt: Date().addingTimeInterval(-8 * day))
         win(&older, winner: 2, discarder: 0, hand: "123m 456m 789s 234p 55s")
         win(&older, winner: 0, discarder: nil, hand: "234m 456m 678m 东东东 99m")
         older.end()
@@ -79,7 +79,7 @@ enum DemoData {
         win(&active, winner: 3, discarder: nil, hand: "234m 456m 678m 东东东 99m")
         archive.upsert(active)
 
-        archive.remember(players + [Player(name: String(localized: "demo.name.wang", defaultValue: "老王")), Player(name: String(localized: "demo.name.zhou", defaultValue: "小周"))])
+        archive.remember(players + [Player(name: String(localized: "demo.name.wang", defaultValue: "老王", bundle: .ui)), Player(name: String(localized: "demo.name.zhou", defaultValue: "小周", bundle: .ui))])
         return archive
     }
 

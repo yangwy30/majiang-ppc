@@ -164,9 +164,9 @@ extension Game {
         guard let biggest = biggestWin else { return nil }
         let name = players[biggest.win.winner].name
         if let fan = biggest.win.fans.first?.fan.name {
-            return String(localized: "最大一手：\(name) \(fan) \(biggest.win.totalFan) 番")
+            return String(localized: "最大一手：\(name) \(fan) \(biggest.win.totalFan) 番", bundle: .ui)
         }
-        return String(localized: "最大一手：\(name) \(biggest.win.totalFan) 番")
+        return String(localized: "最大一手：\(name) \(biggest.win.totalFan) 番", bundle: .ui)
     }
 
     /// 文字版，复制到微信里直接能看。三段用空行隔开，分数只写一遍：
@@ -186,10 +186,10 @@ extension Game {
         let scores = self.scores
         let showMoney = rules.yuanPerPoint != 1
         let gap = Money.language == "en" ? "  " : "\u{3000}"  // 全角空格，比半角松一点；英文用两个半角
-        var title = [String(localized: "\(startedAt.monthDayLabel) 国标")]
+        var title = [String(localized: "\(startedAt.monthDayLabel) 国标", bundle: .ui)]
         if showMoney { title.append(rules.shortRateText) }
-        title.append(isFinished ? String(localized: "\(currentHandIndex) 局打完")
-                     : String(localized: "打到\(prevalentWind(ofHand: displayHand).roundName)第 \(displayHand % 4 + 1) 局"))
+        title.append(isFinished ? String(localized: "\(currentHandIndex) 局打完", bundle: .ui)
+                     : String(localized: "打到\(prevalentWind(ofHand: displayHand).roundName)第 \(displayHand % 4 + 1) 局", bundle: .ui))
 
         var sections = [[title.joined(separator: .dotSeparator)]]
         sections.append(Settlement.ranking(scores: scores).map { player in
@@ -200,13 +200,13 @@ extension Game {
         if isFinished {
             let transfers = Settlement.minimalTransfers(scores: scores)
             if !transfers.isEmpty {
-                sections.append([String(localized: "转账")] + transfers.map {
+                sections.append([String(localized: "转账", bundle: .ui)] + transfers.map {
                     "\(players[$0.from].name) → \(players[$0.to].name)\(gap)\(moneyText($0.points))"
                 })
             }
             if let line = biggestWinLine { sections.append([line]) }
         } else if let last = records.last {
-            sections.append([String(localized: "上一局：\(last.title(in: self).replacingOccurrences(of: String.dotSeparator, with: " "))")])
+            sections.append([String(localized: "上一局：\(last.title(in: self).replacingOccurrences(of: String.dotSeparator, with: " "))", bundle: .ui)])
         }
         return sections.map { $0.joined(separator: "\n") }.joined(separator: "\n\n")
     }

@@ -134,6 +134,6 @@ private struct CodeCells: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(text.isEmpty ? String(localized: "还没填") : text.map(String.init).joined(separator: " "))
+        .accessibilityLabel(text.isEmpty ? String(localized: "还没填", bundle: .ui) : text.map(String.init).joined(separator: " "))
     }
 }

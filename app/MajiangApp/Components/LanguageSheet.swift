@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// 「更多 › 语言」：从底下升起一页，跟「更多」同一个样子。点一行就选上，右边一个对勾；
-/// 选了跟这次打开时不一样的，底下用那种语言提示「关掉 App 再打开」。
+/// 「更多 › 语言」：从底下升起一页，跟「更多」同一个样子。点一行就选上，右边一个对勾，
+/// 整个 App（连这一页）马上换成那种语言，不用关掉再打开。
 struct LanguageSheet: View {
     @State private var selected = AppLanguage.chosen
 
@@ -26,20 +26,13 @@ struct LanguageSheet: View {
                 .buttonStyle(.plain)
                 .accessibilityAddTraits(selected == language ? .isSelected : [])
             }
-            Text(verbatim: selected.relaunchNote)
-                .font(.system(size: 14))
-                .foregroundStyle(Theme.gray)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 12)
-                .opacity(selected == AppLanguage.launched ? 0 : 1)
-                .animation(.easeOut(duration: 0.2), value: selected)
         }
         .padding(.horizontal, 24)
         .frame(maxWidth: Theme.columnWidth)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .foregroundStyle(Theme.ink)
-        // 标题一截、每行 72，再给底下那句提示留两行
-        .presentationDetents([.height(74 + 74 * CGFloat(AppLanguage.allCases.count) + 52)])
+        // 标题一截加每行 72，再留一点底，跟「更多」一样
+        .presentationDetents([.height(74 + 74 * CGFloat(AppLanguage.allCases.count))])
         .presentationDragIndicator(.visible)
         .presentationCornerRadius(28)
         .presentationBackground(Theme.paper)

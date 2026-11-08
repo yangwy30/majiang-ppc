@@ -98,7 +98,7 @@ struct HandDetailView: View {
                     }
                 } else {
                     // 没拍照、在账本里直接改成「和了」的局，只有番数
-                    Text(win.discarder.map { String(localized: "\(game.players[$0].name)点的炮。") } ?? String(localized: "自摸。"))
+                    Text(win.discarder.map { String(localized: "\(game.players[$0].name)点的炮。", bundle: .ui) } ?? String(localized: "自摸。", bundle: .ui))
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.gray)
                         .padding(.top, 14)
@@ -165,7 +165,7 @@ struct HandDetailView: View {
         }
         .fullScreenCover(isPresented: $showPhoto) {
             if let photo {
-                HandPhotoView(photo: photo, caption: String(localized: "第 \(number) 局 · \(record.title(in: game))"), date: record.date) {
+                HandPhotoView(photo: photo, caption: String(localized: "第 \(number) 局 · \(record.title(in: game))", bundle: .ui), date: record.date) {
                     HandPhotos.delete(recordID)
                     self.photo = nil
                 }

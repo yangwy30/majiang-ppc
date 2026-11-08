@@ -66,7 +66,7 @@ struct HouseRulesForm: View {
 
     private var moreLabel: String {
         let changed = RuleItem.more.filter { !$0.isStandard(rules) }.count
-        return changed > 0 ? String(localized: "更多规矩 · 改过 \(changed) 项") : String(localized: "更多规矩")
+        return changed > 0 ? String(localized: "更多规矩 · 改过 \(changed) 项", bundle: .ui) : String(localized: "更多规矩", bundle: .ui)
     }
 
     /// 「比如自摸 24 番：三家各付 32 分，一共赢 192 元。」随改随算。
@@ -74,7 +74,7 @@ struct HouseRulesForm: View {
         let fan = rules.cappedFan(24)
         let each = rules.basePoints + fan
         let money = (Double(each * 3) * rules.yuanPerPoint).formatted(.number.precision(.fractionLength(0...2)))
-        return String(localized: "比如自摸 24 番：三家各付 \(each) 分，一共赢 \(Money.amount(money))。")
+        return String(localized: "比如自摸 24 番：三家各付 \(each) 分，一共赢 \(Money.amount(money))。", bundle: .ui)
     }
 }
 
@@ -227,7 +227,7 @@ private struct RulePicker: View {
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 100)
-                    Text(verbatim: Money.isChinese ? String(localized: "元") : Money.symbol).foregroundStyle(Theme.gray)
+                    Text(verbatim: Money.isChinese ? String(localized: "元", bundle: .ui) : Money.symbol).foregroundStyle(Theme.gray)
                 }
                 .frame(height: 52)
             }
@@ -322,16 +322,16 @@ enum RuleItem: String, Identifiable, CaseIterable {
     /// 行右边的值：数字加单位，或者一个词。
     func value(_ rules: GameRules) -> (text: String, unit: String, isNumber: Bool) {
         switch self {
-        case .rate: Money.isChinese ? (rules.yuanPerPoint.yuanText, String(localized: "元"), true)
+        case .rate: Money.isChinese ? (rules.yuanPerPoint.yuanText, String(localized: "元", bundle: .ui), true)
             : ("\(Money.symbol)\(rules.yuanPerPoint.yuanText)", "", true)
-        case .base: ("\(rules.basePoints)", String(localized: "分"), true)
-        case .minimum: ("\(rules.minimumFan)", String(localized: "番"), true)
-        case .cap: rules.fanCap > 0 ? ("\(rules.fanCap)", String(localized: "番"), true) : (String(localized: "不封顶"), "", false)
-        case .flowers: (rules.includeFlowers ? String(localized: "带花") : String(localized: "不带"), "", false)
-        case .discarder: (rules.onlyDiscarderPays ? String(localized: "只有点炮的人") : String(localized: "三家都付底分"), "", false)
-        case .penalty: (String(localized: "\(rules.falseWinPenalty) 分"), "", false)
-        case .rounds: (String(localized: "\(rules.totalHands / 4) 圈"), "", false)
-        case .swap: (rules.swapSeatsEachRound ? String(localized: "换") : String(localized: "不换"), "", false)
+        case .base: ("\(rules.basePoints)", String(localized: "分", bundle: .ui), true)
+        case .minimum: ("\(rules.minimumFan)", String(localized: "番", bundle: .ui), true)
+        case .cap: rules.fanCap > 0 ? ("\(rules.fanCap)", String(localized: "番", bundle: .ui), true) : (String(localized: "不封顶", bundle: .ui), "", false)
+        case .flowers: (rules.includeFlowers ? String(localized: "带花", bundle: .ui) : String(localized: "不带", bundle: .ui), "", false)
+        case .discarder: (rules.onlyDiscarderPays ? String(localized: "只有点炮的人", bundle: .ui) : String(localized: "三家都付底分", bundle: .ui), "", false)
+        case .penalty: (String(localized: "\(rules.falseWinPenalty) 分", bundle: .ui), "", false)
+        case .rounds: (String(localized: "\(rules.totalHands / 4) 圈", bundle: .ui), "", false)
+        case .swap: (rules.swapSeatsEachRound ? String(localized: "换", bundle: .ui) : String(localized: "不换", bundle: .ui), "", false)
         }
     }
 
@@ -344,28 +344,28 @@ enum RuleItem: String, Identifiable, CaseIterable {
         case .base:
             var values = [0, 5, 8, 10]
             if !values.contains(current.basePoints) { values.append(current.basePoints); values.sort() }
-            return values.map { RuleOption.choice(\.basePoints, $0, String(localized: "\($0) 分"), tag: $0 == 0 ? String(localized: "不要底分") : nil) }
+            return values.map { RuleOption.choice(\.basePoints, $0, String(localized: "\($0) 分", bundle: .ui), tag: $0 == 0 ? String(localized: "不要底分", bundle: .ui) : nil) }
         case .minimum:
-            return [8, 6, 4, 1].map { RuleOption.choice(\.minimumFan, $0, String(localized: "\($0) 番"), tag: $0 == 1 ? String(localized: "和了就算") : nil) }
+            return [8, 6, 4, 1].map { RuleOption.choice(\.minimumFan, $0, String(localized: "\($0) 番", bundle: .ui), tag: $0 == 1 ? String(localized: "和了就算", bundle: .ui) : nil) }
         case .cap:
-            return [0, 88, 64, 32].map { RuleOption.choice(\.fanCap, $0, $0 == 0 ? String(localized: "不封顶") : String(localized: "\($0) 番")) }
+            return [0, 88, 64, 32].map { RuleOption.choice(\.fanCap, $0, $0 == 0 ? String(localized: "不封顶", bundle: .ui) : String(localized: "\($0) 番", bundle: .ui)) }
         case .flowers:
-            return [true, false].map { RuleOption.choice(\.includeFlowers, $0, $0 ? String(localized: "带花") : String(localized: "不带花")) }
+            return [true, false].map { RuleOption.choice(\.includeFlowers, $0, $0 ? String(localized: "带花", bundle: .ui) : String(localized: "不带花", bundle: .ui)) }
         case .discarder:
-            return [false, true].map { RuleOption.choice(\.onlyDiscarderPays, $0, $0 ? String(localized: "只有点炮的人付") : String(localized: "三家都付底分")) }
+            return [false, true].map { RuleOption.choice(\.onlyDiscarderPays, $0, $0 ? String(localized: "只有点炮的人付", bundle: .ui) : String(localized: "三家都付底分", bundle: .ui)) }
         case .penalty:
             var values = [10, 5, 20]
             if !values.contains(current.falseWinPenalty) { values.append(current.falseWinPenalty) }
-            return values.map { RuleOption.choice(\.falseWinPenalty, $0, String(localized: "\($0) 分")) }
+            return values.map { RuleOption.choice(\.falseWinPenalty, $0, String(localized: "\($0) 分", bundle: .ui)) }
         case .rounds:
             // 已经打了的局数之内的圈数不能选
             return [16, 8, 4].map { hands in
-                var option = RuleOption.choice(\.totalHands, hands, String(localized: "\(hands / 4) 圈"))
+                var option = RuleOption.choice(\.totalHands, hands, String(localized: "\(hands / 4) 圈", bundle: .ui))
                 option.enabled = hands >= playedHands
                 return option
             }
         case .swap:
-            return [false, true].map { RuleOption.choice(\.swapSeatsEachRound, $0, $0 ? String(localized: "换座") : String(localized: "不换")) }
+            return [false, true].map { RuleOption.choice(\.swapSeatsEachRound, $0, $0 ? String(localized: "换座", bundle: .ui) : String(localized: "不换", bundle: .ui)) }
         }
     }
 }
@@ -383,7 +383,7 @@ struct RuleOption: Identifiable {
     static func choice<T: Equatable>(_ keyPath: WritableKeyPath<GameRules, T>, _ value: T, _ label: String,
                                      tag: String? = nil, marksStandard: Bool = true) -> RuleOption {
         let isStandard = marksStandard && GameRules.standard[keyPath: keyPath] == value
-        return RuleOption(label: label, tag: isStandard ? String(localized: "国标") : tag,
+        return RuleOption(label: label, tag: isStandard ? String(localized: "国标", bundle: .ui) : tag,
                           isSelected: { $0[keyPath: keyPath] == value },
                           apply: { $0[keyPath: keyPath] = value })
     }

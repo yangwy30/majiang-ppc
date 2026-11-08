@@ -49,7 +49,7 @@ struct TileFace: View {
             }
         }
         .accessibilityElement()
-        .accessibilityLabel(state == .doubt ? String(localized: "\(tile.displayName)，拿不准") : tile.displayName)
+        .accessibilityLabel(state == .doubt ? String(localized: "\(tile.displayName)，拿不准", bundle: .ui) : tile.displayName)
     }
 
     @ViewBuilder

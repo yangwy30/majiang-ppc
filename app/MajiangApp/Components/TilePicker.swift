@@ -74,8 +74,8 @@ struct MeldEditSheet: View {
             switch self {
             case .chow: "吃"
             case .pung: "碰"
-            case .kong: "\(String(localized: "meld.kong", defaultValue: "明杠"))"
-            case .concealedKong: "\(String(localized: "meld.concealedKong", defaultValue: "暗杠"))"
+            case .kong: "\(String(localized: "meld.kong", defaultValue: "明杠", bundle: .ui))"
+            case .concealedKong: "\(String(localized: "meld.concealedKong", defaultValue: "暗杠", bundle: .ui))"
             }
         }
     }

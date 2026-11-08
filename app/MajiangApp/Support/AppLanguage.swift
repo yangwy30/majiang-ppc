@@ -1,9 +1,11 @@
 import Foundation
+import Observation
+import MajiangKit
 
 /// App 用哪种语言：默认跟随手机，也可以在「更多 › 语言」里单独选。
 ///
-/// 选了以后写进 App 自己的 `AppleLanguages`，跟 iPhone「设置 › 拍照算番 › 语言」是同一个设置（两边改哪边都行，互相看得到）。
-/// 系统只在 App 启动时读它，所以要关掉 App 再打开才换过来；不在运行中硬换，免得一半字换了、一半没换。
+/// 选了以后写进 App 自己的 `AppleLanguages`，跟 iPhone「设置 › 拍照算番 › 语言」是同一个设置（两边改哪边都行，互相看得到），
+/// 下次打开 App 时系统直接用它。这次打开的 App 里也马上换：见 `LiveLanguage`。
 enum AppLanguage: String, CaseIterable, Identifiable {
     case system, zhHans = "zh-Hans", zhHant = "zh-Hant", en, ja
 
@@ -12,7 +14,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     /// 每种语言用它自己的文字写：界面是看不懂的语言时，也认得出自己要的那一行。
     var nativeName: String {
         switch self {
-        case .system: String(localized: "language.system", defaultValue: "跟随手机", comment: "语言页：跟手机的语言走")
+        case .system: String(localized: "language.system", defaultValue: "跟随手机", bundle: .ui, comment: "语言页：跟手机的语言走")
         case .zhHans: "简体中文"
         case .zhHant: "繁體中文"
         case .en: "English"
@@ -30,33 +32,80 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         return matching(first) ?? .system
     }
 
-    /// 这次打开 App 时的选择：选了别的、还没重开时，用来判断要不要提示「关掉再打开」。
-    static let launched = chosen
-
+    /// 选一种语言：存下来，界面马上换过去。
+    @MainActor
     static func choose(_ language: AppLanguage) {
         if language == .system {
             UserDefaults.standard.removeObject(forKey: key)
         } else {
             UserDefaults.standard.set([language.rawValue], forKey: key)
         }
+        LiveLanguage.shared.switchTo(language.localization)
+    }
+
+    /// 界面实际用哪一份翻译（zh-Hans、zh-Hant、en、ja）。跟随手机时按手机的语言顺序找第一个有的，都没有就是英文，跟系统一样。
+    private var localization: String {
+        guard self == .system else { return rawValue }
+        // 上面刚把 App 自己的设置删掉，这里读到的就是手机的语言顺序
+        let phone = UserDefaults.standard.stringArray(forKey: Self.key) ?? Locale.preferredLanguages
+        return phone.lazy.compactMap(Self.matching).first?.rawValue ?? AppLanguage.en.rawValue
     }
 
     /// 系统设置里选的可能带地区（zh-Hant-TW、en-GB），按开头认。
     private static func matching(_ identifier: String) -> AppLanguage? {
-        if identifier.hasPrefix("zh-Hant") || identifier == "zh-TW" || identifier == "zh-HK" { return .zhHant }
+        if identifier.hasPrefix("zh-Hant") || identifier.hasPrefix("zh-TW") || identifier.hasPrefix("zh-HK")
+            || identifier.hasPrefix("zh-MO") { return .zhHant }
         if identifier.hasPrefix("zh") { return .zhHans }
         if identifier.hasPrefix("en") { return .en }
         if identifier.hasPrefix("ja") { return .ja }
         return nil
     }
+}
 
-    /// 「关掉 App 再打开」这句用选中的那种语言写：刚选了日文的人，要看得懂这句。
-    var relaunchNote: String {
-        let wanted = self == .system ? Locale.preferredLanguages : [rawValue]
-        let bundle = Bundle.preferredLocalizations(from: Bundle.main.localizations, forPreferences: wanted).first
-            .flatMap { Bundle.main.path(forResource: $0, ofType: "lproj") }
-            .flatMap(Bundle.init(path:)) ?? .main
-        return String(localized: "language.relaunch", defaultValue: "从后台划掉 App 再打开，就换好了",
-                      bundle: bundle, comment: "语言页：选了别的语言以后的提示")
+/// 界面现在显示的语言，换了马上生效，不用关掉 App 再打开。
+///
+/// 系统只在 App 启动时挑一次翻译。换语言时这里做三件事：
+/// 1. 把选中语言的 .lproj 交给 `UILanguage`：`L()` 和 `String(localized:…, bundle: .ui)` 从此取新语言的字；
+/// 2. 根视图的 `locale` 换掉，`Text("…")` 和日期、数字跟着换；
+/// 3. 根视图按语言重建一遍（`RootView` 里的 `.id`），已经画好的字全部重算。语言页本身挂在重建范围外面，不会被关掉。
+@Observable
+final class LiveLanguage {
+    static let shared = LiveLanguage()
+
+    /// zh-Hans、zh-Hant、en、ja。
+    private(set) var localization: String
+    /// 日期、数字跟界面同一种语言，地区还是手机的地区。
+    @ObservationIgnored private(set) var locale: Locale
+    /// 「更多 › 语言」那一页开着没有。放在这里而不是首页里：换语言时首页会重建，页子要留着。
+    var showingSheet = false
+
+    private init() {
+        let launched = UILanguage.localization
+        localization = launched
+        locale = Self.locale(for: launched)
     }
+
+    @MainActor
+    func switchTo(_ new: String) {
+        guard new != localization,
+              let path = Bundle.main.path(forResource: new, ofType: "lproj"),
+              let bundle = Bundle(path: path) else { return }
+        UILanguage.set(bundle: bundle, localization: new)
+        locale = Self.locale(for: new)
+        localization = new
+    }
+
+    private static func locale(for language: String) -> Locale {
+        // 地区在 languageComponents 里（en_GB 的 GB），换语言时要留着，不然英国的手机日期会按美国的顺序排
+        var components = Locale.Components(locale: .current)
+        var lang = Locale.Language.Components(identifier: language)
+        lang.region = components.languageComponents.region ?? Locale.current.region
+        components.languageComponents = lang
+        return Locale(components: components)
+    }
+}
+
+extension Bundle {
+    /// App 里取字都用它：`String(localized: "…", bundle: .ui)`。见 `UILanguage`。
+    static var ui: Bundle { UILanguage.bundle }
 }

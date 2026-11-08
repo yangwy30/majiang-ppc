@@ -195,14 +195,14 @@ struct CheckView: View {
     }
 
     private var subtitle: String {
-        let who = flow.winnerChosen ? String(localized: "\(winnerName)和了 · ") : ""
-        if flow.source == "手动输入" { return who + String(localized: "source.manual", defaultValue: "手动输入", comment: "核对页副标题：牌是手动选的") }
+        let who = flow.winnerChosen ? String(localized: "\(winnerName)和了 · ", bundle: .ui) : ""
+        if flow.source == "手动输入" { return who + String(localized: "source.manual", defaultValue: "手动输入", bundle: .ui, comment: "核对页副标题：牌是手动选的") }
         // 演示数据不看照片，一定要说清楚，不然会以为是认错了（截图模式除外）
-        if flow.source == "演示" && DemoScreen.current == nil { return String(localized: "演示数据，没看你的照片 · 长按首页标题填 Key") }
-        let count = who + String(localized: "认出 \(flow.hand.allTiles.count) 张")
+        if flow.source == "演示" && DemoScreen.current == nil { return String(localized: "演示数据，没看你的照片 · 长按首页标题填 Key", bundle: .ui) }
+        let count = who + String(localized: "认出 \(flow.hand.allTiles.count) 张", bundle: .ui)
         if flow.isReviewing { return count }
         if flow.source == "双读" {
-            return count + (flow.reviewAtLoad == 0 ? String(localized: " · 两遍读得一样") : String(localized: " · \(flow.reviewAtLoad) 张两遍不一样"))
+            return count + (flow.reviewAtLoad == 0 ? String(localized: " · 两遍读得一样", bundle: .ui) : String(localized: " · \(flow.reviewAtLoad) 张两遍不一样", bundle: .ui))
         }
         return count
     }
@@ -211,7 +211,7 @@ struct CheckView: View {
 
     private var actionTitle: String {
         guard let i = actionTile, flow.tiles.indices.contains(i) else { return "" }
-        return String(localized: "第 \(i + 1) 张 · \(flow.tiles[i].tile.displayName)")
+        return String(localized: "第 \(i + 1) 张 · \(flow.tiles[i].tile.displayName)", bundle: .ui)
     }
 
     // MARK: 照片
@@ -278,7 +278,7 @@ struct CheckView: View {
                         // 和的那张下面盖一个朱红小印「和」
                         Group {
                             if index == winningIndex {
-                                Seal(text: String(localized: "seal.win", defaultValue: "和", comment: "核对页和的那张牌下面的朱红小方印，只放一个字（英文 W）"), size: 16)
+                                Seal(text: String(localized: "seal.win", defaultValue: "和", bundle: .ui, comment: "核对页和的那张牌下面的朱红小方印，只放一个字（英文 W）"), size: 16)
                                     .accessibilityLabel("和的那张")
                             } else {
                                 Color.clear
@@ -375,7 +375,7 @@ struct CheckView: View {
                 // 偶尔会卡到超时（一分钟），不让人干等
                 Button("不等了，就用现在这些牌 ›") {
                     flow.cancelRecognition()
-                    flow.notes.append(String(localized: "没等第二遍认完，只有第一遍的读法，对照照片看一眼"))
+                    flow.notes.append(String(localized: "没等第二遍认完，只有第一遍的读法，对照照片看一眼", bundle: .ui))
                 }
                 .buttonStyle(.text(size: 14))
                 .transition(.opacity)
@@ -389,11 +389,11 @@ struct CheckView: View {
     private var problemCard: some View {
         let suggestion = flow.suggestions.first
         let minimum = game.rules.minimumFan
-        var title = String(localized: "还凑不成和牌")
+        var title = String(localized: "还凑不成和牌", bundle: .ui)
         var reason: Text
         switch flow.scoring {
         case .success(let result):
-            title = String(localized: "只有 \(result.fanWithoutFlowers) 番，国标要 \(minimum) 番才能和")
+            title = String(localized: "只有 \(result.fanWithoutFlowers) 番，国标要 \(minimum) 番才能和", bundle: .ui)
             reason = Text("牌型没问题。看看下面的少见情况有没有漏选；牌都对的话，这手就是不够番。")
         case .failure(.wrongTileCount):
             reason = Text("和牌一共 14 张（每个杠多 1 张），现在是 \(flow.hand.allTiles.count) 张。")
@@ -494,9 +494,9 @@ struct CheckView: View {
         VStack(alignment: .leading, spacing: 0) {
             if flow.winnerChosen {
                 HStack(spacing: 8) {
-                    ChoiceChip(title: String(localized: "自摸"), selected: flow.wayChosen && flow.selfDrawn) { flow.pickSelfDrawn() }
+                    ChoiceChip(title: String(localized: "自摸", bundle: .ui), selected: flow.wayChosen && flow.selfDrawn) { flow.pickSelfDrawn() }
                     ForEach((0..<4).filter { $0 != flow.winner }, id: \.self) { i in
-                        ChoiceChip(title: String(localized: "\(game.players[i].name)点炮"),
+                        ChoiceChip(title: String(localized: "\(game.players[i].name)点炮", bundle: .ui),
                                    selected: flow.wayChosen && !flow.selfDrawn && flow.discarder == i) {
                             flow.pickDiscarder(i)
                         }
@@ -527,12 +527,12 @@ struct CheckView: View {
     }
 
     private var wayNote: String? {
-        if !flow.winnerChosen { return String(localized: "先选上面谁和了。") }
+        if !flow.winnerChosen { return String(localized: "先选上面谁和了。", bundle: .ui) }
         if model.isSeasoned { return nil }
-        if !flow.wayChosen { return String(localized: "自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。") }
-        if flow.selfDrawn { return String(localized: "自己摸到和的那张，三家都要付。") }
-        guard let discarder = flow.discarder else { return String(localized: "和的是别人打出的牌。") }
-        return String(localized: "和的是\(game.players[discarder].name)打出的牌。")
+        if !flow.wayChosen { return String(localized: "自己摸到的选「自摸」；和的是别人打出的牌，就选打那张的人。", bundle: .ui) }
+        if flow.selfDrawn { return String(localized: "自己摸到和的那张，三家都要付。", bundle: .ui) }
+        guard let discarder = flow.discarder else { return String(localized: "和的是别人打出的牌。", bundle: .ui) }
+        return String(localized: "和的是\(game.players[discarder].name)打出的牌。", bundle: .ui)
     }
 
     private var availableRare: [SpecialWin] { SpecialWin.allCases.filter { flow.isAvailable($0) } }
@@ -546,7 +546,7 @@ struct CheckView: View {
             HStack {
                 Text("少见情况").font(.system(size: 16))
                 Spacer()
-                Text((chosen.isEmpty ? String(localized: "没有") : chosen.map(\.name).listText) + (rareOpen ? " ⌃" : " ›"))
+                Text((chosen.isEmpty ? String(localized: "没有", bundle: .ui) : chosen.map(\.name).listText) + (rareOpen ? " ⌃" : " ›"))
                     .font(.system(size: 15))
                     .foregroundStyle(Theme.gray)
             }
@@ -664,14 +664,14 @@ private struct QuestionCard: View {
                 .font(.system(size: 16, weight: .semibold))
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
                 ForEach(candidates, id: \.self) { tile in
-                    option(title: onlyOneSide ? String(localized: "有这张") : tile.displayName, wins: hint(for: tile)) {
+                    option(title: onlyOneSide ? String(localized: "有这张", bundle: .ui) : tile.displayName, wins: hint(for: tile)) {
                         TileFace(tile: tile, width: 30)
                     } action: {
                         flow.choose(tile, at: index)
                     }
                 }
                 if tile.uncertain {
-                    option(title: String(localized: "没有这张"), wins: removalHint) {
+                    option(title: String(localized: "没有这张", bundle: .ui), wins: removalHint) {
                         RoundedRectangle(cornerRadius: 30 * 0.16, style: .continuous)
                             .strokeBorder(Theme.faint, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
                             .frame(width: 30, height: 40)
@@ -801,11 +801,11 @@ extension SpecialWin {
     /// 一句白话。
     var plain: String {
         switch self {
-        case .lastTileOfItsKind: String(localized: "和的这张，桌上已经亮出了 3 张")
-        case .kongReplacement: String(localized: "杠完补牌，补到的正好和了")
-        case .lastTileDraw: String(localized: "摸最后一张牌时自摸和了")
-        case .lastTileClaim: String(localized: "和的是别人打出的最后一张牌")
-        case .robbingTheKong: String(localized: "别人加杠时，正好和他加的那张")
+        case .lastTileOfItsKind: String(localized: "和的这张，桌上已经亮出了 3 张", bundle: .ui)
+        case .kongReplacement: String(localized: "杠完补牌，补到的正好和了", bundle: .ui)
+        case .lastTileDraw: String(localized: "摸最后一张牌时自摸和了", bundle: .ui)
+        case .lastTileClaim: String(localized: "和的是别人打出的最后一张牌", bundle: .ui)
+        case .robbingTheKong: String(localized: "别人加杠时，正好和他加的那张", bundle: .ui)
         }
     }
 }

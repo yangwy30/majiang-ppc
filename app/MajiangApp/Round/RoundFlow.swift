@@ -116,20 +116,20 @@ final class RoundFlow {
 
     /// 底部按钮不能点时的原因；nil 表示可以看结果了。
     var blockedReason: String? {
-        if isReviewing { return String(localized: "稍等几秒") }
-        if tiles.isEmpty { return String(localized: "先把牌加上") }
-        if pendingReviewCount > 0 { return String(localized: "还有 \(pendingReviewCount) 张没确认") }
+        if isReviewing { return String(localized: "稍等几秒", bundle: .ui) }
+        if tiles.isEmpty { return String(localized: "先把牌加上", bundle: .ui) }
+        if pendingReviewCount > 0 { return String(localized: "还有 \(pendingReviewCount) 张没确认", bundle: .ui) }
         switch scoring {
         case .failure:
-            return String(localized: "先把牌改对")
+            return String(localized: "先把牌改对", bundle: .ui)
         case .success(let result) where !result.meetsMinimum(game.rules.minimumFan):
-            return String(localized: "不够 \(game.rules.minimumFan) 番，和不了")
+            return String(localized: "不够 \(game.rules.minimumFan) 番，和不了", bundle: .ui)
         case .success:
             break
         }
-        if !winnerChosen { return String(localized: "选一下谁和了") }
-        if !wayChosen { return String(localized: "选一下怎么和的") }
-        if !selfDrawn && (discarder == nil || discarder == winner) { return String(localized: "选一下是谁点的炮") }
+        if !winnerChosen { return String(localized: "选一下谁和了", bundle: .ui) }
+        if !wayChosen { return String(localized: "选一下怎么和的", bundle: .ui) }
+        if !selfDrawn && (discarder == nil || discarder == winner) { return String(localized: "选一下是谁点的炮", bundle: .ui) }
         return nil
     }
 

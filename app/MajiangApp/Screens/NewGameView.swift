@@ -25,9 +25,9 @@ struct NewGameView: View {
 
     /// 不能开始时按钮上直接写原因。
     private var startLabel: String {
-        if canStart { return String(localized: "开始") }
+        if canStart { return String(localized: "开始", bundle: .ui) }
         let filled = trimmed.filter { !$0.isEmpty }
-        return Set(filled).count < filled.count ? String(localized: "名字不能重复") : String(localized: "填好 4 个名字")
+        return Set(filled).count < filled.count ? String(localized: "名字不能重复", bundle: .ui) : String(localized: "填好 4 个名字", bundle: .ui)
     }
 
     var body: some View {
@@ -153,8 +153,8 @@ struct NewGameView: View {
         }
     }
 
-    private static let seatNames = [String(localized: "你"), String(localized: "下家"), String(localized: "对家"), String(localized: "上家")]
-    private static let seatHints = [String(localized: "你的名字"), String(localized: "下家"), String(localized: "对家"), String(localized: "上家")]
+    private static let seatNames = [String(localized: "你", bundle: .ui), String(localized: "下家", bundle: .ui), String(localized: "对家", bundle: .ui), String(localized: "上家", bundle: .ui)]
+    private static let seatHints = [String(localized: "你的名字", bundle: .ui), String(localized: "下家", bundle: .ui), String(localized: "对家", bundle: .ui), String(localized: "上家", bundle: .ui)]
 
     private var frequentNames: [String] {
         model.archive.frequentPlayers.map(\.name).filter { !trimmed.contains($0) }

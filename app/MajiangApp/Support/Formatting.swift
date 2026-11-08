@@ -15,25 +15,25 @@ extension HandRecord {
         let name = { (i: Int) in game.players[i].name }
         switch outcome {
         case .win(let win):
-            var parts = [win.discarder.map { String(localized: "\(name(win.winner))和 · \(name($0))点炮") }
-                         ?? String(localized: "\(name(win.winner))自摸")]
+            var parts = [win.discarder.map { String(localized: "\(name(win.winner))和 · \(name($0))点炮", bundle: .ui) }
+                         ?? String(localized: "\(name(win.winner))自摸", bundle: .ui)]
             // 大番种值得写出来（清一色、七对……），小番种不写
             if let top = win.fans.first, top.fan.points >= 6, top.fan != .chickenHand { parts.append(top.fan.name.keptTogether) }
             let paid = game.rules.paidFan(win)
-            parts.append(paid < win.totalFan ? String(localized: "\(win.totalFan) 番按 \(paid) 算") : String(localized: "\(win.totalFan) 番"))
+            parts.append(paid < win.totalFan ? String(localized: "\(win.totalFan) 番按 \(paid) 算", bundle: .ui) : String(localized: "\(win.totalFan) 番", bundle: .ui))
             return parts.joined(separator: .dotSeparator)
         case .drawn:
-            return String(localized: "这局没人和")
+            return String(localized: "这局没人和", bundle: .ui)
         case .falseWin(let offender):
-            return String(localized: "\(name(offender))和错了")
+            return String(localized: "\(name(offender))和错了", bundle: .ui)
         case .manual(_, let note):
-            return note.isEmpty ? String(localized: "直接改分") : String(localized: "直接改分 · \(note)")
+            return note.isEmpty ? String(localized: "直接改分", bundle: .ui) : String(localized: "直接改分 · \(note)", bundle: .ui)
         }
     }
 
     /// 标题下面一行：谁付了多少。
     func detail(in game: Game) -> String {
-        if case .drawn = outcome { return String(localized: "不计分") }
+        if case .drawn = outcome { return String(localized: "不计分", bundle: .ui) }
         let losers = deltas.indices.filter { deltas[$0] < 0 }
         // 付一样多的人合在一起说：「杨、阿强、莉莉各 −20」
         var groups: [(amount: Int, players: [Int])] = []
@@ -47,7 +47,7 @@ extension HandRecord {
         groups.sort { $0.amount < $1.amount }
         return groups.map { group in
             let names = group.players.map { game.players[$0].name }.listText
-            return group.players.count > 1 ? String(localized: "\(names)各 \(Theme.signed(group.amount))") : "\(names) \(Theme.signed(group.amount))"
+            return group.players.count > 1 ? String(localized: "\(names)各 \(Theme.signed(group.amount))", bundle: .ui) : "\(names) \(Theme.signed(group.amount))"
         }
         .joined(separator: Money.clauseSeparator)
     }
@@ -75,7 +75,7 @@ extension Game {
 
     /// 「南风圈 · 第 1 局」。
     var handLabel: String {
-        String(localized: "\(prevalentWind(ofHand: displayHand).roundName) · 第 \(displayHand % 4 + 1) 局")
+        String(localized: "\(prevalentWind(ofHand: displayHand).roundName) · 第 \(displayHand % 4 + 1) 局", bundle: .ui)
     }
 
     /// 规则一行：「国标 · 带花 · 1 分 = 1 元」。
@@ -88,14 +88,14 @@ extension Game {
         var lines: [String]
         if let discarder = win.discarder {
             lines = [rules.onlyDiscarderPays
-                     ? String(localized: "点炮：\(players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，按家规另外两家不用付。")
-                     : String(localized: "点炮：\(players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，另外两家各付 \(base) 分。")]
+                     ? String(localized: "点炮：\(players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，按家规另外两家不用付。", bundle: .ui)
+                     : String(localized: "点炮：\(players[discarder].name)付 \(base) + \(fan) = \(base + fan) 分，另外两家各付 \(base) 分。", bundle: .ui)]
         } else {
-            lines = [String(localized: "自摸：三家各付 \(base) + \(fan) = \(base + fan) 分。")]
+            lines = [String(localized: "自摸：三家各付 \(base) + \(fan) = \(base + fan) 分。", bundle: .ui)]
         }
-        if base > 0 { lines.append(String(localized: "\(base) 分是底分，不管几番都要先付。")) }
+        if base > 0 { lines.append(String(localized: "\(base) 分是底分，不管几番都要先付。", bundle: .ui)) }
         if rules.yuanPerPoint != 1 {
-            lines.append(String(localized: "按 1 分 = \(Money.amount(rules.yuanPerPoint.yuanText))，\(players[win.winner].name)这局赢 \(moneyText(deltas[win.winner]))。"))
+            lines.append(String(localized: "按 1 分 = \(Money.amount(rules.yuanPerPoint.yuanText))，\(players[win.winner].name)这局赢 \(moneyText(deltas[win.winner]))。", bundle: .ui))
         }
         return lines.joined(separator: "\n")
     }
@@ -105,10 +105,10 @@ extension Game {
         guard let tile = win.hand?.winningTile.displayName else { return nil }
         let winner = players[win.winner].name
         guard let discarder = win.discarder.map({ players[$0].name }) else {
-            return win.context.kongInvolved ? String(localized: "开杠补摸到 \(tile)，和了。") : String(localized: "自己摸到 \(tile)，和了。")
+            return win.context.kongInvolved ? String(localized: "开杠补摸到 \(tile)，和了。", bundle: .ui) : String(localized: "自己摸到 \(tile)，和了。", bundle: .ui)
         }
-        return win.context.kongInvolved ? String(localized: "\(discarder)补杠的 \(tile) 被抢，\(winner)和了。")
-            : String(localized: "\(discarder)打出 \(tile)，\(winner)和了。")
+        return win.context.kongInvolved ? String(localized: "\(discarder)补杠的 \(tile) 被抢，\(winner)和了。", bundle: .ui)
+            : String(localized: "\(discarder)打出 \(tile)，\(winner)和了。", bundle: .ui)
     }
 }
 
@@ -117,27 +117,27 @@ extension GameRules {
     var houseRuleParts: [String] {
         let standard = GameRules.standard
         var parts: [String] = []
-        if basePoints != standard.basePoints { parts.append(String(localized: "底分 \(basePoints)")) }
-        if minimumFan != standard.minimumFan { parts.append(minimumFan == 1 ? String(localized: "和了就算") : String(localized: "\(minimumFan) 番起和")) }
-        if fanCap > 0 { parts.append(String(localized: "封顶 \(fanCap) 番")) }
-        if !includeFlowers { parts.append(String(localized: "不带花")) }
-        if onlyDiscarderPays { parts.append(String(localized: "点炮一家付")) }
-        if falseWinPenalty != standard.falseWinPenalty { parts.append(String(localized: "错和赔 \(falseWinPenalty)")) }
-        if totalHands != standard.totalHands { parts.append(String(localized: "\(totalHands / 4) 圈")) }
-        if swapSeatsEachRound { parts.append(String(localized: "每圈换座")) }
+        if basePoints != standard.basePoints { parts.append(String(localized: "底分 \(basePoints)", bundle: .ui)) }
+        if minimumFan != standard.minimumFan { parts.append(minimumFan == 1 ? String(localized: "和了就算", bundle: .ui) : String(localized: "\(minimumFan) 番起和", bundle: .ui)) }
+        if fanCap > 0 { parts.append(String(localized: "封顶 \(fanCap) 番", bundle: .ui)) }
+        if !includeFlowers { parts.append(String(localized: "不带花", bundle: .ui)) }
+        if onlyDiscarderPays { parts.append(String(localized: "点炮一家付", bundle: .ui)) }
+        if falseWinPenalty != standard.falseWinPenalty { parts.append(String(localized: "错和赔 \(falseWinPenalty)", bundle: .ui)) }
+        if totalHands != standard.totalHands { parts.append(String(localized: "\(totalHands / 4) 圈", bundle: .ui)) }
+        if swapSeatsEachRound { parts.append(String(localized: "每圈换座", bundle: .ui)) }
         return parts
     }
 
     /// 分享图、结算页：「国标 · 带花 · 1 分 = 1 元」；有家规时只写改了的：「国标 · 封顶 64 番 · 1 分 = 2 元」。
     var summary: String {
         let house = houseRuleParts
-        return ([String(localized: "国标")] + (house.isEmpty ? [String(localized: "带花")] : house) + [rateText])
+        return ([String(localized: "国标", bundle: .ui)] + (house.isEmpty ? [String(localized: "带花", bundle: .ui)] : house) + [rateText])
             .joined(separator: .dotSeparator)
     }
 
     /// 开局页那一行：「标准国标 · 1 分 1 元」「新手局 · 1 分 1 元」「封顶 64 番 · 1 分 2 元」。
     var shortSummary: String {
-        let name = scoresLike(.standard) ? String(localized: "标准国标") : scoresLike(.beginner) ? String(localized: "新手局")
+        let name = scoresLike(.standard) ? String(localized: "标准国标", bundle: .ui) : scoresLike(.beginner) ? String(localized: "新手局", bundle: .ui)
             : houseRuleParts.joined(separator: .dotSeparator)
         return "\(name) · \(shortRateText)"
     }
@@ -146,14 +146,14 @@ extension GameRules {
     var houseRuleBadge: String? {
         let house = houseRuleParts
         guard !house.isEmpty else { return nil }
-        return ([String(localized: "家规")] + house + [shortRateText]).joined(separator: .dotSeparator)
+        return ([String(localized: "家规", bundle: .ui)] + house + [shortRateText]).joined(separator: .dotSeparator)
     }
 
     /// 「1 分 = 2 元」；英文「1 pt = £2」。
-    var rateText: String { String(localized: "1 分 = \(Money.amount(yuanPerPoint.yuanText))") }
+    var rateText: String { String(localized: "1 分 = \(Money.amount(yuanPerPoint.yuanText))", bundle: .ui) }
 
     /// 「1 分 2 元」；英文「£2 per pt」。
-    var shortRateText: String { String(localized: "1 分 \(Money.amount(yuanPerPoint.yuanText))") }
+    var shortRateText: String { String(localized: "1 分 \(Money.amount(yuanPerPoint.yuanText))", bundle: .ui) }
 }
 
 extension Date {
@@ -181,30 +181,23 @@ extension Date {
 /// 钱怎么写、界面是哪种语言。简体一律「¥」和「元」，跟以前一样；繁体还写「元」，符号跟手机地区（台湾、香港是 $、HK$）；
 /// 英文、日文用手机地区的货币符号：「£2」「￥2」。
 enum Money {
-    /// App 现在显示的语言：zh-Hans、zh-Hant、en、ja。
-    static let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+    /// App 现在显示的语言：zh-Hans、zh-Hant、en、ja。在「更多 › 语言」里换了会跟着变，所以每次现取。
+    static var language: String { LiveLanguage.shared.localization }
     static var isSimplifiedChinese: Bool { language == "zh-Hans" }
     static var isChinese: Bool { language.hasPrefix("zh") }
 
     /// 日期、数字跟界面同一种语言，地区还是手机的地区。
-    static let locale: Locale = {
-        // 地区在 languageComponents 里（en_GB 的 GB），换语言时要留着，不然英国的手机日期会按美国的顺序排
-        var components = Locale.Components(locale: .current)
-        var lang = Locale.Language.Components(identifier: language)
-        lang.region = components.languageComponents.region ?? Locale.current.region
-        components.languageComponents = lang
-        return Locale(components: components)
-    }()
+    static var locale: Locale { LiveLanguage.shared.locale }
 
-    static let symbol: String = isSimplifiedChinese ? "¥" : (Locale.current.currencySymbol ?? "¥")
+    static var symbol: String { isSimplifiedChinese ? "¥" : (Locale.current.currencySymbol ?? "¥") }
 
     /// 「2 元」；英文、日文「£2」「￥2」。
     static func amount(_ number: String) -> String {
-        isChinese ? String(localized: "\(number) 元") : "\(symbol)\(number)"
+        isChinese ? String(localized: "\(number) 元", bundle: .ui) : "\(symbol)\(number)"
     }
 
     /// 分句之间的逗号：中文「，」，英文「, 」。
-    static var clauseSeparator: String { String(localized: "list.clause", defaultValue: "，", comment: "两句之间的逗号") }
+    static var clauseSeparator: String { String(localized: "list.clause", defaultValue: "，", bundle: .ui, comment: "两句之间的逗号") }
 }
 
 extension String {

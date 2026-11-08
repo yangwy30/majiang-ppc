@@ -119,7 +119,7 @@ struct EditHandSheet: View {
     private var minimumFan: Int { game.rules.minimumFan + flowerFan }
 
     private var blockedReason: String? {
-        if kind == .win && !selfDrawn && discarder == nil { return String(localized: "选一下谁点的炮") }
+        if kind == .win && !selfDrawn && discarder == nil { return String(localized: "选一下谁点的炮", bundle: .ui) }
         if case .failure(let error) = preview { return error.message }
         return nil
     }
@@ -149,7 +149,7 @@ struct EditHandSheet: View {
                 .padding(.bottom, 16)
             }
             .bottomBar {
-                Button(blockedReason ?? String(localized: "保存")) {
+                Button(blockedReason ?? String(localized: "保存", bundle: .ui)) {
                     if let outcome { onSave(outcome) }
                     dismiss()
                 }
@@ -231,14 +231,14 @@ struct EditHandSheet: View {
     }
 
     private var fanNote: String {
-        let flowers = flowerFan > 0 ? String(localized: "含花牌 \(flowerFan) 番。") : ""
+        let flowers = flowerFan > 0 ? String(localized: "含花牌 \(flowerFan) 番。", bundle: .ui) : ""
         if fanEdit != nil || originalWin?.fanOverride != nil || originalWin == nil {
-            return flowers + String(localized: "番数是手填的，账本里不再列番种。")
+            return flowers + String(localized: "番数是手填的，账本里不再列番种。", bundle: .ui)
         }
         if originalWin?.hand != nil {
-            return flowers + String(localized: "按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。")
+            return flowers + String(localized: "按拍下的牌自动算，换了谁和、自摸还是点炮会重算。要直接改就点加减。", bundle: .ui)
         }
-        return flowers + String(localized: "要改番数就点加减。")
+        return flowers + String(localized: "要改番数就点加减。", bundle: .ui)
     }
 
     // MARK: 和错了
