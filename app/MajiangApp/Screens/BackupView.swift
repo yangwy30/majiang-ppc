@@ -55,7 +55,7 @@ struct BackupView: View {
             .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
                 switch result {
                 case .success(let url): importFile(url)
-                case .failure(let error): message = String(localized: "没有导入：\(error.localizedDescription)")
+                case .failure(let error): message = String(localized: "没有导入：\(error.localizedDescription)", bundle: .ui)
                 }
             }
             .alert(message ?? "", isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
@@ -82,8 +82,8 @@ struct BackupView: View {
         switch model.cloud.status {
         case .off: nil
         case .unavailable(let reason), .failed(let reason): reason
-        case .syncing: String(localized: "正在同步…")
-        case .synced(let date): String(localized: "已同步 · \(date.formatted(date: .omitted, time: .shortened))")
+        case .syncing: String(localized: "正在同步…", bundle: .ui)
+        case .synced(let date): String(localized: "已同步 · \(date.formatted(date: .omitted, time: .shortened))", bundle: .ui)
         }
     }
 
@@ -91,19 +91,19 @@ struct BackupView: View {
         do {
             ShareSheet.present([try model.exportFile()])
         } catch {
-            message = String(localized: "导出失败：\(error.localizedDescription)")
+            message = String(localized: "导出失败：\(error.localizedDescription)", bundle: .ui)
         }
     }
 
     private func importFile(_ url: URL) {
         do {
             let summary = try model.importFile(url)
-            let parts = [summary.added > 0 ? String(localized: "加了 \(summary.added) 场牌局") : nil,
-                         summary.updated > 0 ? String(localized: "更新了 \(summary.updated) 场") : nil]
-            message = summary.isEmpty ? String(localized: "文件里的牌局这台手机上都有了。")
-                : String(localized: "\(parts.compactMap { $0 }.joined(separator: Money.clauseSeparator))。")
+            let parts = [summary.added > 0 ? String(localized: "加了 \(summary.added) 场牌局", bundle: .ui) : nil,
+                         summary.updated > 0 ? String(localized: "更新了 \(summary.updated) 场", bundle: .ui) : nil]
+            message = summary.isEmpty ? String(localized: "文件里的牌局这台手机上都有了。", bundle: .ui)
+                : String(localized: "\(parts.compactMap { $0 }.joined(separator: Money.clauseSeparator))。", bundle: .ui)
         } catch {
-            message = String(localized: "这个文件读不出来，确认是「导出全部牌局」导出的文件。")
+            message = String(localized: "这个文件读不出来，确认是「导出全部牌局」导出的文件。", bundle: .ui)
         }
     }
 }

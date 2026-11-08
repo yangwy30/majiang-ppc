@@ -60,8 +60,8 @@ struct GameRulesSheet: View {
     }
 
     private var buttonTitle: String {
-        guard changed else { return String(localized: "好") }
-        return game.records.isEmpty ? String(localized: "改好了") : String(localized: "改，前面 \(game.records.count) 局一起重算")
+        guard changed else { return String(localized: "好", bundle: .ui) }
+        return game.records.isEmpty ? String(localized: "改好了", bundle: .ui) : String(localized: "改，前面 \(game.records.count) 局一起重算", bundle: .ui)
     }
 
     /// 每个人的分数从多少变成多少（四个人排一行）；起和调高后不够番的局单独说一句。
@@ -70,7 +70,7 @@ struct GameRulesSheet: View {
         let new = updated.scores
         let moved = (0..<4).contains { old[$0] != new[$0] }
         let below = updated.winsBelowMinimum.compactMap { record in
-            updated.records.firstIndex { $0.id == record.id }.map { String(localized: "第 \($0 + 1) 局") }
+            updated.records.firstIndex { $0.id == record.id }.map { String(localized: "第 \($0 + 1) 局", bundle: .ui) }
         }
         return VStack(alignment: .leading, spacing: 8) {
             Hairline()

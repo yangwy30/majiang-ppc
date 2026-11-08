@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import MajiangKit
 
 /// App 用哪种语言：默认跟随手机，也可以在「更多 › 语言」里单独选。
 ///
@@ -13,7 +14,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     /// 每种语言用它自己的文字写：界面是看不懂的语言时，也认得出自己要的那一行。
     var nativeName: String {
         switch self {
-        case .system: String(localized: "language.system", defaultValue: "跟随手机", comment: "语言页：跟手机的语言走")
+        case .system: String(localized: "language.system", defaultValue: "跟随手机", bundle: .ui, comment: "语言页：跟手机的语言走")
         case .zhHans: "简体中文"
         case .zhHant: "繁體中文"
         case .en: "English"
@@ -63,9 +64,9 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 
 /// 界面现在显示的语言，换了马上生效，不用关掉 App 再打开。
 ///
-/// 系统只在 App 启动时挑一次翻译，之后 `String(localized:)`、`Text("…")` 一直用那一份。换语言时这里做三件事：
-/// 1. 把 `Bundle.main` 换成会转去新语言那份翻译的样子（`LiveBundle`），代码里取的字都变成新语言；
-/// 2. 根视图的 `locale` 换掉，`Text` 和日期、数字跟着换；
+/// 系统只在 App 启动时挑一次翻译。换语言时这里做三件事：
+/// 1. 把选中语言的 .lproj 交给 `UILanguage`：`L()` 和 `String(localized:…, bundle: .ui)` 从此取新语言的字；
+/// 2. 根视图的 `locale` 换掉，`Text("…")` 和日期、数字跟着换；
 /// 3. 根视图按语言重建一遍（`RootView` 里的 `.id`），已经画好的字全部重算。语言页本身挂在重建范围外面，不会被关掉。
 @Observable
 final class LiveLanguage {
@@ -79,7 +80,7 @@ final class LiveLanguage {
     var showingSheet = false
 
     private init() {
-        let launched = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+        let launched = UILanguage.localization
         localization = launched
         locale = Self.locale(for: launched)
     }
@@ -89,7 +90,7 @@ final class LiveLanguage {
         guard new != localization,
               let path = Bundle.main.path(forResource: new, ofType: "lproj"),
               let bundle = Bundle(path: path) else { return }
-        LiveBundle.install(bundle, localization: new)
+        UILanguage.set(bundle: bundle, localization: new)
         locale = Self.locale(for: new)
         localization = new
     }
@@ -104,26 +105,7 @@ final class LiveLanguage {
     }
 }
 
-/// 换过语言以后 `Bundle.main` 的样子：取翻译时转去选中那种语言的 .lproj，`preferredLocalizations` 也报那种语言
-/// （发给中转站的语言头用它）。一次都没换过时不装，App 跟以前完全一样。
-private final class LiveBundle: Bundle {
-    private static let lock = NSLock()
-    private static var target: (bundle: Bundle, localization: String)?
-
-    static func install(_ bundle: Bundle, localization: String) {
-        lock.withLock { target = (bundle, localization) }
-        if !(Bundle.main is LiveBundle) { object_setClass(Bundle.main, LiveBundle.self) }
-    }
-
-    private static var current: (bundle: Bundle, localization: String)? { lock.withLock { target } }
-
-    override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
-        guard let bundle = Self.current?.bundle else { return super.localizedString(forKey: key, value: value, table: tableName) }
-        return bundle.localizedString(forKey: key, value: value, table: tableName)
-    }
-
-    override var preferredLocalizations: [String] {
-        guard let localization = Self.current?.localization else { return super.preferredLocalizations }
-        return [localization]
-    }
+extension Bundle {
+    /// App 里取字都用它：`String(localized: "…", bundle: .ui)`。见 `UILanguage`。
+    static var ui: Bundle { UILanguage.bundle }
 }

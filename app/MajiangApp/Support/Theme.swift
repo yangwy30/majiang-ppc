@@ -303,7 +303,7 @@ struct DealerStamp: View {
     var size: CGFloat = 22
 
     var body: some View {
-        Seal(text: String(localized: "seal.dealer", defaultValue: "庄", comment: "庄家的朱红小方印，只放一个字（英文 D）"), size: size)
+        Seal(text: String(localized: "seal.dealer", defaultValue: "庄", bundle: .ui, comment: "庄家的朱红小方印，只放一个字（英文 D）"), size: size)
             .accessibilityLabel("庄家")
     }
 }

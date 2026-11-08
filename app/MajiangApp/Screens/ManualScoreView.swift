@@ -30,16 +30,16 @@ struct ManualScoreView: View {
 
     /// 不能保存时按钮上直接写原因。
     private var saveTitle: String {
-        if allZero { return String(localized: "填上这一局的得失分") }
-        if sum != 0 { return String(localized: "加起来要等于 0") }
-        return String(localized: "记下")
+        if allZero { return String(localized: "填上这一局的得失分", bundle: .ui) }
+        if sum != 0 { return String(localized: "加起来要等于 0", bundle: .ui) }
+        return String(localized: "记下", bundle: .ui)
     }
 
     private var status: String {
-        if allZero { return String(localized: "四个人加起来要等于 0。") }
-        if sum > 0 { return String(localized: "赢的比输的多 \(sum) 分，加起来要等于 0。") }
-        if sum < 0 { return String(localized: "输的比赢的多 \(-sum) 分，加起来要等于 0。") }
-        return String(localized: "加起来正好是 0。")
+        if allZero { return String(localized: "四个人加起来要等于 0。", bundle: .ui) }
+        if sum > 0 { return String(localized: "赢的比输的多 \(sum) 分，加起来要等于 0。", bundle: .ui) }
+        if sum < 0 { return String(localized: "输的比赢的多 \(-sum) 分，加起来要等于 0。", bundle: .ui) }
+        return String(localized: "加起来正好是 0。", bundle: .ui)
     }
 
     var body: some View {

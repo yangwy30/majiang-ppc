@@ -6,11 +6,11 @@ struct RulesGuideView: View {
     @Environment(\.dismiss) private var dismiss
 
     private let basics: [(String, String)] = [
-        (String(localized: "怎么算钱"), String(localized: "和牌的人先从每家收 8 分底分，再收番数。自摸：三家都付 8 + 番数；点炮：点炮的人付 8 + 番数，另外两家只付 8。")),
-        (String(localized: "要 8 番才能和"), String(localized: "番数不够 8 番不能和。花牌每张 1 番，但不算进这 8 番。")),
-        (String(localized: "庄怎么轮"), String(localized: "不连庄，每局庄家往下轮一位。东南西北 4 圈、16 局打完一场。App 会自己轮，不用记。")),
-        (String(localized: "一炮只能一个人和"), String(localized: "几个人同时能和同一张牌时，按点炮那家的下家、对家、上家的顺序，只算第一个。")),
-        (String(localized: "和错了"), String(localized: "推倒了却凑不成和牌，赔另外三家各 10 分，这一局接着打。")),
+        (String(localized: "怎么算钱", bundle: .ui), String(localized: "和牌的人先从每家收 8 分底分，再收番数。自摸：三家都付 8 + 番数；点炮：点炮的人付 8 + 番数，另外两家只付 8。", bundle: .ui)),
+        (String(localized: "要 8 番才能和", bundle: .ui), String(localized: "番数不够 8 番不能和。花牌每张 1 番，但不算进这 8 番。", bundle: .ui)),
+        (String(localized: "庄怎么轮", bundle: .ui), String(localized: "不连庄，每局庄家往下轮一位。东南西北 4 圈、16 局打完一场。App 会自己轮，不用记。", bundle: .ui)),
+        (String(localized: "一炮只能一个人和", bundle: .ui), String(localized: "几个人同时能和同一张牌时，按点炮那家的下家、对家、上家的顺序，只算第一个。", bundle: .ui)),
+        (String(localized: "和错了", bundle: .ui), String(localized: "推倒了却凑不成和牌，赔另外三家各 10 分，这一局接着打。", bundle: .ui)),
     ]
 
     private var groups: [(points: Int, fans: [Fan])] {

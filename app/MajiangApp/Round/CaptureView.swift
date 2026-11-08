@@ -125,7 +125,7 @@ struct CaptureView: View {
     }
 
     private var status: String? {
-        if flow.isRecognizing { return slow ? String(localized: "正在认牌…") : nil }
+        if flow.isRecognizing { return slow ? String(localized: "正在认牌…", bundle: .ui) : nil }
         return flow.recognitionError
     }
 
