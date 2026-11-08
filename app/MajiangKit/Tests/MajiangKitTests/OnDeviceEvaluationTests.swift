@@ -9,6 +9,9 @@ import XCTest
 ///     MAJIANG_GEMINI_KEY_FILE=~/.config/gemini/api_key        可选：给了就同时跑 Gemini，评测双读
 ///     MAJIANG_REF_SHEET=…/reference_tiles.jpg                 可选：给 Gemini 的牌面参考图
 ///     MAJIANG_EVAL_OUT=out.json                               可选：逐张结果写到这里
+///     MAJIANG_EXTRA_TRUTH=extra.json                          可选：再加几张不进仓库的照片（格式同 ground_truth.json）
+///     MAJIANG_ONLY=g01,m01                                    可选：只跑这几张
+///     MAJIANG_REPEAT=3                                        可选：每张跑几遍（看 Gemini 稳不稳）
 ///     swift test --filter OnDeviceEvaluationTests
 final class OnDeviceEvaluationTests: XCTestCase {
     private struct GroundTruth: Decodable {
@@ -38,6 +41,8 @@ final class OnDeviceEvaluationTests: XCTestCase {
         var ms: Int
         var notes: [String]
         var gemini: String?
+        /// Gemini 原样的结构：立牌 | 副露，看它有没有把一排一样的牌当成杠。
+        var geminiRaw: String?
         var geminiExact: Bool?
         var merged: String?
         /// 双读后要用户确认的牌数；0 表示自动通过。
@@ -62,7 +67,15 @@ final class OnDeviceEvaluationTests: XCTestCase {
         }
         let photos = URL(fileURLWithPath: Self.env("MAJIANG_PHOTOS") ?? NSString(string: "~/Downloads/majiang-test-photos").expandingTildeInPath)
         let truthURL = try XCTUnwrap(Bundle.module.url(forResource: "ground_truth", withExtension: "json", subdirectory: "Fixtures"))
-        let truth = try JSONDecoder().decode(GroundTruth.self, from: Data(contentsOf: truthURL))
+        var truth = try JSONDecoder().decode(GroundTruth.self, from: Data(contentsOf: truthURL))
+        if let extra = Self.env("MAJIANG_EXTRA_TRUTH") {
+            truth.photos += try JSONDecoder().decode(GroundTruth.self, from: Data(contentsOf: URL(fileURLWithPath: extra))).photos
+        }
+        if let only = Self.env("MAJIANG_ONLY") {
+            let ids = Set(only.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) })
+            truth.photos = truth.photos.filter { ids.contains($0.id) }
+        }
+        let repeats = max(1, Int(Self.env("MAJIANG_REPEAT") ?? "") ?? 1)
 
         let modelURL = URL(fileURLWithPath: modelPath)
         let compiled = modelURL.pathExtension == "mlmodelc" ? modelURL : try await CoreMLTileDetector.compileModel(at: modelURL)
@@ -76,7 +89,7 @@ final class OnDeviceEvaluationTests: XCTestCase {
         }
 
         var rows: [Row] = []
-        for photo in truth.photos {
+        for photo in truth.photos.flatMap({ Array(repeating: $0, count: repeats) }) {
             let url = photos.appendingPathComponent(photo.file)
             guard let data = try? Data(contentsOf: url) else {
                 print("缺照片 \(url.path)")
@@ -96,6 +109,8 @@ final class OnDeviceEvaluationTests: XCTestCase {
                 do {
                     let remote = try await gemini.recognize(request)
                     row.gemini = Self.sorted(remote.hand.allTiles)
+                    row.geminiRaw = remote.concealed.map(\.tile.notation).joined(separator: " ")
+                        + (remote.melds.isEmpty ? "" : " | " + remote.melds.map(\.displayText).joined(separator: " "))
                     row.geminiExact = Self.sorted(remote.hand.allTiles) == Self.sorted(expected)
                     let merged = local.concealed.isEmpty ? remote : DualReadRecognizer.merge(remote, with: local)
                     row.merged = merged.concealed.map { $0.needsReview ? "[\($0.candidates.map(\.notation).joined(separator: "/"))\($0.uncertain ? "/无" : "")]" : $0.tile.notation }
@@ -117,6 +132,7 @@ final class OnDeviceEvaluationTests: XCTestCase {
                 }
             }
             print(String(format: "%@ %@ %4d ms  端侧=%@", photo.id, row.onDeviceExact ? "✅" : "❌", ms, row.onDevice)
+                  + (row.geminiRaw.map { "\n        Gemini=\($0) \(row.geminiExact == true ? "✅" : "❌")" } ?? "")
                   + (row.merged.map { "\n        双读=\($0)  review=\(row.review ?? 0)" } ?? ""))
             rows.append(row)
         }
